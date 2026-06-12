@@ -92,7 +92,16 @@ tr:hover { background: #1e293b60; }
   .cards { grid-template-columns: repeat(2, 1fr); }
   .header h1 { font-size: 22px; }
   .card .value { font-size: 20px; }
-  .filters { flex-direction: column; align-items: flex-start; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
+  .table-wrap table { font-size: 11px; min-width: 500px; }
+  .table-wrap th, .table-wrap td { padding: 8px 6px; white-space: nowrap; }
+  .hide-mobile { display: none; }
+  .filters { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .date-input { max-width: 110px; }
+  .strategy-grid { grid-template-columns: 1fr; }
+  .reports-grid { grid-template-columns: 1fr; }
+  .decision-node { flex-direction: column; gap: 6px; }
+  .decision-node .d-time { min-width: auto; }
 }
 </style>
 </head>
@@ -138,25 +147,25 @@ tr:hover { background: #1e293b60; }
   <!-- A-Stock Positions -->
   <div class="section">
     <h2><span class="badge badge-stock">A股</span> A股持仓</h2>
-    <table>
-      <thead><tr><th>代码</th><th>名称</th><th>持仓</th><th>成本</th><th>现价</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
+    <div class="table-wrap"><table>
+      <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th><th class="hide-mobile">成本</th><th>现价</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td><span class="stock-code">000977</span></td><td><span class="stock-name">浪潮信息</span></td><td>300 股</td><td>¥60.10</td><td>¥57.86</td><td>¥17,358</td><td class="down">-¥672</td><td class="down">-3.73%</td></tr>
-        <tr><td><span class="stock-code">601336</span></td><td><span class="stock-name">新华保险</span></td><td>100 股</td><td>¥59.74</td><td>¥61.46</td><td>¥6,146</td><td class="up">+¥172</td><td class="up">+2.88%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">000977</span></td><td><span class="stock-name">浪潮信息</span></td><td>300 股</td><td class="hide-mobile">¥60.10</td><td>¥57.86</td><td>¥17,358</td><td class="down">-¥672</td><td class="down">-3.73%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">601336</span></td><td><span class="stock-name">新华保险</span></td><td>100 股</td><td class="hide-mobile">¥59.74</td><td>¥61.46</td><td>¥6,146</td><td class="up">+¥172</td><td class="up">+2.88%</td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
   <!-- Fund Positions -->
   <div class="section">
     <h2><span class="badge badge-fund">基金</span> 基金持仓</h2>
-    <table>
-      <thead><tr><th>代码</th><th>名称</th><th>类型</th><th>持仓</th><th>成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
+    <div class="table-wrap"><table>
+      <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td>A股宽基</td><td>4,208.64 份</td><td>¥4.745</td><td>¥4.808</td><td>¥20,236</td><td class="up">+¥266</td><td class="up">+1.33%</td></tr>
-        <tr><td><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td>A股行业</td><td>8,617.66 份</td><td>¥1.738</td><td>¥1.766</td><td>¥15,218</td><td class="up">+¥241</td><td class="up">+1.61%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td class="hide-mobile">A股宽基</td><td>4,208.64 份</td><td class="hide-mobile">¥4.745</td><td>¥4.808</td><td>¥20,236</td><td class="up">+¥266</td><td class="up">+1.33%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td class="hide-mobile">A股行业</td><td>8,617.66 份</td><td class="hide-mobile">¥1.738</td><td>¥1.766</td><td>¥15,218</td><td class="up">+¥241</td><td class="up">+1.61%</td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
   <!-- 今日盘中决策实录 -->
@@ -219,10 +228,10 @@ tr:hover { background: #1e293b60; }
   <!-- Trade History with Pagination — 仅真实数据 -->
   <div class="section">
     <h2>📋 近期交易记录</h2>
-    <table>
-      <thead><tr><th>日期</th><th>时间</th><th>账户</th><th>操作</th><th>代码</th><th>名称</th><th>价格/净值</th><th>数量</th><th>金额</th><th>触发原因</th></tr></thead>
+    <div class="table-wrap"><table>
+      <thead><tr><th>日期</th><th class="hide-mobile">时间</th><th class="hide-mobile">账户</th><th>操作</th><th class="hide-mobile">代码</th><th>名称</th><th>价格/净值</th><th>数量</th><th>金额</th><th class="hide-mobile">触发原因</th></tr></thead>
       <tbody id="tradeBody"></tbody>
-    </table>
+    </table></div>
     <div class="pagination" id="tradePagination"></div>
   </div>
 
@@ -325,11 +334,11 @@ function renderTrades() {
   const start = (tradePage - 1) * TRADE_PER_PAGE;
   const pageTrades = allTrades.slice(start, start + TRADE_PER_PAGE);
   document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
-    '<tr><td>' + t.date + '</td><td>' + t.time + '</td><td><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
+    '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile"><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
     '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
-    '<td class="stock-code">' + t.code + '</td><td class="stock-name">' + t.name + '</td>' +
+    '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name">' + t.name + '</td>' +
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + t.amount + '</td>' +
-    '<td style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
+    '<td class="hide-mobile" style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
   ).join('');
 
   document.getElementById('tradePagination').innerHTML =
