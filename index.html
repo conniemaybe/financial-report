@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 AStock Simulator — 模拟盘实况</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+/* Header */
+.header { text-align: center; margin-bottom: 32px; }
+.header h1 { font-size: 28px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+.header .subtitle { font-size: 13px; color: #64748b; }
+.header .update-time { font-size: 12px; color: #475569; margin-top: 6px; }
+
+/* Cards Row */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+.card .label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.card .value { font-size: 26px; font-weight: 700; color: #f8fafc; }
+.card .change { font-size: 13px; margin-top: 4px; }
+.up { color: #ef4444; }
+.down { color: #22c55e; }
+.neutral { color: #64748b; }
+
+/* Chart */
+.chart-container { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 28px; }
+.chart-container h2 { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 16px; }
+.chart-wrapper { position: relative; height: 300px; }
+
+/* Tables Section */
+.section { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 20px; }
+.section h2 { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.badge-stock { background: #7c3aed20; color: #a78bfa; }
+.badge-fund { background: #05966920; color: #34d399; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+tr:hover { background: #1e293b60; }
+.stock-name { font-weight: 600; color: #f8fafc; }
+.stock-code { color: #64748b; font-size: 11px; margin-left: 6px; }
+
+/* Reports */
+.reports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.report-link { display: flex; align-items: center; gap: 8px; padding: 12px 14px; background: #0f172a; border-radius: 8px; text-decoration: none; color: #e2e8f0; border: 1px solid #1e293b; transition: all 0.2s; font-size: 13px; }
+.report-link:hover { border-color: #3b82f6; background: #1e293b; }
+.report-link .icon { font-size: 18px; }
+.report-link .morning { color: #f59e0b; }
+.report-link .evening { color: #6366f1; }
+
+/* Footer */
+.footer { text-align: center; padding: 40px 16px; font-size: 12px; color: #475569; }
+.footer a { color: #64748b; text-decoration: none; }
+.footer a:hover { color: #94a3b8; }
+
+@media (max-width: 640px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 22px; }
+  .card .value { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>📈 AStock Simulator</h1>
+    <div class="subtitle">A股 + 基金 双账户模拟盘 · 各初始 ¥100,000</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-12 10:38</div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="label">A股账户净值</div>
+      <div class="value">¥99,260</div>
+      <div class="change down">-¥740 (-0.74%)</div>
+    </div>
+    <div class="card">
+      <div class="label">基金账户净值</div>
+      <div class="value">¥100,157</div>
+      <div class="change up">+¥157 (+0.16%)</div>
+    </div>
+    <div class="card">
+      <div class="label">合并总净值</div>
+      <div class="value">¥199,417</div>
+      <div class="change down">-¥583 (-0.29%)</div>
+    </div>
+    <div class="card">
+      <div class="label">A股可用资金</div>
+      <div class="value">¥75,986</div>
+      <div class="change neutral">基金可用 ¥65,000</div>
+    </div>
+  </div>
+
+  <!-- NAV Trend Chart -->
+  <div class="chart-container">
+    <h2>📊 净值走势</h2>
+    <div class="chart-wrapper"><canvas id="navChart"></canvas></div>
+  </div>
+
+  <!-- A-Stock Positions -->
+  <div class="section">
+    <h2><span class="badge badge-stock">A股</span> A股持仓</h2>
+    <table>
+      <thead><tr><th>代码</th><th>名称</th><th>持仓</th><th>成本</th><th>现价</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
+      <tbody id="stockBody">
+        <tr>
+          <td><span class="stock-code">000977</span></td>
+          <td><span class="stock-name">浪潮信息</span></td><td>300 股</td>
+          <td>¥60.10</td><td>¥58.10</td><td>¥17,430</td>
+          <td class="down">-¥600</td><td class="down">-3.33%</td>
+        </tr>
+        <tr>
+          <td><span class="stock-code">601336</span></td>
+          <td><span class="stock-name">新华保险</span></td><td>100 股</td>
+          <td>¥59.74</td><td>¥60.74</td><td>¥6,074</td>
+          <td class="up">+¥100</td><td class="up">+1.67%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Fund Positions -->
+  <div class="section">
+    <h2><span class="badge badge-fund">基金</span> 基金持仓</h2>
+    <table>
+      <thead><tr><th>代码</th><th>名称</th><th>类型</th><th>持仓</th><th>成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
+      <tbody id="fundBody">
+        <tr>
+          <td><span class="stock-code">510300</span></td>
+          <td><span class="stock-name">沪深300ETF</span></td><td>A股宽基</td><td>4,208.64 份</td>
+          <td>¥4.745</td><td>¥4.7789</td><td>¥20,113</td>
+          <td class="up">+¥143</td><td class="up">+0.71%</td>
+        </tr>
+        <tr>
+          <td><span class="stock-code">588000</span></td>
+          <td><span class="stock-name">科创50ETF</span></td><td>A股行业</td><td>8,617.66 份</td>
+          <td>¥1.738</td><td>¥1.7458</td><td>¥15,045</td>
+          <td class="up">+¥67</td><td class="up">+0.45%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Trades -->
+  <div class="section">
+    <h2>📋 近期交易记录</h2>
+    <table>
+      <thead><tr><th>日期</th><th>时间</th><th>操作</th><th>代码</th><th>名称</th><th>价格</th><th>数量</th><th>金额</th><th>原因</th></tr></thead>
+      <tbody id="tradeBody">
+        <tr>
+          <td>2026-06-11</td><td>10:44</td><td><span class="up">买入</span></td>
+          <td class="stock-code">510300</td><td class="stock-name">沪深300ETF</td>
+          <td>¥4.745</td><td>4,208.64 份</td><td>¥20,000</td>
+          <td style="font-size:11px;color:#94a3b8;max-width:200px;">溢价值-0.71%加分，指数条件满足</td>
+        </tr>
+        <tr>
+          <td>2026-06-11</td><td>10:44</td><td><span class="up">买入</span></td>
+          <td class="stock-code">588000</td><td class="stock-name">科创50ETF</td>
+          <td>¥1.738</td><td>8,617.66 份</td><td>¥15,000</td>
+          <td style="font-size:11px;color:#94a3b8;max-width:200px;">溢价值-0.45%加分，半导板块未跌超3%</td>
+        </tr>
+        <tr>
+          <td>2026-06-11</td><td>10:44</td><td><span class="up">买入</span></td>
+          <td class="stock-code">601336</td><td class="stock-name">新华保险</td>
+          <td>¥59.74</td><td>100 股</td><td>¥5,979</td>
+          <td style="font-size:11px;color:#94a3b8;max-width:200px;">保险板块-0.63%>-1%，量比3.11活跃</td>
+        </tr>
+        <tr>
+          <td>2026-06-10</td><td>10:37</td><td><span class="up">买入</span></td>
+          <td class="stock-code">000977</td><td class="stock-name">浪潮信息</td>
+          <td>¥60.10</td><td>300 股</td><td>¥18,035</td>
+          <td style="font-size:11px;color:#94a3b8;max-width:200px;">AI算力龙头，板块逆势+0.51%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Archived Reports -->
+  <div class="section">
+    <h2>📂 历史报告</h2>
+    <div class="reports-grid" id="reportsGrid">
+      <a href="reports/20260612_晨报.html" class="report-link"><span class="icon morning">🌅</span> 6/12 晨报</a>
+      <a href="reports/20260611_日报.html" class="report-link"><span class="icon evening">🌙</span> 6/11 日报</a>
+      <a href="reports/20260611_晨报.html" class="report-link"><span class="icon morning">🌅</span> 6/11 晨报</a>
+      <a href="reports/20260610_日报.html" class="report-link"><span class="icon evening">🌙</span> 6/10 日报</a>
+      <a href="reports/20260610_晨报.html" class="report-link"><span class="icon morning">🌅</span> 6/10 晨报</a>
+      <a href="reports/20260609_日报.html" class="report-link"><span class="icon evening">🌙</span> 6/09 日报</a>
+      <a href="reports/20260609_晨报.html" class="report-link"><span class="icon morning">🌅</span> 6/09 晨报</a>
+      <a href="reports/20260608_日报.html" class="report-link"><span class="icon evening">🌙</span> 6/08 日报</a>
+    </div>
+  </div>
+
+  <!-- Strategy -->
+  <div class="section">
+    <h2>🎯 策略说明</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;font-size:13px;line-height:1.8;color:#94a3b8;">
+      <div>
+        <h3 style="color:#f8fafc;font-size:14px;margin-bottom:8px;">🕐 盘中决策窗口</h3>
+        <p>• 10:00 — 卖出优先（止盈/止损 → 买入兜底）</p>
+        <p>• 10:30 — 买入为主 + 卖出次选</p>
+        <p>• 13:30 — 纯买入窗口</p>
+        <p>• 14:45 — 尾盘最佳买入窗口 🏆</p>
+      </div>
+      <div>
+        <h3 style="color:#f8fafc;font-size:14px;margin-bottom:8px;">📐 核心策略</h3>
+        <p>• 买尾卖早：买入尽量尾盘（看清全天），卖出尽量早盘（利用开盘热情）</p>
+        <p>• 买入触发：板块>-1%、量比≥0.8、非急跌>2%</p>
+        <p>• 否决条件：大盘跌>1.5%、开盘急跌>2%</p>
+        <p>• 风控：单只≤总资金25%、同一板块≤2只</p>
+      </div>
+      <div>
+        <h3 style="color:#f8fafc;font-size:14px;margin-bottom:8px;">📡 数据来源</h3>
+        <p>• 全部行情数据由 NeoData 金融搜索实时获取</p>
+        <p>• 拒绝 WebSearch 获取价格（确保准确性）</p>
+        <p>• 晨报 8:30 / 日报 15:30 自动生成</p>
+        <p>• PushPlus 推送至微信</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>⚡ Powered by WorkBuddy AI · Auto-generated daily</p>
+    <p style="margin-top:4px;">此模拟盘仅供学习参考，不构成投资建议</p>
+  </div>
+
+</div>
+
+<!-- Chart.js NAV Chart -->
+<script>
+const ctx = document.getElementById('navChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['6/8', '6/9', '6/10', '6/11', '6/12'],
+    datasets: [
+      { label: 'A股净值', data: [100000, 100000, 99782, 99260, 99260], borderColor: '#ef4444', backgroundColor: '#ef444420', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#ef4444' },
+      { label: '基金净值', data: [100000, 100000, 100000, 100157, 100157], borderColor: '#34d399', backgroundColor: '#34d39920', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#34d399' },
+      { label: '合并净值', data: [200000, 200000, 199782, 199417, 199417], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', usePointStyle: true, padding: 20, font: { size: 12 } } } },
+    scales: {
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 } } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, callback: v => '¥' + (v/1000).toFixed(0) + 'k' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
