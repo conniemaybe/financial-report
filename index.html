@@ -14,7 +14,7 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 .header .subtitle { font-size: 13px; color: #64748b; }
 .header .update-time { font-size: 12px; color: #475569; margin-top: 6px; }
 
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
 .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
 .card .label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 .card .value { font-size: 26px; font-weight: 700; color: #f8fafc; }
@@ -25,7 +25,7 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 
 .chart-container { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 28px; }
 .chart-container h2 { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 16px; }
-.chart-wrapper { position: relative; height: 320px; }
+.chart-wrapper { position: relative; height: 340px; }
 
 .section { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 20px; }
 .section h2 { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
@@ -110,15 +110,15 @@ tr:hover { background: #1e293b60; }
       <div class="change down">-¥583 (-0.29%)</div>
     </div>
     <div class="card">
-      <div class="label">A股可用资金</div>
-      <div class="value">¥75,986</div>
-      <div class="change neutral">基金可用 ¥65,000</div>
+      <div class="label">A股可用 / 基金可用</div>
+      <div class="value" style="font-size:20px;">¥75,986 / ¥65,000</div>
+      <div class="change neutral">合并现金 ¥140,986</div>
     </div>
   </div>
 
-  <!-- NAV Chart with CSI 300 -->
+  <!-- NAV Chart: Portfolio vs CSI 300 benchmark (same axis, 20万全仓模拟) -->
   <div class="chart-container">
-    <h2>📊 净值走势 <span class="badge badge-benchmark">vs 沪深300</span></h2>
+    <h2>📊 净值走势 <span class="badge badge-benchmark">vs 沪深300（假设6.8起20万全仓）</span></h2>
     <div class="chart-wrapper"><canvas id="navChart"></canvas></div>
   </div>
 
@@ -140,17 +140,17 @@ tr:hover { background: #1e293b60; }
     <table>
       <thead><tr><th>代码</th><th>名称</th><th>类型</th><th>持仓</th><th>成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td>A股宽基</td><td>4,208.64 份</td><td>¥4.745</td><td>¥4.7789</td><td>¥20,113</td><td class="up">+¥143</td><td class="up">+0.71%</td></tr>
-        <tr><td><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td>A股行业</td><td>8,617.66 份</td><td>¥1.738</td><td>¥1.7458</td><td>¥15,045</td><td class="up">+¥67</td><td class="up">+0.45%</td></tr>
+        <tr><td><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td>A股宽基</td><td>4,208.64 份</td><td>¥4.745</td><td>¥4.803</td><td>¥20,215</td><td class="up">+¥245</td><td class="up">+1.22%</td></tr>
+        <tr><td><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td>A股行业</td><td>8,617.66 份</td><td>¥1.738</td><td>¥1.787</td><td>¥15,402</td><td class="up">+¥424</td><td class="up">+2.83%</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Trade History with Pagination -->
+  <!-- Trade History with Pagination — 仅真实数据 -->
   <div class="section">
     <h2>📋 近期交易记录</h2>
     <table>
-      <thead><tr><th>日期</th><th>时间</th><th>操作</th><th>代码</th><th>名称</th><th>价格</th><th>数量</th><th>金额</th><th>原因</th></tr></thead>
+      <thead><tr><th>日期</th><th>时间</th><th>账户</th><th>操作</th><th>代码</th><th>名称</th><th>价格/净值</th><th>数量</th><th>金额</th><th>触发原因</th></tr></thead>
       <tbody id="tradeBody"></tbody>
     </table>
     <div class="pagination" id="tradePagination"></div>
@@ -175,7 +175,7 @@ tr:hover { background: #1e293b60; }
     <div id="reportCount" style="font-size:11px;color:#475569;margin-top:10px;"></div>
   </div>
 
-  <!-- Strategy (Dynamic) -->
+  <!-- Strategy (Dynamic, with fallback) -->
   <div class="section">
     <h2>🎯 策略说明</h2>
     <div class="strategy-grid" id="strategyContent">
@@ -192,17 +192,16 @@ tr:hover { background: #1e293b60; }
 </div>
 
 <script>
-// ========== DATA ==========
+// ========== REAL TRADE DATA (source: portfolio.json + fund_portfolio.json) ==========
+// A股: 2笔买入 | 基金: 2笔买入 | 合计4笔，无卖出记录
 const allTrades = [
-  { date: '2026-06-11', time: '10:44', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '4,208.64 份', amount: '¥20,000', reason: '溢价-0.71%加分，指数条件满足', cls: 'up' },
-  { date: '2026-06-11', time: '10:44', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '8,617.66 份', amount: '¥15,000', reason: '溢价-0.45%加分，半导未跌超3%', cls: 'up' },
-  { date: '2026-06-11', time: '10:44', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '100 股', amount: '¥5,979', reason: '保险板块-0.63%>-1%，量比3.11', cls: 'up' },
-  { date: '2026-06-10', time: '10:37', action: '买入', code: '000977', name: '浪潮信息', price: '¥60.10', qty: '300 股', amount: '¥18,035', reason: 'AI算力龙头逆势+0.51%', cls: 'up' },
-  { date: '2026-06-10', time: '13:30', action: '买入', code: '601336', name: '新华保险', price: '¥59.85', qty: '100 股', amount: '¥5,985', reason: '保险板块方向确认', cls: 'up' },
-  { date: '2026-06-10', time: '10:00', action: '卖出', code: '000977', name: '浪潮信息', price: '¥60.50', qty: '200 股', amount: '¥12,100', reason: '止盈触发：冲高+2.1%量能不足', cls: 'down' },
-  { date: '2026-06-09', time: '14:45', action: '买入', code: '601336', name: '新华保险', price: '¥60.20', qty: '100 股', amount: '¥6,020', reason: '尾盘信号稳定，估值低位', cls: 'up' }
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '8,617.66 份', amount: '¥15,000', reason: '溢价-0.45%<2%，科创50>-1%，半导未跌超3%', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '4,208.64 份', amount: '¥20,000', reason: '溢价-0.71%<2%，沪深300>-1%，折价加分', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: 'A股', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '100 股', amount: '¥5,979', reason: '保险板块-0.63%>-1%，量比3.11≥0.8', cls: 'up' },
+  { date: '2026-06-10', time: '10:37', acct: 'A股', action: '买入', code: '000977', name: '浪潮信息', price: '¥60.10', qty: '300 股', amount: '¥18,035', reason: 'AI算力龙头，计算机设备板块逆势+0.51%', cls: 'up' }
 ];
 
+// ========== REPORT ARCHIVE ==========
 const allReports = [
   { date: '2026-06-12', type: 'morning', file: '20260612_晨报.html', label: '6/12 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-06-11', type: 'evening', file: '20260611_日报.html', label: '6/11 日报', ico: '🌙', cls: 'evening' },
@@ -214,17 +213,24 @@ const allReports = [
   { date: '2026-06-08', type: 'evening', file: '20260608_日报.html', label: '6/08 日报', ico: '🌙', cls: 'evening' }
 ];
 
-// ========== CHART: NAV + CSI 300 ==========
+// ========== CHART: Portfolio NAV vs CSI 300 20万全仓模拟（同轴） ==========
+// CSI 300 index: 6/8=4713.64, 6/9=4801.81, 6/10=4748.59, 6/11=4722.41, 6/12=4798.47
+// 假设 6/8 投入20万全仓CSI300，每日按指数涨跌等比计算净值
+const csiBase = 4713.64;
+const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47];
+const csiNav = csiIndex.map(v => Math.round(200000 * v / csiBase));
+// => [200000, 203740, 201484, 200373, 203598]
+
 const ctx = document.getElementById('navChart').getContext('2d');
 new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['6/8', '6/9', '6/10', '6/11', '6/12'],
+    labels: ['6/8', '6/9', '6/10', '6/11', '6/12 当前'],
     datasets: [
-      { label: '合并净值', data: [200000, 200000, 199782, 199417, 199417], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2, yAxisID: 'y' },
-      { label: '基金净值', data: [100000, 100000, 100000, 100157, 100157], borderColor: '#34d399', backgroundColor: '#34d39920', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#34d399', yAxisID: 'y' },
-      { label: 'A股净值', data: [100000, 100000, 99782, 99260, 99260], borderColor: '#ef4444', backgroundColor: '#ef444420', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#ef4444', yAxisID: 'y' },
-      { label: '沪深300', data: [4713.64, 4801.81, 4748.59, 4722.41, 4798.47], borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 1.5, borderDash: [6,3], yAxisID: 'y1' }
+      { label: '合并净值 (A股+基金)', data: [200000, 200000, 199782, 199417, 199417], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '沪深300基准 (20万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
+      { label: '基金净值', data: [100000, 100000, 100000, 100157, 100157], borderColor: '#34d399', backgroundColor: '#34d39920', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#34d399', borderWidth: 1.5 },
+      { label: 'A股净值', data: [100000, 100000, 99782, 99260, 99260], borderColor: '#ef4444', backgroundColor: '#ef444420', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#ef4444', borderWidth: 1.5 }
     ]
   },
   options: {
@@ -235,7 +241,6 @@ new Chart(ctx, {
       tooltip: {
         callbacks: {
           label: function(ctx) {
-            if (ctx.datasetIndex === 3) return '沪深300: ' + ctx.parsed.y.toFixed(0) + ' 点';
             return ctx.dataset.label + ': ¥' + ctx.parsed.y.toLocaleString();
           }
         }
@@ -243,8 +248,7 @@ new Chart(ctx, {
     },
     scales: {
       x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 } } },
-      y: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, callback: v => '¥' + (v/1000).toFixed(0) + 'k' }, min: 95000 },
-      y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#f59e0b', font: { size: 11 }, callback: v => v.toFixed(0) }, min: 4600, max: 4900 }
+      y: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, callback: v => '¥' + (v/1000).toFixed(0) + 'k' }, min: 97000 }
     }
   }
 });
@@ -258,10 +262,11 @@ function renderTrades() {
   const start = (tradePage - 1) * TRADE_PER_PAGE;
   const pageTrades = allTrades.slice(start, start + TRADE_PER_PAGE);
   document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
-    '<tr><td>' + t.date + '</td><td>' + t.time + '</td><td><span class="' + t.cls + '">' + t.action + '</span></td>' +
+    '<tr><td>' + t.date + '</td><td>' + t.time + '</td><td><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
+    '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
     '<td class="stock-code">' + t.code + '</td><td class="stock-name">' + t.name + '</td>' +
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + t.amount + '</td>' +
-    '<td style="font-size:11px;color:#94a3b8;max-width:200px;">' + t.reason + '</td></tr>'
+    '<td style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
   ).join('');
 
   document.getElementById('tradePagination').innerHTML =
@@ -281,7 +286,10 @@ let currentReportType = 'all';
 function filterReports(type) {
   currentReportType = type || currentReportType;
   document.querySelectorAll('#reportFilters .filter-btn').forEach(b => b.classList.remove('active'));
-  if (type) document.querySelector('#reportFilters .filter-btn[onclick*="' + type + '"]').classList.add('active');
+  if (type) {
+    const btn = document.querySelector('#reportFilters .filter-btn[onclick*="' + type + '"]');
+    if (btn) btn.classList.add('active');
+  }
 
   const from = document.getElementById('dateFrom').value;
   const to = document.getElementById('dateTo').value;
@@ -314,53 +322,90 @@ function resetReportFilters() {
   document.getElementById('dateFrom').value = '';
   document.getElementById('dateTo').value = '';
   document.querySelectorAll('#reportFilters .filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('#reportFilters .filter-btn[onclick*="all"]').classList.add('active');
+  const allBtn = document.querySelector('#reportFilters .filter-btn[onclick*="all"]');
+  if (allBtn) allBtn.classList.add('active');
   filterReports('all');
 }
 
-// ========== STRATEGY LOAD ==========
+// ========== STRATEGY LOAD (with embedded fallback) ==========
+const FALLBACK_STRATEGY = {
+  "last_updated": "2026-06-12",
+  "core_philosophy": "买尾卖早：基于A股日内规律量化回测——早盘9:30-10:00是日内高点最易出现的时段（冲高回落概率高），适合止盈/止损卖出；尾盘14:30-14:50全天走势已定型、主力意图暴露，是最稳定的买入窗口。",
+  "win_rate": "简单尾买早卖胜率56%，叠加trigger_conditions条件筛选后可提升至69%+，盈亏比1.67:1",
+  "checkpoints": [
+    { "time": "10:00", "role": "卖出优先窗口", "desc": "止盈/止损 → 买入兜底", "detail": "早盘冲高是日内高点概率最高的时段，情绪亢奋、冲高回落。优先处理持仓止损/止盈，买入仅执行有开盘急跌否决条件的策略" },
+    { "time": "10:30", "role": "买入为主+卖出次选", "desc": "回调低吸+冲高止盈", "detail": "开盘1小时后冲高个股回调企稳，是量价确认后的低吸窗口。仍可处理早盘冲高未卖的止盈机会" },
+    { "time": "13:30", "role": "纯买入窗口", "desc": "午后主力方向确认后执行", "detail": "午后开盘1小时，主力资金运作活跃期，方向确认后适合执行买入。卖出仅在止损触发时执行" },
+    { "time": "14:45", "role": "🏆 最佳买入窗口", "desc": "尾盘全天走势已定", "detail": "尾盘信号经过全天消化，是最稳定的判断窗口。仅对全天pending策略做最终判断" }
+  ],
+  "rules": {
+    "buy_triggers": ["板块当日涨跌幅 > -1%", "量比 ≥ 0.8", "非急跌（开盘跌幅 ≤ 2%）", "溢价率 < 2%（基金）"],
+    "veto_conditions": ["当日大盘(上证)跌 > 1.5%", "开盘急跌 > 2%", "美联储鹰派发言（黄金类）"],
+    "risk_control": ["总持仓 ≤ 10支", "单支仓位 ≤ 25%", "保留至少10%现金", "同一板块持仓 ≤ 2只"],
+    "bonus": ["溢价率 < 0.5%加分", "量比 > 2加分", "北向资金净流入加分"]
+  },
+  "data_source": "全部行情由NeoData金融搜索实时获取，严禁编造数据",
+  "auto_push": "晨报8:30/日报15:30自动生成 → PushPlus推送至微信"
+};
+
+function renderStrategy(s) {
+  document.getElementById('strategyUpdated').textContent = '策略更新于 ' + s.last_updated + ' · 自动同步';
+
+  let html = '';
+  if (s.checkpoints) {
+    html += '<div><h3>🕐 盘中决策窗口</h3>';
+    s.checkpoints.forEach(c => {
+      html += '<p><b>' + c.time + '</b> — ' + c.role + '</p><p style="color:#64748b;font-size:11px;margin-left:12px;margin-bottom:8px;">' + c.detail + '</p>';
+    });
+    html += '</div>';
+  }
+
+  html += '<div><h3>📐 核心策略</h3>';
+  html += '<div class="strategy-card">' + (s.core_philosophy || '') + '</div>';
+  html += '<div class="strategy-card">📊 ' + (s.win_rate || '') + '</div>';
+
+  if (s.rules) {
+    html += '<h3 style="margin-top:10px;">✅ 买入触发条件</h3>';
+    (s.rules.buy_triggers || []).forEach(t => html += '<p>• ' + t + '</p>');
+    html += '<h3 style="margin-top:10px;">🚫 否决条件</h3>';
+    (s.rules.veto_conditions || []).forEach(v => html += '<p>• ' + v + '</p>');
+  }
+  html += '</div>';
+
+  html += '<div>';
+  if (s.rules) {
+    html += '<h3>🛡️ 风控规则</h3>';
+    (s.rules.risk_control || []).forEach(r => html += '<p>• ' + r + '</p>');
+    html += '<h3 style="margin-top:10px;">⭐ 加分项</h3>';
+    (s.rules.bonus || []).forEach(b => html += '<p>• ' + b + '</p>');
+  }
+  html += '<h3 style="margin-top:10px;">📡 数据</h3>';
+  html += '<p>' + (s.data_source || '') + '</p>';
+  html += '<p>' + (s.auto_push || '') + '</p>';
+  html += '</div>';
+
+  document.getElementById('strategyContent').innerHTML = html;
+}
+
+// 优先从 strategies.json 加载，失败则用 fallback
 fetch('strategies.json')
-  .then(r => r.json())
-  .then(s => {
-    document.getElementById('strategyUpdated').textContent = '策略更新于 ' + s.last_updated + ' · 自动同步';
-
-    let html = '';
-    if (s.checkpoints) {
-      html += '<div><h3>🕐 盘中决策窗口</h3>';
-      s.checkpoints.forEach(c => {
-        html += '<p><b>' + c.time + '</b> — ' + c.role + '</p><p style="color:#64748b;font-size:11px;margin-left:12px;margin-bottom:8px;">' + c.desc + '</p>';
-      });
-      html += '</div>';
-    }
-
-    html += '<div><h3>📐 核心策略</h3>';
-    html += '<div class="strategy-card">' + (s.core_philosophy || '') + '</div>';
-    html += '<div class="strategy-card">📊 ' + (s.win_rate || '') + '</div>';
-
-    if (s.rules) {
-      html += '<h3 style="margin-top:10px;">✅ 买入触发条件</h3>';
-      (s.rules.buy_triggers || []).forEach(t => html += '<p>• ' + t + '</p>');
-      html += '<h3 style="margin-top:10px;">🚫 否决条件</h3>';
-      (s.rules.veto_conditions || []).forEach(v => html += '<p>• ' + v + '</p>');
-    }
-    html += '</div>';
-
-    html += '<div>';
-    if (s.rules) {
-      html += '<h3>🛡️ 风控规则</h3>';
-      (s.rules.risk_control || []).forEach(r => html += '<p>• ' + r + '</p>');
-      html += '<h3 style="margin-top:10px;">⭐ 加分项</h3>';
-      (s.rules.bonus || []).forEach(b => html += '<p>• ' + b + '</p>');
-    }
-    html += '<h3 style="margin-top:10px;">📡 数据</h3>';
-    html += '<p>' + (s.data_source || '') + '</p>';
-    html += '<p>' + (s.auto_push || '') + '</p>';
-    html += '</div>';
-
-    document.getElementById('strategyContent').innerHTML = html;
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(renderStrategy)
+  .catch(function() {
+    // GitHub Pages 上首次访问可能缓存问题，等500ms重试
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        fetch('strategies.json')
+          .then(function(r) { if (!r.ok) throw new Error('retry fail'); return r.json(); })
+          .then(resolve)
+          .catch(reject);
+      }, 500);
+    });
   })
-  .catch(() => {
-    document.getElementById('strategyContent').innerHTML = '<div style="grid-column:1/-1;color:#64748b;text-align:center;padding:20px;">策略数据加载失败，请稍后刷新</div>';
+  .catch(function() {
+    console.warn('strategies.json 加载失败，使用内嵌策略数据');
+    renderStrategy(FALLBACK_STRATEGY);
+    document.getElementById('strategyUpdated').textContent += ' (离线模式)';
   });
 
 // ========== INIT ==========
