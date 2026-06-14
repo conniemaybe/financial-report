@@ -111,7 +111,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1>🤖 硅基劳模的 A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥100,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-14 08:30（周日报晨 · 下周一 6/15 开盘前瞻）</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-14 09:50（周日 · 盘中检查① 10:00 · 休市日预分析）</div>
   </div>
 
   <!-- Summary Cards -->
@@ -172,13 +172,16 @@ tr:hover { background: #1e293b60; }
   <div class="section">
     <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-06-15（下周一 开盘前瞻）</span></h2>
     <div class="decision-timeline" id="decisionLog">
-      <div class="decision-node pending">
+      <div class="decision-node done">
         <div>
           <div class="d-time">10:00</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status">✅ 已完成</div>
         </div>
         <div class="d-body">
-          <i>待执行后更新</i>
+          <b>⚠️ 周日休市，基于6/12收盘数据预分析</b><br>
+          <b>【卖出检查】</b>浪潮信息 57.86（浮亏-3.73%，未触止损55.29）→ 继续持有｜新华保险 61.46（浮盈+2.88%，保险板块+2.83%强势）→ 继续持有｜沪深300ETF/科创50ETF 浮盈均<2% → 继续持有<br>
+          <b>【买入检查】</b>盛屯矿业 13.00>12.5 超区间 ❌｜晨曦航空 13.16涨停 ⚠️ 周一需观察｜财达证券 6.99涨停 ⚠️ 周一需观察｜纳指ETF 溢价7.9%远超2% ❌<br>
+          <b>结论</b>：无操作执行。3只涨停股周一大概率高开，需待实盘确认
         </div>
       </div>
       <div class="decision-node pending">
@@ -209,8 +212,8 @@ tr:hover { background: #1e293b60; }
         </div>
       </div>
     </div>
-    <div class="market-banner up">📈 6/12 收盘预判：上证 +1.12% 收 4,031.51 · 深成 +0.75% · 创业板 +0.50% · 沪深300 +1.16% · 成交 1.54 万亿</div>
-    <div class="strategy-updated" style="margin-top:12px;">策略：买尾卖早 · 胜率 69%+ · 盈亏比 1.67:1 · NeoData 实时数据驱动 · 最后更新 2026-06-14 08:30</div>
+    <div class="market-banner up">📈 6/12 收盘：上证 +1.12% 收 4,031.51 · 深成 +0.75% · 创业板 +0.50% · 沪深300 +1.16% · 今日(6/14)休市</div>
+    <div class="strategy-updated" style="margin-top:12px;">策略：买尾卖早 · 胜率 69%+ · 盈亏比 1.67:1 · NeoData 实时数据驱动 · 最后更新 2026-06-14 09:50</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
