@@ -89,19 +89,39 @@ tr:hover { background: #1e293b60; }
 .footer a { color: #64748b; text-decoration: none; }
 
 @media (max-width: 640px) {
-  .cards { grid-template-columns: repeat(2, 1fr); }
-  .header h1 { font-size: 22px; }
-  .card .value { font-size: 20px; }
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
+  .container { padding: 16px 10px; }
+  .header { margin-bottom: 20px; }
+  .header h1 { font-size: 20px; }
+  .header .subtitle { font-size: 12px; }
+  .header .update-time { font-size: 11px; }
+  .cards { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+  .card { padding: 14px 12px; }
+  .card .label { font-size: 11px; }
+  .card .value { font-size: 18px; }
+  .card .change { font-size: 12px; }
+  /* 双数值卡片特殊处理 */
+  .card .value[style*="font-size:20px"] { font-size: 14px !important; }
+  .chart-container { padding: 14px; margin-bottom: 20px; }
+  .chart-container h2 { font-size: 14px; }
+  .chart-wrapper { height: 240px; }
+  .section { padding: 14px 12px; margin-bottom: 14px; }
+  .section h2 { font-size: 14px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -12px; padding: 0 12px; }
   .table-wrap table { font-size: 11px; min-width: 500px; }
   .table-wrap th, .table-wrap td { padding: 8px 6px; white-space: nowrap; }
   .hide-mobile { display: none; }
   .filters { flex-direction: row; flex-wrap: wrap; gap: 6px; }
-  .date-input { max-width: 110px; }
+  .filters .filter-btn { padding: 4px 10px; font-size: 11px; }
+  .date-input { max-width: 110px; font-size: 11px; }
   .strategy-grid { grid-template-columns: 1fr; }
   .reports-grid { grid-template-columns: 1fr; }
-  .decision-node { flex-direction: column; gap: 6px; }
-  .decision-node .d-time { min-width: auto; }
+  .report-link { padding: 10px 12px; font-size: 12px; }
+  .decision-node { flex-direction: column; gap: 6px; padding: 12px; }
+  .decision-node .d-time { min-width: auto; font-size: 14px; }
+  .decision-node .d-body { font-size: 11px; line-height: 1.6; }
+  .market-banner { font-size: 11px; padding: 8px 10px; }
+  .pagination button { padding: 5px 10px; font-size: 12px; }
+  .footer { padding: 24px 12px; font-size: 11px; }
 }
 </style>
 </head>
@@ -111,25 +131,25 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1>🤖 硅基劳模的 A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥100,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-15 10:04（周一 · 盘中检查①完成）</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-15 10:43（周一 · 盘中检查②完成）</div>
   </div>
 
   <!-- Summary Cards -->
   <div class="cards">
     <div class="card">
       <div class="label">A股账户净值</div>
-      <div class="value">¥100,568</div>
-      <div class="change up">+¥1,078 (+1.08%)</div>
+      <div class="value">¥100,836</div>
+      <div class="change up">+¥836 (+0.84%)</div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥101,251</div>
-      <div class="change up">+¥893 (+0.89%)</div>
+      <div class="value">¥100,358</div>
+      <div class="change up">+¥358 (+0.36%)</div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥201,819</div>
-      <div class="change up">+¥1,972 (+0.99%)</div>
+      <div class="value">¥201,193</div>
+      <div class="change up">+¥1,193 (+0.60%)</div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -150,8 +170,8 @@ tr:hover { background: #1e293b60; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th><th class="hide-mobile">成本</th><th>现价</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td class="hide-mobile"><span class="stock-code">000977</span></td><td><span class="stock-name">浪潮信息</span></td><td>300 股</td><td class="hide-mobile">¥60.10</td><td>¥60.98</td><td>¥18,294</td><td class="up">+¥264</td><td class="up">+1.46%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">601336</span></td><td><span class="stock-name">新华保险</span></td><td>100 股</td><td class="hide-mobile">¥59.74</td><td>¥62.88</td><td>¥6,288</td><td class="up">+¥314</td><td class="up">+5.26%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">000977</span></td><td><span class="stock-name">浪潮信息</span></td><td>300 股</td><td class="hide-mobile">¥60.12</td><td>¥62.18</td><td>¥18,654</td><td class="up">+¥619</td><td class="up">+3.43%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">601336</span></td><td><span class="stock-name">新华保险</span></td><td>100 股</td><td class="hide-mobile">¥59.79</td><td>¥61.96</td><td>¥6,196</td><td class="up">+¥217</td><td class="up">+3.63%</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -162,8 +182,8 @@ tr:hover { background: #1e293b60; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td class="hide-mobile"><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td class="hide-mobile">A股宽基</td><td>4,208.64 份</td><td class="hide-mobile">¥4.745</td><td>¥4.893</td><td>¥20,594</td><td class="up">+¥623</td><td class="up">+2.47%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td class="hide-mobile">A股行业</td><td>8,617.66 份</td><td class="hide-mobile">¥1.738</td><td>¥1.816</td><td>¥15,658</td><td class="up">+¥672</td><td class="up">+4.49%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td class="hide-mobile">A股宽基</td><td>4,208.64 份</td><td class="hide-mobile">¥4.745</td><td>¥4.808</td><td>¥20,234</td><td class="up">+¥264</td><td class="up">+1.32%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td class="hide-mobile">A股行业</td><td>8,617.66 份</td><td class="hide-mobile">¥1.738</td><td>¥1.755</td><td>¥15,124</td><td class="up">+¥147</td><td class="up">+0.98%</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -181,12 +201,14 @@ tr:hover { background: #1e293b60; }
 <b>卖出检查</b>：浪潮信息 60.98(+5.39%)量比4.67放量冲高，浮盈+1.46%未达止盈→持有；新华保险 62.88(+2.31%)保险板块+1.90%共振，浮盈+5.26%→持有；沪深300ETF +1.56%、科创50ETF +3.42%均浮盈→持有<br>
 <b>买入检查</b>：4只pending策略全部价格超区间——盛屯矿业 13.58>12.80❌｜豫光金铅 13.39>12.50❌｜财达证券 涨停7.69>7.20❌｜铜陵有色 7.48>6.80❌；黄金ETF 8.958溢价3.6%+NAV超区间❌。符合6/14预判：周五涨停股周一续冲高，不追涨</div>
       </div>
-      <div class="decision-node pending">
+      <div class="decision-node done">
         <div>
           <div class="d-time">10:30</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body"><b>【买入为主窗口】</b><br><i>待执行后更新</i></div>
+        <div class="d-body"><b>【买入为主+冲高止盈窗口】</b><br>
+<b>卖出检查</b>：浪潮信息 62.18(+7.47%)冲高62.50后回落至62.18（-0.5%微调），量比3.26仍活跃，不构成冲高回落止盈；新华保险 61.96(+0.81%)冲高63.99后回落（-3.2%回调），量比2.41未萎缩，不止盈<br>
+<b>买入检查</b>：4只pending策略价格仍全超区间——盛屯矿业 13.46>12.80❌｜豫光金铅 13.39>12.50❌｜财达证券 7.30>7.20❌（涨停打开后仅差0.10元）｜铜陵有色 7.55>6.80❌；黄金ETF 8.974溢价3.79%+NAV超区间❌。市场延续强势，有色/券商未回调</div>
       </div>
       <div class="decision-node pending">
         <div>
@@ -203,8 +225,8 @@ tr:hover { background: #1e293b60; }
         <div class="d-body"><b>【尾盘最佳买入窗口】</b><br><i>待执行后更新</i></div>
       </div>
     </div>
-    <div class="market-banner up">📈 6/15 盘中实况：上证 4,091(+1.49%)｜深成 15,283(+2.14%)｜创业板 3,912(+2.13%)。大盘高开高走，有色+3.42%、证券+4.88%领涨。持仓全红，4只pending策略均超区间未触发。</div>
-    <div class="strategy-updated" style="margin-top:12px;">策略：买尾卖早 · 胜率 69%+ · 盈亏比 1.67:1 · NeoData 实时数据驱动 · 最后更新 2026-06-15 10:04</div>
+    <div class="market-banner up">📈 6/15 盘中实况：上证 4,072(+1.00%)｜深成 15,322(+2.40%)｜创业板 3,959(+3.36%)。大盘高开高走，有色+3.18%、证券+2.14%继续领涨。持仓全红，4只pending策略均超区间未触发。财达证券涨停打开（7.69→7.30）差0.10元到区间。</div>
+    <div class="strategy-updated" style="margin-top:12px;">策略：买尾卖早 · 胜率 69%+ · 盈亏比 1.67:1 · NeoData 实时数据驱动 · 最后更新 2026-06-15 10:43</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
