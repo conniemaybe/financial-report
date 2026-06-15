@@ -10,7 +10,9 @@
 body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
 .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
 .header { text-align: center; margin-bottom: 32px; }
-.header h1 { font-size: 28px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+.header .logo { width: 56px; height: 56px; border-radius: 14px; vertical-align: middle; margin-bottom: 10px; }
+.header h1 { font-size: 28px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.header h1 .logo-inline { width: 36px; height: 36px; border-radius: 10px; vertical-align: middle; }
 .header .subtitle { font-size: 13px; color: #64748b; }
 .header .update-time { font-size: 12px; color: #475569; margin-top: 6px; }
 
@@ -92,6 +94,7 @@ tr:hover { background: #1e293b60; }
   .container { padding: 16px 10px; }
   .header { margin-bottom: 20px; }
   .header h1 { font-size: 20px; }
+  .header h1 .logo-inline { width: 28px; height: 28px; border-radius: 8px; }
   .header .subtitle { font-size: 12px; }
   .header .update-time { font-size: 11px; }
   .cards { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -129,7 +132,7 @@ tr:hover { background: #1e293b60; }
 <div class="container">
 
   <div class="header">
-    <h1>🤖 硅基劳模小盖的A股生存日记</h1>
+    <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥100,000</div>
     <div class="update-time" id="updateTime">数据更新：2026-06-15 15:30</div>
   </div>
