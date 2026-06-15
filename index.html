@@ -254,6 +254,7 @@ tr:hover { background: #1e293b60; }
       <button class="filter-btn" onclick="resetReportFilters()" style="margin-left:auto;">🔄 重置</button>
     </div>
     <div class="reports-grid" id="reportsGrid"></div>
+    <div class="pagination" id="reportPagination"></div>
     <div id="reportCount" style="font-size:11px;color:#475569;margin-top:10px;"></div>
   </div>
 
@@ -269,7 +270,6 @@ tr:hover { background: #1e293b60; }
 // ========== REAL TRADE DATA (source: portfolio.json + fund_portfolio.json) ==========
 // A股: 2笔买入 | 基金: 2笔买入 | 合计4笔，无卖出记录
 const allTrades = [
-  { date: '2026-06-15', time: '15:30', acct: 'A股', action: '调仓', code: '—', name: '全账户收市', price: '—', qty: '—', amount: '—', reason: '合并净值 ¥201,590（+0.83%），A股+1.75%/基金-0.10%', cls: 'up' },
   { date: '2026-06-14', time: '15:43', acct: 'A股', action: '买入', code: '600036', name: '招商银行', price: '¥41.00', qty: '100 股', amount: '¥4,105', reason: '6/14 盘中尾盘买入，6/15 因 T+1 暂未入持仓', cls: 'up' },
   { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '8,617.66 份', amount: '¥15,000', reason: '溢价-0.45%<2%，科创50>-1%，半导未跌超3%', cls: 'up' },
   { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '4,208.64 份', amount: '¥20,000', reason: '溢价-0.71%<2%，沪深300>-1%，折价加分', cls: 'up' },
@@ -362,6 +362,55 @@ function changeTradePage(delta) {
 // ========== REPORT FILTERS ==========
 let currentReportType = 'all';
 
+// ========== REPORT PAGINATION ==========
+const REPORT_PER_PAGE = 10;
+let reportPage = 1;
+let filteredReports = [];
+
+function getFilteredReports() {
+  const from = document.getElementById('dateFrom').value;
+  const to = document.getElementById('dateTo').value;
+  return allReports.filter(r => {
+    if (currentReportType === 'morning' && r.type !== 'morning') return false;
+    if (currentReportType === 'evening' && r.type !== 'evening') return false;
+    if (from && r.date < from) return false;
+    if (to && r.date > to) return false;
+    return true;
+  });
+}
+
+function renderReports() {
+  filteredReports = getFilteredReports();
+  const totalReportPages = Math.ceil(filteredReports.length / REPORT_PER_PAGE) || 1;
+  if (reportPage > totalReportPages) reportPage = totalReportPages;
+  const start = (reportPage - 1) * REPORT_PER_PAGE;
+  const pageReports = filteredReports.slice(start, start + REPORT_PER_PAGE);
+
+  const grid = document.getElementById('reportsGrid');
+  grid.innerHTML = pageReports.map(r =>
+    '<a href="reports/' + r.file + '" class="report-link"><span class="icon ' + r.cls + '">' + r.ico + '</span> ' + r.label + '</a>'
+  ).join('');
+
+  const pag = document.getElementById('reportPagination');
+  if (totalReportPages <= 1) {
+    pag.innerHTML = '';
+  } else {
+    pag.innerHTML =
+      '<button onclick="changeReportPage(' + (reportPage - 1) + ')" ' + (reportPage === 1 ? 'disabled' : '') + '>‹ 上一页</button>' +
+      '<span class="page-info">' + reportPage + ' / ' + totalReportPages + ' 页（共 ' + filteredReports.length + ' 份）</span>' +
+      '<button onclick="changeReportPage(' + (reportPage + 1) + ')" ' + (reportPage === totalReportPages ? 'disabled' : '') + '>下一页 ›</button>';
+  }
+
+  document.getElementById('reportCount').textContent = '显示 ' + pageReports.length + ' / ' + filteredReports.length + ' 份报告（第 ' + reportPage + '/' + totalReportPages + ' 页）';
+}
+
+function changeReportPage(p) {
+  const totalReportPages = Math.ceil(filteredReports.length / REPORT_PER_PAGE) || 1;
+  if (p < 1 || p > totalReportPages) return;
+  reportPage = p;
+  renderReports();
+}
+
 function filterReports(type) {
   currentReportType = type || currentReportType;
   document.querySelectorAll('#reportFilters .filter-btn').forEach(b => b.classList.remove('active'));
@@ -373,27 +422,8 @@ function filterReports(type) {
   const from = document.getElementById('dateFrom').value;
   const to = document.getElementById('dateTo').value;
 
-  let visible = 0;
-  const grid = document.getElementById('reportsGrid');
-  grid.innerHTML = '';
-
-  allReports.forEach(r => {
-    let show = true;
-    if (currentReportType === 'morning' && r.type !== 'morning') show = false;
-    if (currentReportType === 'evening' && r.type !== 'evening') show = false;
-    if (from && r.date < from) show = false;
-    if (to && r.date > to) show = false;
-
-    const link = document.createElement('a');
-    link.href = 'reports/' + r.file;
-    link.className = 'report-link';
-    link.innerHTML = '<span class="icon ' + r.cls + '">' + r.ico + '</span> ' + r.label;
-    if (!show) link.classList.add('hidden');
-    grid.appendChild(link);
-    if (show) visible++;
-  });
-
-  document.getElementById('reportCount').textContent = '显示 ' + visible + ' / ' + allReports.length + ' 份报告';
+  reportPage = 1; // 切换筛选时回到第一页
+  renderReports();
 }
 
 function resetReportFilters() {
@@ -408,7 +438,7 @@ function resetReportFilters() {
 
 // ========== INIT ==========
 renderTrades();
-filterReports('all');
+renderReports();
 </script>
 </body>
 </html>
