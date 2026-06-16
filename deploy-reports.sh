@@ -1,12 +1,12 @@
 #!/bin/bash
 # ============================================================
-# deploy-reports.sh — 将新生成的报告同步到 GitHub Pages 并推送
+# deploy-reports.sh — 将新生成的报告同步到 GitHub Pages 并推送（自适应代理）
 # 用法: bash deploy-reports.sh "commit说明"
 #
-# 前置条件（一次性配置，已完成）：
-#   git config --global http.proxy "http://127.0.0.1:7892"
-#   git config --global https.proxy "http://127.0.0.1:7892"
-#   （让 git 主动走小云朵代理，而非被动被 Windows 系统代理劫持）
+# 自适应代理策略：探测 127.0.0.1:7892 是否监听
+#   - 开代理 → git -c http.proxy=http://127.0.0.1:7892（走代理转发）
+#   - 关代理 → git -c http.proxy=（直连 GitHub）
+#   不依赖全局 git config，开/关代理都能推
 # ============================================================
 
 REPO_DIR="/c/temp/financial-report"
@@ -59,14 +59,24 @@ git status --short
 git add -A
 git commit -m "$COMMIT_MSG"
 
-# === Step 3: 推送（git 全局已配置走代理 http://127.0.0.1:7892） ===
+# === Step 3: 自适应代理推送 ===
 echo ""
 echo -e "${YELLOW}[3/3]${NC} 推送到 GitHub Pages..."
+
+# 探测代理端口
+PROXY_PORT=7892
+if timeout 2 bash -c "echo > /dev/tcp/127.0.0.1/$PROXY_PORT" 2>/dev/null; then
+    echo -e "  ${CYAN}🌐 检测到代理 → 走代理推送${NC}"
+    GIT_PROXY_OPTS="-c http.proxy=http://127.0.0.1:$PROXY_PORT -c https.proxy=http://127.0.0.1:$PROXY_PORT"
+else
+    echo -e "  ${CYAN}📡 未检测到代理 → 直连推送${NC}"
+    GIT_PROXY_OPTS="-c http.proxy= -c https.proxy="
+fi
 
 MAX_RETRIES=3
 PUSH_SUCCESS=0
 for i in $(seq 1 $MAX_RETRIES); do
-    if git push origin main 2>&1; then
+    if git $GIT_PROXY_OPTS push origin main 2>&1; then
         echo ""
         echo -e "${GREEN}✅ 推送成功！(第 $i 次尝试)${NC}"
         echo -e "   GitHub Pages 将在 1-2 分钟后更新"
@@ -83,7 +93,7 @@ done
 if [ "$PUSH_SUCCESS" -eq 0 ]; then
     echo ""
     echo -e "${RED}❌ 推送失败 ($MAX_RETRIES 次重试均失败)${NC}"
-    echo -e "   排查：检查小云朵代理是否运行在 127.0.0.1:7892"
+    echo -e "   排查：① 确认网络能访问 github.com  ② 代理端口是否为 $PROXY_PORT"
     echo -e "   或手动执行: cd $REPO_DIR && git push origin main"
     exit 1
 fi
