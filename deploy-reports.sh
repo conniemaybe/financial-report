@@ -1,18 +1,12 @@
 #!/bin/bash
 # ============================================================
-# deploy-reports.sh — 将新生成的报告同步到 GitHub Pages 本地仓库（不含 push）
+# deploy-reports.sh — 将新生成的报告同步到 GitHub Pages 并推送
 # 用法: bash deploy-reports.sh "commit说明"
 #
-# ⚠️ 重要：此脚本只做 拷贝+commit，不做 push！
-#   因为 git push 需要「先在 PowerShell 进程禁用 Windows 系统代理，
-#    再在 Bash 进程执行 push」两步跨进程操作，无法在单个 bash 脚本内完成。
-#
-#   push 操作请由调用方（AI/自动化任务）在脚本执行完毕后，
-#   按以下顺序执行两个独立工具调用：
-#     1. PowerShell: Set-ItemProperty 'HKCU:\...\Internet Settings' -Name ProxyEnable -Value 0
-#     2. Bash: cd /c/temp/financial-report && git push origin main
-#
-#   或调用 push-after-deploy.sh（封装了两步，但需 dangerouslyDisableSandbox）
+# 前置条件（一次性配置，已完成）：
+#   git config --global http.proxy "http://127.0.0.1:7892"
+#   git config --global https.proxy "http://127.0.0.1:7892"
+#   （让 git 主动走小云朵代理，而非被动被 Windows 系统代理劫持）
 # ============================================================
 
 REPO_DIR="/c/temp/financial-report"
@@ -26,7 +20,7 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-echo -e "${CYAN}deploy-reports.sh${NC} — 同步报告到本地仓库（push 请单独执行）"
+echo -e "${CYAN}deploy-reports.sh${NC} — 同步报告到 GitHub Pages"
 echo ""
 
 # === Step 1: 拷贝报告文件 ===
@@ -52,30 +46,44 @@ if [ "$REPORT_COUNT" -eq 0 ]; then
     echo -e "  无新报告需要更新"
 fi
 
-# === Step 2: 检查是否有变更 ===
+# === Step 2: 检查变更 + commit ===
 echo ""
-echo -e "${YELLOW}[2/3]${NC} 检查变更..."
+echo -e "${YELLOW}[2/3]${NC} 检查变更并提交..."
 cd "$REPO_DIR"
 CHANGED=$(git status --short | wc -l)
 if [ "$CHANGED" -eq 0 ]; then
-    echo -e "  无任何变更，无需推送"
-    rm -f "$REPO_DIR/.need-push"
+    echo -e "  无任何变更，跳过推送"
     exit 0
 fi
 git status --short
-
-# === Step 3: commit ===
-echo ""
-echo -e "${YELLOW}[3/3]${NC} 提交..."
-git config --global --unset http.proxy 2>/dev/null || true
-git config --global --unset https.proxy 2>/dev/null || true
 git add -A
-git commit -m "$COMMIT_MSG" 2>/dev/null || echo "  (无可提交的内容或已提交)"
+git commit -m "$COMMIT_MSG"
 
-# 写入 flag 文件，告知调用方需要 push
-touch "$REPO_DIR/.need-push"
-
+# === Step 3: 推送（git 全局已配置走代理 http://127.0.0.1:7892） ===
 echo ""
-echo -e "${YELLOW}本地 commit 完成。需要推送时执行：${NC}"
-echo -e "  ${CYAN}bash /c/temp/financial-report/push-after-deploy.sh${NC}"
-echo -e "  或由 AI 分别调用 PowerShell(禁用代理) + Bash(git push)"
+echo -e "${YELLOW}[3/3]${NC} 推送到 GitHub Pages..."
+
+MAX_RETRIES=3
+PUSH_SUCCESS=0
+for i in $(seq 1 $MAX_RETRIES); do
+    if git push origin main 2>&1; then
+        echo ""
+        echo -e "${GREEN}✅ 推送成功！(第 $i 次尝试)${NC}"
+        echo -e "   GitHub Pages 将在 1-2 分钟后更新"
+        PUSH_SUCCESS=1
+        break
+    else
+        if [ $i -lt $MAX_RETRIES ]; then
+            echo -e "${YELLOW}  ⚠️ 第 $i 次失败，重试...${NC}"
+            sleep 2
+        fi
+    fi
+done
+
+if [ "$PUSH_SUCCESS" -eq 0 ]; then
+    echo ""
+    echo -e "${RED}❌ 推送失败 ($MAX_RETRIES 次重试均失败)${NC}"
+    echo -e "   排查：检查小云朵代理是否运行在 127.0.0.1:7892"
+    echo -e "   或手动执行: cd $REPO_DIR && git push origin main"
+    exit 1
+fi

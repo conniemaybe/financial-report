@@ -1,7 +1,11 @@
 #!/bin/bash
-# safe-push.sh - 自动清除 git 代理后推送（防止 Clash 残留代理 + sandbox 拦截导致 push 失败）
+# safe-push.sh — 推送 financial-report 到 GitHub Pages
 # 用法: bash /c/temp/financial-report/safe-push.sh "commit message"
-# 重要：这是自动化任务同步网站的关键脚本，push 失败必须重试！
+#
+# 前置条件（一次性配置，已完成）：
+#   git config --global http.proxy "http://127.0.0.1:7892"
+#   git config --global https.proxy "http://127.0.0.1:7892"
+#   （让 git 主动走小云朵代理，而非被动被 Windows 系统代理劫持）
 
 set -e
 REPO_DIR="/c/temp/financial-report"
@@ -10,14 +14,10 @@ MAX_RETRIES=3
 
 cd "$REPO_DIR"
 
-# 1. 清除 git 全局代理配置（Clash 残留的 http.proxy=127.0.0.1:7892 会拦截 push）
-git config --global --unset http.proxy 2>/dev/null || true
-git config --global --unset https.proxy 2>/dev/null || true
-
-# 2. 暂存所有变更
+# 1. 暂存所有变更
 git add -A
 
-# 3. 检查是否有变更需要提交
+# 2. 检查是否有变更需要提交
 if git diff --cached --quiet; then
     echo "ℹ️  没有变更需要提交"
 else
@@ -25,29 +25,24 @@ else
     echo "✅ commit 完成: $COMMIT_MSG"
 fi
 
-# 4. 推送（多次重试，sandbox 可能偶发拦截 git-remote-https 子进程）
+# 3. 推送（git 全局已配置走代理 http://127.0.0.1:7892，3次重试）
 echo "🔄 正在推送..."
 for i in $(seq 1 $MAX_RETRIES); do
-    # 清除环境变量代理 + git 配置代理双保险
-    if env HTTP_PROXY= HTTPS_PROXY= http_proxy= https_proxy= NO_PROXY="*" \
-       git -c http.proxy= -c https.proxy= push origin main 2>&1; then
+    if git push origin main 2>&1; then
         echo "✅ 第 $i 次 PUSH 成功"
         break
     else
-        echo "⚠️ 第 $i 次 push 失败，清除代理后重试..."
-        git config --global --unset http.proxy 2>/dev/null || true
-        git config --global --unset https.proxy 2>/dev/null || true
+        echo "⚠️ 第 $i 次 push 失败"
         if [ "$i" -eq "$MAX_RETRIES" ]; then
             echo "❌ PUSH 失败 ($MAX_RETRIES 次重试均失败)"
-            echo "⚠️ 网站将无法同步本次更新，请手动运行："
-            echo "   cd C:/temp/financial-report && git push origin main"
+            echo "⚠️ 排查：检查小云朵代理是否运行在 127.0.0.1:7892"
             exit 1
         fi
         sleep 2
     fi
 done
 
-# 5. 验证：检查是否有未推送的 commit
+# 4. 验证
 REMAINING=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
 if [ "$REMAINING" -gt 0 ]; then
     echo "⚠️ 仍有 $REMAINING 个 commit 未推送"
