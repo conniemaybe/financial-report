@@ -57,38 +57,30 @@ if [ "$CHANGED" -eq 0 ]; then
 fi
 git status --short
 
-# === Step 3: 清除所有代理（git config + 环境变量 + Windows 系统代理） ===
+# === Step 3+4: commit + 清除Windows系统代理 + 立即push（三步必须连续执行） ===
+# 核心原理：Clash 每隔几秒会重写 HKCU ProxyEnable=1，
+# 而 Windows 版 git-remote-https.exe 通过 WinINET API 读取该值，
+# 强制走 127.0.0.1:7892 代理（即使 git config/环境变量都设为空也无济于事）。
+# 唯一有效方案：禁用系统代理后【零延迟】执行 git push，抢在 Clash 改回之前完成。
 echo ""
-echo -e "${YELLOW}[3/4]${NC} 清除所有代理残留..."
-
-# 3a. git config 代理（删除而非设为空字符串，更干净）
-git config --global --unset http.proxy 2>/dev/null || true
-git config --global --unset https.proxy 2>/dev/null || true
-
-# 3b. Windows IE 系统代理（Clash 写入的 ProxyEnable=1 会被 WinINET 子进程读取）
-powershell.exe -NoProfile -Command "
-    \$p = Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings';
-    if (\$p.ProxyEnable -ne 0) {
-        Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -Name ProxyEnable -Value 0;
-        Write-Output '  Windows IE 代理已禁用';
-    } else {
-        Write-Output '  Windows IE 代理已是禁用状态';
-    }
-" 2>/dev/null
-
-echo -e "  ${GREEN}✓${NC} 代理已清除（git config + Windows 系统代理）"
-echo -e "  ${YELLOW}注意${NC}: 环境变量 HTTP_PROXY 会在每次 push 命令前通过 env 前缀清除"
-
-# === Step 4: commit + push (3次重试，每次都清除环境变量代理) ===
-echo ""
-echo -e "${YELLOW}[4/4]${NC} 提交并推送..."
+echo -e "${YELLOW}[3/4]${NC} 提交变更..."
 git add -A
 git commit -m "$COMMIT_MSG" 2>/dev/null || echo "  (无可提交的内容或已提交)"
 
-MAX_RETRIES=3
+# 顺带清除 git config 代理（有些环境会写入）
+git config --global --unset http.proxy 2>/dev/null || true
+git config --global --unset https.proxy 2>/dev/null || true
+
+echo ""
+echo -e "${YELLOW}[4/4]${NC} 禁用 Windows 系统代理后立即推送..."
+MAX_RETRIES=5  # 增加重试次数，因为 Clash 可能在我们 push 前抢写
 PUSH_SUCCESS=0
 for i in $(seq 1 $MAX_RETRIES); do
-    # 关键：用 env 前缀清除当前 session 的环境变量代理 + NO_PROXY=* 禁用所有代理 + git -c 内联覆盖
+    # ★ 关键：用 PowerShell 禁用系统代理后【立即】在同一秒内执行 git push ★
+    # powershell.exe 和 git push 必须紧挨着，中间不能有 sleep 或其他耗时操作
+    powershell.exe -NoProfile -Command "Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -Name ProxyEnable -Value 0" 2>/dev/null
+
+    # env 前缀清除环境变量代理 + git -c 内联覆盖 git config 代理（双保险）
     if env HTTP_PROXY= HTTPS_PROXY= http_proxy= https_proxy= NO_PROXY="*" \
        git -c http.proxy= -c https.proxy= push origin main 2>&1; then
         echo ""
@@ -98,11 +90,8 @@ for i in $(seq 1 $MAX_RETRIES); do
         break
     else
         if [ $i -lt $MAX_RETRIES ]; then
-            echo -e "${YELLOW}  ⚠️ 第 $i 次失败，清除代理后重试...${NC}"
-            # 再次清除所有代理
-            git config --global --unset http.proxy 2>/dev/null || true
-            git config --global --unset https.proxy 2>/dev/null || true
-            sleep 2
+            echo -e "${YELLOW}  ⚠️ 第 $i 次失败（可能 Clash 抢写代理），立即重试...${NC}"
+            # 不 sleep！直接重试，减少 Clash 抢写窗口
         fi
     fi
 done
@@ -110,6 +99,9 @@ done
 if [ "$PUSH_SUCCESS" -eq 0 ]; then
     echo ""
     echo -e "${RED}❌ 推送失败 ($MAX_RETRIES 次重试均失败)${NC}"
-    echo -e "   请手动执行: cd $REPO_DIR && git push origin main"
+    echo -e "   根因：Clash 持续重写 Windows 系统代理，git-remote-https 强制走代理失败"
+    echo -e "   建议手动执行（需 Clash 已退出或改为 TUN 模式）："
+    echo -e "     powershell -Command \"Set-ItemProperty 'HKCU:\\...\\Internet Settings' -Name ProxyEnable -Value 0\""
+    echo -e "     cd $REPO_DIR && git push origin main"
     exit 1
 fi
