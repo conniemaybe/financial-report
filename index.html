@@ -195,12 +195,21 @@ tr:hover { background: #1e293b60; }
   <div class="section">
     <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-06-16（周二 · 全球risk-on延续 FOMC周）</span></h2>
     <div class="decision-timeline" id="decisionLog">
-      <div class="decision-node pending">
+      <div class="decision-node done">
         <div>
           <div class="d-time">10:00</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body"><i>待执行后更新</i></div>
+        <div class="d-body"><b>【卖出检查】全部持有，无卖出信号</b><br>
+① 浪潮信息 62.59(-0.79%) 量比2.38 浮盈+4.11%→未触止损(54.5)和止盈(68.0)，早盘跌-0.79%非冲高→持有<br>
+② 新华保险 62.80(-0.63%) 量比1.63 浮盈+5.03%→保险Ⅱ板块-0.84%，未触止损(54.0)和止盈(68.0)→持有<br>
+③ 沪深300ETF 4.912(-0.14%) 浮盈+3.49%→持有<br>
+④ 科创50ETF 1.830(-0.76%) 浮盈+5.26%→持有<br>
+<b>【买入检查】2只A股+2只基金全部SKIP</b><br>
+① 联瑞新材 232.77(+9.23%) 远超建仓区间190-200，非金属+3.57%✅量比3.79✅但价超区间❌<br>
+② 瑞可达 124.26(-0.19%) 超建仓区间112-118(+5.3%)，电子Ⅱ+1.74%✅量比1.70✅但价超区间❌<br>
+③ 黄金ETF 8.930 NAV 8.9319超上限8.80，溢价-0.02%✅金价+0.02%✅但NAV超区间❌<br>
+④ 纳指100ETF 2.258 无成交(量0) NAV 2.015远超上限1.55，溢价12.05%>3%否决❌</div>
       </div>
       <div class="decision-node pending">
         <div>
@@ -224,7 +233,7 @@ tr:hover { background: #1e293b60; }
         <div class="d-body"><i>待执行后更新</i></div>
       </div>
     </div>
-    <div class="market-banner up">📈 6/16 盘前：上证 4,096(+1.61%昨收)｜深成 15,531(+3.79%昨收)｜创业板 4,034(+5.30%昨收)。美伊停火电子签署，纳指+3.07%创新高，SpaceX+20%。A股昨日3900+只上涨，风格再平衡。今日关注FOMC决议、非AI板块持续性、涨停股高开后走势。A股净值 506,163(+1.23%)｜基金净值 508,287(+1.66%)｜合并 1,014,450(+1.45%)。</div>
+    <div class="market-banner down">📊 6/16 10:03 盘中：上证 4,089(-0.19%)｜深成 15,592(+0.39%)｜创业板 4,070(+0.90%)。市场风格分化：科技(创业板)强、主板弱。持仓股早盘微跌，无卖出信号；4只pending策略全部价格超建仓区间，继续等待回调。A股净值 505,213(-0.19%日内)｜基金净值 507,411(+1.08%日内)｜合并 1,012,624(+0.41%日内)。</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -305,10 +314,10 @@ new Chart(ctx, {
   data: {
     labels: ['6/8', '6/9', '6/10', '6/11', '6/12', '6/15', '6/16'],
     datasets: [
-      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1014450], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1012624], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
       { label: '沪深300基准 (100万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
-      { label: 'A股净值', data: [500000, 500000, 498912, 496298, 498448, 506163, 506163], borderColor: '#ef4444', backgroundColor: '#ef444420', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#ef4444', borderWidth: 1.5 },
-      { label: '基金净值', data: [500000, 500000, 500000, 500996, 502475, 501996, 508287], borderColor: '#34d399', backgroundColor: '#34d39920', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#34d399', borderWidth: 1.5 }
+      { label: 'A股净值', data: [500000, 500000, 498912, 496298, 498448, 506163, 505213], borderColor: '#ef4444', backgroundColor: '#ef444420', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#ef4444', borderWidth: 1.5 },
+      { label: '基金净值', data: [500000, 500000, 500000, 500996, 502475, 501996, 507411], borderColor: '#34d399', backgroundColor: '#34d39920', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#34d399', borderWidth: 1.5 }
     ]
   },
   options: {
