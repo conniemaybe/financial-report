@@ -134,7 +134,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-18 15:10（收盘日报）</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-18 16:00（收盘日报·修正版）</div>
   </div>
 
   <!-- Summary Cards -->
@@ -142,17 +142,17 @@ tr:hover { background: #1e293b60; }
     <div class="card">
       <div class="label">A股账户净值</div>
       <div class="value">¥507,891</div>
-      <div class="change up">+¥7,891 (+1.58%)｜累计</div>
+      <div class="change up">今日 +¥338 (+0.07%) ｜ 累计 +¥7,891 (+1.58%)</div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
       <div class="value">¥517,089</div>
-      <div class="change up">+¥17,089 (+3.42%)｜累计</div>
+      <div class="change up">今日 +¥4,024 (+0.78%) ｜ 累计 +¥17,089 (+3.42%)</div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
       <div class="value">¥1,024,979</div>
-      <div class="change up">+¥24,979 (+2.50%)｜累计收益</div>
+      <div class="change up">今日 +¥4,362 (+0.43%) ｜ 累计 +¥24,979 (+2.50%)</div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -232,7 +232,7 @@ tr:hover { background: #1e293b60; }
         📊 今日共执行<b>3笔A股买入+1笔基金加仓</b>：士兰微、三环集团、长电科技、沪深300ETF。</div>
       </div>
     </div>
-    <div class="market-banner down">📊 6/18 收盘：上证-0.43% 深成+0.94% 创业板+2.05% 科创50+3.84%创新高！科技主线(半导体+3.84%)全天强势，大金融重挫——保险Ⅱ-6.42%、新华保险暴跌-6.80%。成交额3.31万亿放量2183亿。6/17建仓的士兰微/三环集团/长电科技+沪深300ETF加仓4笔次日全部浮盈或微亏，新华保险浮亏-3.75%距止损-8%约4.3%。</div>
+    <div class="market-banner down">📊 6/18 收盘：上证-0.43% 深成+0.94% 创业板+2.05% 科创50+3.84%创新高！科技主线(半导体+3.84%)全天强势，大金融重挫——保险Ⅱ-6.42%、新华保险暴跌-6.80%。成交额3.31万亿放量2183亿。今日建仓士兰微/三环集团/长电科技3只A股+沪深300ETF加仓4笔共约16万元，新华保险浮亏-3.75%距止损-8%约4.3%。</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -277,10 +277,10 @@ tr:hover { background: #1e293b60; }
 // ========== REAL TRADE DATA (source: portfolio.json + fund_portfolio.json) ==========
 // A股: 5笔买入 | 基金: 3笔买入 | 合计8笔，无卖出记录
 const allTrades = [
-  { date: '2026-06-17', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,675', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]', cls: 'up' },
-  { date: '2026-06-17', time: '10:30', acct: 'A股', action: '买入', code: '300408', name: '三环集团', price: '¥157.32', qty: '300 股', amount: '¥47,196', reason: '陶瓷基板+2.39%>-1%，量比1.44，换手2.84%筹码稳定', cls: 'up' },
-  { date: '2026-06-17', time: '10:30', acct: '基金', action: '加仓', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '溢价-0.04%折价加分，金字塔加仓3万', cls: 'up' },
-  { date: '2026-06-17', time: '10:00', acct: 'A股', action: '买入', code: '600460', name: '士兰微', price: '¥41.12', qty: '1,000 股', amount: '¥41,120', reason: '半导体板块+2.24%>-1%，量比3.06≥0.8(>2加分)', cls: 'up' },
+  { date: '2026-06-18', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,675', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]', cls: 'up' },
+  { date: '2026-06-18', time: '10:30', acct: 'A股', action: '买入', code: '300408', name: '三环集团', price: '¥157.32', qty: '300 股', amount: '¥47,196', reason: '陶瓷基板+2.39%>-1%，量比1.44，换手2.84%筹码稳定', cls: 'up' },
+  { date: '2026-06-18', time: '10:30', acct: '基金', action: '加仓', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '溢价-0.04%折价加分，金字塔加仓3万', cls: 'up' },
+  { date: '2026-06-18', time: '10:00', acct: 'A股', action: '买入', code: '600460', name: '士兰微', price: '¥41.12', qty: '1,000 股', amount: '¥41,120', reason: '半导体板块+2.24%>-1%，量比3.06≥0.8(>2加分)', cls: 'up' },
   { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '43,000 份', amount: '¥74,760', reason: '溢价-0.45%<2%，科创50>-1%，半导未跌超3%', cls: 'up' },
   { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '21,000 份', amount: '¥99,671', reason: '溢价-0.71%<2%，沪深300>-1%，折价加分', cls: 'up' },
   { date: '2026-06-11', time: '10:44', acct: 'A股', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '500 股', amount: '¥29,895', reason: '保险板块-0.63%>-1%，量比3.11≥0.8', cls: 'up' },
