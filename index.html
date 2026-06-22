@@ -134,7 +134,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-22 10:00</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-22 10:42</div>
   </div>
 
   <!-- Summary Cards -->
@@ -205,12 +205,12 @@ tr:hover { background: #1e293b60; }
         </div>
         <div class="d-body"><b>卖出检查</b>：浪潮信息65.42浮盈+8.82%未触止盈→持有｜新华保险58.28浮亏-2.53%未触止损→持有｜士兰微45.62浮盈+10.92%强势→持有｜三环集团159.17浮盈+1.15%→持有｜长电科技88.13浮盈+5.73%→持有<br><b>买入检查</b>：3只A股pending全部价格超区间❌（金力永磁33.64>33.43+板块-1.33%杀跌❌｜中兴通讯38.93>37.89❌｜通富微电70.55>68.27❌）<br><b>基金检查</b>：黄金ETF NAV 8.92>8.50❌+上海金-2.53%⚠️｜半导体ETF NAV≈2.54>2.50❌｜纳指100联接缺数据❌<br><b>结论</b>：0笔成交，全部SKIP</div>
       </div>
-      <div class="decision-node pending">
+      <div class="decision-node done">
         <div>
           <div class="d-time">10:30</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status">✅ 已执行</div>
         </div>
-        <div class="d-body"><i>待执行后更新</i></div>
+        <div class="d-body"><b>止损检查</b>：5只A股持仓均未触止损（最差三环-2.29%）→全部持有<br><b>买入检查-A股</b>：3只pending全部价格超区间❌（金力永磁33.59>33.43+金属新材料-2.58%杀跌❌｜中兴通讯38.39>37.89❌｜通富微电69.02>68.27❌）<br><b>买入检查-基金</b>：<span class="up">✅半导体ETF 512480 全部条件满足→买入12100份@2.477（¥29,979）</span>｜黄金ETF NAV 8.92>8.50❌｜纳指100联接 NAV 2.05>1.65❌<br><b>结论</b>：1笔成交（基金-半导体ETF），推送1次</div>
       </div>
       <div class="decision-node pending">
         <div>
@@ -227,7 +227,7 @@ tr:hover { background: #1e293b60; }
         <div class="d-body"><i>待执行后更新</i></div>
       </div>
     </div>
-    <div class="market-banner up">📊 6/22 盘中10:00：上证+0.03% 深成+0.67% 创业板+1.31% 科创50+1.80%。半导体+2.34%通信+2.21%领涨，金属新材料-1.30%走弱。COMEX黄金4211.5(-0.81%)，上海金912.20(-2.53%)暴跌。士兰微+9.06%接近涨停，长电科技+6.14%强势。A股账户+1.32%，基金账户+0.23%。</div>
+    <div class="market-banner down">📊 6/22 盘中10:30：上证-0.31% 深成+0.02% 创业板+0.59%。半导体+0.46%早盘冲高回落(10:00时+2.34%)，通信设备+0.50%，金属新材料-2.58%走弱。COMEX黄金4206.5(-0.93%)，上海金912.65(-2.48%)。士兰微+6.38%，长电科技+6.50%强势，新华保险+3.56%反弹。A股账户-0.62%，基金账户+0.51%。</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -270,8 +270,9 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (source: portfolio.json + fund_portfolio.json) ==========
-// A股: 5笔买入 | 基金: 3笔买入 | 合计8笔，无卖出记录
+// A股: 5笔买入 | 基金: 4笔买入 | 合计9笔，无卖出记录
 const allTrades = [
+  { date: '2026-06-22', time: '10:42', acct: '基金', action: '买入', code: '512480', name: '半导体ETF', price: '¥2.477', qty: '12,100 份', amount: '¥29,979', reason: '半导体+0.46%>-1%，溢价-0.03%折价加分，NAV约2.489在[2.38,2.50]内', cls: 'up' },
   { date: '2026-06-18', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,675', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]', cls: 'up' },
   { date: '2026-06-18', time: '10:30', acct: 'A股', action: '买入', code: '300408', name: '三环集团', price: '¥157.32', qty: '300 股', amount: '¥47,196', reason: '陶瓷基板+2.39%>-1%，量比1.44，换手2.84%筹码稳定', cls: 'up' },
   { date: '2026-06-18', time: '10:30', acct: '基金', action: '加仓', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '溢价-0.04%折价加分，金字塔加仓3万', cls: 'up' },
