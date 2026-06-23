@@ -130,10 +130,10 @@
             text-align: center;
         }
         /* 列对齐语义化 class */
-        th { text-align: center; }                                  /* 表头默认居中 */
+        th { text-align: center; }                                  /* 表头一律居中 */
         td { text-align: center; }                                  /* 数据默认居中 */
-        th.col-text, td.col-text { text-align: left; }              /* 文本列左对齐 */
-        td.col-reason {                                              /* 长"原因/说明"列专用 */
+        td.col-text { text-align: left; }                           /* 仅数据：文本列左对齐 */
+        td.col-reason {                                              /* 仅数据：长"原因/说明"列专用 */
             text-align: left;
             font-size: 0.8rem;
             color: #8aa5c5;
