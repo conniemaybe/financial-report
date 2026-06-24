@@ -135,7 +135,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-24 13:30 盘中</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-24 13:30 盘中 · 10:30 网络故障回溯已补记</div>
   </div>
 
   <!-- Summary Cards -->
@@ -216,12 +216,18 @@ tr:hover { background: #1e293b60; }
           <span style="color:#64748b">6持仓均未触发止盈止损 | 三环集团-7.54%⚠️逼近-8%止损线</span>
         </div>
       </div>
-      <div class="decision-node pending">
+      <div class="decision-node pending" style="border-left-color:#f59e0b;background:rgba(245,158,11,0.06);">
         <div>
           <div class="d-time">10:30</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status" style="color:#f59e0b;">⚠️ 网络故障未执行</div>
         </div>
-        <div class="d-body"><i>待执行后更新</i></div>
+        <div class="d-body">
+          <b style="color:#f59e0b;">⚠️ 自动化任务因代理掉线未执行（502 ECONNREFUSED 127.0.0.1:7892，小云朵未运行）</b><br>
+          <span style="color:#94a3b8;">本应为「买入为主+卖出次选」窗口。事后回溯分析（基于分时走势估算）：</span><br>
+          ⚠️ <b>中国银行(601988)</b> 价格约6.10在[5.94,6.30]✅，银行板块约-1.1%>-2%✅，量比>0.6✅，大盘未触否决✅，未急跌✅——<b style="color:#ef4444;">条件满足本应买入，因网络故障错过</b><br>
+          ⚠️ <b>工商银行(601398)</b> 价格约7.28在[7.20,7.56]✅，银行板块约-1.1%>-2%✅，量比>0.6✅，大盘未触否决✅，未急跌✅——<b style="color:#ef4444;">条件满足本应买入，因网络故障错过</b><br>
+          <span style="color:#64748b;font-size:11px;">⚠️ 本次为事后估算，非实际成交。模拟盘原则：不虚构成交记录，仅补执行轨迹说明。后续 13:30 银行板块-2.07%已否决，错失本该今日完成的两只银行股建仓。</span>
+        </div>
       </div>
       <div class="decision-node done">
         <div>
