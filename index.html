@@ -37,8 +37,9 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 .badge-benchmark { background: #f59e0b20; color: #f59e0b; }
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
-td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+th { text-align: center; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
+td { text-align: center; padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+td.col-text { text-align: left; }
 tr:hover { background: #1e293b60; }
 .stock-name { font-weight: 600; color: #f8fafc; }
 .stock-code { color: #64748b; font-size: 11px; margin-left: 6px; }
@@ -173,12 +174,12 @@ tr:hover { background: #1e293b60; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th><th class="hide-mobile">成本</th><th>现价</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td class="hide-mobile"><span class="stock-code">000977</span></td><td><span class="stock-name">浪潮信息</span></td><td>1,500 股</td><td class="hide-mobile">¥60.12</td><td class="up">¥64.70↑</td><td>¥97,050</td><td class="up">+¥6,873</td><td class="up">+7.62%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">601336</span></td><td><span class="stock-name">新华保险</span></td><td>500 股</td><td class="hide-mobile">¥59.79</td><td class="down">¥61.82↓</td><td>¥30,910</td><td class="up">+¥1,015</td><td class="up">+3.39%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">600460</span></td><td><span class="stock-name">士兰微</span></td><td>1,000 股</td><td class="hide-mobile">¥41.13</td><td class="up">¥50.37↑</td><td>¥50,370</td><td class="up">+¥9,239</td><td class="up">+22.46%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">600584</span></td><td><span class="stock-name">长电科技</span></td><td>500 股</td><td class="hide-mobile">¥83.25</td><td class="up">¥94.70↑🔥</td><td>¥47,350</td><td class="up">+¥5,724</td><td class="up">+13.75%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">002156</span></td><td><span class="stock-name">通富微电</span></td><td>500 股</td><td class="hide-mobile">¥68.21</td><td class="up">¥74.01↑</td><td>¥37,005</td><td class="up">+¥2,901</td><td class="up">+8.51%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">688131</span></td><td><span class="stock-name">皓元医药</span></td><td>200 股</td><td class="hide-mobile">¥91.40</td><td class="up">¥92.33↑</td><td>¥18,466</td><td class="up">+¥187</td><td class="up">+1.02%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">000977</span></td><td class="col-text"><span class="stock-name">浪潮信息</span></td><td>1,500 股</td><td class="hide-mobile">¥60.12</td><td class="up">¥64.70↑</td><td>¥97,050</td><td class="up">+¥6,873</td><td class="up">+7.62%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">601336</span></td><td class="col-text"><span class="stock-name">新华保险</span></td><td>500 股</td><td class="hide-mobile">¥59.79</td><td class="down">¥61.82↓</td><td>¥30,910</td><td class="up">+¥1,015</td><td class="up">+3.39%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">600460</span></td><td class="col-text"><span class="stock-name">士兰微</span></td><td>1,000 股</td><td class="hide-mobile">¥41.13</td><td class="up">¥50.37↑</td><td>¥50,370</td><td class="up">+¥9,239</td><td class="up">+22.46%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">600584</span></td><td class="col-text"><span class="stock-name">长电科技</span></td><td>500 股</td><td class="hide-mobile">¥83.25</td><td class="up">¥94.70↑🔥</td><td>¥47,350</td><td class="up">+¥5,724</td><td class="up">+13.75%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">002156</span></td><td class="col-text"><span class="stock-name">通富微电</span></td><td>500 股</td><td class="hide-mobile">¥68.21</td><td class="up">¥74.01↑</td><td>¥37,005</td><td class="up">+¥2,901</td><td class="up">+8.51%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">688131</span></td><td class="col-text"><span class="stock-name">皓元医药</span></td><td>200 股</td><td class="hide-mobile">¥91.40</td><td class="up">¥92.33↑</td><td>¥18,466</td><td class="up">+¥187</td><td class="up">+1.02%</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -189,9 +190,9 @@ tr:hover { background: #1e293b60; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>盈亏</th><th>盈亏%</th></tr></thead>
       <tbody>
-        <tr><td class="hide-mobile"><span class="stock-code">510300</span></td><td><span class="stock-name">沪深300ETF</span></td><td class="hide-mobile">A股宽基·ETF</td><td>27,000 份</td><td class="hide-mobile">¥4.7944</td><td class="up">¥4.970↑</td><td>¥134,190</td><td class="up">+¥4,732</td><td class="up">+3.66%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">588000</span></td><td><span class="stock-name">科创50ETF</span></td><td class="hide-mobile">A股行业·ETF</td><td>43,000 份</td><td class="hide-mobile">¥1.7386</td><td class="up">¥2.096↑</td><td>¥90,128</td><td class="up">+¥15,332</td><td class="up">+20.56%</td></tr>
-        <tr><td class="hide-mobile"><span class="stock-code">512480</span></td><td><span class="stock-name">半导体ETF</span></td><td class="hide-mobile">A股行业·ETF</td><td>12,100 份</td><td class="hide-mobile">¥2.4776</td><td class="up">¥2.636↑</td><td>¥31,896</td><td class="up">+¥1,915</td><td class="up">+6.39%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">510300</span></td><td class="col-text"><span class="stock-name">沪深300ETF</span></td><td class="hide-mobile col-text">A股宽基·ETF</td><td>27,000 份</td><td class="hide-mobile">¥4.7944</td><td class="up">¥4.970↑</td><td>¥134,190</td><td class="up">+¥4,732</td><td class="up">+3.66%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">588000</span></td><td class="col-text"><span class="stock-name">科创50ETF</span></td><td class="hide-mobile col-text">A股行业·ETF</td><td>43,000 份</td><td class="hide-mobile">¥1.7386</td><td class="up">¥2.096↑</td><td>¥90,128</td><td class="up">+¥15,332</td><td class="up">+20.56%</td></tr>
+        <tr><td class="hide-mobile"><span class="stock-code">512480</span></td><td class="col-text"><span class="stock-name">半导体ETF</span></td><td class="hide-mobile col-text">A股行业·ETF</td><td>12,100 份</td><td class="hide-mobile">¥2.4776</td><td class="up">¥2.636↑</td><td>¥31,896</td><td class="up">+¥1,915</td><td class="up">+6.39%</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -386,9 +387,9 @@ function renderTrades() {
   document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
     '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile"><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
     '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
-    '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name">' + t.name + '</td>' +
+    '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name col-text">' + t.name + '</td>' +
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + t.amount + '</td>' +
-    '<td class="hide-mobile" style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
+    '<td class="hide-mobile col-text" style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
   ).join('');
 
   document.getElementById('tradePagination').innerHTML =
