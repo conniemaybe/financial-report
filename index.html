@@ -135,25 +135,25 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-06-29 14:45</div>
+    <div class="update-time" id="updateTime">数据更新：2026-06-29 收盘</div>
   </div>
 
   <!-- Summary Cards -->
   <div class="cards">
     <div class="card">
       <div class="label">A股账户净值</div>
-      <div class="value">¥545,381</div>
-      <div class="change up">累计 +¥45,381 (+9.08%)</div>
+      <div class="value">¥547,519</div>
+      <div class="change up">累计 +¥47,519 (+9.50%)</div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥529,868</div>
-      <div class="change up">累计 +¥29,868 (+5.97%)</div>
+      <div class="value">¥532,084</div>
+      <div class="change up">累计 +¥32,084 (+6.42%)</div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,075,249</div>
-      <div class="change up">累计 +¥75,249 (+7.52%)</div>
+      <div class="value">¥1,079,603</div>
+      <div class="change up">累计 +¥79,603 (+7.96%)</div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -272,7 +272,7 @@ tr:hover { background: #1e293b60; }
         💡 今日已执行：士兰微10:00止盈减仓1/3 @55.42</div>
       </div>
     </div>
-    <div class="market-banner up">📊 6/29 尾盘：上证 4066 (+0.97%) | 半导体+3.68%⭐ | 大硅片+5.46%🔥 | 医药+5.79%🔥 | 保险+2.55% | 韩国芯片800万亿投资催化 | 皓元医药+8.62%🔥创新高</div>
+    <div class="market-banner up">📊 6/29 收盘：上证 4066 (+0.97%) | A股NAV+2.78% 基金NAV+1.34% | 合并净值+¥79,603 (+7.96%) | 半导体+3.68%⭐ | 大硅片+5.46%🔥 | 医药+5.79%🔥 | 保险+2.55% | 韩国芯片800万亿投资催化 | 皓元医药+8.62%🔥创新高</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -338,6 +338,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-06-29', type: 'evening', file: '20260629_日报.html', label: '6/29 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-06-29', type: 'morning', file: '20260629_晨报.html', label: '6/29 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-06-26', type: 'evening', file: '20260626_日报.html', label: '6/26 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-06-26', type: 'morning', file: '20260626_晨报.html', label: '6/26 晨报', ico: '🌅', cls: 'morning' },
@@ -369,23 +370,23 @@ const allReports = [
 ];
 
 // ========== CHART: Portfolio NAV vs CSI 300 + 纳指ETF 100万全仓模拟（同轴） ==========
-// CSI 300 index: 6/8=4713.64, 6/9=4801.81, 6/10=4748.59, 6/11=4722.41, 6/12=4798.47, 6/15=4891.71, 6/16=4908.63, 6/17=4955.20, 6/18=4945.08, 6/22=5042.04, 6/23=4919.39, 6/24=4943.02, 6/25=5020.1, 6/26=4906.38
-// 纳指ETF 513110 收盘价: 6/8=2.367, 6/9=2.456, 6/10=2.389, 6/11=2.367, 6/12=2.405, 6/15=2.508, 6/16=2.543, 6/17=2.544, 6/18=2.531, 6/22=2.562, 6/23=2.454, 6/24=2.469, 6/25=2.5, 6/26=2.418
+// CSI 300 index: 6/8=4713.64, 6/9=4801.81, 6/10=4748.59, 6/11=4722.41, 6/12=4798.47, 6/15=4891.71, 6/16=4908.63, 6/17=4955.20, 6/18=4945.08, 6/22=5042.04, 6/23=4919.39, 6/24=4943.02, 6/25=5020.1, 6/26=4906.38, 6/29=4926.92
+// 纳指ETF 513110 收盘价: 6/8=2.367, 6/9=2.456, 6/10=2.389, 6/11=2.367, 6/12=2.405, 6/15=2.508, 6/16=2.543, 6/17=2.544, 6/18=2.531, 6/22=2.562, 6/23=2.454, 6/24=2.469, 6/25=2.5, 6/26=2.418, 6/29=2.446
 const csiBase = 4713.64;
-const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47, 4891.71, 4908.63, 4955.20, 4945.08, 5042.04, 4919.39, 4943.02, 5020.1, 4906.38];
+const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47, 4891.71, 4908.63, 4955.20, 4945.08, 5042.04, 4919.39, 4943.02, 5020.1, 4906.38, 4926.92];
 const csiNav = csiIndex.map(v => Math.round(1000000 * v / csiBase));
 
 const ndxBase = 2.367;
-const ndxPrice = [2.367, 2.456, 2.389, 2.367, 2.405, 2.508, 2.543, 2.544, 2.531, 2.562, 2.454, 2.469, 2.5, 2.418];
+const ndxPrice = [2.367, 2.456, 2.389, 2.367, 2.405, 2.508, 2.543, 2.544, 2.531, 2.562, 2.454, 2.469, 2.5, 2.418, 2.446];
 const ndxNav = ndxPrice.map(v => Math.round(1000000 * v / ndxBase));
 
 const ctx = document.getElementById('navChart').getContext('2d');
 new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['6/8', '6/9', '6/10', '6/11', '6/12', '6/15', '6/16', '6/17', '6/18', '6/22', '6/23', '6/24', '6/25', '6/26'],
+    labels: ['6/8', '6/9', '6/10', '6/11', '6/12', '6/15', '6/16', '6/17', '6/18', '6/22', '6/23', '6/24', '6/25', '6/26', '6/29'],
     datasets: [
-      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1012812, 1020617, 1024979, 1042242, 1027583, 1044082, 1063894, 1044821], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1012812, 1020617, 1024979, 1042242, 1027583, 1044082, 1063894, 1044821, 1079603], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
       { label: '沪深300基准 (100万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
       { label: '纳指ETF基准 (100万全仓模拟)', data: ndxNav, borderColor: '#a78bfa', backgroundColor: '#a78bfa10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#a78bfa', borderWidth: 2, borderDash: [8,4] }
     ]
