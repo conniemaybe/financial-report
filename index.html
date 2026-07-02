@@ -309,29 +309,29 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (source: portfolio.json + fund_portfolio.json) ==========
-// A股: 10笔买入+1笔分红+4笔卖出 | 基金: 4笔买入 | 合计19笔
+// ⚠️ 2026-07-02 修正：以 portfolio.trades + fund_portfolio.trades 为唯一真相源
+// A股: 8买入+1分红+5卖出=14笔 | 基金: 5笔买入 | 合计19笔
+// 按时间倒序（最新在前），同一时刻卖出优先于买入
 const allTrades = [
-  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥98.82', qty: '300 股', amount: '¥29,636', reason: '半导体-3.69%+急跌趋势转弱清仓，浮盈+18.71%', cls: 'down' },
-  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.70', qty: '500 股', amount: '¥26,330', reason: '半导体-3.69%趋势转弱清仓，浮盈+28.13%', cls: 'down' },
-  { date: '2026-07-02', time: '10:00', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥51.50', qty: '200 股', amount: '¥10,290', reason: '止盈减1/3：浮盈+25.26%，半导体-4.42%杀跌', cls: 'down' },
-  { date: '2026-07-01', time: '09:53', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥110.77', qty: '200 股', amount: '¥22,137', reason: '止盈减仓1/3：浮盈+33.03%超🟢强趋势阈值+30%，半导体+2.38%/量比3.29/涨+6.97%确认强趋势', cls: 'down' },
-  { date: '2026-06-29', time: '09:54', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥55.42', qty: '300 股', amount: '¥16,613', reason: '止盈减1/3：浮盈+34.74%超🟢强趋势阈值+30%，半导体+4.25%/量比4.12/涨停确认', cls: 'down' },
-  { date: '2026-06-25', time: '10:24', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.303', qty: '3,600 份', amount: '¥29,899', reason: '金价回调至建仓区间：NAV约8.30在[8.2,8.5]内✅，溢价0.04%<2%⭐，COMEX-0.68%>-1.5%✅', cls: 'up' },
-  { date: '2026-06-24', time: '13:29', acct: 'A股', action: '卖出', code: '300408', name: '三环集团', price: '¥144.77', qty: '300 股', amount: '¥43,398', reason: '止损卖出：浮亏-8.00%触及止损线', cls: 'down' },
-  { date: '2026-06-24', time: '10:00', acct: 'A股', action: '买入', code: '688131', name: '皓元医药', price: '¥91.37', qty: '200 股', amount: '¥18,279', reason: '医药生物+1.98%>-1%⭐，量比4.40>=1.0⭐，价格在[86.10,91.50]内', cls: 'up' },
-  { date: '2026-06-24', time: '10:00', acct: 'A股', action: '买入', code: '688131', name: '皓元医药', price: '¥91.37', qty: '200 股', amount: '¥18,279', reason: '医药+1.98%>-1%且>1%加分，量比4.40>2加分，价格91.37在[86.10,91.50]内', cls: 'up' },
-  { date: '2026-06-24', time: '13:29', acct: 'A股', action: '卖出', code: '300408', name: '三环集团', price: '¥144.77', qty: '300 股', amount: '¥43,398', reason: '止损卖出：浮亏-8.00%触及止损线', cls: 'down' },
-  { date: '2026-06-23', time: '09:55', acct: 'A股', action: '分红', code: '600584', name: '长电科技', price: '¥0.10/股', qty: '500 股', amount: '¥40', reason: '10派1元含税，持股<30天按20%税，实到40元', cls: 'up' },
-  { date: '2026-06-22', time: '13:37', acct: 'A股', action: '买入', code: '002156', name: '通富微电', price: '¥68.19', qty: '500 股', amount: '¥34,104', reason: '半导+0.15%>-0.5%，量比1.52≥1.0，价格68.19≤68.27，换手9.51%<15%', cls: 'up' },
-  { date: '2026-06-22', time: '10:42', acct: '基金', action: '买入', code: '512480', name: '半导体ETF', price: '¥2.477', qty: '12,100 份', amount: '¥29,979', reason: '半导体+0.46%>-1%，溢价-0.03%折价加分，NAV约2.489在[2.38,2.50]内', cls: 'up' },
-  { date: '2026-06-18', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,675', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]', cls: 'up' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥98.82', qty: '300 股', amount: '¥29,646', reason: '半导体-3.69%+急跌趋势转弱清仓，浮盈+18.71%', cls: 'down' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.70', qty: '500 股', amount: '¥26,350', reason: '半导体-3.69%趋势转弱清仓，浮盈+28.13%', cls: 'down' },
+  { date: '2026-07-02', time: '09:52', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥51.50', qty: '200 股', amount: '¥10,300', reason: '止盈减1/3：浮盈+25.26%，半导体-4.42%杀跌', cls: 'down' },
+  { date: '2026-07-01', time: '09:53', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥110.77', qty: '200 股', amount: '¥22,154', reason: '止盈减仓1/3：浮盈+33.03%超🟢强趋势阈值+30%，半导体+2.38%/量比3.29/涨+6.97%确认强趋势', cls: 'down' },
+  { date: '2026-06-29', time: '09:54', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥55.42', qty: '300 股', amount: '¥16,626', reason: '止盈减1/3：浮盈+34.74%超🟢强趋势阈值+30%，半导体+4.25%/量比4.12/涨停确认', cls: 'down' },
+  { date: '2026-06-25', time: '10:24', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.303', qty: '3,600 份', amount: '¥29,891', reason: '金价回调至建仓区间：NAV约8.30在[8.2,8.5]内✅，溢价0.04%<2%⭐，COMEX-0.68%>-1.5%✅', cls: 'up' },
+  { date: '2026-06-24', time: '13:29', acct: 'A股', action: '卖出', code: '300408', name: '三环集团', price: '¥144.77', qty: '300 股', amount: '¥43,431', reason: '止损卖出：浮亏-8.00%触及止损线', cls: 'down' },
+  { date: '2026-06-24', time: '10:00', acct: 'A股', action: '买入', code: '688131', name: '皓元医药', price: '¥91.37', qty: '200 股', amount: '¥18,274', reason: '医药生物+1.98%>-1%且>1%加分，量比4.40>2加分，价格91.37在[86.10,91.50]内', cls: 'up' },
+  { date: '2026-06-23', time: '09:55', acct: 'A股', action: '分红', code: '600584', name: '长电科技', price: '¥0.10/股', qty: '500 股', amount: '¥50', reason: '10派1元含税，持股<30天按20%税，实到40元（税前50）', cls: 'up' },
+  { date: '2026-06-22', time: '13:37', acct: 'A股', action: '买入', code: '002156', name: '通富微电', price: '¥68.19', qty: '500 股', amount: '¥34,095', reason: '半导体+0.15%>-0.5%✅，量比1.52≥1.0✅，价格68.19≤68.27✅，换手9.51%<15%✅', cls: 'up' },
+  { date: '2026-06-22', time: '10:42', acct: '基金', action: '买入', code: '512480', name: '半导体ETF', price: '¥2.477', qty: '12,100 份', amount: '¥29,972', reason: '半导体+0.46%>-1%，溢价-0.03%折价加分，NAV约2.489在[2.38,2.50]内', cls: 'up' },
+  { date: '2026-06-18', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,665', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]', cls: 'up' },
   { date: '2026-06-18', time: '10:30', acct: 'A股', action: '买入', code: '300408', name: '三环集团', price: '¥157.32', qty: '300 股', amount: '¥47,196', reason: '陶瓷基板+2.39%>-1%，量比1.44，换手2.84%筹码稳定', cls: 'up' },
   { date: '2026-06-18', time: '10:30', acct: '基金', action: '加仓', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '溢价-0.04%折价加分，金字塔加仓3万', cls: 'up' },
-  { date: '2026-06-18', time: '10:00', acct: 'A股', action: '买入', code: '600460', name: '士兰微', price: '¥41.12', qty: '1,000 股', amount: '¥41,120', reason: '半导体板块+2.24%>-1%，量比3.06≥0.8(>2加分)', cls: 'up' },
-  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '43,000 份', amount: '¥74,760', reason: '溢价-0.45%<2%，科创50>-1%，半导未跌超3%', cls: 'up' },
-  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '21,000 份', amount: '¥99,671', reason: '溢价-0.71%<2%，沪深300>-1%，折价加分', cls: 'up' },
-  { date: '2026-06-11', time: '10:44', acct: 'A股', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '500 股', amount: '¥29,895', reason: '保险板块-0.63%>-1%，量比3.11≥0.8', cls: 'up' },
-  { date: '2026-06-10', time: '10:37', acct: 'A股', action: '买入', code: '000977', name: '浪潮信息', price: '¥60.10', qty: '1,500 股', amount: '¥90,177', reason: 'AI算力龙头，计算机设备板块逆势+0.51%', cls: 'up' }
+  { date: '2026-06-18', time: '10:00', acct: 'A股', action: '买入', code: '600460', name: '士兰微', price: '¥41.12', qty: '1,000 股', amount: '¥41,120', reason: '半导体板块+2.24%>-1%，量比3.06≥0.8(>2加分)，价格在[39.5,41.6]内', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '43,000 份', amount: '¥74,734', reason: '溢价-0.45%<2%，科创50>-1%，半导未跌超3%', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '21,000 份', amount: '¥99,645', reason: '溢价-0.71%<2%，沪深300>-1%，折价加分', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: 'A股', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '500 股', amount: '¥29,870', reason: '保险板块-0.63%>-1%，量比3.11≥0.8', cls: 'up' },
+  { date: '2026-06-10', time: '10:37', acct: 'A股', action: '买入', code: '000977', name: '浪潮信息', price: '¥60.10', qty: '1,500 股', amount: '¥90,150', reason: 'AI算力龙头，计算机设备板块逆势+0.51%', cls: 'up' }
 ];
 
 // ========== REPORT ARCHIVE ==========
