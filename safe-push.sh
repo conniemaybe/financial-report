@@ -64,11 +64,42 @@ if [ "$PUSH_SUCCESS" -eq 0 ]; then
     exit 1
 fi
 
-# 6. 验证
+# 6. 验证 git 本地状态（必须 ahead=0 才算 push 真正成功）
 REMAINING=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
 if [ "$REMAINING" -gt 0 ]; then
-    echo "⚠️ 仍有 $REMAINING 个 commit 未推送"
+    echo "❌ 验证失败：仍有 $REMAINING 个 commit 未推送到 origin/main"
+    echo "   git 显示 push 成功但本地仍 ahead，说明 push 被静默拒绝"
     exit 1
-else
-    echo "🎉 同步完成，所有 commit 已推送到 GitHub Pages"
 fi
+echo "✅ git 验证通过：本地与 origin/main 同步"
+
+# 7. 强制验证 raw.githubusercontent.com 上的实际内容（绕过 GitHub Pages CDN 缓存）
+#    ⚠️ 教训：2026-07-02 出现"git push 显示成功但 GitHub Pages 没更新"的误判，
+#    根因是 Pages CDN 缓存延迟（5-10分钟），不是 push 失败。
+#    raw.githubusercontent.com 是直读 git 仓库，无 CDN，可作为"push 是否真正生效"的判据。
+LOCAL_UPDATE_TIME=$(grep -oE '数据更新：[0-9-]+ [0-9:]+' "$REPO_DIR/index.html" | head -1)
+if [ -n "$LOCAL_UPDATE_TIME" ]; then
+    echo "🔍 验证 raw 仓库内容是否已更新（本地 updateTime: $LOCAL_UPDATE_TIME）"
+    sleep 3  # 给 GitHub 一点时间把 commit 同步到 raw CDN
+    for i in $(seq 1 3); do
+        REMOTE_UPDATE_TIME=$(curl -s "https://raw.githubusercontent.com/conniemaybe/financial-report/main/index.html?_t=$(date +%s%N)" \
+            | grep -oE '数据更新：[0-9-]+ [0-9:]+' | head -1)
+        if [ "$REMOTE_UPDATE_TIME" = "$LOCAL_UPDATE_TIME" ]; then
+            echo "✅ raw 验证通过：远程已更新到 $REMOTE_UPDATE_TIME"
+            break
+        else
+            echo "⚠️ 第 $i 次校验：远程=$REMOTE_UPDATE_TIME（预期 $LOCAL_UPDATE_TIME）"
+            if [ "$i" -lt 3 ]; then sleep 5; fi
+        fi
+    done
+
+    if [ "$REMOTE_UPDATE_TIME" != "$LOCAL_UPDATE_TIME" ]; then
+        echo "❌ raw 验证失败：3 次重试后远程仍不是最新内容"
+        echo "   可能原因：push 被静默拒绝 / GitHub 后端同步延迟"
+        echo "   建议：手动执行 'git push origin main' 确认"
+        exit 1
+    fi
+fi
+
+echo "🎉 同步完成（git + raw 双重验证通过）"
+echo "   注：GitHub Pages (conniemaybe.github.io) 可能有 5-10 分钟 CDN 缓存延迟，属正常现象"
