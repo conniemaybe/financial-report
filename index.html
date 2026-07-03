@@ -38,8 +38,8 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: center; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
-td { text-align: center; padding: 10px 12px; border-bottom: 1px solid #1e293b; }
-td.col-text { text-align: left; }
+td { text-align: center; padding: 10px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
+td.col-text { text-align: center; }
 tr:hover { background: #1e293b60; }
 .stock-name { font-weight: 600; color: #f8fafc; }
 .stock-code { color: #64748b; font-size: 11px; margin-left: 6px; }
@@ -136,7 +136,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-03 15:15</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-03 17:05</div>
   </div>
   <!-- ⚠️ updateTime 格式硬约束：只允许 "数据更新：YYYY-MM-DD HH:MM"，禁止追加（晨报）/（日报）/（盘中）等任何后缀标注 -->
 
@@ -277,11 +277,11 @@ tr:hover { background: #1e293b60; }
 // A股 + 基金 合计 19 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
 const allTrades = [
-  { date: '2026-07-02', time: '', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.7', qty: '500 股', amount: '¥26,350', reason: '趋势转弱清仓', cls: 'down' },
-  { date: '2026-07-02', time: '', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥51.5', qty: '200 股', amount: '¥10,300', reason: '趋势转弱清仓', cls: 'down' },
-  { date: '2026-07-02', time: '', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥98.82', qty: '300 股', amount: '¥29,646', reason: '趋势转弱清仓', cls: 'down' },
-  { date: '2026-07-01', time: '', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥110.77', qty: '200 股', amount: '¥22,154', reason: '止盈卖出', cls: 'down' },
-  { date: '2026-06-29', time: '', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥55.42', qty: '300 股', amount: '¥16,626', reason: '止盈卖出', cls: 'down' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.7', qty: '500 股', amount: '¥26,350', reason: '趋势转弱清仓', cls: 'down' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥98.82', qty: '300 股', amount: '¥29,646', reason: '趋势转弱清仓', cls: 'down' },
+  { date: '2026-07-02', time: '09:52', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥51.5', qty: '200 股', amount: '¥10,300', reason: '趋势转弱减仓1/3', cls: 'down' },
+  { date: '2026-07-01', time: '10:00', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥110.77', qty: '200 股', amount: '¥22,154', reason: '止盈卖出', cls: 'down' },
+  { date: '2026-06-29', time: '10:00', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥55.42', qty: '300 股', amount: '¥16,626', reason: '止盈卖出', cls: 'down' },
   { date: '2026-06-25', time: '10:24', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.303', qty: '3,600 份', amount: '¥29,899', reason: '金价大幅回调至建仓区间：估算NAV约8.30在[8.2,8.5]内✅，溢价0.04%<2%且<0.5%加分⭐，COMEX黄金-0.68%>-1.5%✅，上海金-2.59%未触急跌>3%否决✅，人民币稳定✅', cls: 'up' },
   { date: '2026-06-24', time: '13:29', acct: 'A股', action: '卖出', code: '300408', name: '三环集团', price: '¥144.77', qty: '300 股', amount: '¥43,398', reason: '止损卖出：浮亏-8.00%触及止损线', cls: 'down' },
   { date: '2026-06-24', time: '10:00', acct: 'A股', action: '买入', code: '688131', name: '皓元医药', price: '¥91.37', qty: '200 股', amount: '¥18,279', reason: '医药生物+1.98%>-1%且>1%加分，量比4.40>=1.0且>2加分，价格91.37在[86.10,91.50]内，开盘未急跌，大盘+0.13%未触否决，未涨停', cls: 'up' },
@@ -340,23 +340,23 @@ const allReports = [
 ];
 
 // ========== CHART: Portfolio NAV vs CSI 300 + 纳指ETF 100万全仓模拟（同轴） ==========
-// CSI 300 index: 6/8=4713.64, 6/9=4801.81, 6/10=4748.59, 6/11=4722.41, 6/12=4798.47, 6/15=4891.71, 6/16=4908.63, 6/17=4955.20, 6/18=4945.08, 6/22=5042.04, 6/23=4919.39, 6/24=4943.02, 6/25=5020.1, 6/26=4906.38, 6/29=4926.92, 6/30=4979.43, 7/1=4958.5, 7/2=4857.9
-// 纳指ETF 513110 收盘价: 6/8=2.367, 6/9=2.456, 6/10=2.389, 6/11=2.367, 6/12=2.405, 6/15=2.508, 6/16=2.543, 6/17=2.544, 6/18=2.531, 6/22=2.562, 6/23=2.454, 6/24=2.469, 6/25=2.5, 6/26=2.418, 6/29=2.446, 6/30=2.481, 7/1=2.468, 7/2=2.456
+// CSI 300 index: 6/8=4713.64, 6/9=4801.81, 6/10=4748.59, 6/11=4722.41, 6/12=4798.47, 6/15=4891.71, 6/16=4908.63, 6/17=4955.20, 6/18=4945.08, 6/22=5042.04, 6/23=4919.39, 6/24=4943.02, 6/25=5020.1, 6/26=4906.38, 6/29=4926.92, 6/30=4979.43, 7/1=4958.5, 7/2=4857.9, 7/3=4842.17
+// 纳指ETF 513110 收盘价: 6/8=2.367, 6/9=2.456, 6/10=2.389, 6/11=2.367, 6/12=2.405, 6/15=2.508, 6/16=2.543, 6/17=2.544, 6/18=2.531, 6/22=2.562, 6/23=2.454, 6/24=2.469, 6/25=2.5, 6/26=2.418, 6/29=2.446, 6/30=2.481, 7/1=2.468, 7/2=2.456, 7/3=2.445
 const csiBase = 4713.64;
-const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47, 4891.71, 4908.63, 4955.20, 4945.08, 5042.04, 4919.39, 4943.02, 5020.1, 4906.38, 4926.92, 4979.43, 4958.5, 4857.9];
+const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47, 4891.71, 4908.63, 4955.20, 4945.08, 5042.04, 4919.39, 4943.02, 5020.1, 4906.38, 4926.92, 4979.43, 4958.5, 4857.9, 4842.17];
 const csiNav = csiIndex.map(v => Math.round(1000000 * v / csiBase));
 
 const ndxBase = 2.367;
-const ndxPrice = [2.367, 2.456, 2.389, 2.367, 2.405, 2.508, 2.543, 2.544, 2.531, 2.562, 2.454, 2.469, 2.5, 2.418, 2.446, 2.481, 2.468, 2.456];
+const ndxPrice = [2.367, 2.456, 2.389, 2.367, 2.405, 2.508, 2.543, 2.544, 2.531, 2.562, 2.454, 2.469, 2.5, 2.418, 2.446, 2.481, 2.468, 2.456, 2.445];
 const ndxNav = ndxPrice.map(v => Math.round(1000000 * v / ndxBase));
 
 const ctx = document.getElementById('navChart').getContext('2d');
 new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['6/8', '6/9', '6/10', '6/11', '6/12', '6/15', '6/16', '6/17', '6/18', '6/22', '6/23', '6/24', '6/25', '6/26', '6/29', '6/30', '7/1', '7/2'],
+    labels: ['6/8', '6/9', '6/10', '6/11', '6/12', '6/15', '6/16', '6/17', '6/18', '6/22', '6/23', '6/24', '6/25', '6/26', '6/29', '6/30', '7/1', '7/2', '7/3'],
     datasets: [
-      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1012812, 1020617, 1024979, 1042242, 1027583, 1044082, 1063894, 1044821, 1079149, 1094624, 1089877, 1063339], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '合并净值 (A股+基金)', data: [1000000, 1000000, 998912, 997295, 999923, 1008159, 1012812, 1020617, 1024979, 1042242, 1027583, 1044082, 1063894, 1044821, 1079149, 1094624, 1089877, 1063339, 1049931], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
       { label: '沪深300基准 (100万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
       { label: '纳指ETF基准 (100万全仓模拟)', data: ndxNav, borderColor: '#a78bfa', backgroundColor: '#a78bfa10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#a78bfa', borderWidth: 2, borderDash: [8,4] }
     ]
