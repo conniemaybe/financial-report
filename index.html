@@ -87,6 +87,7 @@ tr:hover { background: #1e293b60; }
 .market-banner { padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-top: 14px; }
 .market-banner.up { background: #ef444416; color: #ef4444; border: 1px solid #ef444430; }
 .market-banner.down { background: #22c55e16; color: #22c55e; border: 1px solid #22c55e30; }
+.market-banner.pending { background: #f59e0b16; color: #f59e0b; border: 1px solid #f59e0b30; }
 
 .footer { text-align: center; padding: 40px 16px; font-size: 12px; color: #475569; }
 .footer a { color: #64748b; text-decoration: none; }
@@ -135,7 +136,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-02 15:10</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-03 08:30</div>
   </div>
   <!-- ⚠️ updateTime 格式硬约束：只允许 "数据更新：YYYY-MM-DD HH:MM"，禁止追加（晨报）/（日报）/（盘中）等任何后缀标注 -->
 
@@ -199,74 +200,38 @@ tr:hover { background: #1e293b60; }
 
   <!-- 今日盘中决策实录 -->
   <div class="section">
-    <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-02（周四）</span></h2>
+    <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-03（周五）</span></h2>
     <div class="decision-timeline" id="decisionLog">
-      <div class="decision-node done">
+      <div class="decision-node pending">
         <div>
           <div class="d-time">10:00</div>
-          <div class="d-status">✅ 已执行</div>
+          <div class="d-status">⏳ 待执行</div>
         </div>
-        <div class="d-body"><b>卖出优先窗口</b> — A股1笔，基金0笔<br>
-🔴 卖出检查（止盈+止损）：<br>
-· 浪潮信息65.30(-2.91%)浮盈+8.63%→持有<br>
-· 新华保险64.95(-0.66%)浮盈+8.68%→持有<br>
-· 士兰微51.50(-3.10%)浮盈+25.26%🟢强趋势但半导体-4.42%杀跌→止盈减1/3（200股）✅<br>
-· 长电科技99.29(-6.89%)浮盈+19.26%🟡中等趋势→持有（300股已减无可减）<br>
-· 通富微电69.22(-6.35%)浮盈+1.49%→持有<br>
-· 皓元医药94.00(-1.57%)浮盈+2.85%→持有<br>
-🔵 A股买入检查(1只)：<br>
-· 华东医药29.79(+0.74%)价格超区间29.00❌<br>
-🟢 基金买入检查(0只)</div>
+        <div class="d-body"><b>卖出优先窗口</b></div>
       </div>
-      <div class="decision-node done">
+      <div class="decision-node pending">
         <div>
           <div class="d-time">10:30</div>
-          <div class="d-status">✅ 已执行</div>
+          <div class="d-status">⏳ 待执行</div>
         </div>
-        <div class="d-body"><b>回调低吸+冲高止盈窗口</b> — A股2笔卖出，0笔买入<br>
-🔴 卖出检查（止盈+止损）：<br>
-· 浪潮信息65.75(-2.25%)浮盈+9.38%→持有<br>
-· 新华保险64.28(-1.68%)浮盈+7.50%→持有<br>
-· <b>士兰微52.70(-0.85%)浮盈+28.13%→🔴半导体-3.69%趋势转弱清仓500股✅</b><br>
-· <b>长电科技98.82(-7.33%)浮盈+18.71%→🔴半导体-3.69%+急跌趋势转弱清仓300股✅</b><br>
-· 通富微电70.68(-4.37%)浮盈+3.63%→持有<br>
-· 皓元医药94.25(-1.31%)浮盈+3.12%→持有<br>
-🔵 A股买入检查(1只)：<br>
-· 华东医药29.44(-0.44%)价格超区间29.00❌(量比2.49⭐化学制药+0.15%✅)<br>
-🟢 基金买入检查(0只)</div>
+        <div class="d-body"><b>回调低吸+冲高止盈窗口</b></div>
       </div>
-      <div class="decision-node done">
+      <div class="decision-node pending">
         <div>
           <div class="d-time">13:30</div>
-          <div class="d-status">✅ 已执行</div>
+          <div class="d-status">⏳ 待执行</div>
         </div>
-        <div class="d-body"><b>午后纯买入窗口</b> — 0笔成交，全部持有<br>
-🔴 卖出检查（仅止损）：<br>
-· 浪潮信息64.82(-3.63%)浮盈+7.83%→持有<br>
-· 新华保险64.10(-1.96%)浮盈+7.20%→持有<br>
-· 通富微电69.01(-6.63%)浮盈+1.18%→持有<br>
-· 皓元医药92.94(-2.68%)浮盈+1.69%→持有<br>
-🔵 A股买入检查(1只)：<br>
-· 华东医药29.62(+0.17%)价格29.62>29.00超区间❌(化学制药+0.67%✅量比1.20✅)<br>
-🟢 基金买入检查(0只)</div>
+        <div class="d-body"><b>午后纯买入窗口</b></div>
       </div>
-      <div class="decision-node done">
+      <div class="decision-node pending">
         <div>
           <div class="d-time">14:45</div>
-          <div class="d-status">✅ 已执行</div>
+          <div class="d-status">⏳ 待执行</div>
         </div>
-        <div class="d-body"><b>尾盘最佳买入窗口</b> — 0笔成交，全部持有<br>
-🔴 卖出检查（仅止损）：<br>
-· 浪潮信息63.72(-5.26%)浮盈+5.99%→持有<br>
-· 新华保险63.56(-2.78%)浮盈+6.31%→持有<br>
-· <b>通富微电67.36(-8.86%)浮亏-1.25%→⚠️半导体-8.12%全线杀跌，跌破成本但未触-8%止损线，持有观察</b><br>
-· 皓元医药92.24(-3.41%)浮盈+0.92%→持有<br>
-🔵 A股买入检查(1只)：<br>
-· 华东医药29.54(-0.10%)❌双重否决：①价格29.54>29.00超区间 ②大盘-1.99%<-1.5%系统性风险否决(化学制药+1.21%✅量比0.97✅)<br>
-🟢 基金买入检查(0只)</div>
+        <div class="d-body"><b>尾盘最佳买入窗口</b></div>
       </div>
     </div>
-    <div class="market-banner down">📊 收盘速报：上证-2.03% | 深证-3.85% | 创业板-5.71% | 半导体-8.05%🔥 | 化学制药+1.44% | 保险-1.27%</div>
+    <div class="market-banner pending">📊 7/3 盘中决策待执行 · A股2只BUY待触发(山东黄金/分众传媒) · 基金1只BUY待触发(黄金ETF加仓) · 科创50ETF晨报建议减仓1/3</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -335,6 +300,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-07-03', type: 'morning', file: '20260703_晨报.html', label: '7/3 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-07-02', type: 'evening', file: '20260702_日报.html', label: '7/2 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-07-02', type: 'morning', file: '20260702_晨报.html', label: '7/2 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-07-01', type: 'evening', file: '20260701_日报.html', label: '7/1 日报', ico: '🌙', cls: 'evening' },
