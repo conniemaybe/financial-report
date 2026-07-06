@@ -101,15 +101,19 @@ if [ -n "$LOCAL_UPDATE_TIME" ]; then
     fi
 fi
 
-# 8. 第三层验证：GitHub Actions Pages deploy 状态（2026-07-03 教训补丁）
-#    ⚠️ 教训：2026-07-03 push + raw 都验证通过，但 GitHub Pages deploy job 失败
-#    （"Deployment failed, try again later." - GitHub 服务端错误）
-#    导致网站 1 小时未更新，raw 验证无法发现此问题
-#    解决方案：push 后等 60s 查 Actions API，deploy 失败则自动重试
+# 8. 第三层验证：GitHub Actions Pages deploy 状态
+#    ⚠️ 教训链：
+#      - 2026-07-03: push + raw 都过，但 Pages deploy job 失败 → 加了 deploy 验证
+#      - 2026-07-06: deploy 失败后用"空 commit 重试"，GitHub 服务端故障时空 commit 也失败；
+#                    且 60s 太短，GitHub 排队 80s+ 还没开始执行 → 重试基本无效
+#    解决方案（v2）：
+#      a) 等 Pages run 完成用轮询，不再固定 sleep 60
+#      b) 失败重试用 GitHub API rerun（不新建 commit），避免污染 git 历史
+#      c) 指数退避：30s → 90s → 180s，给 GitHub 服务端恢复时间
+#      d) 最终失败明确告警 + 建议
 
 GH_TOKEN=""
-# 2026-07-03 修复：token 不能硬编码（触发 GitHub Push Protection）
-# 从本地文件读取（该文件不进 git，由用户手动放置）
+# 从本地文件读取（不进 git，避免触发 GitHub Push Protection）
 TOKEN_FILE="$HOME/.workbuddy/astock-simulator/.gh_token"
 if [ -f "$TOKEN_FILE" ]; then
     GH_TOKEN=$(cat "$TOKEN_FILE" | tr -d '[:space:]')
@@ -121,72 +125,128 @@ else
 fi
 REPO="conniemaybe/financial-report"
 
+# 等待 Pages run 到终态（completed）。最多等 6 分钟。
+# 用法: wait_pages_run_complete <run_id>  → 输出 conclusion 或 "timeout"
+wait_pages_run_complete() {
+    local RUN_ID="$1"
+    local MAX_WAIT=360  # 6 分钟
+    local ELAPSED=0
+    while [ "$ELAPSED" -lt "$MAX_WAIT" ]; do
+        local STATUS_CONCL=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID" \
+            | python -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(d.get('status','?') + '|' + str(d.get('conclusion') or '-'))
+except:
+    print('?|?')
+" 2>/dev/null)
+        local STATUS=$(echo "$STATUS_CONCL" | cut -d'|' -f1)
+        local CONCL=$(echo "$STATUS_CONCL" | cut -d'|' -f2)
+        if [ "$STATUS" = "completed" ]; then
+            echo "$CONCL"
+            return 0
+        fi
+        sleep 15
+        ELAPSED=$((ELAPSED + 15))
+    done
+    echo "timeout"
+    return 1
+}
+
 if [ -z "$GH_TOKEN" ]; then
     echo "⏭️  跳过 Pages deploy 验证（无 token）"
+    DEPLOY_RESULT="skipped"
 else
-    echo "🏗️  等待 GitHub Pages 构建部署（60s）..."
-    sleep 60
+    echo "🏗️  查询最新 Pages run 状态（轮询，最长 6 分钟）..."
+
+    # 拿最新一次 Pages workflow run
+    LATEST_RUN=$(curl -s -H "Authorization: token $GH_TOKEN" \
+        "https://api.github.com/repos/$REPO/actions/runs?per_page=1" \
+        | python -c "
+import sys, json
+d = json.load(sys.stdin)
+runs = d.get('workflow_runs', [])
+print(runs[0]['id'] if runs else '')
+" 2>/dev/null)
 
     DEPLOY_RESULT=""
-    RETRY_COUNT=0
-    MAX_DEPLOY_RETRIES=2
+    if [ -z "$LATEST_RUN" ]; then
+        echo "⚠️ 没找到 Pages run，跳过 deploy 验证"
+        DEPLOY_RESULT="no_run"
+    else
+        echo "   最新 run: $LATEST_RUN，开始轮询..."
+        CONCL=$(wait_pages_run_complete "$LATEST_RUN")
+        echo "   run $LATEST_RUN 结论: $CONCL"
 
-    while [ "$RETRY_COUNT" -lt "$MAX_DEPLOY_RETRIES" ]; do
-        RETRY_COUNT=$((RETRY_COUNT + 1))
-
-        # 查最新一次 Pages build run
-        LATEST_RUN=$(curl -s -H "Authorization: token $GH_TOKEN" \
-            "https://api.github.com/repos/$REPO/actions/runs?per_page=1" \
-            | grep -oE '"id":[0-9]+' | head -1 | cut -d':' -f2)
-
-        # 查 run 结论
-        RUN_CONCLUSION=$(curl -s -H "Authorization: token $GH_TOKEN" \
-            "https://api.github.com/repos/$REPO/actions/runs/$LATEST_RUN" \
-            | grep -oE '"conclusion":"[^"]*"' | head -1 | cut -d':' -f2 | tr -d '"')
-
-        if [ "$RUN_CONCLUSION" = "success" ]; then
-            echo "✅ Pages deploy 验证通过（run $LATEST_RUN conclusion=success）"
+        if [ "$CONCL" = "success" ]; then
+            echo "✅ Pages deploy 验证通过（run $LATEST_RUN）"
             DEPLOY_RESULT="success"
-            break
-        elif [ "$RUN_CONCLUSION" = "failure" ]; then
-            echo "❌ Pages deploy 失败（run $LATEST_RUN conclusion=failure）"
-            if [ "$RETRY_COUNT" -lt "$MAX_DEPLOY_RETRIES" ]; then
-                echo "🔄 自动重试（$RETRY_COUNT/$MAX_DEPLOY_RETRIES）：创建空 commit 触发重新部署"
-                git commit --allow-empty -m "safe-push 自动重试 Pages deploy（第 $RETRY_COUNT 次）" > /dev/null 2>&1
-                git $GIT_PROXY_OPTS push origin main > /dev/null 2>&1
-                echo "   等待 60s 后重新检查..."
-                sleep 60
-            else
-                echo "❌ Pages deploy 重试 $MAX_DEPLOY_RETRIES 次仍失败"
+        elif [ "$CONCL" = "failure" ] || [ "$CONCL" = "timeout" ]; then
+            # 失败重试：用 API rerun，指数退避
+            MAX_DEPLOY_RETRIES=3
+            for RETRY in $(seq 1 $MAX_DEPLOY_RETRIES); do
+                echo "❌ Pages deploy $CONCL，触发 API rerun（$RETRY/$MAX_DEPLOY_RETRIES）"
+                HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+                    -H "Authorization: token $GH_TOKEN" \
+                    "https://api.github.com/repos/$REPO/actions/runs/$LATEST_RUN/rerun")
+                if [ "$HTTP_CODE" != "201" ] && [ "$HTTP_CODE" != "200" ]; then
+                    echo "   rerun API 返回 HTTP $HTTP_CODE（非 201/200）"
+                fi
+                # 指数退避：60s → 120s → 180s
+                BACKOFF=$((60 * RETRY))
+                echo "   退避 ${BACKOFF}s 后重新检查..."
+                sleep "$BACKOFF"
+                CONCL=$(wait_pages_run_complete "$LATEST_RUN")
+                echo "   rerun 后 run $LATEST_RUN 结论: $CONCL"
+                if [ "$CONCL" = "success" ]; then
+                    echo "✅ Pages deploy 第 $RETRY 次重试成功"
+                    DEPLOY_RESULT="success"
+                    break
+                fi
+            done
+            if [ "$DEPLOY_RESULT" != "success" ]; then
                 DEPLOY_RESULT="failure"
             fi
         else
-            echo "⏳ Pages 构建中（conclusion=$RUN_CONCLUSION），再等 30s..."
-            sleep 30
-            # 再查一次
-            RUN_CONCLUSION_2=$(curl -s -H "Authorization: token $GH_TOKEN" \
-                "https://api.github.com/repos/$REPO/actions/runs/$LATEST_RUN" \
-                | grep -oE '"conclusion":"[^"]*"' | head -1 | cut -d':' -f2 | tr -d '"')
-            if [ "$RUN_CONCLUSION_2" = "success" ]; then
-                echo "✅ Pages deploy 验证通过（延迟检查）"
-                DEPLOY_RESULT="success"
-                break
-            fi
+            echo "⚠️ Pages run 结论异常：$CONCL"
+            DEPLOY_RESULT="unknown"
         fi
-    done
-
-    # 最终 Pages 状态查询
-    PAGES_STATUS=$(curl -s -H "Authorization: token $GH_TOKEN" \
-        "https://api.github.com/repos/$REPO/pages" \
-        | grep -oE '"status":"[^"]*"' | head -1 | cut -d':' -f2 | tr -d '"')
-    echo "📊 GitHub Pages 最终状态：$PAGES_STATUS"
-
-    if [ "$PAGES_STATUS" != "built" ] && [ "$DEPLOY_RESULT" != "success" ]; then
-        echo "⚠️ Pages 状态异常（$PAGES_STATUS），网站可能未更新"
-        echo "   访问 https://github.com/$REPO/settings/pages 检查"
     fi
 fi
 
-echo "🎉 同步完成（git + raw 验证通过，Pages deploy 验证已根据 token 可用性跳过/执行）"
-echo "   网站：https://conniemaybe.github.io/financial-report/"
-echo "   注：GitHub Pages CDN 可能有 5-10 分钟缓存延迟，强制刷新请 Ctrl+F5"
+# 最终 Pages 状态查询
+if [ -n "$GH_TOKEN" ]; then
+    PAGES_STATUS=$(curl -s -H "Authorization: token $GH_TOKEN" \
+        "https://api.github.com/repos/$REPO/pages" \
+        | python -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(d.get('status','?'))
+except:
+    print('?')
+" 2>/dev/null)
+    echo "📊 GitHub Pages 最终状态：$PAGES_STATUS"
+fi
+
+echo ""
+if [ "$DEPLOY_RESULT" = "success" ]; then
+    echo "🎉 同步完成（git + raw + Pages deploy 三重验证全部通过）"
+    echo "   网站：https://conniemaybe.github.io/financial-report/"
+    echo "   注：GitHub Pages CDN 可能有 1-5 分钟缓存延迟，强制刷新请 Ctrl+F5"
+elif [ "$DEPLOY_RESULT" = "skipped" ] || [ "$DEPLOY_RESULT" = "no_run" ]; then
+    echo "🎉 同步完成（git + raw 验证通过；Pages deploy 验证已跳过）"
+    echo "   建议：检查 token 配置以启用 Pages deploy 自动验证"
+else
+    echo "⚠️  ⚠️  ⚠️  Pages deploy 失败！git + raw 已通过，但网站可能未更新"
+    echo "   请手动访问 https://github.com/$REPO/actions 查看失败原因"
+    echo "   若是 GitHub 服务端故障，等 10-30 分钟后手动执行："
+    echo "     bash /c/temp/financial-report/safe-push.sh 'retry after GitHub recovered'"
+    echo "   或单独 rerun 失败的 run："
+    echo "     curl -X POST -H 'Authorization: token \$GH_TOKEN' \\"
+    echo "       https://api.github.com/repos/$REPO/actions/runs/<run_id>/rerun"
+    # 注意：不 exit 1，因为 git push 已成功，只是 Pages deploy 失败
+    # 让调用方看到告警但流程继续，避免阻塞 automation 后续步骤
+fi
