@@ -60,11 +60,11 @@ def build_astock_rows(portfolio: dict) -> str:
         pnl_pct = pos.get("pnl_pct", 0)  # 已是小数形式
 
         # 当日盈亏：①优先用 positions 里已计算的；②否则从前一交易日 snapshot 反推；
-        # ③新建仓（snapshot 里没有）用当天 BUY 价作为基准
+        # ③新建仓（snapshot 里没有）用 avg_cost 作为基准（含费用摊薄，保证当日盈亏 = 总盈亏）
         prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
         prev_price = prev_snap.get("price") or prev_snap.get("avg_cost", 0)
-        if prev_price == 0 and code in today_buy_prices:
-            prev_price = today_buy_prices[code]
+        if prev_price == 0:
+            prev_price = cost  # 新建仓用 avg_cost 作基准
         if prev_price > 0:
             daily_pnl = (price - prev_price) * shares
             daily_pct = (price - prev_price) / prev_price
@@ -123,8 +123,8 @@ def build_fund_rows(portfolio: dict) -> str:
 
         prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
         prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
-        if prev_nav == 0 and code in today_buy_navs:
-            prev_nav = today_buy_navs[code]
+        if prev_nav == 0:
+            prev_nav = avg_nav  # 新建仓用 avg_nav 作基准
         if prev_nav > 0:
             daily_pnl = (cur_nav - prev_nav) * shares
             daily_pct = (cur_nav - prev_nav) / prev_nav
