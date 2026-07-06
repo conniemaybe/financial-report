@@ -39,6 +39,15 @@ def build_astock_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
+    # 新建仓当天的 BUY 价（用于无 snapshot 时作为基准）
+    from datetime import date as _date
+    today_str = _date.today().isoformat()
+    today_buy_prices = {
+        t["code"]: t.get("price", 0)
+        for t in portfolio.get("trades", [])
+        if t.get("action") == "BUY" and t.get("date") == today_str
+    }
+
     positions = portfolio.get("positions", {})
     rows = []
     for code, pos in positions.items():
@@ -50,9 +59,12 @@ def build_astock_rows(portfolio: dict) -> str:
         pnl = pos.get("pnl", 0)
         pnl_pct = pos.get("pnl_pct", 0)  # 已是小数形式
 
-        # 当日盈亏：从前后 snapshot 反推
+        # 当日盈亏：①优先用 positions 里已计算的；②否则从前一交易日 snapshot 反推；
+        # ③新建仓（snapshot 里没有）用当天 BUY 价作为基准
         prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
         prev_price = prev_snap.get("price") or prev_snap.get("avg_cost", 0)
+        if prev_price == 0 and code in today_buy_prices:
+            prev_price = today_buy_prices[code]
         if prev_price > 0:
             daily_pnl = (price - prev_price) * shares
             daily_pct = (price - prev_price) / prev_price
@@ -87,6 +99,14 @@ def build_fund_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
+    from datetime import date as _date
+    today_str = _date.today().isoformat()
+    today_buy_navs = {
+        t["code"]: t.get("nav") or t.get("price", 0)
+        for t in portfolio.get("trades", [])
+        if t.get("action") == "BUY" and t.get("date") == today_str
+    }
+
     positions = portfolio.get("positions", {})
     rows = []
     for code, pos in positions.items():
@@ -103,6 +123,8 @@ def build_fund_rows(portfolio: dict) -> str:
 
         prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
         prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
+        if prev_nav == 0 and code in today_buy_navs:
+            prev_nav = today_buy_navs[code]
         if prev_nav > 0:
             daily_pnl = (cur_nav - prev_nav) * shares
             daily_pct = (cur_nav - prev_nav) / prev_nav
