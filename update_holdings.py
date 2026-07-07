@@ -39,6 +39,13 @@ def build_astock_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
+    # 2026-07-07 v5：今日新建仓代码集合（用于 daily_pnl 是否需要重算的判断）
+    today_str = records[-1].get("date") if records else None
+    today_buy_codes = {
+        t.get("code") for t in portfolio.get("trades", [])
+        if t.get("action") == "BUY" and t.get("date") == today_str
+    }
+
     # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时价格
     # 盘中 10:00/10:30/13:30/14:45 同步后，网站立即显示最新价
     intraday = portfolio.get("intraday_snapshots", [])
@@ -64,8 +71,14 @@ def build_astock_rows(portfolio: dict) -> str:
         daily_pnl = intraday_pos.get("daily_pnl")
         daily_pct = intraday_pos.get("daily_pnl_pct")
 
-        # 当日盈亏兜底（intraday_snapshots 没算时再算）
-        if daily_pnl is None:
+        # 当日盈亏兜底（intraday_snapshots 没算 或 与总盈亏相等时重算）
+        # 2026-07-07 防御：intraday_snapshots 的 daily_pnl 可能被污染成=pnl，
+        # 用 prev_snap 重算保证正确（新建仓除外，新建仓 daily_pnl 应该=pnl）
+        need_recalc = daily_pnl is None or (
+            daily_pnl is not None and abs(daily_pnl - pnl) < 0.01
+            and code not in today_buy_codes  # 非新建仓
+        )
+        if need_recalc:
             prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
             prev_price = prev_snap.get("price") or prev_snap.get("avg_cost", 0)
             if prev_price == 0:
@@ -104,6 +117,13 @@ def build_fund_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
+    # 2026-07-07 v5：今日新建仓代码集合
+    today_str = records[-1].get("date") if records else None
+    today_buy_codes = {
+        t.get("code") for t in portfolio.get("trades", [])
+        if t.get("action") == "BUY" and t.get("date") == today_str
+    }
+
     # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时净值
     intraday = portfolio.get("intraday_snapshots", [])
     latest_intraday = intraday[-1] if intraday else None
@@ -132,8 +152,12 @@ def build_fund_rows(portfolio: dict) -> str:
         ft_raw = pos.get("fund_type", "ETF")
         ft_display = ft_raw if "·" in ft_raw or len(ft_raw) > 6 else f"{ft_raw}·ETF"
 
-        # 当日盈亏兜底
-        if daily_pnl is None:
+        # 当日盈亏兜底（同 A股防御逻辑）
+        need_recalc = daily_pnl is None or (
+            daily_pnl is not None and abs(daily_pnl - pnl) < 0.01
+            and code not in today_buy_codes  # 非新建仓
+        )
+        if need_recalc:
             prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
             prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
             if prev_nav == 0:
