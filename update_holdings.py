@@ -39,14 +39,11 @@ def build_astock_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
-    # 新建仓当天的 BUY 价（用于无 snapshot 时作为基准）
-    from datetime import date as _date
-    today_str = _date.today().isoformat()
-    today_buy_prices = {
-        t["code"]: t.get("price", 0)
-        for t in portfolio.get("trades", [])
-        if t.get("action") == "BUY" and t.get("date") == today_str
-    }
+    # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时价格
+    # 盘中 10:00/10:30/13:30/14:45 同步后，网站立即显示最新价
+    intraday = portfolio.get("intraday_snapshots", [])
+    latest_intraday = intraday[-1] if intraday else None
+    intraday_positions = (latest_intraday or {}).get("positions", {})
 
     positions = portfolio.get("positions", {})
     rows = []
@@ -54,22 +51,30 @@ def build_astock_rows(portfolio: dict) -> str:
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
         cost = pos.get("avg_cost", 0)
-        price = pos.get("current_price", cost)
-        mv = pos.get("market_value", price * shares)
-        pnl = pos.get("pnl", 0)
-        pnl_pct = pos.get("pnl_pct", 0)  # 已是小数形式
+        # 优先用 intraday_snapshots 实时价，回退到 positions 的 current_price
+        intraday_pos = intraday_positions.get(code, {})
+        price = (
+            intraday_pos.get("current_price")
+            or pos.get("current_price")
+            or cost
+        )
+        mv = intraday_pos.get("market_value") or pos.get("market_value") or price * shares
+        pnl = intraday_pos.get("pnl") or pos.get("pnl", 0)
+        pnl_pct = intraday_pos.get("pnl_pct") or pos.get("pnl_pct", 0)
+        daily_pnl = intraday_pos.get("daily_pnl")
+        daily_pct = intraday_pos.get("daily_pnl_pct")
 
-        # 当日盈亏：①优先用 positions 里已计算的；②否则从前一交易日 snapshot 反推；
-        # ③新建仓（snapshot 里没有）用 avg_cost 作为基准（含费用摊薄，保证当日盈亏 = 总盈亏）
-        prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
-        prev_price = prev_snap.get("price") or prev_snap.get("avg_cost", 0)
-        if prev_price == 0:
-            prev_price = cost  # 新建仓用 avg_cost 作基准
-        if prev_price > 0:
-            daily_pnl = (price - prev_price) * shares
-            daily_pct = (price - prev_price) / prev_price
-        else:
-            daily_pnl, daily_pct = 0, 0
+        # 当日盈亏兜底（intraday_snapshots 没算时再算）
+        if daily_pnl is None:
+            prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
+            prev_price = prev_snap.get("price") or prev_snap.get("avg_cost", 0)
+            if prev_price == 0:
+                prev_price = cost  # 新建仓用 avg_cost 作基准
+            if prev_price > 0:
+                daily_pnl = (price - prev_price) * shares
+                daily_pct = (price - prev_price) / prev_price
+            else:
+                daily_pnl, daily_pct = 0, 0
 
         arrow = "↑" if price > cost else ("↓" if price < cost else "")
         cls_price = css_cls(price - cost)
@@ -77,7 +82,7 @@ def build_astock_rows(portfolio: dict) -> str:
         cls_dly = css_cls(daily_pnl)
         daily_cell = (
             f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br><small>{fmt_pct(daily_pct)}</small></td>"
-            if prev_price > 0
+            if daily_pnl != 0 or daily_pct != 0
             else "<td class=''><span style='color:#64748b'>— 新建仓</span></td>"
         )
 
@@ -99,13 +104,10 @@ def build_fund_rows(portfolio: dict) -> str:
     today_rec = records[-1] if records else None
     prev_rec = records[-2] if len(records) >= 2 else None
 
-    from datetime import date as _date
-    today_str = _date.today().isoformat()
-    today_buy_navs = {
-        t["code"]: t.get("nav") or t.get("price", 0)
-        for t in portfolio.get("trades", [])
-        if t.get("action") == "BUY" and t.get("date") == today_str
-    }
+    # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时净值
+    intraday = portfolio.get("intraday_snapshots", [])
+    latest_intraday = intraday[-1] if intraday else None
+    intraday_positions = (latest_intraday or {}).get("positions", {})
 
     positions = portfolio.get("positions", {})
     rows = []
@@ -113,23 +115,34 @@ def build_fund_rows(portfolio: dict) -> str:
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
         avg_nav = pos.get("avg_nav", 0)
-        cur_nav = pos.get("current_nav", avg_nav)
-        mv = pos.get("market_value", cur_nav * shares)
-        pnl = pos.get("pnl", 0)
-        pnl_pct = pos.get("pnl_pct", 0)
+        # 优先用 intraday_snapshots 实时净值，回退到 positions
+        intraday_pos = intraday_positions.get(code, {})
+        cur_nav = (
+            intraday_pos.get("current_nav")
+            or pos.get("current_nav")
+            or avg_nav
+        )
+        mv = intraday_pos.get("market_value") or pos.get("market_value") or cur_nav * shares
+        pnl = intraday_pos.get("pnl") or pos.get("pnl", 0)
+        pnl_pct = intraday_pos.get("pnl_pct") or pos.get("pnl_pct", 0)
+        daily_pnl = intraday_pos.get("daily_pnl")
+        daily_pct = intraday_pos.get("daily_pnl_pct")
+
         # fund_type 字段在 portfolio.json 里可能简写，扩展显示
         ft_raw = pos.get("fund_type", "ETF")
         ft_display = ft_raw if "·" in ft_raw or len(ft_raw) > 6 else f"{ft_raw}·ETF"
 
-        prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
-        prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
-        if prev_nav == 0:
-            prev_nav = avg_nav  # 新建仓用 avg_nav 作基准
-        if prev_nav > 0:
-            daily_pnl = (cur_nav - prev_nav) * shares
-            daily_pct = (cur_nav - prev_nav) / prev_nav
-        else:
-            daily_pnl, daily_pct = 0, 0
+        # 当日盈亏兜底
+        if daily_pnl is None:
+            prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
+            prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
+            if prev_nav == 0:
+                prev_nav = avg_nav  # 新建仓用 avg_nav 作基准
+            if prev_nav > 0:
+                daily_pnl = (cur_nav - prev_nav) * shares
+                daily_pct = (cur_nav - prev_nav) / prev_nav
+            else:
+                daily_pnl, daily_pct = 0, 0
 
         arrow = "↑" if cur_nav > avg_nav else ("↓" if cur_nav < avg_nav else "")
         cls_price = css_cls(cur_nav - avg_nav)
@@ -137,7 +150,7 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_dly = css_cls(daily_pnl)
         daily_cell = (
             f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br><small>{fmt_pct(daily_pct)}</small></td>"
-            if prev_nav > 0
+            if daily_pnl != 0 or daily_pct != 0
             else "<td class=''><span style='color:#64748b'>— 新申购</span></td>"
         )
 
