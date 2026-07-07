@@ -159,7 +159,13 @@ def build_fund_rows(portfolio: dict) -> str:
         )
         if need_recalc:
             prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
-            prev_nav = prev_snap.get("current_nav") or prev_snap.get("avg_nav", 0)
+            # 2026-07-07 补丁：兼容从日报HTML重建的 snapshot（字段名是A股风格 price/current_price）
+            prev_nav = (
+                prev_snap.get("current_nav")
+                or prev_snap.get("price")
+                or prev_snap.get("current_price")
+                or prev_snap.get("avg_nav", 0)
+            )
             if prev_nav == 0:
                 prev_nav = avg_nav  # 新建仓用 avg_nav 作基准
             if prev_nav > 0:
