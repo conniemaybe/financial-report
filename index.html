@@ -136,7 +136,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-07 08:20</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-07 10:00</div>
   </div>
   <!-- ⚠️ updateTime 格式硬约束：只允许 "数据更新：YYYY-MM-DD HH:MM"，禁止追加（晨报）/（日报）/（盘中）等任何后缀标注 -->
 
@@ -181,6 +181,7 @@ tr:hover { background: #1e293b60; }
         <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>500 股</td><td class='hide-mobile'>¥68.21</td><td class='down'>¥66.18↓</td><td>¥33,090</td><td class='up'>+¥690<br><small>+2.13%</small></td><td class='down'>-¥1,014<br><small>-2.97%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>200 股</td><td class='hide-mobile'>¥91.40</td><td class='up'>¥92.27↑</td><td>¥18,454</td><td class='up'>+¥56<br><small>+0.30%</small></td><td class='up'>+¥175<br><small>+0.96%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>800 股</td><td class='hide-mobile'>¥26.02</td><td class='down'>¥25.80↓</td><td>¥20,640</td><td class='down'>-¥173<br><small>-0.83%</small></td><td class='down'>-¥173<br><small>-0.83%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>800 股</td><td class='hide-mobile'>¥38.59</td><td class=''>¥38.59</td><td>¥30,864</td><td class=''>+¥0<br><small>+0.00%</small></td><td class=''>+¥0<br><small>+0.00%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -203,12 +204,12 @@ tr:hover { background: #1e293b60; }
   <div class="section">
     <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-07（周二）</span></h2>
     <div class="decision-timeline" id="decisionLog">
-      <div class="decision-node pending">
+      <div class="decision-node done">
         <div>
           <div class="d-time">10:00</div>
-          <div class="d-status">⏳ 待执行</div>
+          <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body">待盘中执行</div>
+        <div class="d-body"><b>卖出优先窗口 — 1笔成交，牧原股份买入800股</b><br>🔴 卖出检查（止盈+止损）：浪潮信息72.22(+3.60%)浮盈+20.1%🟢强趋势→持有（档位阈值+30%未到） | 新华保险63.40(-1.67%)浮盈+6.03%→持有 | 通富微电67.14(+1.45%)浮亏-1.57%→持有 | 皓元医药89.90(-2.57%)浮亏-1.64%→持有 | 山东黄金25.36(-1.71%)浮亏-2.53%T+1可卖但未触止损→持有<br>🔵 A股买入检查(1只)：牧原股份38.58在[36.50,39.00]内✅ 养殖业-0.87%>-1%✅ 量比2.38✅ 非急跌-0.26%✅ →<b style="color:#ef4444">执行买入800股@38.58</b><br>🟢 基金买入检查(0只)：无活跃pending策略</div>
       </div>
       <div class="decision-node pending">
         <div>
@@ -232,7 +233,7 @@ tr:hover { background: #1e293b60; }
         <div class="d-body">待盘中执行</div>
       </div>
     </div>
-    <div class="market-banner up">📊 7/7 晨报已生成 · 今日盘中4个检查点待执行 · A股5只持仓+基金4只持仓 · 牧原股份BUY候选</div>
+    <div class="market-banner down">📊 7/7 盘中 · 上证-0.46%深证-0.07%创业板+0.29% · 10:00卖出优先窗口：牧原股份买入800股✅ · A股6只持仓+基金4只持仓 · 3个检查点待执行</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -275,9 +276,10 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (auto-generated from portfolio.json + fund_portfolio.json) ==========
-// A股 + 基金 合计 21 笔（按时间倒序，同时刻卖出优先）
+// A股 + 基金 合计 22 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
 const allTrades = [
+  { date: '2026-07-07', time: '09:54', acct: 'A股', action: '买入', code: '002714', name: '牧原股份', price: '¥38.58', qty: '800 股', amount: '¥30,872', reason: '养殖业板块-0.87%>-1%✅，量比2.38≥0.8✅，价格38.58在[36.50,39.00]内✅，非急跌-0.26%<2%✅', cls: 'up' },
   { date: '2026-07-06', time: '13:27', acct: 'A股', action: '买入', code: '600547', name: '山东黄金', price: '¥26.01', qty: '800 股', amount: '¥20,813', reason: '贵金属板块+0.16%>-1%✅，量比1.76≥0.8✅，价格26.01在[24.50,26.50]内✅，非急跌-0.27%✅', cls: 'up' },
   { date: '2026-07-06', time: '09:55', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.719', qty: '2,200 份', amount: '¥19,187', reason: '溢价0.49%<0.5%加分⭐，NAV 8.6764在[8.40,8.70]内✅，贵金属+2.79%强势✅，量比1.88✅，非急跌✅', cls: 'up' },
   { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.7', qty: '500 股', amount: '¥26,350', reason: '趋势转弱清仓', cls: 'down' },
