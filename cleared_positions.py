@@ -282,17 +282,23 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
 
 def inject_cleared_module(html: str, module: str) -> str:
     """把 cleared 模块注入 index.html：插在"近期交易记录"和"历史报告档案"之间"""
-    # 先清除已存在的 clearedSection（幂等）
+    # 先清除已存在的 clearedSection（幂等，兼容多种写法）
     html = re.sub(
-        r'\s*<!-- 已清仓标的.*?</div>\s*<script>.*?switchClearedTab.*?</script>\s*',
+        r'\s*<!-- 已清仓标的.*?switchClearedTab.*?</script>\s*',
         '\n\n',
         html, flags=re.DOTALL, count=1,
     )
-    # 在"历史报告档案"前插入
-    marker = "  <!-- Report Archive"
-    if marker not in html:
-        raise RuntimeError("未找到插入锚点：'<!-- Report Archive'")
-    return html.replace(marker, module + "\n" + marker, 1)
+    # 尝试多个锚点（兼容历史版本）
+    for marker in ["  <!-- Report Archive with Filters", "  <!-- Report Archive"]:
+        if marker in html:
+            return html.replace(marker, module + "\n" + marker, 1)
+    # 兜底：搜索"历史报告档案"前的 section
+    idx = html.find("历史报告档案")
+    if idx > 0:
+        section_start = html.rfind("<div class=\"section\"", 0, idx)
+        if section_start > 0:
+            return html[:section_start] + module + "\n" + html[section_start:]
+    raise RuntimeError("未找到插入锚点：Report Archive / 历史报告档案")
 
 
 # ============== 主流程 ==============

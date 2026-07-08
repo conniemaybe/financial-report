@@ -86,6 +86,13 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
     if market_signal:
         parts.append(market_signal)
 
+    # 单位判定：基金用"份"，A股用"股"
+    def get_unit(t: dict) -> str:
+        # 基金标志：is_etf/fund_type 字段 或 code 在基金代码段
+        if t.get("is_etf") or t.get("fund_type"):
+            return "份"
+        return "股"
+
     # 卖出明细（含完整 reason）
     if sells:
         sell_parts = []
@@ -96,7 +103,8 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
             shares = t.get("shares", 0)
             reason = t.get("reason", "")
             amount = t.get("amount") or price * shares
-            sell_parts.append(f"{name}({code}) {shares}股@{price} = ¥{amount:,.0f}｜{reason}")
+            unit = get_unit(t)
+            sell_parts.append(f"{name}({code}) {shares}{unit}@{price} = ¥{amount:,.0f}｜{reason}")
         parts.append("卖出 " + "； ".join(sell_parts))
 
     # 买入明细
@@ -109,7 +117,8 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
             shares = t.get("shares", 0)
             reason = t.get("reason", "")
             amount = t.get("amount") or price * shares
-            buy_parts.append(f"{name}({code}) {shares}股@{price} = ¥{amount:,.0f}｜{reason}")
+            unit = get_unit(t)
+            buy_parts.append(f"{name}({code}) {shares}{unit}@{price} = ¥{amount:,.0f}｜{reason}")
         parts.append("买入 " + "； ".join(buy_parts))
 
     return " — ".join(parts)
@@ -191,17 +200,19 @@ def main():
         if trades:
             print(f"  {w}: {len(trades)} 笔 — {[t['name'] for t in trades]}")
 
-    # 基金
+    # 基金（必须用同一个 today 判定，避免把历史基金交易错塞进当日决策）
     fund_trades = {}
     if FUND_PORTFOLIO.exists():
         fund_pf = json.loads(FUND_PORTFOLIO.read_text(encoding="utf-8"))
-        fund_today = get_today_str(fund_pf) or today
-        fund_trades = collect_trades_by_window(fund_pf, fund_today)
+        # 严禁 fallback 到 today：基金当日没交易就当无处理
+        fund_trades = collect_trades_by_window(fund_pf, today)
         if any(fund_trades.values()):
             print(f"\n基金 当日交易窗口分布:")
             for w, trades in fund_trades.items():
                 if trades:
                     print(f"  {w}: {len(trades)} 笔 — {[t['name'] for t in trades]}")
+        else:
+            print(f"\n基金 当日（{today}）无交易，跳过")
 
     print(f"\n🔧 丰富决策节点...")
     html = INDEX_HTML.read_text(encoding="utf-8")

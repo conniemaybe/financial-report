@@ -23,12 +23,13 @@ INDEX_HTML = Path(r"C:\temp\financial-report\index.html")
 
 
 def fmt_money(v: float) -> str:
+    """v8 统一：所有金额保留 2 位小数（含 ¥、千分位、正负号）"""
     sign = "+" if v >= 0 else "-"
-    return f"{sign}¥{abs(v):,.0f}"
+    return f"{sign}¥{abs(v):,.2f}"
 
 
 def fmt_pct(v: float) -> str:
-    """0.0112 → '+1.12%'（小数入参，渲染时 ×100）"""
+    """0.0112 → '+1.12%'（小数入参，渲染时 ×100，统一 2 位小数）"""
     sign = "+" if v >= 0 else ""
     return f"{sign}{v*100:.2f}%"
 
@@ -88,6 +89,44 @@ def get_today_sells(portfolio: dict, today: str | None) -> dict:
             "fees": fees,
         })
     return sells
+
+
+def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: float, is_fund: bool = False) -> tuple[float, float, float]:
+    """计算持仓标的的总盈亏（v8 新增）。
+    返回 (total_pnl, total_pct, avg_cost)
+
+    A股：基于完整交易历史（trades 完整可信）
+        总盈亏 = Σ(SELL 净额) + 持仓浮动市值 + Σ(分红) - Σ(BUY 总成本)
+
+    基金：基于 pos.avg_nav（trades 历史可能有遗漏，fund_state.avg_nav 是权威值）
+        总盈亏 = (current_nav - avg_nav) × shares
+    """
+    if is_fund:
+        avg_cost = pos.get("avg_nav", 0)
+        shares = pos.get("shares", 0)
+        total_pnl = (current_price - avg_cost) * shares
+        total_pct = (current_price - avg_cost) / avg_cost if avg_cost > 0 else 0
+        return total_pnl, total_pct, avg_cost
+
+    # A股：基于 trades 完整历史
+    trades = [t for t in portfolio.get("trades", []) if t.get("code") == code]
+    buy_total = sum(
+        t.get("amount", 0) + t.get("commission", 0) + t.get("transfer_fee", 0)
+        for t in trades if t.get("action") == "BUY"
+    )
+    sell_net = sum(
+        t.get("amount", 0) - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+        for t in trades if t.get("action") == "SELL"
+    )
+    div_total = sum(t.get("amount", 0) for t in trades if t.get("action") == "DIVIDEND")
+
+    shares = pos.get("shares", 0)
+    holding_mv = shares * current_price
+    total_pnl = sell_net + holding_mv + div_total - buy_total
+    buy_shares = sum(t.get("shares", 0) for t in trades if t.get("action") == "BUY")
+    avg_cost = buy_total / buy_shares if buy_shares > 0 else 0
+    total_pct = total_pnl / buy_total if buy_total > 0 else 0
+    return total_pnl, total_pct, avg_cost
 
 
 def compute_daily_pnl_astock(
@@ -231,15 +270,15 @@ def build_astock_rows(portfolio: dict) -> str:
     for code, pos in positions.items():
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
-        cost = pos.get("avg_cost", 0)
 
         price = (
             pos.get("current_price")
-            or cost
+            or pos.get("avg_cost", 0)
         )
         mv = price * shares
-        pnl = (price - cost) * shares
-        pnl_pct = (price - cost) / cost if cost > 0 else 0
+
+        # 总盈亏：基于完整交易历史（v8，与已清仓标的口径一致）
+        pnl, pnl_pct, avg_cost = compute_total_pnl(portfolio, code, pos, price)
 
         # 当日盈亏：持仓浮动 + SELL 实现损益（v7）
         daily_pnl, daily_pct, is_new = compute_daily_pnl_astock(
@@ -247,8 +286,8 @@ def build_astock_rows(portfolio: dict) -> str:
         )
 
         # 渲染
-        arrow = "↑" if price > cost else ("↓" if price < cost else "")
-        cls_price = css_cls(price - cost)
+        arrow = "↑" if price > avg_cost else ("↓" if price < avg_cost else "")
+        cls_price = css_cls(price - avg_cost)
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
 
@@ -269,9 +308,9 @@ def build_astock_rows(portfolio: dict) -> str:
             f"<tr><td class='hide-mobile'><span class='stock-code'>{code}</span></td>"
             f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
             f"<td>{shares:,} 股</td>"
-            f"<td class='hide-mobile'>¥{cost:.2f}</td>"
+            f"<td class='hide-mobile'>¥{avg_cost:.2f}</td>"
             f"<td class='{cls_price}'>¥{price:.2f}{arrow}</td>"
-            f"<td>¥{mv:,.0f}</td>"
+            f"<td>¥{mv:,.2f}</td>"
             f"{daily_cell}"
             f"<td class='{cls_pnl}'>{fmt_money(pnl)}<br><small>{fmt_pct(pnl_pct)}</small></td></tr>"
         )
@@ -286,13 +325,13 @@ def build_astock_rows(portfolio: dict) -> str:
             realized_part = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in today_sells.get(code, []))
         debug_lines.append(
             f"  {name}({code}) shares={shares} price={price} prev_close={prev_price:.2f} | "
-            f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
+            f"当日[持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f}]={daily_pnl} | "
+            f"总盈亏={pnl:+.2f}({pnl_pct*100:+.2f}%)"
         )
 
     # 注：历史清仓标的已移至独立"已清仓标的"模块（cleared_positions.py 维护）
-    # 当日清仓的实现损益通过账户卡片下方小字脚注透明化，不在持仓表中显示
 
-    print("📊 A股 当日盈亏自检（v7 持仓浮动+SELL实现损益）：")
+    print("📊 A股 当日盈亏+总盈亏自检（v8 持仓浮动+SELL实现+总盈亏交易历史口径）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
@@ -308,15 +347,15 @@ def build_fund_rows(portfolio: dict) -> str:
     for code, pos in positions.items():
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
-        avg_nav = pos.get("avg_nav", 0)
 
         cur_nav = (
             pos.get("current_nav")
             or pos.get("avg_nav", 0)
         )
         mv = cur_nav * shares
-        pnl = (cur_nav - avg_nav) * shares
-        pnl_pct = (cur_nav - avg_nav) / avg_nav if avg_nav > 0 else 0
+
+        # 总盈亏：基金用 avg_nav（trades 历史不完整，详见 compute_total_pnl 注释）
+        pnl, pnl_pct, avg_nav = compute_total_pnl(portfolio, code, pos, cur_nav, is_fund=True)
 
         # 当日盈亏：持仓浮动 + SELL 实现损益（v7）
         daily_pnl, daily_pct, is_new = compute_daily_pnl_fund(
@@ -348,7 +387,7 @@ def build_fund_rows(portfolio: dict) -> str:
             f"<td>{shares:,.0f} 份</td>"
             f"<td class='hide-mobile'>¥{avg_nav:.4f}</td>"
             f"<td class='{cls_price}'>¥{cur_nav:.4f}{arrow}</td>"
-            f"<td>¥{mv:,.0f}</td>"
+            f"<td>¥{mv:,.2f}</td>"
             f"{daily_cell}"
             f"<td class='{cls_pnl}'>{fmt_money(pnl)}<br><small>{fmt_pct(pnl_pct)}</small></td></tr>"
         )
@@ -363,12 +402,13 @@ def build_fund_rows(portfolio: dict) -> str:
             realized_part = sum(s["shares"] * (s["price"] - prev_nav_val) - s["fees"] for s in today_sells.get(code, []))
         debug_lines.append(
             f"  {name}({code}) shares={shares} nav={cur_nav} prev_nav={prev_nav_val:.4f} | "
-            f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
+            f"当日[持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f}]={daily_pnl} | "
+            f"总盈亏={pnl:+.2f}({pnl_pct*100:+.2f}%)"
         )
 
     # 注：历史清仓标的已移至独立"已清仓标的"模块（cleared_positions.py 维护）
 
-    print("\n📊 基金 当日盈亏自检（v7 持仓浮动+SELL实现损益）：")
+    print("\n📊 基金 当日盈亏+总盈亏自检（v8 持仓浮动+SELL实现+总盈亏交易历史口径）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
@@ -405,7 +445,7 @@ def get_prev_day_nav(portfolio: dict) -> float | None:
 
 def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     """自动重算 4 个账户卡片：A股、基金、合并、可用资金。
-    v7 增强：A股卡片下方追加"今日已清仓贡献"小字，让清仓标的的实现损益透明化。
+    v8 原则：固定格式，禁止自发挥。每个卡片只输出"标签 + 净值 + 累计/今日盈亏"三行。
     """
     initial = 500000  # 初始资金
 
@@ -416,19 +456,6 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     a_total_pct = a_total_pnl / initial
     a_today_pnl = (a_nav - a_prev) if a_prev else 0
     a_today_pct = (a_today_pnl / a_prev) if a_prev else 0
-
-    # A股今日清仓贡献（透明化关键数据）
-    a_today = get_today(astock_pf)
-    a_sells = get_today_sells(astock_pf, a_today)
-    cleared_a_codes = [c for c in a_sells.keys() if c not in astock_pf.get("positions", {})]
-    cleared_a_pnl = 0
-    cleared_a_names = []
-    for code in cleared_a_codes:
-        r = compute_daily_pnl_cleared(astock_pf, code, a_today, a_sells, is_fund=False)
-        if r is not None:
-            cleared_a_pnl += r
-            name = next((t.get("name", code) for t in astock_pf.get("trades", []) if t.get("code") == code), code)
-            cleared_a_names.append(f"{name}{r:+.0f}")
 
     # === 基金 ===
     f_nav, f_cash = calc_nav(fund_pf, "current_nav")
@@ -443,7 +470,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     combined_total_pnl = combined_nav - initial * 2
     combined_total_pct = combined_total_pnl / (initial * 2)
 
-    # 渲染辅助（与日报口径保持一致：保留两位小数，不做四舍五入）
+    # 渲染辅助：所有金额统一 2 位小数
     def fmt_card_money(v: float) -> str:
         sign = "+" if v >= 0 else "-"
         return f"{sign}¥{abs(v):,.2f}"
@@ -455,7 +482,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     def cls(v: float) -> str:
         return "up" if v > 0 else ("down" if v < 0 else "")
 
-    # === 替换 A股卡片（含清仓脚注） ===
+    # === 替换 A股卡片（固定三行：标签 + 净值 + 累计/今日盈亏，无脚注）===
     a_value = f'<div class="value">¥{a_nav:,.2f}</div>'
     a_change = (
         f'<div class="change {cls(a_total_pnl)}">'
@@ -463,25 +490,19 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         f'今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})'
         f'</div>'
     )
-    # 如果有清仓标的，加一行小字
-    if cleared_a_names:
-        cleared_cls = cls(cleared_a_pnl)
-        cleared_summary = " · ".join(cleared_a_names)
-        a_footnote = (
-            f'<div class="change {cleared_cls}" style="font-size:11px;opacity:0.8;margin-top:2px;">'
-            f'其中已清仓标的贡献 {fmt_card_money(cleared_a_pnl)}（{cleared_summary}）'
-            f'</div>'
-        )
-    else:
-        a_footnote = ""
-
+    # 移除已存在的脚注（幂等）
     html = re.sub(
-        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>(\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>)?',
-        rf'\1\n      {a_value}\n      {a_change}{a_footnote}',
+        r'(A股账户净值</div>\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>)\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>',
+        r'\1',
+        html, count=1,
+    )
+    html = re.sub(
+        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        rf'\1\n      {a_value}\n      {a_change}',
         html, count=1,
     )
 
-    # === 替换 基金卡片 ===
+    # === 替换 基金卡片（固定三行）===
     f_value = f'<div class="value">¥{f_nav:,.2f}</div>'
     f_change = (
         f'<div class="change {cls(f_total_pnl)}">'
@@ -495,7 +516,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         html, count=1,
     )
 
-    # === 替换 合并卡片 ===
+    # === 替换 合并卡片（固定三行）===
     c_value = f'<div class="value">¥{combined_nav:,.2f}</div>'
     c_change = (
         f'<div class="change {cls(combined_total_pnl)}">'
@@ -508,21 +529,20 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         html, count=1,
     )
 
-    # === 可用资金卡片 ===
+    # === 可用资金卡片（固定两行：标签 + 金额，无任何额外文案）===
     cash_value = f'<div class="value">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
+    # 移除可能存在的"日报归档"等自发挥 change 行
     html = re.sub(
-        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>',
+        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>(\s*<div class="change[^"]*">[^<]*</div>)?',
         rf'\1\n      {cash_value}',
         html, count=1,
     )
 
     # 自检输出
-    print(f"\n📊 账户卡片自算（v7 自动重算 + 清仓透明化）：")
-    print(f"  A股: NAV ¥{a_nav:,.0f} | 昨日 ¥{a_prev:,.0f} | 今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)}) | 累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)})")
-    if cleared_a_names:
-        print(f"    └─ 清仓标的贡献 {fmt_card_money(cleared_a_pnl)}（{', '.join(cleared_a_names)}）")
-    print(f"  基金: NAV ¥{f_nav:,.0f} | 昨日 ¥{f_prev:,.0f} | 今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)}) | 累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})")
-    print(f"  合并: NAV ¥{combined_nav:,.0f} | 累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})")
+    print(f"\n📊 账户卡片自算（v8 固定格式）：")
+    print(f"  A股: NAV ¥{a_nav:,.2f} | 昨日 ¥{a_prev:,.2f} | 今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)}) | 累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)})")
+    print(f"  基金: NAV ¥{f_nav:,.2f} | 昨日 ¥{f_prev:,.2f} | 今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)}) | 累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})")
+    print(f"  合并: NAV ¥{combined_nav:,.2f} | 累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})")
 
     return html
 
@@ -552,7 +572,7 @@ def update_index(astock_rows: str, fund_rows: str, astock_pf: dict, fund_pf: dic
     html = update_account_cards(astock_pf, fund_pf, html)
 
     INDEX_HTML.write_text(html, encoding="utf-8")
-    print(f"\n✅ index.html 已更新（持仓表 + 账户卡片，v6 自动重算）")
+    print(f"\n✅ index.html 已更新（持仓表 + 账户卡片，v8 固定格式）")
 
 
 if __name__ == "__main__":
