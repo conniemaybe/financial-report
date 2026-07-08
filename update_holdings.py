@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-2026-07-06 v3 同步 index.html 持仓表（A 股 + 基金）
+2026-07-08 v5 彻底重写：修正新建仓判定 + 修正当日盈亏计算
 
-数据前提（已由 normalize_pnl_pct.py 完成）：
-  - positions[code].pnl_pct 已全部归一为小数形式（0.1595 表示 15.95%）
-  - 不再有「百分号前数字」（15.95 表示 15.95%）混用
-
-用法：
-    python update_holdings.py
+核心原则（吃过 3 次亏的教训）：
+1. **"今日"= intraday_snapshots 最新一条的日期**（盘中 automation 写入的实时状态）
+   不是 daily_records[-1].date（那是昨日日报存档）
+2. **新建仓判定**：pos.buy_date == 今日（intraday_snapshots[0].date）
+   只要 intraday_snapshots 已经有该仓位的数据，就不是新建仓
+3. **当日盈亏**：直接用 intraday_snapshots[-1].positions[code].daily_pnl
+   这是 portfolio_state.update_market_values() 算好的，无需 update_holdings 再算
+4. **兜底**：intraday_snapshots 缺失时，用 daily_records 的 prev/current 价格反推
 """
 import json
 import re
@@ -34,76 +36,93 @@ def css_cls(v: float) -> str:
     return "up" if v > 0 else ("down" if v < 0 else "")
 
 
-def build_astock_rows(portfolio: dict) -> str:
-    records = portfolio.get("daily_records", [])
-    today_rec = records[-1] if records else None
-    prev_rec = records[-2] if len(records) >= 2 else None
+def get_today_from_intraday(portfolio: dict) -> str | None:
+    """今日 = intraday_snapshots 第一条的日期（盘中 automation 写入的当天日期）"""
+    snaps = portfolio.get("intraday_snapshots", [])
+    for s in snaps:
+        d = s.get("date")
+        if d:
+            return d
+    return None
 
-    # 2026-07-08 修复：新建仓判定改用 pos.buy_date == records[-1].date
-    # 不能再用 trades.action == BUY + trades.date == today_str（today_str 是当前真实日期，不是 daily_records 的日期）
-    # daily_records 最新一条才是网站展示的"今日"，buy_date 和它对齐才是新建仓
-    latest_record_date = records[-1].get("date") if records else None
+
+def build_astock_rows(portfolio: dict) -> str:
     positions = portfolio.get("positions", {})
 
-    # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时价格
-    # 盘中 10:00/10:30/13:30/14:45 同步后，网站立即显示最新价
+    # 今日 = intraday_snapshots 的日期（不是 daily_records 最新日期！）
     intraday = portfolio.get("intraday_snapshots", [])
+    today = get_today_from_intraday(portfolio)
     latest_intraday = intraday[-1] if intraday else None
     intraday_positions = (latest_intraday or {}).get("positions", {})
+
+    # 兜底数据：daily_records 最新（昨日日报）
+    records = portfolio.get("daily_records", [])
+    prev_rec = records[-1] if records else None  # 7/7 日报
+    prev_prev_rec = records[-2] if len(records) >= 2 else None  # 7/6 日报（用于新建仓判定 prev_price）
 
     rows = []
     for code, pos in positions.items():
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
         cost = pos.get("avg_cost", 0)
-        # 2026-07-08 修复：buy_date 对齐 daily_records 最新日期 = 新建仓
-        is_new_position = (
-            pos.get("buy_date") == latest_record_date
-            or pos.get("buy_date") is None  # 老仓位无 buy_date 当作非新建仓
-            and pos.get("buy_date") == latest_record_date
-        )
-        # 优先用 intraday_snapshots 实时价，回退到 positions 的 current_price
+        buy_date = pos.get("buy_date")
+
+        # ===== 新建仓判定（v5 修正）=====
+        # 今日 = intraday_snapshots 日期（如果有）
+        # 新建仓 = pos.buy_date == 今日
+        # 老仓位（buy_date 为 None 或 < 今日）→ 非新建仓
+        is_new_position = bool(today) and buy_date == today
+
+        # ===== 价格 & 市值（优先 intraday_snapshots）=====
         intraday_pos = intraday_positions.get(code, {})
         price = (
             intraday_pos.get("current_price")
             or pos.get("current_price")
             or cost
         )
-        mv = intraday_pos.get("market_value") or pos.get("market_value") or price * shares
+        mv = intraday_pos.get("market_value") or price * shares
         pnl = intraday_pos.get("pnl") or pos.get("pnl", 0)
         pnl_pct = intraday_pos.get("pnl_pct") or pos.get("pnl_pct", 0)
-        daily_pnl = intraday_pos.get("daily_pnl")
-        daily_pct = intraday_pos.get("daily_pnl_pct")
 
-        # 2026-07-08 修复：新建仓直接显示"— 新建仓"，不算 daily_pnl
-        # 之前的逻辑用 prev_rec.snapshot.price，但新建仓 prev_rec 里根本没有这条
-        # 导致 prev_price=0 → 用 cost 兜底 → daily_pnl = 总盈亏（错误！）
+        # ===== 当日盈亏（v5 修正）=====
         if is_new_position:
-            daily_pnl = None  # 标记为新建仓
+            # 真新建仓：当天买入，当日盈亏就是总盈亏（从成本到现价的浮动）
+            # 显示"— 新建仓"更清晰（因为当日盈亏 = 总盈亏会让人误以为数据错了）
+            daily_pnl = None
             daily_pct = None
-        elif daily_pnl is None or (
-            daily_pnl is not None and abs(daily_pnl - pnl) < 0.01
-        ):
-            # 当日盈亏兜底（intraday_snapshots 没算 或 与总盈亏相等时重算）
-            prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
-            prev_price = prev_snap.get("price") or prev_snap.get("current_price") or prev_snap.get("avg_cost", 0)
-            if prev_price > 0:
-                daily_pnl = (price - prev_price) * shares
-                daily_pct = (price - prev_price) / prev_price
-            else:
-                daily_pnl, daily_pct = 0, 0
+        else:
+            # 非新建仓：直接用 intraday_snapshots 算好的 daily_pnl
+            daily_pnl = intraday_pos.get("daily_pnl")
+            daily_pct = intraday_pos.get("daily_pnl_pct")
+            # 兜底：仅当 intraday_snapshots 完全没算 daily_pnl 时才用 prev_rec 反推
+            # 注意：不能用"daily_pnl == pnl"判定未更新，因为真新建仓两者会相等但 daily_pnl 是对的
+            if daily_pnl is None:
+                prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
+                prev_price = (
+                    prev_snap.get("price")
+                    or prev_snap.get("current_price")
+                    or prev_snap.get("avg_cost", 0)
+                )
+                if prev_price > 0:
+                    daily_pnl = (price - prev_price) * shares
+                    daily_pct = (price - prev_price) / prev_price
+                else:
+                    daily_pnl, daily_pct = 0, 0
 
+        # ===== 渲染 =====
         arrow = "↑" if price > cost else ("↓" if price < cost else "")
         cls_price = css_cls(price - cost)
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
+
         if daily_pnl is None:
             daily_cell = "<td class=''><span style='color:#64748b'>— 新建仓</span></td>"
+        elif daily_pnl == 0 and daily_pct == 0:
+            daily_cell = "<td class=''><span style='color:#64748b'>— 无变化</span></td>"
         else:
             daily_cell = (
-                f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br><small>{fmt_pct(daily_pct)}</small></td>"
-                if daily_pnl != 0 or daily_pct != 0
-                else "<td class=''><span style='color:#64748b'>— 无变化</span></td>"
+                f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br>"
+                f"<small>{fmt_pct(daily_pct)}</small></td>"
             )
 
         rows.append(
@@ -120,74 +139,75 @@ def build_astock_rows(portfolio: dict) -> str:
 
 
 def build_fund_rows(portfolio: dict) -> str:
-    records = portfolio.get("daily_records", [])
-    today_rec = records[-1] if records else None
-    prev_rec = records[-2] if len(records) >= 2 else None
-
-    # 2026-07-08 修复：新建仓判定改用 pos.buy_date == records[-1].date（同 A股）
-    latest_record_date = records[-1].get("date") if records else None
     positions = portfolio.get("positions", {})
 
-    # 2026-07-07 v4：优先用 intraday_snapshots[-1] 的实时净值
     intraday = portfolio.get("intraday_snapshots", [])
+    today = get_today_from_intraday(portfolio)
     latest_intraday = intraday[-1] if intraday else None
     intraday_positions = (latest_intraday or {}).get("positions", {})
+
+    records = portfolio.get("daily_records", [])
+    prev_rec = records[-1] if records else None
 
     rows = []
     for code, pos in positions.items():
         name = pos.get("name", "")
         shares = pos.get("shares", 0)
         avg_nav = pos.get("avg_nav", 0)
-        # 2026-07-08 修复：新建仓判定（buy_date 对齐 daily_records 最新日期）
-        is_new_position = pos.get("buy_date") == latest_record_date
-        # 优先用 intraday_snapshots 实时净值，回退到 positions
+        buy_date = pos.get("buy_date")
+
+        # 新建仓判定（同 A股逻辑）
+        is_new_position = bool(today) and buy_date == today
+
         intraday_pos = intraday_positions.get(code, {})
         cur_nav = (
             intraday_pos.get("current_nav")
             or pos.get("current_nav")
             or avg_nav
         )
-        mv = intraday_pos.get("market_value") or pos.get("market_value") or cur_nav * shares
+        mv = intraday_pos.get("market_value") or cur_nav * shares
         pnl = intraday_pos.get("pnl") or pos.get("pnl", 0)
         pnl_pct = intraday_pos.get("pnl_pct") or pos.get("pnl_pct", 0)
-        daily_pnl = intraday_pos.get("daily_pnl")
-        daily_pct = intraday_pos.get("daily_pnl_pct")
 
-        # fund_type 字段在 portfolio.json 里可能简写，扩展显示
+        # fund_type 显示
         ft_raw = pos.get("fund_type", "ETF")
         ft_display = ft_raw if "·" in ft_raw or len(ft_raw) > 6 else f"{ft_raw}·ETF"
 
-        # 2026-07-08 修复：新建仓直接显示"— 新申购"，不算 daily_pnl（同 A股逻辑）
+        # 当日盈亏
         if is_new_position:
             daily_pnl = None
             daily_pct = None
-        elif daily_pnl is None or (
-            daily_pnl is not None and abs(daily_pnl - pnl) < 0.01
-        ):
-            prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
-            prev_nav = (
-                prev_snap.get("current_nav")
-                or prev_snap.get("price")
-                or prev_snap.get("current_price")
-                or prev_snap.get("avg_nav", 0)
-            )
-            if prev_nav > 0:
-                daily_pnl = (cur_nav - prev_nav) * shares
-                daily_pct = (cur_nav - prev_nav) / prev_nav
-            else:
-                daily_pnl, daily_pct = 0, 0
+        else:
+            daily_pnl = intraday_pos.get("daily_pnl")
+            daily_pct = intraday_pos.get("daily_pnl_pct")
+            # 兜底：仅当 intraday 完全没算时才反推
+            if daily_pnl is None:
+                prev_snap = (prev_rec or {}).get("positions_snapshot", {}).get(code, {})
+                prev_nav = (
+                    prev_snap.get("current_nav")
+                    or prev_snap.get("price")
+                    or prev_snap.get("current_price")
+                    or prev_snap.get("avg_nav", 0)
+                )
+                if prev_nav > 0:
+                    daily_pnl = (cur_nav - prev_nav) * shares
+                    daily_pct = (cur_nav - prev_nav) / prev_nav
+                else:
+                    daily_pnl, daily_pct = 0, 0
 
         arrow = "↑" if cur_nav > avg_nav else ("↓" if cur_nav < avg_nav else "")
         cls_price = css_cls(cur_nav - avg_nav)
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
+
         if daily_pnl is None:
             daily_cell = "<td class=''><span style='color:#64748b'>— 新申购</span></td>"
+        elif daily_pnl == 0 and daily_pct == 0:
+            daily_cell = "<td class=''><span style='color:#64748b'>— 无变化</span></td>"
         else:
             daily_cell = (
-                f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br><small>{fmt_pct(daily_pct)}</small></td>"
-                if daily_pnl != 0 or daily_pct != 0
-                else "<td class=''><span style='color:#64748b'>— 无变化</span></td>"
+                f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br>"
+                f"<small>{fmt_pct(daily_pct)}</small></td>"
             )
 
         rows.append(
@@ -238,3 +258,18 @@ if __name__ == "__main__":
     a_rows = build_astock_rows(astock_pf)
     f_rows = build_fund_rows(fund_pf)
     update_index(a_rows, f_rows)
+
+    # 打印当日盈亏自检（让用户能直接核对）
+    print("\n📊 当日盈亏自检：")
+    today = get_today_from_intraday(astock_pf)
+    print(f"  今日（intraday_snapshots 日期）: {today}")
+    intraday = astock_pf.get("intraday_snapshots", [])
+    if intraday:
+        latest = intraday[-1]
+        print(f"  最新 intraday 时间: {latest.get('time')}")
+        total_daily = 0
+        for code, p in latest.get("positions", {}).items():
+            dp = p.get("daily_pnl", 0) or 0
+            total_daily += dp
+            print(f"    {p.get('name')}({code}): daily_pnl={dp:+.2f} ({(p.get('daily_pnl_pct') or 0)*100:+.2f}%)")
+        print(f"  持仓浮盈合计: {total_daily:+.2f}")
