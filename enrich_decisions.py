@@ -94,6 +94,7 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
         return "股"
 
     # 卖出明细（含完整 reason）
+    # v8 统一：金额 :,.2f，价格 :.2f（与全盘口径一致）
     if sells:
         sell_parts = []
         for t in sells:
@@ -104,7 +105,7 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
             reason = t.get("reason", "")
             amount = t.get("amount") or price * shares
             unit = get_unit(t)
-            sell_parts.append(f"{name}({code}) {shares}{unit}@{price} = ¥{amount:,.0f}｜{reason}")
+            sell_parts.append(f"{name}({code}) {shares}{unit}@{price:.2f} = ¥{amount:,.2f}｜{reason}")
         parts.append("卖出 " + "； ".join(sell_parts))
 
     # 买入明细
@@ -118,7 +119,7 @@ def format_decision_body(window_id: str, trades: list, market_signal: str = "") 
             reason = t.get("reason", "")
             amount = t.get("amount") or price * shares
             unit = get_unit(t)
-            buy_parts.append(f"{name}({code}) {shares}{unit}@{price} = ¥{amount:,.0f}｜{reason}")
+            buy_parts.append(f"{name}({code}) {shares}{unit}@{price:.2f} = ¥{amount:,.2f}｜{reason}")
         parts.append("买入 " + "； ".join(buy_parts))
 
     return " — ".join(parts)

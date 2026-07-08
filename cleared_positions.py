@@ -167,7 +167,7 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
         if item["current_price"] is not None and item["post_clear_pct"] is not None:
             post_cell = (
                 f"<td class='{post_cls}'>{fmt_pct(item['post_clear_pct'])}<br>"
-                f"<small>现{price_label}¥{item['current_price']:.{4 if is_fund else 2}f}</small></td>"
+                f"<small>现{price_label} ¥{item['current_price']:.{4 if is_fund else 2}f}</small></td>"
             )
         else:
             post_cell = "<td><span style='color:#64748b'>—</span></td>"
@@ -191,7 +191,9 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
 
 
 def build_summary_row(cleared: list) -> str:
-    """汇总行：总实现盈亏"""
+    """汇总行：总实现盈亏。
+    v8：金额全部 2 位小数，与持仓表/账户卡片口径一致。
+    """
     if not cleared:
         return ""
     total_realized = sum(c["realized"] for c in cleared)
@@ -200,11 +202,10 @@ def build_summary_row(cleared: list) -> str:
     cls_total = cls(total_realized)
     return (
         f'<tr style="border-top:2px solid #334155;font-weight:600;background:#1e293b;">'
-        f'<td colspan="3" style="text-align:right;color:#94a3b8;">合计 {len(cleared)} 只 · 总投入 ¥{total_cost:,.0f}</td>'
+        f'<td colspan="3" style="text-align:right;color:#94a3b8;">合计 {len(cleared)} 只 · 总投入 ¥{total_cost:,.2f}</td>'
         f'<td class="{cls_total}">{fmt_money(total_realized)}</td>'
         f'<td class="{cls_total}">{fmt_pct(total_pct)}</td>'
-        f'<td colspan="3" style="color:#64748b;font-weight:400;font-size:12px;">'
-        f'含交易费用 & 分红（如有）</td></tr>'
+        f'<td colspan="3"></td></tr>'
     )
 
 
@@ -218,7 +219,7 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
     return f'''
   <!-- 已清仓标的 — 2026-07-08 新增 -->
   <div class="section" id="clearedSection">
-    <h2>💀 已清仓标的 <span style="font-size:12px;color:#64748b;font-weight:400;">含交易费用 & 分红（如有）</span></h2>
+    <h2>💀 已清仓标的</h2>
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
       <button class="filter-btn active" onclick="switchClearedTab('astock')">A股</button>
       <button class="filter-btn" onclick="switchClearedTab('fund')">基金</button>
