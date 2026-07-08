@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 """
-2026-07-08 v6 彻底重写：完全弃用 intraday_snapshots.daily_pnl，自己算
+2026-07-08 v7 彻底重写：当日盈亏 = 持仓浮动 + 当日SELL实现损益
 
-吃过 4 次坑的最终结论：
+吃过 5 次坑的最终结论（v7）：
 1. intraday_snapshots.daily_pnl 在 A股日内减仓后不会按新份额重算（14:45 bug）
 2. intraday_snapshots.daily_pnl_pct 在 基金 实际是"总盈亏%"不是"当日%"（数据源 bug）
-3. 唯一可靠的当日盈亏计算方法：用 prev_rec（昨日日报 snapshot）的 price 自己算
-   daily_pnl = (今日价 - 昨日价) × 当前持仓份额
+3. v6 用 "当前份额 × (今日价 - 昨日价)" 自算，**漏算已卖出部分的实现损益**
+4. v7 正确口径：当日盈亏 = 持仓浮动 + Σ(当日SELL shares × (sell_price - 昨收)) - Σ(当日SELL fees)
+   - 持仓浮动 = current_shares × (today_close - yesterday_close)
+   - SELL 实现损益从 portfolio.trades 提取（含 commission + stamp_tax + transfer_fee）
+5. **清仓标的也必须显示**：002156 通富、688131 皓元清仓，v6 完全遗漏了 -2431 元亏损
 
-边界处理：
-- 新建仓（buy_date == 今日）：显示"— 新建仓"
-- 日内减仓（14:45 卖出部分）：用当前剩余份额 × (今日价 - 昨日价)，这是简化但合理的口径
-  （理论上应该分前段/后段算，但网站展示用近似值即可）
-- 无 prev_rec 数据（历史首日）：显示"— 无数据"
+与账户卡片"今日 NAV - 昨日 NAV"天然对齐（NAV 法天然包含卖出+持仓两部分）。
 """
 import json
 import re
@@ -61,37 +60,132 @@ def get_prev_snapshot(portfolio: dict, code: str) -> dict:
     return prev_rec.get("positions_snapshot", {}).get(code, {})
 
 
-def compute_daily_pnl_astock(portfolio: dict, code: str, pos: dict, today_price: float, today: str | None) -> tuple[float | None, float | None, bool]:
-    """计算 A股当日盈亏。返回 (daily_pnl, daily_pct, is_new_position)"""
+def get_today_sells(portfolio: dict, today: str | None) -> dict:
+    """提取今日所有 SELL 交易，按 code 聚合。
+    返回 {code: [{"shares": x, "price": y, "fees": z}, ...]}
+    fees = commission + stamp_tax + transfer_fee
+    """
+    sells = {}
+    if not today:
+        return sells
+    for t in portfolio.get("trades", []):
+        if t.get("action") != "SELL":
+            continue
+        if t.get("date") != today:
+            continue
+        code = t.get("code")
+        if not code:
+            continue
+        fees = (
+            t.get("commission", 0)
+            + t.get("stamp_tax", 0)
+            + t.get("transfer_fee", 0)
+            + t.get("fee", 0)  # 基金字段
+        )
+        sells.setdefault(code, []).append({
+            "shares": t.get("shares", 0),
+            "price": t.get("price") or t.get("nav", 0),
+            "fees": fees,
+        })
+    return sells
+
+
+def compute_daily_pnl_astock(
+    portfolio: dict, code: str, pos: dict, today_price: float, today: str | None,
+    today_sells: dict,
+) -> tuple[float | None, float | None, bool]:
+    """计算 A股当日盈亏（v7：持仓浮动 + SELL 实现损益）。
+    返回 (daily_pnl, daily_pct, is_new_position)
+
+    正确口径：
+      当日盈亏 = 持仓浮动 + SELL 实现损益
+      持仓浮动 = current_shares × (today_close - yesterday_close)
+      SELL 实现损益 = Σ(sell_shares × (sell_price - yesterday_close)) - Σ(sell_fees)
+
+    daily_pct 含义：相对"昨日收盘 × 昨日份额"的涨跌幅（用于展示）
+    """
     shares = pos.get("shares", 0)
     buy_date = pos.get("buy_date")
     is_new_position = bool(today) and buy_date == today
 
-    if is_new_position:
-        return None, None, True
-
-    # 用昨日 snapshot 的 price 反推
     prev_snap = get_prev_snapshot(portfolio, code)
     prev_price = (
         prev_snap.get("price")
         or prev_snap.get("current_price")
         or prev_snap.get("avg_cost", 0)
     )
-    if prev_price > 0:
-        daily_pnl = (today_price - prev_price) * shares
-        daily_pct = (today_price - prev_price) / prev_price
-        return daily_pnl, daily_pct, False
-    return None, None, False  # 无 prev 数据
-
-
-def compute_daily_pnl_fund(portfolio: dict, code: str, pos: dict, today_nav: float, today: str | None) -> tuple[float | None, float | None, bool]:
-    """计算基金当日盈亏"""
-    shares = pos.get("shares", 0)
-    buy_date = pos.get("buy_date")
-    is_new_position = bool(today) and buy_date == today
 
     if is_new_position:
+        # 新建仓：只有 SELL 实现损益（罕见但可能有当日买卖）
+        sells_today = today_sells.get(code, [])
+        if sells_today and prev_price > 0:
+            realized = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in sells_today)
+            return realized, None, True
         return None, None, True
+
+    if prev_price <= 0:
+        return None, None, False  # 无 prev 数据
+
+    # 持仓浮动
+    holding_pnl = (today_price - prev_price) * shares
+
+    # SELL 实现损益
+    sells_today = today_sells.get(code, [])
+    realized = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in sells_today)
+
+    daily_pnl = holding_pnl + realized
+
+    # daily_pct：相对昨日市值的涨跌幅（昨日市值 = 昨日份额 × 昨日价）
+    # 昨日份额需要从昨日 snapshot 拿，否则用当前份额+SELL 份额近似
+    prev_shares = prev_snap.get("shares", shares + sum(s["shares"] for s in sells_today))
+    prev_value = prev_shares * prev_price
+    daily_pct = daily_pnl / prev_value if prev_value > 0 else 0
+
+    return daily_pnl, daily_pct, False
+
+
+def compute_daily_pnl_cleared(
+    portfolio: dict, code: str, today: str | None, today_sells: dict,
+    is_fund: bool = False,
+) -> float | None:
+    """计算今日清仓标的的当日实现损益。
+    清仓标的不在 positions 里，但当日有 SELL 交易全部清仓。
+    实现损益 = Σ(sell_shares × (sell_price - yesterday_close)) - Σ(sell_fees)
+    """
+    sells_today = today_sells.get(code, [])
+    if not sells_today:
+        return None
+
+    prev_snap = get_prev_snapshot(portfolio, code)
+    if is_fund:
+        prev_price = (
+            prev_snap.get("current_nav")
+            or prev_snap.get("price")
+            or prev_snap.get("current_price")
+            or prev_snap.get("avg_nav", 0)
+        )
+    else:
+        prev_price = (
+            prev_snap.get("price")
+            or prev_snap.get("current_price")
+            or prev_snap.get("avg_cost", 0)
+        )
+
+    if prev_price <= 0:
+        return None
+
+    realized = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in sells_today)
+    return realized
+
+
+def compute_daily_pnl_fund(
+    portfolio: dict, code: str, pos: dict, today_nav: float, today: str | None,
+    today_sells: dict,
+) -> tuple[float | None, float | None, bool]:
+    """计算基金当日盈亏（v7）"""
+    shares = pos.get("shares", 0)
+    buy_date = pos.get("buy_date") or pos.get("purchase_date")
+    is_new_position = bool(today) and buy_date == today
 
     prev_snap = get_prev_snapshot(portfolio, code)
     prev_nav = (
@@ -100,21 +194,37 @@ def compute_daily_pnl_fund(portfolio: dict, code: str, pos: dict, today_nav: flo
         or prev_snap.get("current_price")
         or prev_snap.get("avg_nav", 0)
     )
-    if prev_nav > 0:
-        daily_pnl = (today_nav - prev_nav) * shares
-        daily_pct = (today_nav - prev_nav) / prev_nav
-        return daily_pnl, daily_pct, False
-    return None, None, False
+
+    if is_new_position:
+        sells_today = today_sells.get(code, [])
+        if sells_today and prev_nav > 0:
+            realized = sum(s["shares"] * (s["price"] - prev_nav) - s["fees"] for s in sells_today)
+            return realized, None, True
+        return None, None, True
+
+    if prev_nav <= 0:
+        return None, None, False
+
+    # 持仓浮动
+    holding_pnl = (today_nav - prev_nav) * shares
+
+    # SELL 实现损益
+    sells_today = today_sells.get(code, [])
+    realized = sum(s["shares"] * (s["price"] - prev_nav) - s["fees"] for s in sells_today)
+
+    daily_pnl = holding_pnl + realized
+
+    prev_shares = prev_snap.get("shares", shares + sum(s["shares"] for s in sells_today))
+    prev_value = prev_shares * prev_nav
+    daily_pct = daily_pnl / prev_value if prev_value > 0 else 0
+
+    return daily_pnl, daily_pct, False
 
 
 def build_astock_rows(portfolio: dict) -> str:
     positions = portfolio.get("positions", {})
     today = get_today(portfolio)
-
-    # intraday_snapshots 只用来取"今日现价"（这个数据可靠）
-    intraday = portfolio.get("intraday_snapshots", [])
-    latest_intraday = intraday[-1] if intraday else None
-    intraday_positions = (latest_intraday or {}).get("positions", {})
+    today_sells = get_today_sells(portfolio, today)
 
     rows = []
     debug_lines = []
@@ -123,8 +233,6 @@ def build_astock_rows(portfolio: dict) -> str:
         shares = pos.get("shares", 0)
         cost = pos.get("avg_cost", 0)
 
-        # 今日现价：优先用 pos.current_price（这是 portfolio_state.update_market_values 写入的最新价）
-        # 不用 intraday_snapshots.current_price，14:45 快照价在收盘后已过时
         price = (
             pos.get("current_price")
             or cost
@@ -133,9 +241,9 @@ def build_astock_rows(portfolio: dict) -> str:
         pnl = (price - cost) * shares
         pnl_pct = (price - cost) / cost if cost > 0 else 0
 
-        # 当日盈亏：完全自算
+        # 当日盈亏：持仓浮动 + SELL 实现损益（v7）
         daily_pnl, daily_pct, is_new = compute_daily_pnl_astock(
-            portfolio, code, pos, price, today
+            portfolio, code, pos, price, today, today_sells
         )
 
         # 渲染
@@ -154,7 +262,7 @@ def build_astock_rows(portfolio: dict) -> str:
         else:
             daily_cell = (
                 f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br>"
-                f"<small>{fmt_pct(daily_pct)}</small></td>"
+                f"<small>{fmt_pct(daily_pct or 0)}</small></td>"
             )
 
         rows.append(
@@ -167,10 +275,52 @@ def build_astock_rows(portfolio: dict) -> str:
             f"{daily_cell}"
             f"<td class='{cls_pnl}'>{fmt_money(pnl)}<br><small>{fmt_pct(pnl_pct)}</small></td></tr>"
         )
-        debug_lines.append(f"  {name}({code}) shares={shares} price={price} daily_pnl={daily_pnl} daily_pct={(daily_pct or 0)*100:.2f}%")
 
-    # 自检输出
-    print("📊 A股 当日盈亏自检（v6 全自算）：")
+        # debug：拆解持仓浮动 vs SELL 实现损益
+        holding_part = 0
+        realized_part = 0
+        prev_snap = get_prev_snapshot(portfolio, code)
+        prev_price = prev_snap.get("price") or prev_snap.get("current_price") or prev_snap.get("avg_cost", 0)
+        if prev_price > 0 and not is_new:
+            holding_part = (price - prev_price) * shares
+            realized_part = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in today_sells.get(code, []))
+        debug_lines.append(
+            f"  {name}({code}) shares={shares} price={price} prev_close={prev_price:.2f} | "
+            f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
+        )
+
+    # === 追加"今日已清仓"行 ===
+    # 清仓标的 = 今日有 SELL 但已不在 positions 里的
+    cleared_codes = [c for c in today_sells.keys() if c not in positions]
+    for code in cleared_codes:
+        realized = compute_daily_pnl_cleared(portfolio, code, today, today_sells, is_fund=False)
+        if realized is None:
+            continue
+        # 从 trades 拿标的名称
+        name = next((t.get("name", code) for t in portfolio.get("trades", []) if t.get("code") == code), code)
+        cls_dly = css_cls(realized)
+        sell_info = today_sells[code]
+        total_shares = sum(s["shares"] for s in sell_info)
+        total_fees = sum(s["fees"] for s in sell_info)
+        daily_cell = (
+            f"<td class='{cls_dly}'>{fmt_money(realized)}<br>"
+            f"<small>已清仓 · 含费用¥{total_fees:.2f}</small></td>"
+        )
+        # 清仓行的市值列显示"—"
+        rows.append(
+            f"<tr style='opacity:0.7'>"
+            f"<td class='hide-mobile'><span class='stock-code'>{code}</span></td>"
+            f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
+            f"<td><span style='color:#64748b'>已清仓 ({total_shares}股)</span></td>"
+            f"<td class='hide-mobile'>—</td>"
+            f"<td>—</td>"
+            f"<td>—</td>"
+            f"{daily_cell}"
+            f"<td>—</td></tr>"
+        )
+        debug_lines.append(f"  {name}({code}) [清仓] shares={total_shares} | SELL实现={realized:+.2f} (含费用{total_fees:.2f})")
+
+    print("📊 A股 当日盈亏自检（v7 持仓+清仓+实现损益）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
@@ -179,10 +329,7 @@ def build_astock_rows(portfolio: dict) -> str:
 def build_fund_rows(portfolio: dict) -> str:
     positions = portfolio.get("positions", {})
     today = get_today(portfolio)
-
-    intraday = portfolio.get("intraday_snapshots", [])
-    latest_intraday = intraday[-1] if intraday else None
-    intraday_positions = (latest_intraday or {}).get("positions", {})
+    today_sells = get_today_sells(portfolio, today)
 
     rows = []
     debug_lines = []
@@ -191,8 +338,6 @@ def build_fund_rows(portfolio: dict) -> str:
         shares = pos.get("shares", 0)
         avg_nav = pos.get("avg_nav", 0)
 
-        # 今日净值：基金优先用 pos.current_nav（这是 fund_state.update_fund_values 写入的最新净值）
-        # 不用 intraday_snapshots.current_nav，因为 14:45 时净值是盘中估值不是真实收盘净值
         cur_nav = (
             pos.get("current_nav")
             or pos.get("avg_nav", 0)
@@ -201,9 +346,9 @@ def build_fund_rows(portfolio: dict) -> str:
         pnl = (cur_nav - avg_nav) * shares
         pnl_pct = (cur_nav - avg_nav) / avg_nav if avg_nav > 0 else 0
 
-        # 当日盈亏：完全自算
+        # 当日盈亏：持仓浮动 + SELL 实现损益（v7）
         daily_pnl, daily_pct, is_new = compute_daily_pnl_fund(
-            portfolio, code, pos, cur_nav, today
+            portfolio, code, pos, cur_nav, today, today_sells
         )
 
         ft_raw = pos.get("fund_type", "ETF")
@@ -221,7 +366,7 @@ def build_fund_rows(portfolio: dict) -> str:
         else:
             daily_cell = (
                 f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br>"
-                f"<small>{fmt_pct(daily_pct)}</small></td>"
+                f"<small>{fmt_pct(daily_pct or 0)}</small></td>"
             )
 
         rows.append(
@@ -235,9 +380,50 @@ def build_fund_rows(portfolio: dict) -> str:
             f"{daily_cell}"
             f"<td class='{cls_pnl}'>{fmt_money(pnl)}<br><small>{fmt_pct(pnl_pct)}</small></td></tr>"
         )
-        debug_lines.append(f"  {name}({code}) shares={shares} nav={cur_nav} daily_pnl={daily_pnl} daily_pct={(daily_pct or 0)*100:.2f}%")
 
-    print("\n📊 基金 当日盈亏自检（v6 全自算）：")
+        # debug：拆解
+        holding_part = 0
+        realized_part = 0
+        prev_snap = get_prev_snapshot(portfolio, code)
+        prev_nav_val = prev_snap.get("current_nav") or prev_snap.get("price") or prev_snap.get("current_price") or prev_snap.get("avg_nav", 0)
+        if prev_nav_val > 0 and not is_new:
+            holding_part = (cur_nav - prev_nav_val) * shares
+            realized_part = sum(s["shares"] * (s["price"] - prev_nav_val) - s["fees"] for s in today_sells.get(code, []))
+        debug_lines.append(
+            f"  {name}({code}) shares={shares} nav={cur_nav} prev_nav={prev_nav_val:.4f} | "
+            f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
+        )
+
+    # === 追加"今日已清仓"行（基金罕见清仓，但保留兼容） ===
+    cleared_codes = [c for c in today_sells.keys() if c not in positions]
+    for code in cleared_codes:
+        realized = compute_daily_pnl_cleared(portfolio, code, today, today_sells, is_fund=True)
+        if realized is None:
+            continue
+        name = next((t.get("name", code) for t in portfolio.get("trades", []) if t.get("code") == code), code)
+        cls_dly = css_cls(realized)
+        sell_info = today_sells[code]
+        total_shares = sum(s["shares"] for s in sell_info)
+        total_fees = sum(s["fees"] for s in sell_info)
+        daily_cell = (
+            f"<td class='{cls_dly}'>{fmt_money(realized)}<br>"
+            f"<small>已清仓 · 含费用¥{total_fees:.2f}</small></td>"
+        )
+        rows.append(
+            f"<tr style='opacity:0.7'>"
+            f"<td class='hide-mobile'><span class='stock-code'>{code}</span></td>"
+            f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
+            f"<td class='hide-mobile col-text'>—</td>"
+            f"<td><span style='color:#64748b'>已清仓 ({total_shares}份)</span></td>"
+            f"<td class='hide-mobile'>—</td>"
+            f"<td>—</td>"
+            f"<td>—</td>"
+            f"{daily_cell}"
+            f"<td>—</td></tr>"
+        )
+        debug_lines.append(f"  {name}({code}) [清仓] shares={total_shares} | SELL实现={realized:+.2f} (含费用{total_fees:.2f})")
+
+    print("\n📊 基金 当日盈亏自检（v7 持仓+清仓+实现损益）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
@@ -273,7 +459,9 @@ def get_prev_day_nav(portfolio: dict) -> float | None:
 
 
 def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
-    """自动重算 4 个账户卡片：A股、基金、合并、可用资金"""
+    """自动重算 4 个账户卡片：A股、基金、合并、可用资金。
+    v7 增强：A股卡片下方追加"今日已清仓贡献"小字，让清仓标的的实现损益透明化。
+    """
     initial = 500000  # 初始资金
 
     # === A股 ===
@@ -283,6 +471,19 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     a_total_pct = a_total_pnl / initial
     a_today_pnl = (a_nav - a_prev) if a_prev else 0
     a_today_pct = (a_today_pnl / a_prev) if a_prev else 0
+
+    # A股今日清仓贡献（透明化关键数据）
+    a_today = get_today(astock_pf)
+    a_sells = get_today_sells(astock_pf, a_today)
+    cleared_a_codes = [c for c in a_sells.keys() if c not in astock_pf.get("positions", {})]
+    cleared_a_pnl = 0
+    cleared_a_names = []
+    for code in cleared_a_codes:
+        r = compute_daily_pnl_cleared(astock_pf, code, a_today, a_sells, is_fund=False)
+        if r is not None:
+            cleared_a_pnl += r
+            name = next((t.get("name", code) for t in astock_pf.get("trades", []) if t.get("code") == code), code)
+            cleared_a_names.append(f"{name}{r:+.0f}")
 
     # === 基金 ===
     f_nav, f_cash = calc_nav(fund_pf, "current_nav")
@@ -309,7 +510,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     def cls(v: float) -> str:
         return "up" if v > 0 else ("down" if v < 0 else "")
 
-    # === 替换 A股卡片 ===
+    # === 替换 A股卡片（含清仓脚注） ===
     a_value = f'<div class="value">¥{a_nav:,.2f}</div>'
     a_change = (
         f'<div class="change {cls(a_total_pnl)}">'
@@ -317,9 +518,21 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         f'今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})'
         f'</div>'
     )
+    # 如果有清仓标的，加一行小字
+    if cleared_a_names:
+        cleared_cls = cls(cleared_a_pnl)
+        cleared_summary = " · ".join(cleared_a_names)
+        a_footnote = (
+            f'<div class="change {cleared_cls}" style="font-size:11px;opacity:0.8;margin-top:2px;">'
+            f'其中已清仓标的贡献 {fmt_card_money(cleared_a_pnl)}（{cleared_summary}）'
+            f'</div>'
+        )
+    else:
+        a_footnote = ""
+
     html = re.sub(
-        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
-        rf'\1\n      {a_value}\n      {a_change}',
+        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>(\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>)?',
+        rf'\1\n      {a_value}\n      {a_change}{a_footnote}',
         html, count=1,
     )
 
@@ -359,8 +572,10 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     )
 
     # 自检输出
-    print(f"\n📊 账户卡片自算（v6 自动重算）：")
+    print(f"\n📊 账户卡片自算（v7 自动重算 + 清仓透明化）：")
     print(f"  A股: NAV ¥{a_nav:,.0f} | 昨日 ¥{a_prev:,.0f} | 今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)}) | 累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)})")
+    if cleared_a_names:
+        print(f"    └─ 清仓标的贡献 {fmt_card_money(cleared_a_pnl)}（{', '.join(cleared_a_names)}）")
     print(f"  基金: NAV ¥{f_nav:,.0f} | 昨日 ¥{f_prev:,.0f} | 今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)}) | 累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})")
     print(f"  合并: NAV ¥{combined_nav:,.0f} | 累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})")
 
