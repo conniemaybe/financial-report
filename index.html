@@ -179,7 +179,7 @@ tr:hover { background: #1e293b60; }
         <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>1,500 股</td><td class='hide-mobile'>¥60.12</td><td class='up'>¥78.17↑</td><td>¥117,255</td><td class='up'>+¥12,690<br><small>+12.14%</small></td><td class='up'>+¥27,078<br><small>+30.03%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>300 股</td><td class='hide-mobile'>¥59.79</td><td class='up'>¥62.89↑</td><td>¥18,867</td><td class='down'>-¥477<br><small>-2.47%</small></td><td class='up'>+¥930<br><small>+5.18%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>800 股</td><td class='hide-mobile'>¥26.02</td><td class='down'>¥25.12↓</td><td>¥20,096</td><td class='down'>-¥544<br><small>-2.64%</small></td><td class='down'>-¥717<br><small>-3.45%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>800 股</td><td class='hide-mobile'>¥38.59</td><td class='down'>¥37.58↓</td><td>¥30,064</td><td class='down'>-¥808<br><small>-2.62%</small></td><td class='down'>-¥808<br><small>-2.62%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>800 股</td><td class='hide-mobile'>¥38.59</td><td class='down'>¥37.58↓</td><td>¥30,064</td><td class=''><span style='color:#64748b'>— 新建仓</span></td><td class='down'>-¥808<br><small>-2.62%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -207,14 +207,14 @@ tr:hover { background: #1e293b60; }
           <div class="d-time">10:00</div>
           <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body">卖出优先窗口 — 🚡系统性风险，2笔成交：通富微电止损500股@64.45 + 新华保险止盈200股@63.34</div>
+        <div class="d-body">卖出优先窗口 — 🚡系统性风险锁定（10:00北向净流出22.3亿升级，保守原则当日不降级） — 卖出 通富微电(002156) 500股@64.45 = ¥32,201｜🚡系统性风险提前止损：浮亏-5.51%超半导体板块-1.44%，北向净流出22亿升级系统性风险； 新华保险(601336) 200股@63.34 = ¥12,657｜🚡系统性风险加速止盈：浮盈+5.94%趋势转弱(5日-3.12%)，落袋为安； 皓元医药(688131) 200股@84.48 = ¥16,882｜🚡系统性风险提前止损：浮亏-7.57%逼近-8%止损线，个股当日-2.95%远弱于医药生物板块-0.75%，5日-11.54%趋势极弱</div>
       </div>
       <div class="decision-node completed">
         <div>
           <div class="d-time">10:30</div>
           <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body">回调低吸窗口 — 🚡系统性风险锁定，1笔成交：皓元医药提前止损200股@84.48 | BUY全跳过（三一重工）</div>
+        <div class="d-body">回调低吸窗口 — 🚡系统性风险锁定（10:00北向净流出22.3亿升级，保守原则当日不降级） — 买入 黄金ETF(518880) 2200股@8.719 = ¥19,187｜贵金属强势+溢价低</div>
       </div>
       <div class="decision-node pending">
         <div>
@@ -274,11 +274,12 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (auto-generated from portfolio.json + fund_portfolio.json) ==========
-// A股 + 基金 合计 21 笔（按时间倒序，同时刻卖出优先）
+// A股 + 基金 合计 24 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
 const allTrades = [
-  { date: '2026-07-08', time: '10:00', acct: 'A股', action: '卖出', code: '002156', name: '通富微电', price: '¥64.45', qty: '500 股', amount: '¥32,201', reason: '🚡系统性风险提前止损：浮亏-5.51%远超半导体板块-1.44%', cls: 'down' },
-  { date: '2026-07-08', time: '10:00', acct: 'A股', action: '卖出', code: '601336', name: '新华保险', price: '¥63.34', qty: '200 股', amount: '¥12,657', reason: '🚡系统性风险加速止盈：浮盈+5.94%趋势转弱', cls: 'down' },
+  { date: '2026-07-08', time: '10:26', acct: 'A股', action: '卖出', code: '688131', name: '皓元医药', price: '¥84.48', qty: '200 股', amount: '¥16,882', reason: '🚡系统性风险提前止损：浮亏-7.57%逼近-8%止损线，个股当日-2.95%远弱于医药生物板块-0.75%，5日-11.54%趋势极弱', cls: 'down' },
+  { date: '2026-07-08', time: '09:56', acct: 'A股', action: '卖出', code: '002156', name: '通富微电', price: '¥64.45', qty: '500 股', amount: '¥32,201', reason: '🚡系统性风险提前止损：浮亏-5.51%超半导体板块-1.44%，北向净流出22亿升级系统性风险', cls: 'down' },
+  { date: '2026-07-08', time: '09:56', acct: 'A股', action: '卖出', code: '601336', name: '新华保险', price: '¥63.34', qty: '200 股', amount: '¥12,657', reason: '🚡系统性风险加速止盈：浮盈+5.94%趋势转弱(5日-3.12%)，落袋为安', cls: 'down' },
   { date: '2026-07-07', time: '10:00', acct: 'A股', action: '买入', code: '002714', name: '牧原股份', price: '¥38.58', qty: '800 股', amount: '¥30,864', reason: '养殖业板块-0.87%>-1%✅，量比2.38≥0.8✅，价格38.58在[36.50,39.00]内✅，非急跌-0.26%<2%✅', cls: 'up' },
   { date: '2026-07-06', time: '13:30', acct: 'A股', action: '买入', code: '600547', name: '山东黄金', price: '¥26.01', qty: '800 股', amount: '¥20,808', reason: '贵金属板块强势+溢价低，黄金股回调建仓', cls: 'up' },
   { date: '2026-07-06', time: '09:55', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.719', qty: '2,200 份', amount: '¥19,187', reason: '贵金属强势+溢价低', cls: 'up' },
