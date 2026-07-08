@@ -123,11 +123,10 @@ def build_astock_rows(portfolio: dict) -> str:
         shares = pos.get("shares", 0)
         cost = pos.get("avg_cost", 0)
 
-        # 今日现价（仅用这个字段，不用 daily_pnl）
-        intraday_pos = intraday_positions.get(code, {})
+        # 今日现价：优先用 pos.current_price（这是 portfolio_state.update_market_values 写入的最新价）
+        # 不用 intraday_snapshots.current_price，14:45 快照价在收盘后已过时
         price = (
-            intraday_pos.get("current_price")
-            or pos.get("current_price")
+            pos.get("current_price")
             or cost
         )
         mv = price * shares
@@ -192,12 +191,11 @@ def build_fund_rows(portfolio: dict) -> str:
         shares = pos.get("shares", 0)
         avg_nav = pos.get("avg_nav", 0)
 
-        # 今日净值（仅用这个字段）
-        intraday_pos = intraday_positions.get(code, {})
+        # 今日净值：基金优先用 pos.current_nav（这是 fund_state.update_fund_values 写入的最新净值）
+        # 不用 intraday_snapshots.current_nav，因为 14:45 时净值是盘中估值不是真实收盘净值
         cur_nav = (
-            intraday_pos.get("current_nav")
-            or pos.get("current_nav")
-            or avg_nav
+            pos.get("current_nav")
+            or pos.get("avg_nav", 0)
         )
         mv = cur_nav * shares
         pnl = (cur_nav - avg_nav) * shares
@@ -299,10 +297,10 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     combined_total_pnl = combined_nav - initial * 2
     combined_total_pct = combined_total_pnl / (initial * 2)
 
-    # 渲染辅助
+    # 渲染辅助（与日报口径保持一致：保留两位小数，不做四舍五入）
     def fmt_card_money(v: float) -> str:
         sign = "+" if v >= 0 else "-"
-        return f"{sign}¥{abs(v):,.0f}"
+        return f"{sign}¥{abs(v):,.2f}"
 
     def fmt_card_pct(v: float) -> str:
         sign = "+" if v >= 0 else ""
@@ -312,7 +310,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         return "up" if v > 0 else ("down" if v < 0 else "")
 
     # === 替换 A股卡片 ===
-    a_value = f'<div class="value">¥{a_nav:,.0f}</div>'
+    a_value = f'<div class="value">¥{a_nav:,.2f}</div>'
     a_change = (
         f'<div class="change {cls(a_total_pnl)}">'
         f'累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)}) · '
@@ -326,7 +324,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     )
 
     # === 替换 基金卡片 ===
-    f_value = f'<div class="value">¥{f_nav:,.0f}</div>'
+    f_value = f'<div class="value">¥{f_nav:,.2f}</div>'
     f_change = (
         f'<div class="change {cls(f_total_pnl)}">'
         f'累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)}) · '
@@ -340,7 +338,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     )
 
     # === 替换 合并卡片 ===
-    c_value = f'<div class="value">¥{combined_nav:,.0f}</div>'
+    c_value = f'<div class="value">¥{combined_nav:,.2f}</div>'
     c_change = (
         f'<div class="change {cls(combined_total_pnl)}">'
         f'累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})'
@@ -353,7 +351,7 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     )
 
     # === 可用资金卡片 ===
-    cash_value = f'<div class="value">¥{a_cash:,.0f} / ¥{f_cash:,.0f}</div>'
+    cash_value = f'<div class="value">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
     html = re.sub(
         r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>',
         rf'\1\n      {cash_value}',
