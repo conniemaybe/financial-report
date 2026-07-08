@@ -48,11 +48,17 @@ def get_today(portfolio: dict) -> str | None:
 
 
 def get_prev_snapshot(portfolio: dict, code: str) -> dict:
-    """从 daily_records[-1]（昨日日报）拿该标的的 snapshot"""
+    """从昨日日报拿该标的的 snapshot（跳过今日占位条目）"""
     records = portfolio.get("daily_records", [])
     if not records:
         return {}
-    return records[-1].get("positions_snapshot", {}).get(code, {})
+    today = get_today(portfolio)
+    # 找真正的昨日 record
+    if today and records[-1].get("date") == today and len(records) >= 2:
+        prev_rec = records[-2]
+    else:
+        prev_rec = records[-1]
+    return prev_rec.get("positions_snapshot", {}).get(code, {})
 
 
 def compute_daily_pnl_astock(portfolio: dict, code: str, pos: dict, today_price: float, today: str | None) -> tuple[float | None, float | None, bool]:
@@ -239,7 +245,131 @@ def build_fund_rows(portfolio: dict) -> str:
     return "\n        ".join(rows)
 
 
-def update_index(astock_rows: str, fund_rows: str):
+def calc_nav(portfolio: dict, price_field_a: str = "current_price", price_field_f: str = "current_nav") -> tuple[float, float]:
+    """计算账户 NAV 和现金。返回 (nav, cash)"""
+    cash = portfolio.get("cash", 0)
+    total_mv = 0
+    for code, p in portfolio.get("positions", {}).items():
+        shares = p.get("shares", 0)
+        # 兼容 A股/基金
+        price = p.get(price_field_a) or p.get(price_field_f) or p.get("avg_cost") or p.get("avg_nav") or 0
+        total_mv += shares * price
+    return cash + total_mv, cash
+
+
+def get_prev_day_nav(portfolio: dict) -> float | None:
+    """取昨日 NAV：跳过今日占位条目，取真正的昨日。
+    判定：如果 daily_records 最新一条的 date == 今日（intraday_snapshots 日期），说明是今日占位 → 用倒数第二条。
+    """
+    records = portfolio.get("daily_records", [])
+    if not records:
+        return None
+    today = get_today(portfolio)
+    latest = records[-1]
+    if today and latest.get("date") == today:
+        # 最新一条是今日 → 取上一条
+        if len(records) >= 2:
+            return records[-2].get("nav")
+        return None
+    return latest.get("nav")
+
+
+def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
+    """自动重算 4 个账户卡片：A股、基金、合并、可用资金"""
+    initial = 500000  # 初始资金
+
+    # === A股 ===
+    a_nav, a_cash = calc_nav(astock_pf, "current_price")
+    a_prev = get_prev_day_nav(astock_pf)
+    a_total_pnl = a_nav - initial
+    a_total_pct = a_total_pnl / initial
+    a_today_pnl = (a_nav - a_prev) if a_prev else 0
+    a_today_pct = (a_today_pnl / a_prev) if a_prev else 0
+
+    # === 基金 ===
+    f_nav, f_cash = calc_nav(fund_pf, "current_nav")
+    f_prev = get_prev_day_nav(fund_pf)
+    f_total_pnl = f_nav - initial
+    f_total_pct = f_total_pnl / initial
+    f_today_pnl = (f_nav - f_prev) if f_prev else 0
+    f_today_pct = (f_today_pnl / f_prev) if f_prev else 0
+
+    # === 合并 ===
+    combined_nav = a_nav + f_nav
+    combined_total_pnl = combined_nav - initial * 2
+    combined_total_pct = combined_total_pnl / (initial * 2)
+
+    # 渲染辅助
+    def fmt_card_money(v: float) -> str:
+        sign = "+" if v >= 0 else "-"
+        return f"{sign}¥{abs(v):,.0f}"
+
+    def fmt_card_pct(v: float) -> str:
+        sign = "+" if v >= 0 else ""
+        return f"{sign}{v*100:.2f}%"
+
+    def cls(v: float) -> str:
+        return "up" if v > 0 else ("down" if v < 0 else "")
+
+    # === 替换 A股卡片 ===
+    a_value = f'<div class="value">¥{a_nav:,.0f}</div>'
+    a_change = (
+        f'<div class="change {cls(a_total_pnl)}">'
+        f'累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)}) · '
+        f'今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})'
+        f'</div>'
+    )
+    html = re.sub(
+        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        rf'\1\n      {a_value}\n      {a_change}',
+        html, count=1,
+    )
+
+    # === 替换 基金卡片 ===
+    f_value = f'<div class="value">¥{f_nav:,.0f}</div>'
+    f_change = (
+        f'<div class="change {cls(f_total_pnl)}">'
+        f'累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)}) · '
+        f'今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)})'
+        f'</div>'
+    )
+    html = re.sub(
+        r'(基金账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        rf'\1\n      {f_value}\n      {f_change}',
+        html, count=1,
+    )
+
+    # === 替换 合并卡片 ===
+    c_value = f'<div class="value">¥{combined_nav:,.0f}</div>'
+    c_change = (
+        f'<div class="change {cls(combined_total_pnl)}">'
+        f'累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})'
+        f'</div>'
+    )
+    html = re.sub(
+        r'(合并总净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        rf'\1\n      {c_value}\n      {c_change}',
+        html, count=1,
+    )
+
+    # === 可用资金卡片 ===
+    cash_value = f'<div class="value">¥{a_cash:,.0f} / ¥{f_cash:,.0f}</div>'
+    html = re.sub(
+        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>',
+        rf'\1\n      {cash_value}',
+        html, count=1,
+    )
+
+    # 自检输出
+    print(f"\n📊 账户卡片自算（v6 自动重算）：")
+    print(f"  A股: NAV ¥{a_nav:,.0f} | 昨日 ¥{a_prev:,.0f} | 今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)}) | 累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)})")
+    print(f"  基金: NAV ¥{f_nav:,.0f} | 昨日 ¥{f_prev:,.0f} | 今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)}) | 累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})")
+    print(f"  合并: NAV ¥{combined_nav:,.0f} | 累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})")
+
+    return html
+
+
+def update_index(astock_rows: str, fund_rows: str, astock_pf: dict, fund_pf: dict):
     html = INDEX_HTML.read_text(encoding="utf-8")
 
     html = re.sub(
@@ -260,8 +390,11 @@ def update_index(astock_rows: str, fund_rows: str):
         html, count=1, flags=re.DOTALL,
     )
 
+    # 自动重算账户卡片
+    html = update_account_cards(astock_pf, fund_pf, html)
+
     INDEX_HTML.write_text(html, encoding="utf-8")
-    print(f"\n✅ index.html 持仓表已更新（A 股 + 基金，分两列，v6 全自算）")
+    print(f"\n✅ index.html 已更新（持仓表 + 账户卡片，v6 自动重算）")
 
 
 if __name__ == "__main__":
@@ -272,4 +405,4 @@ if __name__ == "__main__":
 
     a_rows = build_astock_rows(astock_pf)
     f_rows = build_fund_rows(fund_pf)
-    update_index(a_rows, f_rows)
+    update_index(a_rows, f_rows, astock_pf, fund_pf)
