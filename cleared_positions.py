@@ -1,0 +1,334 @@
+#!/usr/bin/env python3
+"""
+2026-07-08 v1：已清仓标的板块生成器
+
+从 portfolio.trades 全量遍历，识别所有清仓标的（SELL 总份额 ≥ BUY 总份额
+且已不在 positions 里），计算实现盈亏、盈亏%、清仓均价、清仓后距今收益率等指标。
+
+输出：在 index.html 的"近期交易记录"和"历史报告档案"之间插入独立模块，
+      支持A股/基金切换。
+"""
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
+FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portfolio.json")
+INDEX_HTML = Path(r"C:\temp\financial-report\index.html")
+NEODATA_QUERY = Path(r"C:\Users\conniehe\.workbuddy\skills-marketplace\skills\neodata-financial-search\scripts\query.py")
+PYTHON = r"C:\Users\conniehe\.workbuddy\binaries\python\versions\3.13.12\python.exe"
+
+
+# ============== 数据层 ==============
+
+def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[dict]:
+    """识别已清仓标的。
+    清仓判定：① 已不在 positions；② SELL 总份额 ≥ BUY 总份额；③ BUY 总份额 > 0
+    """
+    current_positions = set(portfolio.get("positions", {}).keys())
+    trades_by_code = {}
+    for t in portfolio.get("trades", []):
+        c = t.get("code")
+        if not c:
+            continue
+        trades_by_code.setdefault(c, []).append(t)
+
+    cleared = []
+    for code, trades in trades_by_code.items():
+        if code in current_positions:
+            continue
+        buys = [t for t in trades if t["action"] == "BUY"]
+        sells = [t for t in trades if t["action"] == "SELL"]
+        divs = [t for t in trades if t["action"] == "DIVIDEND"]
+        buy_shares = sum(t["shares"] for t in buys)
+        sell_shares = sum(t["shares"] for t in sells)
+        if buy_shares == 0:
+            continue
+        if sell_shares < buy_shares:
+            # 部分清仓但 positions 里没有 → 数据残留，跳过避免误导
+            continue
+
+        name = trades[0].get("name", code)
+        # 成本 = Σ(BUY amount + commission + transfer_fee)
+        buy_total = sum(
+            t["amount"] + t.get("commission", 0) + t.get("transfer_fee", 0)
+            for t in buys
+        )
+        # 卖出净额 = Σ(SELL amount - commission - stamp_tax - transfer_fee)
+        sell_total = sum(
+            t["amount"] - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+            for t in sells
+        )
+        div_total = sum(t.get("amount", 0) for t in divs)
+        realized = sell_total - buy_total + div_total
+        realized_pct = realized / buy_total if buy_total > 0 else 0
+        avg_buy = buy_total / buy_shares
+        avg_sell = sell_total / sell_shares if sell_shares > 0 else 0
+        last_sell_date = max(t["date"] for t in sells)
+
+        cleared.append({
+            "code": code,
+            "name": name,
+            "is_fund": is_fund,
+            "shares": buy_shares,
+            "avg_buy": avg_buy,
+            "avg_sell": avg_sell,
+            "buy_total": buy_total,
+            "sell_total": sell_total,
+            "div_total": div_total,
+            "realized": realized,
+            "realized_pct": realized_pct,
+            "clear_date": last_sell_date,
+            "current_price": None,  # 后续 NeoData 填充
+            "post_clear_pct": None,  # 清仓后距今收益率
+        })
+
+    # 按清仓日期降序
+    cleared.sort(key=lambda x: x["clear_date"], reverse=True)
+    return cleared
+
+
+def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
+    """用 NeoData 查询清仓标的的现价，填充 current_price 和 post_clear_pct"""
+    # 股票
+    for item in cleared_astock:
+        code = item["code"]
+        query = f"{item['name']} {code} 最新价格"
+        try:
+            r = subprocess.run(
+                [PYTHON, str(NEODATA_QUERY), "--query", query],
+                capture_output=True, text=True, encoding="utf-8", timeout=60
+            )
+            # 从返回里提取最新价格:XX元
+            m = re.search(r"最新价格[:：]\s*([\d.]+)元", r.stdout)
+            if m:
+                price = float(m.group(1))
+                item["current_price"] = price
+                # 清仓后收益率 = (现价 - 清仓均价) / 清仓均价
+                if item["avg_sell"] > 0:
+                    item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
+                print(f"  ✅ {item['name']}({code}) 现价 {price}")
+            else:
+                print(f"  ⚠️ {item['name']}({code}) 未解析到价格")
+        except Exception as e:
+            print(f"  ❌ {item['name']}({code}) 查询失败: {e}")
+
+    # 基金（ETF 走股票接口）
+    for item in cleared_fund:
+        code = item["code"]
+        query = f"{item['name']} {code} 最新净值"
+        try:
+            r = subprocess.run(
+                [PYTHON, str(NEODATA_QUERY), "--query", query],
+                capture_output=True, text=True, encoding="utf-8", timeout=60
+            )
+            m = re.search(r"最新(?:价格|净值)[:：]\s*([\d.]+)", r.stdout)
+            if m:
+                price = float(m.group(1))
+                item["current_price"] = price
+                if item["avg_sell"] > 0:
+                    item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
+                print(f"  ✅ {item['name']}({code}) 现净值 {price}")
+            else:
+                print(f"  ⚠️ {item['name']}({code}) 未解析到净值")
+        except Exception as e:
+            print(f"  ❌ {item['name']}({code}) 查询失败: {e}")
+
+
+# ============== 渲染层 ==============
+
+def fmt_money(v: float) -> str:
+    sign = "+" if v >= 0 else "-"
+    return f"{sign}¥{abs(v):,.2f}"
+
+
+def fmt_pct(v: float) -> str:
+    sign = "+" if v >= 0 else ""
+    return f"{sign}{v*100:.2f}%"
+
+
+def cls(v: float) -> str:
+    return "up" if v > 0 else ("down" if v < 0 else "")
+
+
+def build_cleared_rows(cleared: list, is_fund: bool) -> str:
+    """构造 tbody HTML"""
+    if not cleared:
+        return '<tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">暂无已清仓标的</td></tr>'
+
+    rows = []
+    for item in cleared:
+        realized_cls = cls(item["realized"])
+        post_cls = cls(item["post_clear_pct"] or 0)
+        price_label = "净值" if is_fund else "价格"
+        # 清仓后收益率（带现价）
+        if item["current_price"] is not None and item["post_clear_pct"] is not None:
+            post_cell = (
+                f"<td class='{post_cls}'>{fmt_pct(item['post_clear_pct'])}<br>"
+                f"<small>现{price_label}¥{item['current_price']:.{4 if is_fund else 2}f}</small></td>"
+            )
+        else:
+            post_cell = "<td><span style='color:#64748b'>—</span></td>"
+
+        # 盈亏%相对成本
+        pct_vs_cost = item["realized_pct"]
+
+        rows.append(
+            f"<tr>"
+            f"<td class='hide-mobile'><span class='stock-code'>{item['code']}</span></td>"
+            f"<td class='col-text'><span class='stock-name'>{item['name']}</span></td>"
+            f"<td>{item['clear_date']}</td>"
+            f"<td class='{realized_cls}'>{fmt_money(item['realized'])}</td>"
+            f"<td class='{realized_cls}'>{fmt_pct(pct_vs_cost)}</td>"
+            f"<td>¥{item['avg_sell']:.{4 if is_fund else 2}f}</td>"
+            f"<td>¥{item['avg_buy']:.{4 if is_fund else 2}f}</td>"
+            f"{post_cell}"
+            f"</tr>"
+        )
+    return "\n        ".join(rows)
+
+
+def build_summary_row(cleared: list) -> str:
+    """汇总行：总实现盈亏"""
+    if not cleared:
+        return ""
+    total_realized = sum(c["realized"] for c in cleared)
+    total_cost = sum(c["buy_total"] for c in cleared)
+    total_pct = total_realized / total_cost if total_cost > 0 else 0
+    cls_total = cls(total_realized)
+    return (
+        f'<tr style="border-top:2px solid #334155;font-weight:600;background:#1e293b;">'
+        f'<td colspan="3" style="text-align:right;color:#94a3b8;">合计 {len(cleared)} 只 · 总投入 ¥{total_cost:,.0f}</td>'
+        f'<td class="{cls_total}">{fmt_money(total_realized)}</td>'
+        f'<td class="{cls_total}">{fmt_pct(total_pct)}</td>'
+        f'<td colspan="3" style="color:#64748b;font-weight:400;font-size:12px;">'
+        f'含交易费用 & 分红（如有）</td></tr>'
+    )
+
+
+def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
+    """构造完整模块 HTML（含 A股/基金切换）"""
+    a_rows = build_cleared_rows(cleared_astock, is_fund=False)
+    a_summary = build_summary_row(cleared_astock)
+    f_rows = build_cleared_rows(cleared_fund, is_fund=True)
+    f_summary = build_summary_row(cleared_fund)
+
+    return f'''
+  <!-- 已清仓标的 — 2026-07-08 新增 -->
+  <div class="section" id="clearedSection">
+    <h2>💀 已清仓标的 <span style="font-size:12px;color:#64748b;font-weight:400;">含交易费用 & 分红（如有）</span></h2>
+    <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
+      <button class="filter-btn active" onclick="switchClearedTab('astock')">A股</button>
+      <button class="filter-btn" onclick="switchClearedTab('fund')">基金</button>
+      <span style="margin-left:auto;font-size:12px;color:#64748b;align-self:center;">
+        💡 清仓后收益率 = (现价 - 清仓均价) / 清仓均价，正值表示"卖早了"
+      </span>
+    </div>
+
+    <div class="table-wrap" id="clearedAstockTable">
+      <table>
+        <thead><tr>
+          <th class="hide-mobile">代码</th>
+          <th>名称</th>
+          <th>清仓日期</th>
+          <th>实现盈亏</th>
+          <th>盈亏比例</th>
+          <th>清仓均价</th>
+          <th class="hide-mobile">成本均价</th>
+          <th>清仓后距今</th>
+        </tr></thead>
+        <tbody>
+          {a_rows}
+          {a_summary}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" id="clearedFundTable" style="display:none;">
+      <table>
+        <thead><tr>
+          <th class="hide-mobile">代码</th>
+          <th>名称</th>
+          <th>清仓日期</th>
+          <th>实现盈亏</th>
+          <th>盈亏比例</th>
+          <th>清仓净价</th>
+          <th class="hide-mobile">成本净价</th>
+          <th>清仓后距今</th>
+        </tr></thead>
+        <tbody>
+          {f_rows}
+          {f_summary}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function switchClearedTab(tab) {{
+      document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${{tab}}"]`);
+      if (btn) btn.classList.add('active');
+      document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
+      document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
+    }}
+  </script>
+'''
+
+
+# ============== 注入层 ==============
+
+def inject_cleared_module(html: str, module: str) -> str:
+    """把 cleared 模块注入 index.html：插在"近期交易记录"和"历史报告档案"之间"""
+    # 先清除已存在的 clearedSection（幂等）
+    html = re.sub(
+        r'\s*<!-- 已清仓标的.*?</div>\s*<script>.*?switchClearedTab.*?</script>\s*',
+        '\n\n',
+        html, flags=re.DOTALL, count=1,
+    )
+    # 在"历史报告档案"前插入
+    marker = "  <!-- Report Archive"
+    if marker not in html:
+        raise RuntimeError("未找到插入锚点：'<!-- Report Archive'")
+    return html.replace(marker, module + "\n" + marker, 1)
+
+
+# ============== 主流程 ==============
+
+def main():
+    with open(ASTOCK_PORTFOLIO, encoding="utf-8") as f:
+        a_pf = json.load(f)
+    with open(FUND_PORTFOLIO, encoding="utf-8") as f:
+        f_pf = json.load(f)
+
+    print("🔍 识别已清仓标的...")
+    cleared_a = identify_cleared_positions(a_pf, is_fund=False)
+    cleared_f = identify_cleared_positions(f_pf, is_fund=True)
+
+    print(f"\n📊 A股清仓标的 {len(cleared_a)} 只：")
+    for c in cleared_a:
+        print(f"  {c['name']}({c['code']}) 清仓日={c['clear_date']} 实现={c['realized']:+.2f}({c['realized_pct']*100:+.2f}%)")
+
+    print(f"\n📊 基金清仓标的 {len(cleared_f)} 只：")
+    for c in cleared_f:
+        print(f"  {c['name']}({c['code']}) 清仓日={c['clear_date']} 实现={c['realized']:+.2f}({c['realized_pct']*100:+.2f}%)")
+
+    print("\n🌐 NeoData 查询清仓标的现价...")
+    fetch_current_prices(cleared_a, cleared_f)
+
+    print("\n🏗️  构造 HTML 模块...")
+    module = build_cleared_module(cleared_a, cleared_f)
+
+    print("\n📝 注入 index.html...")
+    html = INDEX_HTML.read_text(encoding="utf-8")
+    new_html = inject_cleared_module(html, module)
+    INDEX_HTML.write_text(new_html, encoding="utf-8")
+
+    print("\n✅ 已清仓标的模块注入完成")
+    print(f"   A股 {len(cleared_a)} 只 | 基金 {len(cleared_f)} 只")
+
+
+if __name__ == "__main__":
+    main()

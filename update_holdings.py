@@ -289,38 +289,10 @@ def build_astock_rows(portfolio: dict) -> str:
             f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
         )
 
-    # === 追加"今日已清仓"行 ===
-    # 清仓标的 = 今日有 SELL 但已不在 positions 里的
-    cleared_codes = [c for c in today_sells.keys() if c not in positions]
-    for code in cleared_codes:
-        realized = compute_daily_pnl_cleared(portfolio, code, today, today_sells, is_fund=False)
-        if realized is None:
-            continue
-        # 从 trades 拿标的名称
-        name = next((t.get("name", code) for t in portfolio.get("trades", []) if t.get("code") == code), code)
-        cls_dly = css_cls(realized)
-        sell_info = today_sells[code]
-        total_shares = sum(s["shares"] for s in sell_info)
-        total_fees = sum(s["fees"] for s in sell_info)
-        daily_cell = (
-            f"<td class='{cls_dly}'>{fmt_money(realized)}<br>"
-            f"<small>已清仓 · 含费用¥{total_fees:.2f}</small></td>"
-        )
-        # 清仓行的市值列显示"—"
-        rows.append(
-            f"<tr style='opacity:0.7'>"
-            f"<td class='hide-mobile'><span class='stock-code'>{code}</span></td>"
-            f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
-            f"<td><span style='color:#64748b'>已清仓 ({total_shares}股)</span></td>"
-            f"<td class='hide-mobile'>—</td>"
-            f"<td>—</td>"
-            f"<td>—</td>"
-            f"{daily_cell}"
-            f"<td>—</td></tr>"
-        )
-        debug_lines.append(f"  {name}({code}) [清仓] shares={total_shares} | SELL实现={realized:+.2f} (含费用{total_fees:.2f})")
+    # 注：历史清仓标的已移至独立"已清仓标的"模块（cleared_positions.py 维护）
+    # 当日清仓的实现损益通过账户卡片下方小字脚注透明化，不在持仓表中显示
 
-    print("📊 A股 当日盈亏自检（v7 持仓+清仓+实现损益）：")
+    print("📊 A股 当日盈亏自检（v7 持仓浮动+SELL实现损益）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
@@ -394,36 +366,9 @@ def build_fund_rows(portfolio: dict) -> str:
             f"持仓浮动={holding_part:+.2f} SELL实现={realized_part:+.2f} | 合计={daily_pnl}"
         )
 
-    # === 追加"今日已清仓"行（基金罕见清仓，但保留兼容） ===
-    cleared_codes = [c for c in today_sells.keys() if c not in positions]
-    for code in cleared_codes:
-        realized = compute_daily_pnl_cleared(portfolio, code, today, today_sells, is_fund=True)
-        if realized is None:
-            continue
-        name = next((t.get("name", code) for t in portfolio.get("trades", []) if t.get("code") == code), code)
-        cls_dly = css_cls(realized)
-        sell_info = today_sells[code]
-        total_shares = sum(s["shares"] for s in sell_info)
-        total_fees = sum(s["fees"] for s in sell_info)
-        daily_cell = (
-            f"<td class='{cls_dly}'>{fmt_money(realized)}<br>"
-            f"<small>已清仓 · 含费用¥{total_fees:.2f}</small></td>"
-        )
-        rows.append(
-            f"<tr style='opacity:0.7'>"
-            f"<td class='hide-mobile'><span class='stock-code'>{code}</span></td>"
-            f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
-            f"<td class='hide-mobile col-text'>—</td>"
-            f"<td><span style='color:#64748b'>已清仓 ({total_shares}份)</span></td>"
-            f"<td class='hide-mobile'>—</td>"
-            f"<td>—</td>"
-            f"<td>—</td>"
-            f"{daily_cell}"
-            f"<td>—</td></tr>"
-        )
-        debug_lines.append(f"  {name}({code}) [清仓] shares={total_shares} | SELL实现={realized:+.2f} (含费用{total_fees:.2f})")
+    # 注：历史清仓标的已移至独立"已清仓标的"模块（cleared_positions.py 维护）
 
-    print("\n📊 基金 当日盈亏自检（v7 持仓+清仓+实现损益）：")
+    print("\n📊 基金 当日盈亏自检（v7 持仓浮动+SELL实现损益）：")
     for line in debug_lines:
         print(line)
     return "\n        ".join(rows)
