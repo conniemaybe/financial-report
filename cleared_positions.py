@@ -193,22 +193,10 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
 
 
 def build_summary_row(cleared: list) -> str:
-    """汇总行：总实现盈亏。
-    v8：金额全部 2 位小数，与持仓表/账户卡片口径一致。
+    """v9：已清仓模块不显示汇总行（用户反馈不需要加总）。
+    保留函数仅为兼容，返回空字符串。
     """
-    if not cleared:
-        return ""
-    total_realized = sum(c["realized"] for c in cleared)
-    total_cost = sum(c["buy_total"] for c in cleared)
-    total_pct = total_realized / total_cost if total_cost > 0 else 0
-    cls_total = cls(total_realized)
-    return (
-        f'<tr style="border-top:2px solid #334155;font-weight:600;background:#1e293b;">'
-        f'<td colspan="3" style="text-align:right;color:#94a3b8;">合计 {len(cleared)} 只 · 总投入 ¥{total_cost:,.2f}</td>'
-        f'<td class="{cls_total}">{fmt_money(total_realized)}</td>'
-        f'<td class="{cls_total}">{fmt_pct(total_pct)}</td>'
-        f'<td colspan="3"></td></tr>'
-    )
+    return ""
 
 
 def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
