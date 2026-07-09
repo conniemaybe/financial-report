@@ -39,25 +39,49 @@ def css_cls(v: float) -> str:
 
 
 def get_today(portfolio: dict) -> str | None:
-    """今日 = intraday_snapshots 第一条的日期"""
-    for s in portfolio.get("intraday_snapshots", []):
-        d = s.get("date")
+    """今日 = 最新交易日（优先取 intraday_snapshots 最后一条，兜底 records[-1]）。
+
+    v10 修复（2026-07-09）：原逻辑取 snapshots[0]，但 snapshots 跨日累积不清理，
+    导致今日判定为昨天的日期，进而 get_prev_snapshot 取错 record。
+    现在取 snapshots[-1]（最新一条），保证拿到的是真正的今日。
+    """
+    snaps = portfolio.get("intraday_snapshots", [])
+    if snaps:
+        d = snaps[-1].get("date")
         if d:
             return d
+    records = portfolio.get("daily_records", [])
+    if records:
+        return records[-1].get("date")
     return None
 
 
 def get_prev_snapshot(portfolio: dict, code: str) -> dict:
-    """从昨日日报拿该标的的 snapshot（跳过今日占位条目）"""
+    """从昨日日报拿该标的的 snapshot。
+
+    v10 修复（2026-07-09）：原逻辑用 today 与 records[-1].date 比对，但 today
+    被错判（见 get_today）会导致 prev_rec 错乱。现在以 records 日期为准：
+    - 找到今日 record 索引，prev_rec = 前一条
+    - 若 records[-1].date != today（今日日报尚未生成），prev_rec = records[-1]
+    """
     records = portfolio.get("daily_records", [])
     if not records:
         return {}
     today = get_today(portfolio)
-    # 找真正的昨日 record
-    if today and records[-1].get("date") == today and len(records) >= 2:
-        prev_rec = records[-2]
-    else:
+    # 找今日 record 的索引
+    today_idx = None
+    for i in range(len(records) - 1, -1, -1):
+        if records[i].get("date") == today:
+            today_idx = i
+            break
+    if today_idx is not None and today_idx > 0:
+        prev_rec = records[today_idx - 1]
+    elif today_idx is None:
+        # 今日日报还没生成 → records[-1] 就是昨日
         prev_rec = records[-1]
+    else:
+        # today_idx == 0，没有更早的 record
+        return {}
     return prev_rec.get("positions_snapshot", {}).get(code, {})
 
 
@@ -429,20 +453,25 @@ def calc_nav(portfolio: dict, price_field_a: str = "current_price", price_field_
 
 
 def get_prev_day_nav(portfolio: dict) -> float | None:
-    """取昨日 NAV：跳过今日占位条目，取真正的昨日。
-    判定：如果 daily_records 最新一条的 date == 今日（intraday_snapshots 日期），说明是今日占位 → 用倒数第二条。
+    """取昨日 NAV：与 get_prev_snapshot 同步逻辑（v10 修复）。
+
+    判定：找到今日 record 索引，prev = 前一条；若今日 record 未生成，prev = records[-1]。
     """
     records = portfolio.get("daily_records", [])
     if not records:
         return None
     today = get_today(portfolio)
-    latest = records[-1]
-    if today and latest.get("date") == today:
-        # 最新一条是今日 → 取上一条
-        if len(records) >= 2:
-            return records[-2].get("nav")
+    today_idx = None
+    for i in range(len(records) - 1, -1, -1):
+        if records[i].get("date") == today:
+            today_idx = i
+            break
+    if today_idx is not None and today_idx > 0:
+        return records[today_idx - 1].get("nav")
+    elif today_idx is None:
+        return records[-1].get("nav")
+    else:
         return None
-    return latest.get("nav")
 
 
 def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
