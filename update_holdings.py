@@ -92,11 +92,13 @@ def get_today_sells(portfolio: dict, today: str | None) -> dict:
 
 
 def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: float, is_fund: bool = False) -> tuple[float, float, float]:
-    """计算持仓标的的总盈亏（v8 新增）。
+    """计算持仓标的的总盈亏（v9 修正：绕开 amount 歧义，直接用 price/shares 重算）。
     返回 (total_pnl, total_pct, avg_cost)
 
-    A股：基于完整交易历史（trades 完整可信）
-        总盈亏 = Σ(SELL 净额) + 持仓浮动市值 + Σ(分红) - Σ(BUY 总成本)
+    A股：基于完整交易历史
+        BUY 成本  = Σ(price × shares + commission + transfer_fee)
+        SELL 净额 = Σ(price × shares - commission - stamp_tax - transfer_fee)
+        总盈亏 = SELL净额 + 持仓浮动市值 + Σ(分红) - BUY总成本
 
     基金：基于 pos.avg_nav（trades 历史可能有遗漏，fund_state.avg_nav 是权威值）
         总盈亏 = (current_nav - avg_nav) × shares
@@ -108,14 +110,14 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
         total_pct = (current_price - avg_cost) / avg_cost if avg_cost > 0 else 0
         return total_pnl, total_pct, avg_cost
 
-    # A股：基于 trades 完整历史
+    # A股：v9 基于 price/shares + 独立费用字段重算（绕开 amount 字段语义在不同时期不一致的问题）
     trades = [t for t in portfolio.get("trades", []) if t.get("code") == code]
     buy_total = sum(
-        t.get("amount", 0) + t.get("commission", 0) + t.get("transfer_fee", 0)
+        t.get("price", 0) * t.get("shares", 0) + t.get("commission", 0) + t.get("transfer_fee", 0)
         for t in trades if t.get("action") == "BUY"
     )
     sell_net = sum(
-        t.get("amount", 0) - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+        t.get("price", 0) * t.get("shares", 0) - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
         for t in trades if t.get("action") == "SELL"
     )
     div_total = sum(t.get("amount", 0) for t in trades if t.get("action") == "DIVIDEND")

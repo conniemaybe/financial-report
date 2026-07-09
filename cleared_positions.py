@@ -51,14 +51,16 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
             continue
 
         name = trades[0].get("name", code)
-        # 成本 = Σ(BUY amount + commission + transfer_fee)
+        # ⚠️ v9 正确口径：绕开 amount 字段歧义（早期 amount=price×shares，后期 amount=total_cost/net_proceeds）
+        # 直接基于 price/shares + 独立费用字段重算
+        # BUY 成本 = Σ(price × shares + commission + transfer_fee)
         buy_total = sum(
-            t["amount"] + t.get("commission", 0) + t.get("transfer_fee", 0)
+            t["price"] * t["shares"] + t.get("commission", 0) + t.get("transfer_fee", 0)
             for t in buys
         )
-        # 卖出净额 = Σ(SELL amount - commission - stamp_tax - transfer_fee)
+        # SELL 净额 = Σ(price × shares - commission - stamp_tax - transfer_fee)
         sell_total = sum(
-            t["amount"] - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+            t["price"] * t["shares"] - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
             for t in sells
         )
         div_total = sum(t.get("amount", 0) for t in divs)
@@ -219,7 +221,7 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
     return f'''
   <!-- 已清仓标的 — 2026-07-08 新增 -->
   <div class="section" id="clearedSection">
-    <h2>💀 已清仓标的</h2>
+    <h2>📦 已清仓标的</h2>
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
       <button class="filter-btn active" onclick="switchClearedTab('astock')">A股</button>
       <button class="filter-btn" onclick="switchClearedTab('fund')">基金</button>
