@@ -136,7 +136,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-10 14:45</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-10 15:30</div>
   </div>
   <!-- ⚠️ updateTime 格式硬约束：只允许 "数据更新：YYYY-MM-DD HH:MM"，禁止追加（晨报）/（日报）/（盘中）等任何后缀标注 -->
 
@@ -339,9 +339,14 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (auto-generated from portfolio.json + fund_portfolio.json) ==========
-// A股 + 基金 合计 30 笔（按时间倒序，同时刻卖出优先）
+// A股 + 基金 合计 35 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
 const allTrades = [
+  { date: '2026-07-10', time: '15:13', acct: 'A股', action: '分红', code: '601336', name: '新华保险', price: '¥2.06/股', qty: '200 股', amount: '¥330', reason: '2025年末期息2.06元/股，除权除息日2026-07-10，持股>30天扣10%红利税', cls: 'up' },
+  { date: '2026-07-10', time: '14:43', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥89.97', qty: '300 股', amount: '¥26,970', reason: '止盈减1/3：浮盈+49.6%🟢强趋势远超+30%阈值，价格89.97首次回落至SELL区间[82,90]内，14:45尾盘窗口执行', cls: 'down' },
+  { date: '2026-07-10', time: '13:29', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.321', qty: '9,500 份', amount: '¥22,044', reason: '止盈减1/3：浮盈+33.5%≥30%阈值（13:30盘中重评估触发）', cls: 'down' },
+  { date: '2026-07-10', time: '10:22', acct: 'A股', action: '买入', code: '688300', name: '联瑞新材', price: '¥195.82', qty: '100 股', amount: '¥19,587', reason: '✅错杀倾向+10:30回调低吸窗口：非金属材料+1.01%>-1%✅，量比3.03≥0.8✅，价格195.82在[185,200]内✅，跌幅-1.94%<2%✅', cls: 'up' },
+  { date: '2026-07-10', time: '09:54', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.383', qty: '14,300 份', amount: '¥34,068', reason: '止盈减1/3：浮盈+37.07%远超+30%阈值，10:00卖出优先窗口执行', cls: 'down' },
   { date: '2026-07-09', time: '13:27', acct: 'A股', action: '卖出', code: '600547', name: '山东黄金', price: '¥23.62', qty: '500 股', amount: '¥11,799', reason: '止损卖出：浮亏-8.56%触及止损线-8%（除权除息日加速下跌，贵金属-2.62%板块弱势）', cls: 'down' },
   { date: '2026-07-09', time: '10:08', acct: 'A股', action: '分红', code: '600547', name: '山东黄金', price: '¥0.18/股', qty: '500 股', amount: '¥72', reason: '山东黄金2025年度分红，10派1.8元（每股0.18元），除权除息日2026-07-09', cls: 'up' },
   { date: '2026-07-08', time: '14:45', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥78.17', qty: '500 股', amount: '¥39,056', reason: '🚡系统性风险减仓：浮盈+30.03%>20%，涨停封板趋势强，减仓1/3锁定利润', cls: 'down' },
