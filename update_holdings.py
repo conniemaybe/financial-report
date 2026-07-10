@@ -181,11 +181,16 @@ def compute_daily_pnl_astock(
     )
 
     if is_new_position:
-        # 新建仓：只有 SELL 实现损益（罕见但可能有当日买卖）
+        # 新建仓：v11.2 修复 — 新建仓也有当日盈亏，基准用 avg_cost（含手续费摊薄）
+        # 当日盈亏 = 持仓浮动（today_price - avg_cost）× shares + SELL 实现损益
+        avg_cost = pos.get("avg_cost", 0)
         sells_today = today_sells.get(code, [])
-        if sells_today and prev_price > 0:
-            realized = sum(s["shares"] * (s["price"] - prev_price) - s["fees"] for s in sells_today)
-            return realized, None, True
+        if avg_cost > 0 and today_price > 0:
+            holding_pnl = (today_price - avg_cost) * shares
+            realized = sum(s["shares"] * (s["price"] - avg_cost) - s["fees"] for s in sells_today)
+            daily_pnl = holding_pnl + realized
+            daily_pct = daily_pnl / (avg_cost * shares) if shares > 0 else 0
+            return daily_pnl, daily_pct, True
         return None, None, True
 
     if prev_price <= 0:
@@ -261,10 +266,15 @@ def compute_daily_pnl_fund(
     )
 
     if is_new_position:
+        # 新建仓：v11.2 修复 — 新建仓也有当日盈亏，基准用 avg_nav（含手续费摊薄）
+        avg_nav = pos.get("avg_nav") or pos.get("avg_cost", 0)
         sells_today = today_sells.get(code, [])
-        if sells_today and prev_nav > 0:
-            realized = sum(s["shares"] * (s["price"] - prev_nav) - s["fees"] for s in sells_today)
-            return realized, None, True
+        if avg_nav > 0 and today_nav > 0:
+            holding_pnl = (today_nav - avg_nav) * shares
+            realized = sum(s["shares"] * (s["price"] - avg_nav) - s["fees"] for s in sells_today)
+            daily_pnl = holding_pnl + realized
+            daily_pct = daily_pnl / (avg_nav * shares) if shares > 0 else 0
+            return daily_pnl, daily_pct, True
         return None, None, True
 
     if prev_nav <= 0:
