@@ -355,30 +355,15 @@
     
     <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
     <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
-    <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划买入区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
+    <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
     <tbody><tr>
-                <td class="col-text" style="color:#e0eaf6;font-weight:500">牧原股份（002714）</td>
-                <td>36.50～39.00</td>
-                <td>✅ 已执行</td>
-                <td class="col-reason">13:30 策略已executed(7/7牧原股份买入800股已完成)，不重新评估</td>
-            </tr><tr>
-                <td class="col-text" style="color:#e0eaf6;font-weight:500">三一重工（600031）</td>
-                <td>18.50～20.50</td>
-                <td>⏳ 过期未执行</td>
-                <td class="col-reason"> 10:00: 🚡系统性风险（北向净流出22.3亿升级）→ BUY全跳过<br><br> 10:30: 🚡系统性风险锁定（保守原则当日不降级）→ BUY继续跳过<br><br> 14:45: 🚡系统性风险锁定（深证-1.57%/创业板-1.26%齐跌>0.8%共振确认）→ BUY标记expired<br><br>10:00 策略已expired(7/8)，不重新评估<br><br>10:30 策略已expired(7/8)，不重新评估<br><br>13:30 策略已expired(7/8三一重工)，不重新评估。BUY区间18.50-20.50已失效<br><br>14:45 策略已expired(7/8三一重工)，不重新评估。BUY区间18.50-20.50已失效</td>
-            </tr><tr>
-                <td class="col-text" style="color:#e0eaf6;font-weight:500">中科曙光（603019）</td>
-                <td>52.00～57.00</td>
-                <td>⏳ 过期未执行</td>
-                <td class="col-reason"> 10:30: 🟡中性→BUY推迟至14:45（价格99.30远超区间上限57.00，条件①不满足）<br><br> 13:30: 🟡中性→BUY推迟至14:45（价格101.60远超区间上限57.00，条件①不满足）<br><br> 14:45: 🟡中性→14:45窗口可执行BUY，但价格104.15远超区间上限57.00，条件①不满足→SKIP（全天4次均超区间→标记expired）<br><br>10:00 策略已expired(7/9)，不重新评估<br><br>10:30 策略已expired(7/9)，不重新评估<br><br>13:30 策略已expired(7/9中科曙光)，不重新评估。BUY区间52.00-57.00已失效（7/9价格远超100元）<br><br>14:45 策略已expired(7/9中科曙光)，不重新评估。BUY区间52.00-57.00已失效（价格远超100元）</td>
-            </tr><tr>
                 <td class="col-text" style="color:#e0eaf6;font-weight:500">浪潮信息（000977）</td>
-                <td>82.00～90.00</td>
+                <td>卖出 82.00～90.00</td>
                 <td>✅ 已执行</td>
                 <td class="col-reason">10:00 92.79(+7.91%)>区间上限90.00，条件①不满足→SKIP。浮盈+54.36%🟢强趋势连续涨停3天(7/8-7/9今+7.91%未封板)，价格已远超SELL区间，待后续检查点重新评估<br><br>10:30 91.31(+6.19%)>区间上限90.00，条件①不满足→SKIP。浮盈+51.9%🟢强趋势，已连续3天涨停后冲高回落，待回调至82-90区间再执行减仓<br><br>13:30 93.33(+8.54%)>区间上限90.00，条件①不满足→SKIP。浮盈+55.2%🟢强趋势连续暴涨(7/8-7/9涨停今+8.54%)，价格已远超SELL区间上限90，需待回调至82-90区间再执行减仓300股<br><br>14:45 89.97(+4.63%)在[82,90]区间内✅ + 非跌停价✅(远离跌停77.39) + 换手17.73%>5%✅ → 全部3项触发条件满足，执行卖出300股@89.97，浮盈+49.6%🟢强趋势减1/3锁定利润</td>
             </tr><tr>
                 <td class="col-text" style="color:#e0eaf6;font-weight:500">联瑞新材（688300）</td>
-                <td>185.00～200.00</td>
+                <td>买入 185.00～200.00</td>
                 <td>✅ 已执行</td>
                 <td class="col-reason">10:00 203.00(+3.49%)>区间上限200.00，条件①不满足→SKIP。10:00卖出优先窗口+价格超区间，推迟至10:30/13:30/14:45检查<br><br>10:30 195.82(-0.17%)在[185,200]内✅，非金属材料板块+1.01%>-1%✅，量比3.03≥0.8✅，跌幅-1.94%<2%✅，✅错杀倾向→10:30窗口执行BUY → 成交100股@195.82<br><br>13:30 策略已executed(7/10 10:30联瑞新材买入100股@195.82已完成)，不重新评估</td>
             </tr></tbody></table></div>
@@ -466,13 +451,13 @@ A股宽基全线回调：沪深300ETF-1.77%、科创50ETF-5.11%、半导体ETF-6
         
         
         <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
-        <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
-        <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划买入区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
-        <tbody><tr>
+    <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
+    <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
+    <tbody><tr>
                 <td class="col-text" style="color:#e0eaf6;font-weight:500">科创50ETF（588000）</td>
-                <td>NAV 2.20～2.40</td>
+                <td>卖出 NAV 2.250～2.400</td>
                 <td>✅ 已执行</td>
-                <td class="col-reason">13:30 NAV 2.3041 场内2.321 浮盈+33.5%≥30% → 必须立即执行减仓1/3=9500份<br><br>14:45 策略已executed(7/10 科创50ETF减仓2次已完成)，不重新评估。当前浮盈+32.53%>=30%，但已减仓55%(43000->19200份)，止盈观察</td>
+                <td class="col-reason">10:00 NAV 2.383在区间[2.25,2.40]内✅ + 非跌停价✅ → 全部2项触发条件满足，执行卖出14300份@2.383，成交金额34068.04元(佣金8.52+过户费0.34)<br><br>10:30 NAV 2.344 在旧区间[2.25,2.40]内但策略已executed(10:00成交14300份@2.383)。当前浮盈+34.83%仍超30%，但10:00已减仓1/3，不重复操作</td>
             </tr></tbody></table></div>
         <div class="section"><div class="section-title">策略反思</div><div class="reflection-item ">
                 <strong>💡 </strong><br>✅ 科创50ETF SELL减仓23,800份：10:00卖出优先窗口减14,300份@2.383（浮盈+37.07%远超+30%阈值）+ 13:30再减9,500份@2.321（浮盈+33.5%≥30%），两笔均触发v10.3铁律"盘中浮盈超阈值必须重新激活执行"。执行纪律严，减仓55%大幅锁定利润。
