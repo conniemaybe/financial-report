@@ -526,57 +526,57 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     # === 替换 A股卡片（固定三行：标签 + 净值 + 累计/今日盈亏，无脚注）===
     a_value = f'<div class="value">¥{a_nav:,.2f}</div>'
     a_change = (
-        f'<div class="change {cls(a_total_pnl)}">'
-        f'累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)}) · '
-        f'今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})'
+        f'<div class="change">'
+        f'<span class="{cls(a_total_pnl)}">累计 {fmt_card_money(a_total_pnl)} ({fmt_card_pct(a_total_pct)})</span> · '
+        f'<span class="{cls(a_today_pnl)}">今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})</span>'
         f'</div>'
     )
     # 移除已存在的脚注（幂等）
     html = re.sub(
-        r'(A股账户净值</div>\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>)\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>',
+        r'(A股账户净值</div>\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>)\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>',
         r'\1',
-        html, count=1,
+        html, count=1, flags=re.DOTALL,
     )
     html = re.sub(
-        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {a_value}\n      {a_change}',
-        html, count=1,
+        html, count=1, flags=re.DOTALL,
     )
 
     # === 替换 基金卡片（固定三行）===
     f_value = f'<div class="value">¥{f_nav:,.2f}</div>'
     f_change = (
-        f'<div class="change {cls(f_total_pnl)}">'
-        f'累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)}) · '
-        f'今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)})'
+        f'<div class="change">'
+        f'<span class="{cls(f_total_pnl)}">累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})</span> · '
+        f'<span class="{cls(f_today_pnl)}">今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)})</span>'
         f'</div>'
     )
     html = re.sub(
-        r'(基金账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        r'(基金账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {f_value}\n      {f_change}',
-        html, count=1,
+        html, count=1, flags=re.DOTALL,
     )
 
     # === 替换 合并卡片（固定三行）===
     c_value = f'<div class="value">¥{combined_nav:,.2f}</div>'
     c_change = (
-        f'<div class="change {cls(combined_total_pnl)}">'
-        f'累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})'
+        f'<div class="change">'
+        f'<span class="{cls(combined_total_pnl)}">累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})</span>'
         f'</div>'
     )
     html = re.sub(
-        r'(合并总净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">[^<]*</div>',
+        r'(合并总净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {c_value}\n      {c_change}',
-        html, count=1,
+        html, count=1, flags=re.DOTALL,
     )
 
     # === 可用资金卡片（固定两行：标签 + 金额，无任何额外文案）===
     cash_value = f'<div class="value">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
     # 移除可能存在的"日报归档"等自发挥 change 行
     html = re.sub(
-        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>(\s*<div class="change[^"]*">[^<]*</div>)?',
+        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>(\s*<div class="change[^"]*">.*?</div>)?',
         rf'\1\n      {cash_value}',
-        html, count=1,
+        html, count=1, flags=re.DOTALL,
     )
 
     # 自检输出
