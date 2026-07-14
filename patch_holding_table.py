@@ -19,7 +19,7 @@ from datetime import date
 
 PORTFOLIO_PATH = Path("C:/Users/conniehe/.workbuddy/astock-simulator/portfolio.json")
 FUND_PORTFOLIO_PATH = Path("C:/Users/conniehe/.workbuddy/astock-simulator/fund_portfolio.json")
-REPORTS_DIR = Path("C:/temp/financial-report/reports")
+REPORTS_DIR = Path("E:/temp/financial-report/reports")
 
 
 def fmt_money(v: float) -> str:

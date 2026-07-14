@@ -27,7 +27,7 @@ from pathlib import Path
 
 # ===== 路径常量 =====
 REPORT_DIR = Path(r"E:/workbuddyProject/Project_01_invest")
-INDEX_HTML = Path(r"C:/temp/financial-report/index.html")
+INDEX_HTML = Path(r"E:/temp/financial-report/index.html")
 LOG_FILE = Path.home() / ".workbuddy" / "astock-simulator" / "cross_validate.log"
 
 # 比对阈值（当日盈亏率% / 总盈亏率% / 市值元 的容差）

@@ -1,6 +1,6 @@
 #!/bin/bash
 # safe-push.sh — 推送 financial-report 到 GitHub Pages（自适应代理，开/关都能推）
-# 用法: bash /c/temp/financial-report/safe-push.sh "commit message"
+# 用法: bash /e/temp/financial-report/safe-push.sh "commit message"
 #
 # 原理：先探测 127.0.0.1:7892 端口是否在监听
 #   - 开着代理 → 走代理（git -c http.proxy=http://127.0.0.1:7892）
@@ -8,7 +8,7 @@
 #   不依赖全局 git config，避免"代理关了推不了"的陷阱
 
 set -e
-REPO_DIR="/c/temp/financial-report"
+REPO_DIR="/e/temp/financial-report"
 COMMIT_MSG="${1:-auto sync}"
 MAX_RETRIES=3
 
@@ -243,7 +243,7 @@ else
     echo "⚠️  ⚠️  ⚠️  Pages deploy 失败！git + raw 已通过，但网站可能未更新"
     echo "   请手动访问 https://github.com/$REPO/actions 查看失败原因"
     echo "   若是 GitHub 服务端故障，等 10-30 分钟后手动执行："
-    echo "     bash /c/temp/financial-report/safe-push.sh 'retry after GitHub recovered'"
+    echo "     bash /e/temp/financial-report/safe-push.sh 'retry after GitHub recovered'"
     echo "   或单独 rerun 失败的 run："
     echo "     curl -X POST -H 'Authorization: token \$GH_TOKEN' \\"
     echo "       https://api.github.com/repos/$REPO/actions/runs/<run_id>/rerun"

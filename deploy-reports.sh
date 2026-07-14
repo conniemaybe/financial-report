@@ -9,7 +9,7 @@
 #   不依赖全局 git config，开/关代理都能推
 # ============================================================
 
-REPO_DIR="/c/temp/financial-report"
+REPO_DIR="/e/temp/financial-report"
 SRC_DIR="/e/workbuddyProject/Project_01_invest"
 COMMIT_MSG="${1:-auto: sync reports to GitHub Pages}"
 
