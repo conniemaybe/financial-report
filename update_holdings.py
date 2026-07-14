@@ -19,7 +19,7 @@ from pathlib import Path
 
 ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
 FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portfolio.json")
-INDEX_HTML = Path(r"C:\temp\financial-report\index.html")
+INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
 
 
 def fmt_money(v: float) -> str:

@@ -16,7 +16,7 @@ from pathlib import Path
 
 ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
 FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portfolio.json")
-INDEX_HTML = Path(r"C:\temp\financial-report\index.html")
+INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
 NEODATA_QUERY = Path(r"C:\Users\conniehe\.workbuddy\skills-marketplace\skills\neodata-financial-search\scripts\query.py")
 PYTHON = r"C:\Users\conniehe\.workbuddy\binaries\python\versions\3.13.12\python.exe"
 

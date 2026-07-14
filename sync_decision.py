@@ -7,7 +7,7 @@ def run(cmd, cwd=None):
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=cwd or REPO)
     return result.stdout.strip(), result.stderr.strip(), result.returncode
 
-REPO = r"C:\temp\financial-report"
+REPO = r"E:\temp\financial-report"
 INDEX = os.path.join(REPO, "index.html")
 
 def update_decision(time_slot, status, body, market_banner=None):

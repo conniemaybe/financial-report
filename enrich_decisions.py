@@ -17,7 +17,7 @@ from pathlib import Path
 
 PORTFOLIO = Path.home() / ".workbuddy" / "astock-simulator" / "portfolio.json"
 FUND_PORTFOLIO = Path.home() / ".workbuddy" / "astock-simulator" / "fund_portfolio.json"
-INDEX_HTML = Path(r"C:\temp\financial-report\index.html")
+INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
 
 # 时段窗口：每笔 trade.time 归到对应的决策节点
 TIME_WINDOWS = [
