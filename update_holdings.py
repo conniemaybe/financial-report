@@ -444,14 +444,53 @@ def build_fund_rows(portfolio: dict) -> str:
 
     # 注：历史清仓标的已移至独立"已清仓标的"模块（cleared_positions.py 维护）
 
+    # ⏳ 待确认订单（场外基金 T+N，2026-07-17 新增）
+    # pending_orders 里的订单：资金已扣但份额未确认，不能算入 NAV（避免与 cash 重复）
+    # 但必须在持仓表里可见，让用户看到"钱去了哪"
+    pending_orders = portfolio.get("pending_orders", [])
+    pending_rows = []
+    for o in pending_orders:
+        if o.get("status") != "pending_confirm":
+            continue
+        pcode = o.get("code", "")
+        pname = o.get("name", "")
+        pamount = o.get("amount", 0)
+        pfee = o.get("purchase_fee", 0)
+        pinvest = o.get("invest_amount", pamount - pfee)
+        pnav = o.get("order_nav", 0)
+        pft = o.get("fund_type", "")
+        pft_display = pft if "·" in pft or len(pft) > 6 else f"{pft}·场外"
+        pconfirm = o.get("confirm_date", "—")
+        pending_rows.append(
+            f"<tr style='background:rgba(245,158,11,0.08)'>"
+            f"<td class='hide-mobile'><span class='stock-code'>{pcode}</span></td>"
+            f"<td class='col-text'><span class='stock-name'>{pname}</span> "
+            f"<span style='color:#f59e0b;font-size:0.78rem'>⏳ 待确认</span></td>"
+            f"<td class='hide-mobile col-text'>{pft_display}</td>"
+            f"<td><span style='color:#f59e0b'>⏳ 待确认</span></td>"
+            f"<td class='hide-mobile'>¥{pnav:.4f}<br><small style='color:#94a3b8'>下单参考</small></td>"
+            f"<td><span style='color:#94a3b8'>—</span></td>"
+            f"<td>¥{pinvest:,.2f}<br><small style='color:#94a3b8'>申购金额</small></td>"
+            f"<td colspan='2'><span style='color:#f59e0b'>⏳ T+N 待确认<br>"
+            f"<small>预计 {pconfirm} 入持仓</small></span></td></tr>"
+        )
+
     print("\n📊 基金 当日盈亏+总盈亏自检（v8 持仓浮动+SELL实现+总盈亏交易历史口径）：")
     for line in debug_lines:
         print(line)
-    return "\n        ".join(rows)
+    if pending_rows:
+        print(f"⏳ 待确认订单 {len(pending_rows)} 笔已追加到持仓表")
+    return "\n        ".join(rows + pending_rows)
 
 
 def calc_nav(portfolio: dict, price_field_a: str = "current_price", price_field_f: str = "current_nav") -> tuple[float, float]:
-    """计算账户 NAV 和现金。返回 (nav, cash)"""
+    """计算账户 NAV 和现金。返回 (nav, cash)
+
+    v9 (2026-07-17)：加入 pending_orders 待确认订单价值。
+    场外基金 T+N 申购后资金已从 cash 扣除，但份额未入持仓。
+    若 NAV 不算 pending_orders，会造成 NAV 虚低（差值 = 待确认金额）。
+    pending_orders 按 invest_amount 计入（份额未确认，按已投入金额算）。
+    """
     cash = portfolio.get("cash", 0)
     total_mv = 0
     for code, p in portfolio.get("positions", {}).items():
@@ -459,6 +498,14 @@ def calc_nav(portfolio: dict, price_field_a: str = "current_price", price_field_
         # 兼容 A股/基金
         price = p.get(price_field_a) or p.get(price_field_f) or p.get("avg_cost") or p.get("avg_nav") or 0
         total_mv += shares * price
+
+    # 待确认订单按 invest_amount 计入 NAV（资金已扣但份额未确认的中间态）
+    pending_value = sum(
+        o.get("invest_amount", 0) for o in portfolio.get("pending_orders", [])
+        if o.get("status") == "pending_confirm"
+    )
+    if pending_value > 0:
+        total_mv += pending_value
     return cash + total_mv, cash
 
 
