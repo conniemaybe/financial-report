@@ -231,22 +231,70 @@ except:
     echo "📊 GitHub Pages 最终状态：$PAGES_STATUS"
 fi
 
+# === v11.18 新增 #020：Pages build 状态校验（第四重验证）===
+# 背景：2026-07-18~07-20 线上停更 3 天，根因是 Jekyll 构建失败（缺 .nojekyll），
+# 但 safe-push 只验证 actions/runs workflow，legacy Pages 模式不走 workflow，
+# 导致构建失败完全沉默。现在增加 /pages/builds API 校验。
+#
+# 注意：即使仓库走 Actions workflow 部署 Pages，/pages/builds 也会记录部署结果，
+# 所以这个校验对两种模式都有效。
+PAGES_BUILD_OK=0
+if [ -n "$GH_TOKEN" ]; then
+    echo "🏗️  校验最新一次 Pages build 状态（第四重验证）..."
+    sleep 10  # 等 Pages build pipeline 启动
+    for i in $(seq 1 6); do
+        LATEST_BUILD_STATUS=$(curl -s -H "Authorization: token $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/pages/builds?per_page=1" \
+            | python -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    if isinstance(d, list) and d:
+        print(d[0].get('status','?'))
+    else:
+        print('?')
+except:
+    print('?')
+" 2>/dev/null)
+        if [ "$LATEST_BUILD_STATUS" = "built" ]; then
+            echo "✅ Pages build 验证通过（status: built）"
+            PAGES_BUILD_OK=1
+            break
+        elif [ "$LATEST_BUILD_STATUS" = "errored" ] || [ "$LATEST_BUILD_STATUS" = "errored" ]; then
+            echo "❌ Pages build 失败（status: $LATEST_BUILD_STATUS）"
+            echo "   可能原因：Jekyll 处理失败（检查 .nojekyll 是否存在）/ 文件名含特殊字符 / 仓库配置问题"
+            echo "   排查：https://github.com/$REPO/settings/pages"
+            break
+        else
+            echo "⏳ 第 $i 次查询：status=$LATEST_BUILD_STATUS（构建中），15s 后重试..."
+            sleep 15
+        fi
+    done
+fi
+
 echo ""
-if [ "$DEPLOY_RESULT" = "success" ]; then
-    echo "🎉 同步完成（git + raw + Pages deploy 三重验证全部通过）"
+if [ "$DEPLOY_RESULT" = "success" ] && { [ -z "$GH_TOKEN" ] || [ "$PAGES_BUILD_OK" -eq 1 ]; }; then
+    echo "🎉 同步完成（git + raw + Pages deploy + Pages build 四重验证全部通过）"
     echo "   网站：https://conniemaybe.github.io/financial-report/"
     echo "   注：GitHub Pages CDN 可能有 1-5 分钟缓存延迟，强制刷新请 Ctrl+F5"
 elif [ "$DEPLOY_RESULT" = "skipped" ] || [ "$DEPLOY_RESULT" = "no_run" ]; then
-    echo "🎉 同步完成（git + raw 验证通过；Pages deploy 验证已跳过）"
-    echo "   建议：检查 token 配置以启用 Pages deploy 自动验证"
+    if [ "$PAGES_BUILD_OK" -eq 1 ]; then
+        echo "🎉 同步完成（git + raw + Pages build 验证通过；Actions deploy 验证已跳过）"
+    else
+        echo "🎉 同步完成（git + raw 验证通过；Pages 相关验证已跳过）"
+        echo "   建议：检查 token 配置以启用 Pages build 自动验证"
+    fi
 else
-    echo "⚠️  ⚠️  ⚠️  Pages deploy 失败！git + raw 已通过，但网站可能未更新"
-    echo "   请手动访问 https://github.com/$REPO/actions 查看失败原因"
+    echo "⚠️  ⚠️  ⚠️  部署验证失败！"
+    if [ "$DEPLOY_RESULT" != "success" ]; then
+        echo "   - Actions workflow deploy: 失败"
+    fi
+    if [ "$PAGES_BUILD_OK" -ne 1 ] && [ -n "$GH_TOKEN" ]; then
+        echo "   - Pages build: 失败或未确认"
+    fi
+    echo "   请手动访问 https://github.com/$REPO/actions 和 https://github.com/$REPO/settings/pages 查看失败原因"
     echo "   若是 GitHub 服务端故障，等 10-30 分钟后手动执行："
     echo "     bash /e/temp/financial-report/safe-push.sh 'retry after GitHub recovered'"
-    echo "   或单独 rerun 失败的 run："
-    echo "     curl -X POST -H 'Authorization: token \$GH_TOKEN' \\"
-    echo "       https://api.github.com/repos/$REPO/actions/runs/<run_id>/rerun"
-    # 注意：不 exit 1，因为 git push 已成功，只是 Pages deploy 失败
+    # 注意：不 exit 1，因为 git push 已成功，只是 Pages 部署/构建失败
     # 让调用方看到告警但流程继续，避免阻塞 automation 后续步骤
 fi
