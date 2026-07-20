@@ -421,7 +421,12 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_dly = css_cls(daily_pnl or 0)
 
         if daily_pnl is None:
-            daily_cell = f"<td class=''><span style='color:#64748b'>— {'新申购' if is_new else '无数据'}</span></td>"
+            # v11.19（2026-07-20）：新申购场外基金 T+1 确认当日无净值波动数据，
+            # 用更友好的文案告知用户，而不是冷冰冰的"无数据"
+            if is_new:
+                daily_cell = "<td class=''><span style='color:#f59e0b'>⏳ T+1确认中</span></td>"
+            else:
+                daily_cell = "<td class=''><span style='color:#64748b'>— 无数据</span></td>"
         elif daily_pnl == 0 and daily_pct == 0:
             daily_cell = "<td class=''><span style='color:#64748b'>— 无变化</span></td>"
         else:
