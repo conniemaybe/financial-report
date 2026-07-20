@@ -44,16 +44,30 @@ def get_today(portfolio: dict) -> str | None:
     v10 修复（2026-07-09）：原逻辑取 snapshots[0]，但 snapshots 跨日累积不清理，
     导致今日判定为昨天的日期，进而 get_prev_snapshot 取错 record。
     现在取 snapshots[-1]（最新一条），保证拿到的是真正的今日。
+
+    v11 修复（2026-07-20，踩坑日志 #017）：intraday_snapshots 可能因 NeoData 查价
+    失败而当天没有新快照，导致 snaps[-1] 仍是上一交易日的数据（如 7/20 没快照时
+    snaps[-1] 是 7/17），进而 get_today 返回 7/17，prev_snapshot 取成 7/16，
+    当日盈亏全错。修复：snapshots[-1].date 必须等于今天的日历日期，否则回退到
+    records[-1]，再兜底用 date.today()。
     """
+    from datetime import date as _date
+    calendar_today = _date.today().isoformat()
+
     snaps = portfolio.get("intraday_snapshots", [])
     if snaps:
         d = snaps[-1].get("date")
-        if d:
+        # v11：snapshots[-1] 必须是今天，否则视为快照缺失
+        if d == calendar_today:
             return d
     records = portfolio.get("daily_records", [])
     if records:
-        return records[-1].get("date")
-    return None
+        last_rec_date = records[-1].get("date")
+        # 今日日报还没生成时 records[-1] 是昨日，不能当作 today
+        if last_rec_date == calendar_today:
+            return last_rec_date
+    # v11 兜底：用日历今日
+    return calendar_today
 
 
 def get_prev_snapshot(portfolio: dict, code: str) -> dict:
