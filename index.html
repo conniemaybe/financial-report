@@ -136,7 +136,7 @@ tr:hover { background: #1e293b60; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-17 19:04</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-20 08:27</div>
   </div>
   <!-- ⚠️ updateTime 格式硬约束：只允许 "数据更新：2026-07-13 10:00<!-- Summary Cards -->
   <div class="cards">
@@ -196,26 +196,19 @@ tr:hover { background: #1e293b60; }
     </table></div>
   </div>
 
-                                                              <!-- 今日盘中决策实录 -->
+                                                                <!-- 今日盘中决策实录 -->
   <div class="section">
-    <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-17（周五）</span></h2>
+    <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-20（周一）</span></h2>
     <div class="decision-timeline" id="decisionLog">
-      <div class="decision-node done">
+      <div class="decision-node pending">
         <div>
-          <div class="d-time">10:00</div>
-          <div class="d-status">✅ 已完成</div>
+          <div class="d-time">待执行</div>
+          <div class="d-status">⏳ 待执行</div>
         </div>
-        <div class="d-body"><b>卖出优先窗口</b><br>富国中证500增强(161017): 市价单，trigger满足（申购open+评分75/B级+硬筛PASS）→execute_purchase NAV=2.577，金额¥20,000（含申购费¥30），T+1确认日2026-07-20，已执行<br>建信中证500增强(000478): 市价单，trigger满足（申购open+评分75/B级+硬筛PASS）→execute_purchase NAV=3.5198，金额¥20,000（含申购费¥30），T+1确认日2026-07-20，已执行</div>
-      </div>
-      <div class="decision-node done">
-        <div>
-          <div class="d-time">13:30</div>
-          <div class="d-status">✅ 已完成</div>
-        </div>
-        <div class="d-body"><b>午后纯买入窗口</b><br>富国中证500增强(161017): 已执行（10:00已成交），NAV已确认，无需重复操作<br>建信中证500增强(000478): 已执行（10:00已成交），NAV已确认，无需重复操作</div>
+        <div class="d-body"><b>晨报策略待执行</b><br>富国中证500增强(161017): 计划买入 ¥20,000，¥20,000申购（等待盘中automation触发）<br>建信中证500增强(000478): 计划买入 ¥20,000，¥20,000申购（等待盘中automation触发）</div>
       </div>
     </div>
-    <div class="market-banner">📊 07-17 · 盘中策略已执行</div>
+    <div class="market-banner">📊 07-20 · 晨报已生成 2 条策略 · 待盘中触发</div>
   </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
@@ -255,12 +248,12 @@ tr:hover { background: #1e293b60; }
           <th>清仓后距今</th>
         </tr></thead>
         <tbody>
-          <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,397.48</td><td class='down'>-7.13%</td><td>¥181.90</td><td>¥195.87</td><td class='down'>-22.48%<br><small>现价格 ¥141.00</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,535.22</td><td class='down'>-7.38%</td><td>¥24.01</td><td>¥26.02</td><td class='down'>-1.03%<br><small>现价格 ¥23.76</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,902.69</td><td class='down'>-5.58%</td><td>¥64.40</td><td>¥68.21</td><td class='up'>+6.15%<br><small>现价格 ¥68.36</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,396.80</td><td class='down'>-7.64%</td><td>¥84.41</td><td>¥91.40</td><td class='down'>-15.76%<br><small>现价格 ¥71.11</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,150.69</td><td class='up'>+24.36%</td><td>¥103.57</td><td>¥83.35</td><td class='down'>-17.46%<br><small>现价格 ¥85.49</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,809.37</td><td class='down'>-8.07%</td><td>¥144.66</td><td>¥157.36</td><td class='down'>-31.56%<br><small>现价格 ¥99.01</small></td></tr>
+          <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,397.48</td><td class='down'>-7.13%</td><td>¥181.90</td><td>¥195.87</td><td><span style='color:#64748b'>—</span></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,535.22</td><td class='down'>-7.38%</td><td>¥24.01</td><td>¥26.02</td><td><span style='color:#64748b'>—</span></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,902.69</td><td class='down'>-5.58%</td><td>¥64.40</td><td>¥68.21</td><td><span style='color:#64748b'>—</span></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,396.80</td><td class='down'>-7.64%</td><td>¥84.41</td><td>¥91.40</td><td><span style='color:#64748b'>—</span></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,150.69</td><td class='up'>+24.36%</td><td>¥103.57</td><td>¥83.35</td><td><span style='color:#64748b'>—</span></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,809.37</td><td class='down'>-8.07%</td><td>¥144.66</td><td>¥157.36</td><td><span style='color:#64748b'>—</span></td></tr>
           
         </tbody>
       </table>
@@ -374,6 +367,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-07-20', type: 'morning', file: '20260720_晨报.html', label: '7/20 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-07-17', type: 'evening', file: '20260717_日报.html', label: '7/17 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-07-17', type: 'morning', file: '20260717_晨报.html', label: '7/17 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-07-16', type: 'evening', file: '20260716_日报.html', label: '7/16 日报', ico: '🌙', cls: 'evening' },
