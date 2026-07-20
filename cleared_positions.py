@@ -17,8 +17,58 @@ from pathlib import Path
 ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
 FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portfolio.json")
 INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
-NEODATA_QUERY = Path(r"C:\Users\conniehe\.workbuddy\skills-marketplace\skills\neodata-financial-search\scripts\query.py")
+
+# NeoData query.py 路径（v11.16 修复 #018：旧路径 skills-marketplace 已废弃，
+# 统一用 plugins 路径；如未来再迁移，请同步更新所有引用该路径的脚本）
+NEODATA_QUERY_CANDIDATES = [
+    Path(r"C:\Users\conniehe\.workbuddy\plugins\marketplaces\experts\plugins\a-share-analysis\skills\neodata-financial-search\scripts\query.py"),
+    Path(r"C:\Users\conniehe\.workbuddy\skills-marketplace\skills\neodata-financial-search\scripts\query.py"),
+]
+NEODATA_QUERY = next((p for p in NEODATA_QUERY_CANDIDATES if p.exists()), NEODATA_QUERY_CANDIDATES[0])
 PYTHON = r"C:\Users\conniehe\.workbuddy\binaries\python\versions\3.13.12\python.exe"
+
+# Token 缓存文件（v11.16 修复 #018：query.py 失效时主动用缓存 token 重试）
+NEODATA_TOKEN_CACHE = Path(r"C:\Users\conniehe\.workbuddy\plugins\marketplaces\experts\plugins\a-share-analysis\skills\.neodata_token")
+
+
+def _read_cached_token() -> str:
+    """读取 NeoData 缓存 token（12 小时有效期）。
+    失败返回空串。"""
+    try:
+        if NEODATA_TOKEN_CACHE.exists():
+            return NEODATA_TOKEN_CACHE.read_text(encoding="utf-8").strip()
+    except Exception:
+        pass
+    return ""
+
+
+def _query_neodata(query: str) -> str:
+    """查询 NeoData，自动带 --token（v11.16 修复 #018）。
+
+    流程：
+      1. 先无 token 查（让 query.py 自己读缓存）
+      2. 若返回 TOKEN_EXPIRED / TOKEN_MISSING → 读本地缓存 token 显式带 --token 重试
+      3. 仍失败 → 返回空串，调用方按"未查到"处理
+    """
+    try:
+        r = subprocess.run(
+            [PYTHON, str(NEODATA_QUERY), "--query", query],
+            capture_output=True, text=True, encoding="utf-8", timeout=60
+        )
+        out = r.stdout or ""
+        # 若脚本提示需要 token → 用缓存 token 重试
+        if "TOKEN_EXPIRED" in out or "TOKEN_MISSING" in out:
+            tok = _read_cached_token()
+            if tok:
+                r2 = subprocess.run(
+                    [PYTHON, str(NEODATA_QUERY), "--query", query, "--token", tok],
+                    capture_output=True, text=True, encoding="utf-8", timeout=60
+                )
+                return r2.stdout or ""
+        return out
+    except Exception as e:
+        print(f"  ⚠️ NeoData 查询异常: {e}")
+        return ""
 
 
 # ============== 数据层 ==============
@@ -93,50 +143,41 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
 
 
 def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
-    """用 NeoData 查询清仓标的的现价，填充 current_price 和 post_clear_pct"""
+    """用 NeoData 查询清仓标的的现价，填充 current_price 和 post_clear_pct。
+
+    v11.16 修复 #018：原版不传 --token，NeoData 本地凭证失效后全部返回空 →
+    所有清仓标的"清仓后距今"显示"—"。现在统一走 _query_neodata helper，
+    先无 token 查 → TOKEN_MISSING 时用缓存 token 重试。
+    """
     # 股票
     for item in cleared_astock:
         code = item["code"]
         query = f"{item['name']} {code} 最新价格"
-        try:
-            r = subprocess.run(
-                [PYTHON, str(NEODATA_QUERY), "--query", query],
-                capture_output=True, text=True, encoding="utf-8", timeout=60
-            )
-            # 从返回里提取最新价格:XX元
-            m = re.search(r"最新价格[:：]\s*([\d.]+)元", r.stdout)
-            if m:
-                price = float(m.group(1))
-                item["current_price"] = price
-                # 清仓后收益率 = (现价 - 清仓均价) / 清仓均价
-                if item["avg_sell"] > 0:
-                    item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
-                print(f"  ✅ {item['name']}({code}) 现价 {price}")
-            else:
-                print(f"  ⚠️ {item['name']}({code}) 未解析到价格")
-        except Exception as e:
-            print(f"  ❌ {item['name']}({code}) 查询失败: {e}")
+        out = _query_neodata(query)
+        m = re.search(r"最新价格[:：]\s*([\d.]+)元", out)
+        if m:
+            price = float(m.group(1))
+            item["current_price"] = price
+            if item["avg_sell"] > 0:
+                item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
+            print(f"  ✅ {item['name']}({code}) 现价 {price}")
+        else:
+            print(f"  ⚠️ {item['name']}({code}) 未解析到价格（NeoData 返回为空或鉴权失败）")
 
     # 基金（ETF 走股票接口）
     for item in cleared_fund:
         code = item["code"]
         query = f"{item['name']} {code} 最新净值"
-        try:
-            r = subprocess.run(
-                [PYTHON, str(NEODATA_QUERY), "--query", query],
-                capture_output=True, text=True, encoding="utf-8", timeout=60
-            )
-            m = re.search(r"最新(?:价格|净值)[:：]\s*([\d.]+)", r.stdout)
-            if m:
-                price = float(m.group(1))
-                item["current_price"] = price
-                if item["avg_sell"] > 0:
-                    item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
-                print(f"  ✅ {item['name']}({code}) 现净值 {price}")
-            else:
-                print(f"  ⚠️ {item['name']}({code}) 未解析到净值")
-        except Exception as e:
-            print(f"  ❌ {item['name']}({code}) 查询失败: {e}")
+        out = _query_neodata(query)
+        m = re.search(r"最新(?:价格|净值)[:：]\s*([\d.]+)", out)
+        if m:
+            price = float(m.group(1))
+            item["current_price"] = price
+            if item["avg_sell"] > 0:
+                item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
+            print(f"  ✅ {item['name']}({code}) 现净值 {price}")
+        else:
+            print(f"  ⚠️ {item['name']}({code}) 未解析到净值")
 
 
 # ============== 渲染层 ==============
