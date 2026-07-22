@@ -559,6 +559,8 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     # === A股 ===
     a_nav, a_cash = calc_nav(astock_pf, "current_price")
     a_prev = get_prev_day_nav(astock_pf)
+    if a_prev is None:
+        a_prev = a_nav  # 无历史记录时以当日NAV为基准，今日盈亏=0
     a_total_pnl = a_nav - initial
     a_total_pct = a_total_pnl / initial
     a_today_pnl = (a_nav - a_prev) if a_prev else 0
@@ -567,6 +569,8 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     # === 基金 ===
     f_nav, f_cash = calc_nav(fund_pf, "current_nav")
     f_prev = get_prev_day_nav(fund_pf)
+    if f_prev is None:
+        f_prev = f_nav  # 无历史记录时以当日NAV为基准，今日盈亏=0
     f_total_pnl = f_nav - initial
     f_total_pct = f_total_pnl / initial
     f_today_pnl = (f_nav - f_prev) if f_prev else 0
