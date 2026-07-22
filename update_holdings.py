@@ -22,6 +22,80 @@ FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portf
 INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
 
 
+def normalize_portfolio_v2(portfolio: dict) -> dict:
+    """将 schema_version 2 的 strategy_groups 结构归一化为 v1 兼容的扁平结构。
+
+    v2 结构：
+      portfolio.strategy_groups.A.positions / .cash / .trades / .nav_history
+      portfolio.strategy_groups.B.positions / .cash / .trades / .nav_history
+
+    v1 兼容结构（本脚本各函数所期望的）：
+      portfolio.positions / .cash / .trades / .daily_records
+
+    归一化策略：将所有 group 的 positions/cash/trades 合并到顶层。
+    nav_history → daily_records：按日期合并各组 NAV（同一日期求和）。
+    如果已经是 v1 结构（无 strategy_groups 或 schema_version < 2），直接返回。
+    """
+    if portfolio.get("schema_version", 1) < 2:
+        return portfolio
+
+    merged = dict(portfolio)  # 浅拷贝保留顶层字段（cooldown_state, intraday_snapshots 等）
+    all_positions = {}
+    total_cash = 0.0
+    all_trades = []
+
+    groups = portfolio.get("strategy_groups", {})
+
+    for group_key, group in groups.items():
+        # 合并持仓（同 code 不应跨组重复，但以防万一用 update）
+        all_positions.update(group.get("positions", {}))
+        total_cash += group.get("cash", 0)
+        all_trades.extend(group.get("trades", []))
+
+    merged["positions"] = all_positions
+    merged["cash"] = total_cash
+    merged["trades"] = all_trades
+
+    # nav_history → daily_records：按日期合并各组 NAV
+    # 每个日期的 combined nav = Σ(group.nav)
+    # 无 nav_history 的组（如 B 空仓）按 initial_capital 补值
+    nav_by_date: dict[str, float] = {}
+    nav_records_by_date: dict[str, dict] = {}  # 保留最后一个 group 的完整 record 做模板
+
+    for group_key, group in groups.items():
+        initial = group.get("initial_capital", 0)
+        nh = group.get("nav_history", [])
+        if not nh:
+            continue
+        for rec in nh:
+            d = rec.get("date")
+            if not d:
+                continue
+            nav_by_date[d] = nav_by_date.get(d, 0) + rec.get("nav", 0)
+            nav_records_by_date[d] = rec  # 保留结构做模板
+
+    # 对没有 nav_history 的组，补 initial_capital（空仓组 NAV = cash = initial_capital）
+    for group_key, group in groups.items():
+        nh = group.get("nav_history", [])
+        initial = group.get("initial_capital", 0)
+        if not nh and initial > 0:
+            # 该组无历史，所有日期补 initial_capital
+            for d in nav_by_date:
+                nav_by_date[d] += initial
+
+    # 构造 daily_records
+    daily_records = []
+    for d in sorted(nav_by_date.keys()):
+        rec = dict(nav_records_by_date.get(d, {}))
+        rec["date"] = d
+        rec["nav"] = nav_by_date[d]
+        daily_records.append(rec)
+
+    merged["daily_records"] = daily_records
+
+    return merged
+
+
 def fmt_money(v: float) -> str:
     """v8 统一：所有金额保留 2 位小数（含 ¥、千分位、正负号）"""
     sign = "+" if v >= 0 else "-"
@@ -691,6 +765,10 @@ if __name__ == "__main__":
         astock_pf = json.load(f)
     with open(FUND_PORTFOLIO, encoding="utf-8") as f:
         fund_pf = json.load(f)
+
+    # v2 兼容：将 strategy_groups 归一化为 v1 扁平结构
+    astock_pf = normalize_portfolio_v2(astock_pf)
+    fund_pf = normalize_portfolio_v2(fund_pf)
 
     a_rows = build_astock_rows(astock_pf)
     f_rows = build_fund_rows(fund_pf)
