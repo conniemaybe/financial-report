@@ -142,8 +142,8 @@ tr:hover { background: #1e293b60; }
   <div class="cards">
     <div class="card">
       <div class="label">A股账户净值</div>
-      <div class="value">¥791,051.96</div>
-      <div class="change"><span class="up">累计 +¥291,051.96 (+58.21%)</span> · <span class="down">今日 -¥23,000.94 (-2.83%)</span></div>
+      <div class="value">¥541,051.96</div>
+      <div class="change"><span class="up">累计 +¥41,051.96 (+8.21%)</span> · <span class="down">今日 -¥23,000.94 (-4.08%)</span></div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
@@ -152,8 +152,8 @@ tr:hover { background: #1e293b60; }
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,310,790.37</div>
-      <div class="change"><span class="up">累计 +¥310,790.37 (+31.08%)</span></div>
+      <div class="value">¥1,060,790.37</div>
+      <div class="change"><span class="up">累计 +¥60,790.37 (+6.08%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -247,7 +247,14 @@ tr:hover { background: #1e293b60; }
           <th>清仓后距今</th>
         </tr></thead>
         <tbody>
-          <tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">暂无已清仓标的</td></tr>
+          <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,626.84</td><td class='up'>+13.68%</td><td>¥46.76</td><td>¥41.13</td><td class='down'>-27.01%<br><small>现价格 ¥34.13</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥32,998.49</td><td class='up'>+36.60%</td><td>¥82.11</td><td>¥60.11</td><td class='up'>+13.87%<br><small>现价格 ¥93.50</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,400.88</td><td class='down'>-7.15%</td><td>¥181.88</td><td>¥195.89</td><td class='down'>-26.90%<br><small>现价格 ¥132.96</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,538.81</td><td class='down'>-7.39%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+14.76%<br><small>现价格 ¥27.55</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,909.32</td><td class='down'>-5.60%</td><td>¥64.40</td><td>¥68.21</td><td class='up'>+18.38%<br><small>现价格 ¥76.23</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,399.97</td><td class='down'>-7.66%</td><td>¥84.40</td><td>¥91.40</td><td class='down'>-14.40%<br><small>现价格 ¥72.25</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,116.38</td><td class='up'>+24.27%</td><td>¥103.51</td><td>¥83.36</td><td class='down'>-15.32%<br><small>现价格 ¥87.65</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,818.43</td><td class='down'>-8.09%</td><td>¥144.65</td><td>¥157.38</td><td class='down'>-26.31%<br><small>现价格 ¥106.59</small></td></tr>
           
         </tbody>
       </table>
@@ -312,21 +319,55 @@ tr:hover { background: #1e293b60; }
 
 <script>
 // ========== REAL TRADE DATA (auto-generated from portfolio.json + fund_portfolio.json) ==========
-// A股 + 基金 合计 12 笔（按时间倒序，同时刻卖出优先）
+// A股 + 基金 合计 46 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
 const allTrades = [
+  { date: '2026-07-22', time: '09:55', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥33.85', qty: '300 股', amount: '¥10,145', reason: '止损卖出：浮亏-17.68%远超-8%止损线，10:00卖出优先窗口执行', cls: 'down' },
+  { date: '2026-07-21', time: '10:07', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥77.99', qty: '200 股', amount: '¥15,585', reason: '一次性清仓（防碎片化规则#021）：仓位衰减13.3%<25%阈值+趋势停滞+昨日已明确建议清仓未落地', cls: 'down' },
+  { date: '2026-07-21', time: '09:56', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥79.9', qty: '100 股', amount: '¥7,981', reason: '止盈减1/3：浮盈+32.90%弱趋势远超+15%阈值，10:00卖出优先窗口执行', cls: 'down' },
   { date: '2026-07-20', time: '09:56', acct: '基金', action: '申购确认', code: '161017', name: '富国中证500增强', price: '¥2.43', qty: '8,218 份', amount: '¥20,000', reason: '基金策略自动生成：评分75/B级+硬筛PASS+申购开放，首批40%建仓¥20,000', cls: '' },
   { date: '2026-07-20', time: '09:56', acct: '基金', action: '申购确认', code: '000478', name: '建信中证500增强', price: '¥3.3528', qty: '5,956 份', amount: '¥20,000', reason: '基金策略自动生成：评分75/B级+硬筛PASS+申购开放，首批40%建仓¥20,000', cls: '' },
-  { date: '2026-07-15', time: '14:43', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.026', qty: '4,200 份', amount: '¥8,504', reason: '止盈减仓1/3: 7/14 NAV=2.1185 浮盈+21.85% 跟踪指数科创50 5日跌-12.08%远超-5%阈值 趋势转弱', cls: 'neutral' },
-  { date: '2026-07-14', time: '09:55', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.086', qty: '6,400 份', amount: '¥13,345', reason: '止盈减1/3：NAV口径浮盈+20.95%在+20%~30%区间，科创50指数5日跌-8.74%>5%触发减仓，10:00卖出优先窗口执行', cls: 'neutral' },
-  { date: '2026-07-10', time: '13:29', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.321', qty: '9,500 份', amount: '¥22,044', reason: '止盈减1/3：浮盈+33.5%≥30%阈值（13:30盘中重评估触发）', cls: 'neutral' },
-  { date: '2026-07-10', time: '09:54', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.383', qty: '14,300 份', amount: '¥34,068', reason: '止盈减1/3：浮盈+37.07%远超+30%阈值，10:00卖出优先窗口执行', cls: 'neutral' },
-  { date: '2026-07-06', time: '09:55', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.719', qty: '2,200 份', amount: '¥19,187', reason: '贵金属强势+溢价低', cls: 'neutral' },
-  { date: '2026-06-25', time: '10:24', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.303', qty: '3,600 份', amount: '¥29,899', reason: '金价大幅回调至建仓区间', cls: 'neutral' },
-  { date: '2026-06-22', time: '10:42', acct: '基金', action: '买入', code: '512480', name: '半导体ETF', price: '¥2.477', qty: '12,100 份', amount: '¥29,979', reason: '半导体板块强势', cls: 'neutral' },
-  { date: '2026-06-18', time: '10:30', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '金字塔加仓3万', cls: 'neutral' },
-  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '4,200 份', amount: '¥19,934', reason: '盘中触发：溢价-0.71%<2%，沪深300指数-0.76%>-1%，大盘-0.55%未超-2%，折价加分', cls: 'neutral' },
-  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '8,600 份', amount: '¥14,952', reason: '盘中触发：溢价-0.45%<2%，科创50指数-0.42%>-1%，大盘-0.55%未超-2%，半导体+0.61%未超-3%', cls: 'neutral' },
+  { date: '2026-07-20', time: '09:56', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥83.84', qty: '100 股', amount: '¥8,375', reason: '止盈减仓1/3：浮盈+39.4%≥+30%强趋势阈值，10:00卖出优先窗口', cls: 'down' },
+  { date: '2026-07-17', time: '09:53', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥83.2', qty: '100 股', amount: '¥8,311', reason: '止盈减1/3：浮盈+38.4%🔴弱趋势远超+15%阈值（5日-7.06%板块转弱），10:00卖出优先窗口执行', cls: 'down' },
+  { date: '2026-07-16', time: '09:53', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥84.55', qty: '200 股', amount: '¥16,896', reason: '止盈减1/3：浮盈+40.67%远超+30%阈值，10:00卖出优先窗口执行', cls: 'down' },
+  { date: '2026-07-15', time: '14:43', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.026', qty: '4,200 份', amount: '¥8,504', reason: '止盈减仓1/3: 7/14 NAV=2.1185 浮盈+21.85% 跟踪指数科创50 5日跌-12.08%远超-5%阈值 趋势转弱', cls: 'down' },
+  { date: '2026-07-14', time: '09:55', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.086', qty: '6,400 份', amount: '¥13,345', reason: '止盈减1/3：NAV口径浮盈+20.95%在+20%~30%区间，科创50指数5日跌-8.74%>5%触发减仓，10:00卖出优先窗口执行', cls: 'down' },
+  { date: '2026-07-13', time: '09:54', acct: 'A股', action: '卖出', code: '688300', name: '联瑞新材', price: '¥182.04', qty: '100 股', amount: '¥18,190', reason: '止损卖出：浮亏-7.06%触及弱势标的止损线-5%（MA20下方+非金属材料板块-2.05%负涨幅→收紧至-5%）', cls: 'down' },
+  { date: '2026-07-10', time: '15:13', acct: 'A股', action: '分红', code: '601336', name: '新华保险', price: '¥2.06/股', qty: '200 股', amount: '¥330', reason: '2025年末期息2.06元/股，除权除息日2026-07-10，持股>30天扣10%红利税', cls: 'up' },
+  { date: '2026-07-10', time: '14:43', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥89.97', qty: '300 股', amount: '¥26,970', reason: '止盈减1/3：浮盈+49.6%🟢强趋势远超+30%阈值，价格89.97首次回落至SELL区间[82,90]内，14:45尾盘窗口执行', cls: 'down' },
+  { date: '2026-07-10', time: '13:29', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.321', qty: '9,500 份', amount: '¥22,044', reason: '止盈减1/3：浮盈+33.5%≥30%阈值（13:30盘中重评估触发）', cls: 'down' },
+  { date: '2026-07-10', time: '10:22', acct: 'A股', action: '买入', code: '688300', name: '联瑞新材', price: '¥195.82', qty: '100 股', amount: '¥19,587', reason: '✅错杀倾向+10:30回调低吸窗口：非金属材料+1.01%>-1%✅，量比3.03≥0.8✅，价格195.82在[185,200]内✅，跌幅-1.94%<2%✅', cls: 'up' },
+  { date: '2026-07-10', time: '09:54', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥2.383', qty: '14,300 份', amount: '¥34,068', reason: '止盈减1/3：浮盈+37.07%远超+30%阈值，10:00卖出优先窗口执行', cls: 'down' },
+  { date: '2026-07-09', time: '13:27', acct: 'A股', action: '卖出', code: '600547', name: '山东黄金', price: '¥23.62', qty: '500 股', amount: '¥11,799', reason: '止损卖出：浮亏-8.56%触及止损线-8%（除权除息日加速下跌，贵金属-2.62%板块弱势）', cls: 'down' },
+  { date: '2026-07-09', time: '10:08', acct: 'A股', action: '分红', code: '600547', name: '山东黄金', price: '¥0.18/股', qty: '500 股', amount: '¥72', reason: '山东黄金2025年度分红，10派1.8元（每股0.18元），除权除息日2026-07-09', cls: 'up' },
+  { date: '2026-07-08', time: '14:45', acct: 'A股', action: '卖出', code: '000977', name: '浪潮信息', price: '¥78.17', qty: '500 股', amount: '¥39,056', reason: '🚡系统性风险减仓：浮盈+30.03%>20%，涨停封板趋势强，减仓1/3锁定利润', cls: 'down' },
+  { date: '2026-07-08', time: '14:45', acct: 'A股', action: '卖出', code: '601336', name: '新华保险', price: '¥63.2', qty: '100 股', amount: '¥6,312', reason: '🚡系统性风险减仓：浮盈+5.70%在0~20%区间，减仓1/3降低敞口', cls: 'down' },
+  { date: '2026-07-08', time: '14:45', acct: 'A股', action: '卖出', code: '600547', name: '山东黄金', price: '¥24.72', qty: '300 股', amount: '¥7,407', reason: '🚡系统性风险加速减仓：浮亏-4.98%逼近-5%止损线，减仓1/3防进一步下探', cls: 'down' },
+  { date: '2026-07-08', time: '14:45', acct: 'A股', action: '卖出', code: '002714', name: '牧原股份', price: '¥37', qty: '300 股', amount: '¥11,089', reason: '🚡系统性风险减仓：浮亏-4.12%逼近-5%止损线，当日跌-3.87%趋势偏弱，减仓1/3', cls: 'down' },
+  { date: '2026-07-08', time: '10:26', acct: 'A股', action: '卖出', code: '688131', name: '皓元医药', price: '¥84.48', qty: '200 股', amount: '¥16,882', reason: '🚡系统性风险提前止损：浮亏-7.57%逼近-8%止损线，个股当日-2.95%远弱于医药生物板块-0.75%，5日-11.54%趋势极弱', cls: 'down' },
+  { date: '2026-07-08', time: '09:56', acct: 'A股', action: '卖出', code: '002156', name: '通富微电', price: '¥64.45', qty: '500 股', amount: '¥32,201', reason: '🚡系统性风险提前止损：浮亏-5.51%超半导体板块-1.44%，北向净流出22亿升级系统性风险', cls: 'down' },
+  { date: '2026-07-08', time: '09:56', acct: 'A股', action: '卖出', code: '601336', name: '新华保险', price: '¥63.34', qty: '200 股', amount: '¥12,657', reason: '🚡系统性风险加速止盈：浮盈+5.94%趋势转弱(5日-3.12%)，落袋为安', cls: 'down' },
+  { date: '2026-07-07', time: '10:00', acct: 'A股', action: '买入', code: '002714', name: '牧原股份', price: '¥38.58', qty: '800 股', amount: '¥30,864', reason: '养殖业板块-0.87%>-1%✅，量比2.38≥0.8✅，价格38.58在[36.50,39.00]内✅，非急跌-0.26%<2%✅', cls: 'up' },
+  { date: '2026-07-06', time: '13:30', acct: 'A股', action: '买入', code: '600547', name: '山东黄金', price: '¥26.01', qty: '800 股', amount: '¥20,808', reason: '贵金属板块强势+溢价低，黄金股回调建仓', cls: 'up' },
+  { date: '2026-07-06', time: '09:55', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.719', qty: '2,200 份', amount: '¥19,187', reason: '贵金属强势+溢价低', cls: 'up' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥51.5', qty: '200 股', amount: '¥10,300', reason: '触发了结+15%止盈', cls: 'down' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600460', name: '士兰微', price: '¥52.7', qty: '500 股', amount: '¥26,350', reason: '触发了结+15%止盈', cls: 'down' },
+  { date: '2026-07-02', time: '10:30', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥98.82', qty: '300 股', amount: '¥29,646', reason: '分红派息后调整持仓，分批了结', cls: 'down' },
+  { date: '2026-07-01', time: '10:00', acct: 'A股', action: '卖出', code: '600584', name: '长电科技', price: '¥110.77', qty: '200 股', amount: '¥22,154', reason: '分红派息日，部分了结', cls: 'down' },
+  { date: '2026-06-25', time: '10:24', acct: '基金', action: '买入', code: '518880', name: '黄金ETF', price: '¥8.303', qty: '3,600 份', amount: '¥29,899', reason: '金价大幅回调至建仓区间', cls: 'up' },
+  { date: '2026-06-24', time: '13:29', acct: 'A股', action: '卖出', code: '300408', name: '三环集团', price: '¥144.77', qty: '300 股', amount: '¥43,398', reason: '止损卖出：浮亏-8.00%触及止损线', cls: 'down' },
+  { date: '2026-06-24', time: '10:00', acct: 'A股', action: '买入', code: '688131', name: '皓元医药', price: '¥91.37', qty: '200 股', amount: '¥18,279', reason: '医药生物+1.98%>-1%且>1%加分，量比4.40>=1.0且>2加分，价格91.37在[86.10,91.50]内，开盘未急跌，大盘+0.13%未触否决，未涨停', cls: 'up' },
+  { date: '2026-06-23', time: '09:55', acct: 'A股', action: '分红', code: '600584', name: '长电科技', price: '¥0.10/股', qty: '500 股', amount: '¥40', reason: '10派1元含税，持股<30天按20%税，实到40元', cls: 'up' },
+  { date: '2026-06-22', time: '13:37', acct: 'A股', action: '买入', code: '002156', name: '通富微电', price: '¥68.19', qty: '500 股', amount: '¥34,104', reason: '半导体板块+0.15%>-0.5%✅，量比1.52≥1.0✅，价格68.19≤68.27✅，换手9.51%<15%✅，大盘+0.70%未触否决✅', cls: 'up' },
+  { date: '2026-06-22', time: '10:42', acct: '基金', action: '买入', code: '512480', name: '半导体ETF', price: '¥2.477', qty: '12,100 份', amount: '¥29,979', reason: '半导体板块强势', cls: 'up' },
+  { date: '2026-06-18', time: '14:45', acct: 'A股', action: '买入', code: '600584', name: '长电科技', price: '¥83.33', qty: '500 股', amount: '¥41,665', reason: '半导体封测+4.09%>1%加分，价格83.33回落至区间[79.0,83.4]内，量比1.29', cls: 'up' },
+  { date: '2026-06-18', time: '10:30', acct: 'A股', action: '买入', code: '300408', name: '三环集团', price: '¥157.32', qty: '300 股', amount: '¥47,196', reason: '陶瓷基板+2.39%>-1%，量比1.44，换手2.84%筹码稳定', cls: 'up' },
+  { date: '2026-06-18', time: '10:30', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.962', qty: '6,000 份', amount: '¥29,772', reason: '金字塔加仓3万', cls: 'up' },
+  { date: '2026-06-18', time: '10:00', acct: 'A股', action: '买入', code: '600460', name: '士兰微', price: '¥41.12', qty: '1,000 股', amount: '¥41,120', reason: '半导体板块+2.24%>-1%，量比3.06≥0.8(>2加分)，价格在[39.5,41.6]内', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: 'A股', action: '买入', code: '601336', name: '新华保险', price: '¥59.74', qty: '500 股', amount: '¥29,870', reason: '保险板块-0.63%>-1%，量比3.11≥0.8', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '510300', name: '沪深300ETF', price: '¥4.745', qty: '4,200 份', amount: '¥19,934', reason: '盘中触发：溢价-0.71%<2%，沪深300指数-0.76%>-1%，大盘-0.55%未超-2%，折价加分', cls: 'up' },
+  { date: '2026-06-11', time: '10:44', acct: '基金', action: '买入', code: '588000', name: '科创50ETF', price: '¥1.738', qty: '8,600 份', amount: '¥14,952', reason: '盘中触发：溢价-0.45%<2%，科创50指数-0.42%>-1%，大盘-0.55%未超-2%，半导体+0.61%未超-3%', cls: 'up' },
+  { date: '2026-06-10', time: '10:37', acct: 'A股', action: '买入', code: '000977', name: '浪潮信息', price: '¥60.1', qty: '1,500 股', amount: '¥90,150', reason: 'AI算力龙头，计算机设备板块逆势+0.51%', cls: 'up' },
 ];
 
 // ========== REPORT ARCHIVE ==========

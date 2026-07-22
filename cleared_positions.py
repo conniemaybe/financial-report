@@ -341,6 +341,12 @@ def main():
     with open(FUND_PORTFOLIO, encoding="utf-8") as f:
         f_pf = json.load(f)
 
+    # 2026-07-22 修复 schema v2 兼容：positions/trades 在 strategy_groups.{A,B} 下
+    # 之前直接读顶层为空 → 已清仓标的识别为 0 → 网站缺数据
+    from update_holdings import normalize_portfolio_v2
+    a_pf = normalize_portfolio_v2(a_pf)
+    f_pf = normalize_portfolio_v2(f_pf)
+
     print("🔍 识别已清仓标的...")
     cleared_a = identify_cleared_positions(a_pf, is_fund=False)
     cleared_f = identify_cleared_positions(f_pf, is_fund=True)

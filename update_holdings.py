@@ -32,56 +32,59 @@ def normalize_portfolio_v2(portfolio: dict) -> dict:
     v1 兼容结构（本脚本各函数所期望的）：
       portfolio.positions / .cash / .trades / .daily_records
 
-    归一化策略：将所有 group 的 positions/cash/trades 合并到顶层。
-    nav_history → daily_records：按日期合并各组 NAV（同一日期求和）。
+    归一化策略（2026-07-22 修正）：
+      只合并 A 组（真实账户）到顶层。B 组是 v3.2 虚拟策略账户（未真正注入资金），
+      若一并合并会让 A 股 NAV 虚高 25 万（用户反馈"A股账户净值 ¥791,051.96 错误"）。
+      A 组 initial_capital=500000 是 v1→v2 迁移时从原 v1 账户继承的真实注资。
+    nav_history → daily_records：直接用 A 组的。
     如果已经是 v1 结构（无 strategy_groups 或 schema_version < 2），直接返回。
     """
     if portfolio.get("schema_version", 1) < 2:
         return portfolio
 
     merged = dict(portfolio)  # 浅拷贝保留顶层字段（cooldown_state, intraday_snapshots 等）
-    all_positions = {}
-    total_cash = 0.0
-    all_trades = []
-
     groups = portfolio.get("strategy_groups", {})
 
-    for group_key, group in groups.items():
-        # 合并持仓（同 code 不应跨组重复，但以防万一用 update）
-        all_positions.update(group.get("positions", {}))
-        total_cash += group.get("cash", 0)
-        all_trades.extend(group.get("trades", []))
+    # 只取 A 组（真实账户）。B 组是虚拟策略账户，不纳入网站展示。
+    # 如果未来 B 组真正启用（有 trades 或 positions），再考虑合并策略。
+    group_a = groups.get("A", {})
+    group_b = groups.get("B", {})
+
+    # 合并 positions/trades：以 A 为主；B 若已有真实持仓则追加
+    all_positions = dict(group_a.get("positions", {}))
+    all_trades = list(group_a.get("trades", []))
+    # B 组有真实交易时才纳入
+    if group_b.get("trades") or group_b.get("positions"):
+        all_positions.update(group_b.get("positions", {}))
+        all_trades.extend(group_b.get("trades", []))
+        total_cash = group_a.get("cash", 0) + group_b.get("cash", 0)
+    else:
+        # B 组未启用：只算 A 组 cash
+        total_cash = group_a.get("cash", 0)
 
     merged["positions"] = all_positions
     merged["cash"] = total_cash
     merged["trades"] = all_trades
 
-    # nav_history → daily_records：按日期合并各组 NAV
-    # 每个日期的 combined nav = Σ(group.nav)
-    # 无 nav_history 的组（如 B 空仓）按 initial_capital 补值
+    # nav_history → daily_records：直接用 A 组的（B 组若有再追加）
     nav_by_date: dict[str, float] = {}
-    nav_records_by_date: dict[str, dict] = {}  # 保留最后一个 group 的完整 record 做模板
+    nav_records_by_date: dict[str, dict] = {}
 
-    for group_key, group in groups.items():
-        initial = group.get("initial_capital", 0)
-        nh = group.get("nav_history", [])
-        if not nh:
+    for rec in group_a.get("nav_history", []):
+        d = rec.get("date")
+        if not d:
             continue
-        for rec in nh:
+        nav_by_date[d] = nav_by_date.get(d, 0) + rec.get("nav", 0)
+        nav_records_by_date[d] = rec
+
+    # B 组若有 nav_history 则合并
+    if group_b.get("nav_history"):
+        for rec in group_b["nav_history"]:
             d = rec.get("date")
             if not d:
                 continue
             nav_by_date[d] = nav_by_date.get(d, 0) + rec.get("nav", 0)
-            nav_records_by_date[d] = rec  # 保留结构做模板
-
-    # 对没有 nav_history 的组，补 initial_capital（空仓组 NAV = cash = initial_capital）
-    for group_key, group in groups.items():
-        nh = group.get("nav_history", [])
-        initial = group.get("initial_capital", 0)
-        if not nh and initial > 0:
-            # 该组无历史，所有日期补 initial_capital
-            for d in nav_by_date:
-                nav_by_date[d] += initial
+            nav_records_by_date[d] = rec
 
     # 构造 daily_records
     daily_records = []
@@ -92,6 +95,9 @@ def normalize_portfolio_v2(portfolio: dict) -> dict:
         daily_records.append(rec)
 
     merged["daily_records"] = daily_records
+
+    # 保留 initial_capital（从 A 组继承）
+    merged["initial_capital"] = group_a.get("initial_capital", 500000)
 
     return merged
 
