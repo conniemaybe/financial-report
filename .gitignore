@@ -1,1 +1,4 @@
 __pycache__/
+*.bak
+*.bak_*
+index.html.bak*
