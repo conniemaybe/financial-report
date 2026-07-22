@@ -143,7 +143,7 @@ tr:hover { background: #1e293b60; }
     <div class="card">
       <div class="label">A股账户净值</div>
       <div class="value">¥541,199.96</div>
-      <div class="change"><span class="up">累计 +¥41,199.96 (+8.24%)</span> · <span class="down">今日 -¥22,852.94 (-4.05%)</span></div>
+      <div class="change"><span class="up">累计 +¥41,199.96 (+8.24%)</span> · <span class="up">今日 +¥539.33 (+0.10%)</span></div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
@@ -153,7 +153,7 @@ tr:hover { background: #1e293b60; }
     <div class="card">
       <div class="label">合并总净值</div>
       <div class="value">¥1,060,018.43</div>
-      <div class="change"><span class="up">累计 +¥60,018.43 (+6.00%)</span></div>
+      <div class="change"><span class="up">累计 +¥60,018.43 (+6.00%)</span> · <span class="up">今日 +¥1,949.40 (+0.18%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -466,9 +466,13 @@ const csiBase = 4713.64;
 const csiIndex = [4713.64, 4801.81, 4748.59, 4722.41, 4798.47, 4891.71, 4908.63, 4955.20, 4945.08, 5042.04, 4919.39, 4943.02, 5020.1, 4906.38, 4926.92, 4979.43, 4958.5, 4857.9, 4842.17, 4842.00, 4792.26, 4755.53, 4876.31, 4780.79, 4749.22, 4796.5, 4739.61, 4698.43, 4529.1, 4598.32, 4739.23, 4717.24];
 const csiNav = csiIndex.map(v => Math.round(1000000 * v / csiBase));
 
-const ndxBase = 2.367;
+// 纳指ETF基准：6/8按均价2.373全仓买入，含手续费250+过户费100，剩余现金
+// 买入份额=421200份（取整100），剩余现金¥142.40
+const ndxBase = 2.373;
 const ndxPrice = [2.367, 2.456, 2.389, 2.367, 2.405, 2.508, 2.543, 2.544, 2.531, 2.562, 2.454, 2.469, 2.5, 2.418, 2.446, 2.481, 2.468, 2.456, 2.445, 2.450, 2.438, 2.405, 2.439, 2.440, 2.436, 2.436, 2.437, 2.435, 2.352, 2.352, 2.396, 2.39];
-const ndxNav = ndxPrice.map(v => Math.round(1000000 * v / ndxBase));
+const ndxShares = 421200;
+const ndxCash = 142.40;
+const ndxNav = ndxPrice.map(v => Math.round(ndxShares * v + ndxCash));
 
 const ctx = document.getElementById('navChart').getContext('2d');
 new Chart(ctx, {
