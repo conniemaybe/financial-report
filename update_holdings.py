@@ -721,10 +721,10 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     )
 
     # === 可用资金卡片（固定两行：标签 + 金额，无任何额外文案）===
-    cash_value = f'<div class="value">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
-    # 移除可能存在的"日报归档"等自发挥 change 行
+    cash_value = f'<div class="value" style="font-size:20px;">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
+    # 兼容 value 带或不带 style 属性
     html = re.sub(
-        r'(A股可用 / 基金可用</div>)\s*<div class="value">[^<]+</div>(\s*<div class="change[^"]*">.*?</div>)?',
+        r'(A股可用 / 基金可用</div>)\s*<div class="value"[^>]*>[^<]+</div>(\s*<div class="change[^"]*">.*?</div>)?',
         rf'\1\n      {cash_value}',
         html, count=1, flags=re.DOTALL,
     )
