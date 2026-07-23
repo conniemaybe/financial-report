@@ -17,6 +17,25 @@ import json
 import re
 from pathlib import Path
 
+
+def sub_assert(pattern, repl, html, *, label="未命名", expected=1, flags=0):
+    """re.sub 的安全包装：必须匹配 expected 个，否则 raise。
+    替代裸 re.sub，杜绝"pattern 不匹配静默返回原 HTML"的隐形 bug。
+    架构审查 P0 #1 修复（2026-07-23）。
+    """
+    if flags:
+        new_html, count = re.subn(pattern, repl, html, count=expected, flags=flags)
+    else:
+        new_html, count = re.subn(pattern, repl, html, count=expected)
+    if count != expected:
+        raise AssertionError(
+            f"[sub_assert] '{label}' 替换失败：期望 {expected} 次，实际 {count} 次\n"
+            f"  pattern: {pattern[:120]}{'...' if len(pattern) > 120 else ''}\n"
+            f"  → HTML 可能结构已变，请人工检查"
+        )
+    return new_html
+
+
 ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
 FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portfolio.json")
 INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
@@ -681,16 +700,19 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         f'<span class="{cls(a_today_pnl)}">今日 {fmt_card_money(a_today_pnl)} ({fmt_card_pct(a_today_pct)})</span>'
         f'</div>'
     )
-    # 移除已存在的脚注（幂等）
-    html = re.sub(
+    # 移除已存在的脚注（幂等：可能匹配 0 或 1 次）
+    _html_before, _cnt = re.subn(
         r'(A股账户净值</div>\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>)\s*<div class="change[^"]*" style="font-size:11px[^"]*">[^<]*</div>',
         r'\1',
         html, count=1, flags=re.DOTALL,
     )
-    html = re.sub(
+    assert _cnt in (0, 1), f"[脚注清理] 意外匹配 {_cnt} 次（应 0 或 1）"
+    html = _html_before
+    # 替换 A股卡片（必须匹配 1 次）
+    html = sub_assert(
         r'(A股账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {a_value}\n      {a_change}',
-        html, count=1, flags=re.DOTALL,
+        html, label="A股账户净值卡片", flags=re.DOTALL,
     )
 
     # === 替换 基金卡片（固定三行）===
@@ -701,10 +723,10 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         f'<span class="{cls(f_today_pnl)}">今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)})</span>'
         f'</div>'
     )
-    html = re.sub(
+    html = sub_assert(
         r'(基金账户净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {f_value}\n      {f_change}',
-        html, count=1, flags=re.DOTALL,
+        html, label="基金账户净值卡片", flags=re.DOTALL,
     )
 
     # === 替换 合并卡片（固定三行）===
@@ -714,19 +736,19 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
         f'<span class="{cls(combined_total_pnl)}">累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})</span>'
         f'</div>'
     )
-    html = re.sub(
+    html = sub_assert(
         r'(合并总净值</div>)\s*<div class="value">[^<]+</div>\s*<div class="change[^"]*">.*?</div>',
         rf'\1\n      {c_value}\n      {c_change}',
-        html, count=1, flags=re.DOTALL,
+        html, label="合并总净值卡片", flags=re.DOTALL,
     )
 
     # === 可用资金卡片（固定两行：标签 + 金额，无任何额外文案）===
     cash_value = f'<div class="value" style="font-size:20px;">¥{a_cash:,.2f} / ¥{f_cash:,.2f}</div>'
     # 兼容 value 带或不带 style 属性
-    html = re.sub(
+    html = sub_assert(
         r'(A股可用 / 基金可用</div>)\s*<div class="value"[^>]*>[^<]+</div>(\s*<div class="change[^"]*">.*?</div>)?',
         rf'\1\n      {cash_value}',
-        html, count=1, flags=re.DOTALL,
+        html, label="可用资金卡片", flags=re.DOTALL,
     )
 
     # 自检输出
@@ -735,28 +757,41 @@ def update_account_cards(astock_pf: dict, fund_pf: dict, html: str) -> str:
     print(f"  基金: NAV ¥{f_nav:,.2f} | 昨日 ¥{f_prev:,.2f} | 今日 {fmt_card_money(f_today_pnl)} ({fmt_card_pct(f_today_pct)}) | 累计 {fmt_card_money(f_total_pnl)} ({fmt_card_pct(f_total_pct)})")
     print(f"  合并: NAV ¥{combined_nav:,.2f} | 累计 {fmt_card_money(combined_total_pnl)} ({fmt_card_pct(combined_total_pct)})")
 
+    # === 渲染后 self-check（架构审查 P0 #2 修复，2026-07-23）===
+    # 校验 HTML 确实包含本次计算值，杜绝"re.sub 静默失败 → 卡片显示旧值"
+    _checks = [
+        (f"¥{a_nav:,.2f}", "A股 NAV 卡片值未渲染"),
+        (f"¥{f_nav:,.2f}", "基金 NAV 卡片值未渲染"),
+        (f"¥{combined_nav:,.2f}", "合并 NAV 卡片值未渲染"),
+        (f"¥{a_cash:,.2f} / ¥{f_cash:,.2f}", "可用资金卡片值未渲染"),
+    ]
+    for expected_str, err_msg in _checks:
+        if expected_str not in html:
+            raise AssertionError(f"[self-check] {err_msg}：HTML 中找不到 '{expected_str}'")
+    print(f"✅ self-check 通过：4 张卡片值均已正确渲染")
+
     return html
 
 
 def update_index(astock_rows: str, fund_rows: str, astock_pf: dict, fund_pf: dict):
     html = INDEX_HTML.read_text(encoding="utf-8")
 
-    html = re.sub(
+    html = sub_assert(
         r"<thead><tr><th class=\"hide-mobile\">代码</th><th>名称</th><th>持仓</th>"
         r"<th class=\"hide-mobile\">成本</th><th>现价</th><th>市值</th>.*?</tr></thead>\s*<tbody>.*?</tbody>",
         f'<thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th>'
         f'<th class="hide-mobile">成本</th><th>现价</th><th>市值</th>'
         f'<th>当日盈亏</th><th>总盈亏</th></tr></thead>\n      <tbody>\n        {astock_rows}\n      </tbody>',
-        html, count=1, flags=re.DOTALL,
+        html, label="A股持仓表", flags=re.DOTALL,
     )
 
-    html = re.sub(
+    html = sub_assert(
         r"<thead><tr><th class=\"hide-mobile\">代码</th><th>名称</th><th class=\"hide-mobile\">类型</th>"
         r"<th>持仓</th><th class=\"hide-mobile\">成本净值</th><th>当前净值</th><th>市值</th>.*?</tr></thead>\s*<tbody>.*?</tbody>",
         f'<thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th>'
         f'<th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th>'
         f'<th>当日盈亏</th><th>总盈亏</th></tr></thead>\n      <tbody>\n        {fund_rows}\n      </tbody>',
-        html, count=1, flags=re.DOTALL,
+        html, label="基金持仓表", flags=re.DOTALL,
     )
 
     # 自动重算账户卡片
