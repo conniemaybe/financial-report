@@ -72,39 +72,36 @@ def css_cls(v: float) -> str:
 
 
 def compute_card_vars(a_pf, f_pf):
-    """计算 4 张卡片需要的所有变量"""
+    """计算 4 张卡片需要的所有变量。
+    当日盈亏口径与 update_holdings.update_account_cards 完全一致：NAV - 昨日NAV。
+    直接复用 update_holdings.get_prev_day_nav，避免口径分裂。
+    """
+    import update_holdings as uh
+
+    a_pf_dict = a_pf.model_dump()
+    f_pf_dict = f_pf.model_dump()
+
     # === A股 ===
     a_nav = a_pf.nav
     a_cash = a_pf.cash
     a_total_pnl = a_nav - INITIAL_CAPITAL
     a_total_pct = a_total_pnl / INITIAL_CAPITAL
-    # 当日盈亏：用 daily_records 反推（这里简化用 0，实际由 update_holdings 算）
-    a_today_pnl = 0
-    a_today_pct = 0
-    # 尝试从 daily_records 取昨日 NAV
-    a_records = getattr(a_pf, '_daily_records', [])  # 可能没有
-    if a_records and len(a_records) >= 2:
-        try:
-            a_prev = a_records[-2].get('nav', a_nav) if isinstance(a_records[-2], dict) else a_nav
-            a_today_pnl = a_nav - a_prev
-            a_today_pct = a_today_pnl / a_prev if a_prev else 0
-        except Exception:
-            pass
+    a_prev = uh.get_prev_day_nav(a_pf_dict)
+    if a_prev is None:
+        a_prev = a_nav  # 无历史记录时今日盈亏=0
+    a_today_pnl = (a_nav - a_prev) if a_prev else 0
+    a_today_pct = (a_today_pnl / a_prev) if a_prev else 0
 
     # === 基金 ===
     f_nav = f_pf.nav
     f_cash = f_pf.cash
     f_total_pnl = f_nav - INITIAL_CAPITAL
     f_total_pct = f_total_pnl / INITIAL_CAPITAL
-    f_today_pnl = 0
-    f_today_pct = 0
-    if hasattr(f_pf, 'daily_records') and f_pf.daily_records and len(f_pf.daily_records) >= 2:
-        try:
-            f_prev = f_pf.daily_records[-2].get('nav', f_nav)
-            f_today_pnl = f_nav - f_prev
-            f_today_pct = f_today_pnl / f_prev if f_prev else 0
-        except Exception:
-            pass
+    f_prev = uh.get_prev_day_nav(f_pf_dict)
+    if f_prev is None:
+        f_prev = f_nav
+    f_today_pnl = (f_nav - f_prev) if f_prev else 0
+    f_today_pct = (f_today_pnl / f_prev) if f_prev else 0
 
     # === 合并 ===
     combined_nav = a_nav + f_nav
