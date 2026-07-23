@@ -14,6 +14,19 @@ MAX_RETRIES=3
 
 cd "$REPO_DIR"
 
+# 0. Token 健康检查（架构审查 #203，2026-07-23 新增）
+#    痛点：token 过期导致 push 401，但等用户发现已经晚了一天
+#    方案：push 前先用 GitHub API 验证 token，失效立即告警+退出
+TOKEN_HEALTH_SCRIPT="C:/Users/conniehe/.workbuddy/astock-simulator/scripts/gh_token_health_check.py"
+if [ -f "$TOKEN_HEALTH_SCRIPT" ] && command -v python &>/dev/null; then
+    echo "🔑 执行 token 健康检查..."
+    if ! python "$TOKEN_HEALTH_SCRIPT"; then
+        echo "❌ Token 健康检查失败，拒绝 push（避免 401 静默失败）"
+        echo "   修复：见告警消息中的步骤，或手动执行 gh_token_health_check.py 查看详情"
+        exit 1
+    fi
+fi
+
 # 1. 暂存所有变更
 git add -A
 
