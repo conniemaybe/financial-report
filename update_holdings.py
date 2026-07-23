@@ -15,7 +15,12 @@
 """
 import json
 import re
+import sys
 from pathlib import Path
+
+# schema v2 兼容工具（架构审查 #202，2026-07-23 从本地提取到共享模块）
+sys.path.insert(0, r"C:\Users\conniehe\.workbuddy\skills\astock-simulator\scripts")
+from schema_v2_compat import normalize_portfolio_v2  # noqa: E402
 
 
 def sub_assert(pattern, repl, html, *, label="未命名", expected=1, flags=0):
@@ -41,84 +46,8 @@ FUND_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\fund_portf
 INDEX_HTML = Path(r"E:\temp\financial-report\index.html")
 
 
-def normalize_portfolio_v2(portfolio: dict) -> dict:
-    """将 schema_version 2 的 strategy_groups 结构归一化为 v1 兼容的扁平结构。
-
-    v2 结构：
-      portfolio.strategy_groups.A.positions / .cash / .trades / .nav_history
-      portfolio.strategy_groups.B.positions / .cash / .trades / .nav_history
-
-    v1 兼容结构（本脚本各函数所期望的）：
-      portfolio.positions / .cash / .trades / .daily_records
-
-    归一化策略（2026-07-22 修正）：
-      只合并 A 组（真实账户）到顶层。B 组是 v3.2 虚拟策略账户（未真正注入资金），
-      若一并合并会让 A 股 NAV 虚高 25 万（用户反馈"A股账户净值 ¥791,051.96 错误"）。
-      A 组 initial_capital=500000 是 v1→v2 迁移时从原 v1 账户继承的真实注资。
-    nav_history → daily_records：直接用 A 组的。
-    如果已经是 v1 结构（无 strategy_groups 或 schema_version < 2），直接返回。
-    """
-    if portfolio.get("schema_version", 1) < 2:
-        return portfolio
-
-    merged = dict(portfolio)  # 浅拷贝保留顶层字段（cooldown_state, intraday_snapshots 等）
-    groups = portfolio.get("strategy_groups", {})
-
-    # 只取 A 组（真实账户）。B 组是虚拟策略账户，不纳入网站展示。
-    # 如果未来 B 组真正启用（有 trades 或 positions），再考虑合并策略。
-    group_a = groups.get("A", {})
-    group_b = groups.get("B", {})
-
-    # 合并 positions/trades：以 A 为主；B 若已有真实持仓则追加
-    all_positions = dict(group_a.get("positions", {}))
-    all_trades = list(group_a.get("trades", []))
-    # B 组有真实交易时才纳入
-    if group_b.get("trades") or group_b.get("positions"):
-        all_positions.update(group_b.get("positions", {}))
-        all_trades.extend(group_b.get("trades", []))
-        total_cash = group_a.get("cash", 0) + group_b.get("cash", 0)
-    else:
-        # B 组未启用：只算 A 组 cash
-        total_cash = group_a.get("cash", 0)
-
-    merged["positions"] = all_positions
-    merged["cash"] = total_cash
-    merged["trades"] = all_trades
-
-    # nav_history → daily_records：直接用 A 组的（B 组若有再追加）
-    nav_by_date: dict[str, float] = {}
-    nav_records_by_date: dict[str, dict] = {}
-
-    for rec in group_a.get("nav_history", []):
-        d = rec.get("date")
-        if not d:
-            continue
-        nav_by_date[d] = nav_by_date.get(d, 0) + rec.get("nav", 0)
-        nav_records_by_date[d] = rec
-
-    # B 组若有 nav_history 则合并
-    if group_b.get("nav_history"):
-        for rec in group_b["nav_history"]:
-            d = rec.get("date")
-            if not d:
-                continue
-            nav_by_date[d] = nav_by_date.get(d, 0) + rec.get("nav", 0)
-            nav_records_by_date[d] = rec
-
-    # 构造 daily_records
-    daily_records = []
-    for d in sorted(nav_by_date.keys()):
-        rec = dict(nav_records_by_date.get(d, {}))
-        rec["date"] = d
-        rec["nav"] = nav_by_date[d]
-        daily_records.append(rec)
-
-    merged["daily_records"] = daily_records
-
-    # 保留 initial_capital（从 A 组继承）
-    merged["initial_capital"] = group_a.get("initial_capital", 500000)
-
-    return merged
+# normalize_portfolio_v2 已提取到 schema_v2_compat.py（2026-07-23 架构审查 #202）
+# 4 个脚本共用同一实现，避免"改一处忘改其他 3 处"的 bug
 
 
 def fmt_money(v: float) -> str:
