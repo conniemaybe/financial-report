@@ -38,11 +38,14 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: center; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
-td { text-align: center; padding: 10px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
+/* 固定行高：用 height + line-height 防止内容多/少导致行高漂移 */
+td { text-align: center; padding: 8px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; height: 40px; line-height: 1.4; }
 td.col-text { text-align: center; }
 tr:hover { background: #1e293b60; }
 .stock-name { font-weight: 600; color: #f8fafc; }
-.stock-code { color: #64748b; font-size: 11px; margin-left: 6px; }
+.stock-code { color: #94a3b8; font-size: 13px; margin-left: 6px; font-variant-numeric: tabular-nums; }
+.reason-cell { color: #94a3b8; max-width: 240px; font-size: 12px; text-align: left; }
+td.hide-mobile { font-size: 13px; color: #cbd5e1; }
 
 /* Pagination */
 .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
@@ -225,26 +228,13 @@ tr:hover { background: #1e293b60; }
     <div class="pagination" id="tradePagination"></div>
   </div>
 
-<script>
-    function switchClearedTab(tab) {
-      document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
-      const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${tab}"]`);
-      if (btn) btn.classList.add('active');
-      document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
-      document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
-    }
-  </script>
 
-
-  <!-- 已清仓标的 — 2026-07-08 新增 -->
+  <!-- 已清仓标的 — 2026-07-08 新增 / 2026-07-23 改造为分页+固定行高 -->
   <div class="section" id="clearedSection">
     <h2>📦 已清仓标的</h2>
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
       <button class="filter-btn active" onclick="switchClearedTab('astock')">A股</button>
       <button class="filter-btn" onclick="switchClearedTab('fund')">基金</button>
-      <span style="margin-left:auto;font-size:12px;color:#64748b;align-self:center;">
-        💡 清仓后收益率 = (现价 - 清仓均价) / 清仓均价，正值表示"卖早了"
-      </span>
     </div>
 
     <div class="table-wrap" id="clearedAstockTable">
@@ -259,17 +249,7 @@ tr:hover { background: #1e293b60; }
           <th class="hide-mobile">成本均价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
-          <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,626.84</td><td class='up'>+13.68%</td><td>¥46.76</td><td>¥41.13</td><td class='down'>-31.10%<br><small>现价格 ¥32.22</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥32,998.49</td><td class='up'>+36.60%</td><td>¥82.11</td><td>¥60.11</td><td class='up'>+7.13%<br><small>现价格 ¥87.96</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,400.88</td><td class='down'>-7.15%</td><td>¥181.88</td><td>¥195.89</td><td class='down'>-29.97%<br><small>现价格 ¥127.38</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,538.81</td><td class='down'>-7.39%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+14.22%<br><small>现价格 ¥27.42</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,909.32</td><td class='down'>-5.60%</td><td>¥64.40</td><td>¥68.21</td><td class='up'>+8.42%<br><small>现价格 ¥69.82</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,399.97</td><td class='down'>-7.66%</td><td>¥84.40</td><td>¥91.40</td><td class='down'>-17.13%<br><small>现价格 ¥69.95</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,116.38</td><td class='up'>+24.27%</td><td>¥103.51</td><td>¥83.36</td><td class='down'>-21.93%<br><small>现价格 ¥80.81</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,818.43</td><td class='down'>-8.09%</td><td>¥144.65</td><td>¥157.38</td><td class='down'>-27.03%<br><small>现价格 ¥105.55</small></td></tr>
-          
-        </tbody>
+        <tbody id="clearedAstockBody"></tbody>
       </table>
     </div>
 
@@ -285,22 +265,82 @@ tr:hover { background: #1e293b60; }
           <th class="hide-mobile">成本净价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
-          <tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">暂无已清仓标的</td></tr>
-          
-        </tbody>
+        <tbody id="clearedFundBody"></tbody>
       </table>
     </div>
+    <div class="pagination" id="clearedPagination"></div>
   </div>
 
   <script>
+    // === 已清仓标的分页（2026-07-23 新增）===
+    const CLEARED_PER_PAGE = 8;
+    let clearedPage = 1;
+    let clearedTab = 'astock';
+
+    const allClearedAstock = [
+      {code:'600460', name:'士兰微', date:'2026-07-22', pnl:'+¥5,626.84', pnlPct:'+13.68%', clearPrice:'¥46.76', costPrice:'¥41.13', after:'-31.10%', afterPrice:'¥32.22', pnlCls:'up', afterCls:'down'},
+      {code:'000977', name:'浪潮信息', date:'2026-07-21', pnl:'+¥32,998.49', pnlPct:'+36.60%', clearPrice:'¥82.11', costPrice:'¥60.11', after:'+7.13%', afterPrice:'¥87.96', pnlCls:'up', afterCls:'up'},
+      {code:'688300', name:'联瑞新材', date:'2026-07-13', pnl:'-¥1,400.88', pnlPct:'-7.15%', clearPrice:'¥181.88', costPrice:'¥195.89', after:'-29.97%', afterPrice:'¥127.38', pnlCls:'down', afterCls:'down'},
+      {code:'600547', name:'山东黄金', date:'2026-07-09', pnl:'-¥1,538.81', pnlPct:'-7.39%', clearPrice:'¥24.01', costPrice:'¥26.02', after:'+14.22%', afterPrice:'¥27.42', pnlCls:'down', afterCls:'up'},
+      {code:'002156', name:'通富微电', date:'2026-07-08', pnl:'-¥1,909.32', pnlPct:'-5.60%', clearPrice:'¥64.40', costPrice:'¥68.21', after:'+8.42%', afterPrice:'¥69.82', pnlCls:'down', afterCls:'up'},
+      {code:'688131', name:'皓元医药', date:'2026-07-08', pnl:'-¥1,399.97', pnlPct:'-7.66%', clearPrice:'¥84.40', costPrice:'¥91.40', after:'-17.13%', afterPrice:'¥69.95', pnlCls:'down', afterCls:'down'},
+      {code:'600584', name:'长电科技', date:'2026-07-02', pnl:'+¥10,116.38', pnlPct:'+24.27%', clearPrice:'¥103.51', costPrice:'¥83.36', after:'-21.93%', afterPrice:'¥80.81', pnlCls:'up', afterCls:'down'},
+      {code:'300408', name:'三环集团', date:'2026-06-24', pnl:'-¥3,818.43', pnlPct:'-8.09%', clearPrice:'¥144.65', costPrice:'¥157.38', after:'-27.03%', afterPrice:'¥105.55', pnlCls:'down', afterCls:'down'}
+    ];
+    const allClearedFund = [];  // 基金暂无清仓
+
     function switchClearedTab(tab) {
+      clearedTab = tab;
+      clearedPage = 1;
       document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
       const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${tab}"]`);
       if (btn) btn.classList.add('active');
       document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
       document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
+      renderCleared();
     }
+
+    function renderCleared() {
+      const data = clearedTab === 'astock' ? allClearedAstock : allClearedFund;
+      const totalPages = Math.max(1, Math.ceil(data.length / CLEARED_PER_PAGE));
+      if (clearedPage > totalPages) clearedPage = totalPages;
+      const start = (clearedPage - 1) * CLEARED_PER_PAGE;
+      const pageData = data.slice(start, start + CLEARED_PER_PAGE);
+      const bodyId = clearedTab === 'astock' ? 'clearedAstockBody' : 'clearedFundBody';
+      const body = document.getElementById(bodyId);
+      if (!data.length) {
+        body.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#64748b;padding:24px;">暂无已清仓标的</td></tr>';
+      } else {
+        body.innerHTML = pageData.map(c =>
+          '<tr><td class="hide-mobile"><span class="stock-code">' + c.code + '</span></td>' +
+          '<td class="col-text"><span class="stock-name">' + c.name + '</span></td>' +
+          '<td>' + c.date + '</td>' +
+          '<td class="' + c.pnlCls + '">' + c.pnl + '</td>' +
+          '<td class="' + c.pnlCls + '">' + c.pnlPct + '</td>' +
+          '<td>' + c.clearPrice + '</td>' +
+          '<td class="hide-mobile">' + c.costPrice + '</td>' +
+          '<td class="' + c.afterCls + '">' + c.after + '<br><small style="color:#64748b;">现价格 ' + c.afterPrice + '</small></td></tr>'
+        ).join('');
+      }
+      const pag = document.getElementById('clearedPagination');
+      if (data.length <= CLEARED_PER_PAGE) {
+        pag.innerHTML = '';
+      } else {
+        pag.innerHTML =
+          '<button onclick="changeClearedPage(-1)" ' + (clearedPage<=1?'disabled':'') + '>◀ 上一页</button>' +
+          '<span class="page-info">' + clearedPage + ' / ' + totalPages + ' 页（共 ' + data.length + ' 条）</span>' +
+          '<button onclick="changeClearedPage(1)" ' + (clearedPage>=totalPages?'disabled':'') + '>下一页 ▶</button>';
+      }
+    }
+
+    function changeClearedPage(delta) {
+      const data = clearedTab === 'astock' ? allClearedAstock : allClearedFund;
+      const totalPages = Math.max(1, Math.ceil(data.length / CLEARED_PER_PAGE));
+      clearedPage = Math.max(1, Math.min(totalPages, clearedPage + delta));
+      renderCleared();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCleared);
   </script>
 
 <div class="section">
@@ -552,11 +592,11 @@ function renderTrades() {
   const start = (tradePage - 1) * TRADE_PER_PAGE;
   const pageTrades = filtered.slice(start, start + TRADE_PER_PAGE);
   document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
-    '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile"><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
+    '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile">' + t.acct + '</td>' +
     '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
     '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name col-text">' + t.name + '</td>' +
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + fmtTradeAmount(t.amount) + '</td>' +
-    '<td class="hide-mobile col-text" style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
+    '<td class="hide-mobile col-text reason-cell">' + t.reason + '</td></tr>'
   ).join('');
 
   // 搜索状态下展示提示
