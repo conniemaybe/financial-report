@@ -143,28 +143,27 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
 
 
 def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
-    """用 NeoData 查询清仓标的的现价，填充 current_price 和 post_clear_pct。
+    """查询清仓标的的现价，填充 current_price 和 post_clear_pct。
 
-    v11.16 修复 #018：原版不传 --token，NeoData 本地凭证失效后全部返回空 →
-    所有清仓标的"清仓后距今"显示"—"。现在统一走 _query_neodata helper，
-    先无 token 查 → TOKEN_MISSING 时用缓存 token 重试。
+    **2026-07-24 永久改造（前复权教训）**：
+    - A股清仓标的 → 走 westock-data `kline --fq bfq`（不复权，真实成交价）
+      原因：NeoData 对股票返回前复权价，分红股（如 600460 士兰微、601336 新华保险等）
+      现价会偏低，"清仓后距今收益率"失真
+    - 基金清仓标的 → 继续走 NeoData（基金通道不带前复权，安全）
     """
-    # 股票
+    # 股票：走 westock-data bfq
     for item in cleared_astock:
         code = item["code"]
-        query = f"{item['name']} {code} 最新价格"
-        out = _query_neodata(query)
-        m = re.search(r"最新价格[:：]\s*([\d.]+)元", out)
-        if m:
-            price = float(m.group(1))
+        price = _westock_bfq_price(code)
+        if price is not None:
             item["current_price"] = price
             if item["avg_sell"] > 0:
                 item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
             print(f"  ✅ {item['name']}({code}) 现价 {price}")
         else:
-            print(f"  ⚠️ {item['name']}({code}) 未解析到价格（NeoData 返回为空或鉴权失败）")
+            print(f"  ⚠️ {item['name']}({code}) 未查到现价")
 
-    # 基金（ETF 走股票接口）
+    # 基金：继续走 NeoData（基金通道不带前复权）
     for item in cleared_fund:
         code = item["code"]
         query = f"{item['name']} {code} 最新净值"
@@ -178,6 +177,68 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
             print(f"  ✅ {item['name']}({code}) 现净值 {price}")
         else:
             print(f"  ⚠️ {item['name']}({code}) 未解析到净值")
+
+
+def _westock_bfq_price(code: str):
+    """用 westock-data kline --fq bfq 查询股票最新收盘价（不复权）。
+
+    列结构：| date | open | last | high | low | volume | amount | exchange |
+    close = `last` 字段（第 3 列）
+
+    Returns: float or None
+    """
+    import time as _t
+
+    # 代码 → westock 前缀
+    if code.startswith(("6", "5", "9", "11", "13")):
+        westock_code = "sh" + code
+    else:
+        westock_code = "sz" + code
+
+    cmd = f"npx -y westock-data-clawhub@1.0.4 kline {westock_code} --period day --limit 1 --fq bfq"
+    for attempt in range(3):
+        try:
+            r = subprocess.run(
+                cmd, capture_output=True, text=True, timeout=60, shell=True,
+            )
+            out = r.stdout or ""
+            if not out or "数据为空" in out or "Error" in out:
+                if attempt < 2:
+                    _t.sleep(3)
+                    continue
+                return None
+            # 解析 markdown 表格第一行数据
+            date_pat = re.compile(r"(20\d{2}-\d{2}-\d{2})")
+            for line in out.strip().split("\n"):
+                m = date_pat.search(line)
+                if not m or "|" not in line:
+                    continue
+                cells = [c.strip() for c in line.split("|")]
+                date_idx = None
+                for i, c in enumerate(cells):
+                    if date_pat.match(c):
+                        date_idx = i
+                        break
+                if date_idx is not None and date_idx + 2 < len(cells):
+                    try:
+                        price = float(cells[date_idx + 2])
+                        if 0.01 < price < 100000:
+                            return price
+                    except ValueError:
+                        continue
+            if attempt < 2:
+                _t.sleep(3)
+        except subprocess.TimeoutExpired:
+            if attempt < 2:
+                _t.sleep(3)
+                continue
+            return None
+        except Exception:
+            if attempt < 2:
+                _t.sleep(3)
+                continue
+            return None
+    return None
 
 
 # ============== 渲染层 ==============
