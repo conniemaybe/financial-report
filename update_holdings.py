@@ -99,32 +99,66 @@ def get_today(portfolio: dict) -> str | None:
 
 
 def get_prev_snapshot(portfolio: dict, code: str) -> dict:
-    """从昨日日报拿该标的的 snapshot。
+    """从昨日日报 / intraday_snapshots / pos.prev_close 拿该标的的昨日收盘价 snapshot。
 
-    v10 修复（2026-07-09）：原逻辑用 today 与 records[-1].date 比对，但 today
-    被错判（见 get_today）会导致 prev_rec 错乱。现在以 records 日期为准：
-    - 找到今日 record 索引，prev_rec = 前一条
-    - 若 records[-1].date != today（今日日报尚未生成），prev_rec = records[-1]
+    v11.5 重写（2026-07-24，单一真值源铁律 + #031）：
+    昨日基准价的权威真值源优先级（**A股与基金统一**）：
+      1. **pos.prev_close**：portfolio.positions[code].prev_close（A股盘中脚本维护，
+         是当前显示当日盈亏的真正基准，与网站首页口径天然对齐）
+      2. **daily_records 当日的前一条**：基金日终定稿，positions_snapshot 里有完整字段
+      3. **intraday_snapshots 昨日最后一个时点**：兜底（在 1/2 都缺失时使用）
+
+    v11.4 旧逻辑的 bug：normalize_portfolio_v2 把 A股 nav_history 转成了 daily_records，
+    导致 get_prev_snapshot 误走 daily_records 分支，取了"当日 nav_history 定稿"
+    （positions_snapshot.price = 7/23 收盘价 65.72）当作"昨日价"，而今日价也是
+    65.72（取自 pos.current_price），结果 prev=today → 当日盈亏=0。
+    根因：daily_records 是"日终定稿"不是"昨日数据"，混用了语义。
     """
+    # === 优先级 1：A股 pos.prev_close（单一真值源，与网站/日报口径一致）===
+    pos = portfolio.get("positions", {}).get(code, {})
+    prev_close = pos.get("prev_close")
+    if prev_close and prev_close > 0:
+        # 包成 snapshot dict 形式，让上层 .get("price") 能读到
+        return {
+            "price": prev_close,
+            "current_price": prev_close,
+            "name": pos.get("name", ""),
+            "shares": pos.get("shares", 0),
+        }
+
+    # === 优先级 2：基金 daily_records（前一交易日）===
     records = portfolio.get("daily_records", [])
-    if not records:
+    if records:
+        today = get_today(portfolio)
+        today_idx = None
+        for i in range(len(records) - 1, -1, -1):
+            if records[i].get("date") == today:
+                today_idx = i
+                break
+        if today_idx is not None and today_idx > 0:
+            prev_rec = records[today_idx - 1]
+        elif today_idx is None:
+            # 今日日报还没生成 → records[-1] 就是昨日
+            prev_rec = records[-1]
+        else:
+            prev_rec = None
+        if prev_rec:
+            snap = prev_rec.get("positions_snapshot", {}).get(code, {})
+            if snap:
+                return snap
+
+    # === 优先级 3：intraday_snapshots 昨日最后一个时点 ===
+    snaps = portfolio.get("intraday_snapshots", [])
+    if not snaps:
         return {}
-    today = get_today(portfolio)
-    # 找今日 record 的索引
-    today_idx = None
-    for i in range(len(records) - 1, -1, -1):
-        if records[i].get("date") == today:
-            today_idx = i
-            break
-    if today_idx is not None and today_idx > 0:
-        prev_rec = records[today_idx - 1]
-    elif today_idx is None:
-        # 今日日报还没生成 → records[-1] 就是昨日
-        prev_rec = records[-1]
-    else:
-        # today_idx == 0，没有更早的 record
+    from datetime import date as _date
+    calendar_today = _date.today().isoformat()
+    prev_day_snaps = [s for s in snaps if s.get("date") != calendar_today]
+    if not prev_day_snaps:
         return {}
-    return prev_rec.get("positions_snapshot", {}).get(code, {})
+    prev_day_snaps.sort(key=lambda s: (s.get("date", ""), s.get("time", "")))
+    last_prev = prev_day_snaps[-1]
+    return last_prev.get("positions", {}).get(code, {})
 
 
 def get_today_sells(portfolio: dict, today: str | None) -> dict:
@@ -557,10 +591,41 @@ def calc_nav(portfolio: dict, price_field_a: str = "current_price", price_field_
 
 
 def get_prev_day_nav(portfolio: dict) -> float | None:
-    """取昨日 NAV：与 get_prev_snapshot 同步逻辑（v10 修复）。
+    """取昨日 NAV：与 get_prev_snapshot 同步逻辑（v11.5 修复，单一真值源铁律）。
 
-    判定：找到今日 record 索引，prev = 前一条；若今日 record 未生成，prev = records[-1]。
+    优先级：
+      1. A股 pos.prev_close 重算法：用每个标的的 prev_close × shares + cash
+         （最权威的昨日 NAV，与持仓表当日盈亏口径一致）
+      2. daily_records 前一交易日的 nav 字段（基金）
+      3. intraday_snapshots 昨日最后时点的 NAV 累加（兜底）
+
+    v11.4 旧逻辑的 bug：A股 daily_records 来自 nav_history 转换，最后一条已是
+    "今日开盘前基准"（用今日 current_price 算的），导致 prev_nav == today_nav
+    → 账户卡片当日盈亏=0。
     """
+    # === 优先级 1：用 pos.prev_close 重算（A股真值源）===
+    positions = portfolio.get("positions", {})
+    has_prev_close = any(p.get("prev_close") for p in positions.values())
+    if has_prev_close:
+        cash = portfolio.get("cash", 0)
+        total_mv = 0
+        for code, p in positions.items():
+            shares = p.get("shares", 0)
+            prev_price = p.get("prev_close")
+            if not prev_price or prev_price <= 0:
+                # 该标的没有 prev_close → 用 avg_cost 兜底（新建仓的标的）
+                prev_price = p.get("avg_cost") or p.get("avg_nav") or 0
+            total_mv += shares * prev_price
+        # 待确认订单的金额不变（资金昨日已扣，今日仍在待确认）
+        pending_value = sum(
+            o.get("invest_amount", 0) for o in portfolio.get("pending_orders", [])
+            if o.get("status") == "pending_confirm"
+        )
+        if pending_value > 0:
+            total_mv += pending_value
+        return cash + total_mv
+
+    # === 优先级 2：基金 daily_records ===
     records = portfolio.get("daily_records", [])
     if not records:
         return None

@@ -43,6 +43,8 @@ td { text-align: center; padding: 8px 12px; border-bottom: 1px solid #1e293b; ve
 td.col-text { text-align: center; }
 td small { font-size: 0.85em; color: #64748b; }
 tr:hover { background: #1e293b60; }
+tr.placeholder-row:hover { background: transparent; }
+tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent; }
 .stock-name { font-weight: 600; color: #f8fafc; }
 .stock-code { color: #94a3b8; font-size: 13px; margin-left: 6px; font-variant-numeric: tabular-nums; }
 .reason-cell { color: #94a3b8; max-width: 240px; font-size: 12px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -143,7 +145,7 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-24 10:00</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-24 10:30</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,7 +153,7 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     <div class="card">
       <div class="label">A股账户净值</div>
       <div class="value">¥541,407.96</div>
-      <div class="change"><span class="up">累计 +¥41,407.96 (+8.28%)</span> · <span class="">今日 +¥0.00 (+0.00%)</span></div>
+      <div class="change"><span class="up">累计 +¥41,407.96 (+8.28%)</span> · <span class="down">今日 -¥279.00 (-0.05%)</span></div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
@@ -181,8 +183,8 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th><th class="hide-mobile">成本</th><th>现价</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
-        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>200 股</td><td class='hide-mobile'>¥59.75</td><td class='up'>¥65.72↑</td><td>¥13,144.00</td><td class=''><span style='color:#64748b'>— 无变化</span></td><td class='up'>+¥2,648.05<br><small>+8.86%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>500 股</td><td class='hide-mobile'>¥38.59</td><td class='up'>¥39.70↑</td><td>¥19,850.00</td><td class=''><span style='color:#64748b'>— 无变化</span></td><td class='up'>+¥68.86<br><small>+0.22%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>200 股</td><td class='hide-mobile'>¥59.75</td><td class='up'>¥65.72↑</td><td>¥13,144.00</td><td class='up'>+¥176.00<br><small>+1.36%</small></td><td class='up'>+¥2,648.05<br><small>+8.86%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>500 股</td><td class='hide-mobile'>¥38.59</td><td class='up'>¥39.70↑</td><td>¥19,850.00</td><td class='down'>-¥455.00<br><small>-2.24%</small></td><td class='up'>+¥68.86<br><small>+0.22%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -203,16 +205,16 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     </table></div>
   </div>
 
-            <!-- 今日盘中决策实录 -->
+              <!-- 今日盘中决策实录 -->
   <div class="section">
     <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-24（周五）</span></h2>
     <div class="decision-timeline" id="decisionLog">
       <div class="decision-node done">
         <div>
-          <div class="d-time">10:00</div>
+          <div class="d-time">10:30</div>
           <div class="d-status">✅ 已完成</div>
         </div>
-        <div class="d-body"><b>卖出优先窗口</b><br>（系统巡查）(): 今日无 pending 策略（冷却期/主线未达标），本轮巡查无操作</div>
+        <div class="d-body"><b>回调低吸窗口</b><br>（系统巡查）(): 今日无 pending 策略（冷却期/主线未达标），本轮巡查无操作</div>
       </div>
     </div>
     <div class="market-banner">📊 07-24 · 盘中策略检查完成</div>
@@ -257,14 +259,14 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
           <th>清仓后距今</th>
         </tr></thead>
         <tbody>
-          <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,637.23</td><td class='up'>+13.71%</td><td>¥46.77</td><td>¥41.13</td><td class='down'>-30.48%<br><small>现价格 ¥32.51</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥33,007.97</td><td class='up'>+36.61%</td><td>¥82.12</td><td>¥60.11</td><td class='up'>+5.95%<br><small>现价格 ¥87.00</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,397.48</td><td class='down'>-7.13%</td><td>¥181.90</td><td>¥195.87</td><td class='down'>-29.97%<br><small>现价格 ¥127.39</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,517.02</td><td class='down'>-7.29%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+10.63%<br><small>现价格 ¥26.56</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,900.04</td><td class='down'>-5.57%</td><td>¥64.40</td><td>¥68.20</td><td class='up'>+15.92%<br><small>现价格 ¥74.66</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,396.80</td><td class='down'>-7.64%</td><td>¥84.41</td><td>¥91.40</td><td class='down'>-17.23%<br><small>现价格 ¥69.87</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,138.90</td><td class='up'>+24.33%</td><td>¥103.53</td><td>¥83.35</td><td class='down'>-20.70%<br><small>现价格 ¥82.10</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,805.75</td><td class='down'>-8.06%</td><td>¥144.67</td><td>¥157.35</td><td class='down'>-29.17%<br><small>现价格 ¥102.47</small></td></tr>
+          <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,637.23</td><td class='up'>+13.71%</td><td>¥46.77</td><td>¥41.13</td><td class='down'>-32.04%<br><small>现价格 ¥31.78</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥33,007.97</td><td class='up'>+36.61%</td><td>¥82.12</td><td>¥60.11</td><td class='up'>+6.30%<br><small>现价格 ¥87.29</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,397.48</td><td class='down'>-7.13%</td><td>¥181.90</td><td>¥195.87</td><td class='down'>-31.81%<br><small>现价格 ¥124.03</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,517.02</td><td class='down'>-7.29%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+10.84%<br><small>现价格 ¥26.61</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,900.04</td><td class='down'>-5.57%</td><td>¥64.40</td><td>¥68.20</td><td class='up'>+15.52%<br><small>现价格 ¥74.40</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,396.80</td><td class='down'>-7.64%</td><td>¥84.41</td><td>¥91.40</td><td class='down'>-18.52%<br><small>现价格 ¥68.78</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,138.90</td><td class='up'>+24.33%</td><td>¥103.53</td><td>¥83.35</td><td class='down'>-20.88%<br><small>现价格 ¥81.91</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,805.75</td><td class='down'>-8.06%</td><td>¥144.67</td><td>¥157.35</td><td class='down'>-30.17%<br><small>现价格 ¥101.02</small></td></tr>
           
         </tbody>
       </table>
@@ -549,7 +551,7 @@ function renderTrades() {
   if (tradePage > totalTradePagesDyn) tradePage = totalTradePagesDyn;
   const start = (tradePage - 1) * TRADE_PER_PAGE;
   const pageTrades = filtered.slice(start, start + TRADE_PER_PAGE);
-  document.getElementById('tradeBody').innerHTML = pageTrades.map(t => {
+  let rowsHtml = pageTrades.map(t => {
     // reason 统一截断到 36 字（防止长 reason 撑高行高），title 属性保留全文
     const reasonFull = t.reason || '';
     const reasonShort = reasonFull.length > 36 ? reasonFull.slice(0, 36) + '…' : reasonFull;
@@ -559,6 +561,12 @@ function renderTrades() {
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + fmtTradeAmount(t.amount) + '</td>' +
     '<td class="hide-mobile col-text reason-cell" title="' + reasonFull.replace(/"/g, '&quot;') + '">' + reasonShort + '</td></tr>';
   }).join('');
+  // 当本页条数不足 TRADE_PER_PAGE 时，补空行占位（防止最后一页高度缩短导致翻页抖动）
+  const cols = 10; // 表格列数
+  for (let i = pageTrades.length; i < TRADE_PER_PAGE; i++) {
+    rowsHtml += '<tr class="placeholder-row"><td colspan="' + cols + '">&nbsp;</td></tr>';
+  }
+  document.getElementById('tradeBody').innerHTML = rowsHtml;
 
   // 搜索状态下展示提示
   const hint = document.getElementById('tradeSearchHint');
