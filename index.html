@@ -39,12 +39,13 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: center; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
 /* 固定行高：用 height + line-height 防止内容多/少导致行高漂移 */
-td { text-align: center; padding: 8px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; height: 40px; line-height: 1.4; }
+td { text-align: center; padding: 8px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; height: 40px; line-height: 1.4; white-space: nowrap; }
 td.col-text { text-align: center; }
+td small { font-size: 0.85em; color: #64748b; }
 tr:hover { background: #1e293b60; }
 .stock-name { font-weight: 600; color: #f8fafc; }
 .stock-code { color: #94a3b8; font-size: 13px; margin-left: 6px; font-variant-numeric: tabular-nums; }
-.reason-cell { color: #94a3b8; max-width: 240px; font-size: 12px; text-align: left; }
+.reason-cell { color: #94a3b8; max-width: 240px; font-size: 12px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 td.hide-mobile { font-size: 13px; color: #cbd5e1; }
 
 /* Pagination */
@@ -551,13 +552,16 @@ function renderTrades() {
   if (tradePage > totalTradePagesDyn) tradePage = totalTradePagesDyn;
   const start = (tradePage - 1) * TRADE_PER_PAGE;
   const pageTrades = filtered.slice(start, start + TRADE_PER_PAGE);
-  document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
-    '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile">' + t.acct + '</td>' +
+  document.getElementById('tradeBody').innerHTML = pageTrades.map(t => {
+    // reason 统一截断到 36 字（防止长 reason 撑高行高），title 属性保留全文
+    const reasonFull = t.reason || '';
+    const reasonShort = reasonFull.length > 36 ? reasonFull.slice(0, 36) + '…' : reasonFull;
+    return '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile">' + t.acct + '</td>' +
     '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
     '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name col-text">' + t.name + '</td>' +
     '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + fmtTradeAmount(t.amount) + '</td>' +
-    '<td class="hide-mobile col-text reason-cell">' + t.reason + '</td></tr>'
-  ).join('');
+    '<td class="hide-mobile col-text reason-cell" title="' + reasonFull.replace(/"/g, '&quot;') + '">' + reasonShort + '</td></tr>';
+  }).join('');
 
   // 搜索状态下展示提示
   const hint = document.getElementById('tradeSearchHint');
@@ -669,147 +673,112 @@ renderReports();
 
 
 
-<!-- === 今日盘中决策实录数据（由 inject_intraday_to_site.py 生成）=== -->
+
+
+
+
+
+
+<!-- === 今日盘中决策实录数据（v2，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-07-23，由 inject_intraday_to_site.py 生成）===
-const INTRADAY_DATA = {"date": "2026-07-23", "astock": {"10:30": {"date": "2026-07-23", "time": "10:30", "timestamp": "2026-07-23T10:25:15", "positions": {"601336": {"name": "新华保险", "shares": 200, "avg_cost": 57.73059739999999, "current_price": 65.68, "market_value": 13136.000000000002, "pnl": 1589.8805200000027, "pnl_pct": 0.13769825634958724, "daily_pnl": 70.0000000000017, "daily_pnl_pct": 0.0053574161947039425}, "002714": {"name": "牧原股份", "shares": 500, "avg_cost": 38.589645, "current_price": 39.18, "market_value": 19590.0, "pnl": 295.1775000000012, "pnl_pct": 0.015298274964695904, "daily_pnl": -129.999999999999, "daily_pnl_pct": -0.0065922920892494425}}}, "13:30": {"date": "2026-07-23", "time": "13:30", "timestamp": "2026-07-23T13:28:44", "positions": {"601336": {"name": "新华保险", "shares": 200, "avg_cost": 57.73059739999999, "current_price": 65.52, "market_value": 13104.0, "pnl": 1557.8805200000006, "pnl_pct": 0.13492676242425308, "daily_pnl": 37.999999999999545, "daily_pnl_pct": 0.002908311648553463}, "002714": {"name": "牧原股份", "shares": 500, "avg_cost": 38.589645, "current_price": 39.94, "market_value": 19970.0, "pnl": 675.1775000000002, "pnl_pct": 0.03499267743976397, "daily_pnl": 250.0, "daily_pnl_pct": 0.012677484787018257}}}, "14:45": {"date": "2026-07-23", "time": "14:45", "timestamp": "2026-07-23T14:42:56", "positions": {"601336": {"name": "新华保险", "shares": 200, "avg_cost": 57.73059739999999, "current_price": 65.57, "market_value": 13113.999999999998, "pnl": 1567.88052, "pnl_pct": 0.13579285427591992, "daily_pnl": 47.99999999999898, "daily_pnl_pct": 0.0036736568192253924}, "002714": {"name": "牧原股份", "shares": 500, "avg_cost": 38.589645, "current_price": 39.74, "market_value": 19870.0, "pnl": 575.1775000000023, "pnl_pct": 0.029809939946325102, "daily_pnl": 150.00000000000213, "daily_pnl_pct": 0.007606490872211062}}}}, "fund": {"10:30": {"date": "2026-07-23", "time": "10:30", "timestamp": "2026-07-23T10:25:30", "positions": {"510300": {"name": "沪深300ETF", "shares": 27000, "avg_nav": 4.7944, "current_nav": 4.772, "market_value": 128844.0, "pnl": -604.8, "pnl_pct": -0.004672117470382153, "daily_pnl": -405.0, "daily_pnl_pct": -0.0031334865260078714, "fund_type": "A股宽基"}, "588000": {"name": "科创50ETF", "shares": 8600, "avg_nav": 1.7386, "current_nav": 1.9615, "market_value": 16868.9, "pnl": 1916.94, "pnl_pct": 0.1282066030139193, "daily_pnl": -468.7, "daily_pnl_pct": -0.027033730158730156, "fund_type": "A股行业"}, "512480": {"name": "半导体ETF", "shares": 24200, "avg_nav": 1.2388, "current_nav": 1.1541, "market_value": 27929.22, "pnl": -2049.74, "pnl_pct": -0.06837261866322247, "daily_pnl": 244.42, "daily_pnl_pct": 0.008828671328671328, "fund_type": "A股行业"}, "518880": {"name": "黄金ETF", "shares": 5800, "avg_nav": 8.4631, "current_nav": 8.5596, "market_value": 49645.68, "pnl": 559.7, "pnl_pct": 0.011402441185853755, "daily_pnl": 531.28, "daily_pnl_pct": 0.010817194142654663, "fund_type": "黄金"}, "161017": {"name": "富国中证500增强", "shares": 8218.11, "avg_nav": 2.43, "current_nav": 2.489, "market_value": 20454.88, "pnl": 484.87, "pnl_pct": 0.024279835390946386, "daily_pnl": 788.94, "daily_pnl_pct": 0.04011700793982453, "fund_type": "量化增强"}, "000478": {"name": "建信中证500增强", "shares": 5956.22, "avg_nav": 3.3528, "current_nav": 3.4327, "market_value": 20445.92, "pnl": 475.9, "pnl_pct": 0.023830827964686326, "daily_pnl": 774.9, "daily_pnl_pct": 0.03939320535335799, "fund_type": "量化增强"}}}, "13:30": {"date": "2026-07-23", "time": "13:30", "timestamp": "2026-07-23T13:29:01", "positions": {"510300": {"name": "沪深300ETF", "shares": 27000, "avg_nav": 4.7944, "current_nav": 4.772, "market_value": 128844.0, "pnl": -604.8, "pnl_pct": -0.004672117470382153, "daily_pnl": 189.0, "daily_pnl_pct": 0.0014690451206716814, "fund_type": "A股宽基"}, "588000": {"name": "科创50ETF", "shares": 8600, "avg_nav": 1.7386, "current_nav": 1.9615, "market_value": 16868.9, "pnl": 1916.94, "pnl_pct": 0.1282066030139193, "daily_pnl": 55.9, "daily_pnl_pct": 0.003324808184143197, "fund_type": "A股行业"}, "512480": {"name": "半导体ETF", "shares": 24200, "avg_nav": 1.2388, "current_nav": 1.1541, "market_value": 27929.22, "pnl": -2049.74, "pnl_pct": -0.06837261866322247, "daily_pnl": 50.82, "daily_pnl_pct": 0.0018229166666666589, "fund_type": "A股行业"}, "518880": {"name": "黄金ETF", "shares": 5800, "avg_nav": 8.4631, "current_nav": 8.5596, "market_value": 49645.68, "pnl": 559.7, "pnl_pct": 0.011402441185853755, "daily_pnl": -2.32, "daily_pnl_pct": -4.6728971962715435e-05, "fund_type": "黄金"}, "161017": {"name": "富国中证500增强", "shares": 8218.11, "avg_nav": 2.43, "current_nav": 2.489, "market_value": 20454.88, "pnl": 484.87, "pnl_pct": 0.024279835390946386, "daily_pnl": -164.36, "daily_pnl_pct": -0.00797130330809088, "fund_type": "量化增强"}, "000478": {"name": "建信中证500增强", "shares": 5956.22, "avg_nav": 3.3528, "current_nav": 3.4327, "market_value": 20445.92, "pnl": 475.9, "pnl_pct": 0.023830827964686326, "daily_pnl": -73.26, "daily_pnl_pct": -0.003570391872278594, "fund_type": "量化增强"}}}, "14:45": {"date": "2026-07-23", "time": "14:45", "timestamp": "2026-07-23T14:43:15", "positions": {"510300": {"name": "沪深300ETF", "shares": 27000, "avg_nav": 4.7944, "current_nav": 4.772, "market_value": 128844.0, "pnl": -604.8, "pnl_pct": -0.004672117470382153, "daily_pnl": 189.0, "daily_pnl_pct": 0.0014690451206716814, "fund_type": "A股宽基"}, "588000": {"name": "科创50ETF", "shares": 8600, "avg_nav": 1.7386, "current_nav": 1.9615, "market_value": 16868.9, "pnl": 1916.94, "pnl_pct": 0.1282066030139193, "daily_pnl": 55.9, "daily_pnl_pct": 0.003324808184143197, "fund_type": "A股行业"}, "512480": {"name": "半导体ETF", "shares": 24200, "avg_nav": 1.2388, "current_nav": 1.1541, "market_value": 27929.22, "pnl": -2049.74, "pnl_pct": -0.06837261866322247, "daily_pnl": 50.82, "daily_pnl_pct": 0.0018229166666666589, "fund_type": "A股行业"}, "518880": {"name": "黄金ETF", "shares": 5800, "avg_nav": 8.4631, "current_nav": 8.5596, "market_value": 49645.68, "pnl": 559.7, "pnl_pct": 0.011402441185853755, "daily_pnl": -2.32, "daily_pnl_pct": -4.6728971962715435e-05, "fund_type": "黄金"}, "161017": {"name": "富国中证500增强", "shares": 8218.11, "avg_nav": 2.43, "current_nav": 2.489, "market_value": 20454.88, "pnl": 484.87, "pnl_pct": 0.024279835390946386, "daily_pnl": -164.36, "daily_pnl_pct": -0.00797130330809088, "fund_type": "量化增强"}, "000478": {"name": "建信中证500增强", "shares": 5956.22, "avg_nav": 3.3528, "current_nav": 3.4327, "market_value": 20445.92, "pnl": 475.9, "pnl_pct": 0.023830827964686326, "daily_pnl": -73.26, "daily_pnl_pct": -0.003570391872278594, "fund_type": "量化增强"}}}}};
+// === 今日盘中决策实录数据（2026-07-24，由 inject_intraday_to_site.py v2 生成）===
+const INTRADAY_DATA = {
+  "date": "2026-07-24",
+  "now": "09:39",
+  "run_times": [],
+  "decision_briefs": {}
+};
 const STANDARD_TIMES = ['10:00', '10:30', '13:30', '14:45'];
 
-function fmtPnl(v) {
-  if (v === null || v === undefined || isNaN(v)) return '<span style="color:#64748b;">-</span>';
-  const cls = v >= 0 ? 'pos' : 'neg';
-  const sign = v >= 0 ? '+' : '';
-  return `<span class="${cls}">${sign}${v.toFixed(2)}</span>`;
-}
-function fmtPct(p) {
-  if (p === null || p === undefined || isNaN(p)) return '';
-  const v = p * 100;
-  const cls = v >= 0 ? 'pos' : 'neg';
-  const sign = v >= 0 ? '+' : '';
-  return ` <span class="${cls}" style="font-size:0.85em;">(${sign}${v.toFixed(2)}%)</span>`;
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+function timeToMinutes(t) {
+  // '10:30' -> 630
+  const parts = t.split(':');
+  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
 }
 
-function renderPositionRow(p, isFund) {
-  const name = p.name || p.code;
-  const code = p.code || '';
-  const price = isFund ? (p.current_nav || 0) : (p.current_price || 0);
-  const priceLabel = isFund ? '净值' : '现价';
-  const shares = p.shares || 0;
-  const dailyPnl = p.daily_pnl || 0;
-  const totalPnl = p.pnl || 0;
-  const dailyPct = fmtPct(p.daily_pnl_pct);
-  const totalPct = fmtPct(p.pnl_pct);
-  return `<div style="padding:4px 0 4px 18px;border-left:2px solid #2a3851;margin-top:4px;font-size:0.92em;">
-    <div style="color:#cbd5e1;">
-      <span style="font-weight:600;color:#e2e8f0;">${name}</span>
-      <span style="color:#64748b;font-size:0.9em;">(${code}) · ${shares.toLocaleString()} 份</span>
-    </div>
-    <div style="color:#94a3b8;font-size:0.88em;margin-top:2px;">
-      ${priceLabel} ¥${price.toFixed(isFund ? 4 : 2)}
-      ｜ 当日 ${fmtPnl(dailyPnl)}${dailyPct}
-      ｜ 累计 ${fmtPnl(totalPnl)}${totalPct}
-    </div>
-  </div>`;
-}
+function renderTimeSlot(t, runTimes, now, briefs) {
+  const run = runTimes.indexOf(t) >= 0;
+  const nowMin = timeToMinutes(now);
+  const slotMin = timeToMinutes(t);
+  const isFuture = slotMin > nowMin;
+  const isToday = INTRADAY_DATA.date === new Date().toISOString().slice(0, 10);
 
-function renderTimeSlot(t, astockSnap, fundSnap) {
-  const hasAstock = !!astockSnap;
-  const hasFund = !!fundSnap;
-  const ts = (astockSnap && astockSnap.timestamp) || (fundSnap && fundSnap.timestamp) || '';
-  if (!hasAstock && !hasFund) {
-    // 未运行
-    return `<div class="decision-node pending">
-      <div>
-        <div class="d-time">${t}</div>
-        <div class="d-status" style="color:#64748b;">⏸️ 未运行或未记录</div>
-      </div>
-      <div class="d-body" style="color:#64748b;">该时点 automation 未触发，或 intraday_snapshots 未写入</div>
-    </div>`;
+  if (run) {
+    // 已运行：展示决策摘要
+    let briefHtml = '';
+    if (briefs && Object.keys(briefs).length > 0) {
+      briefHtml = Object.entries(briefs).map(([k, v]) =>
+        '<div style="padding:5px 0;color:#cbd5e1;font-size:0.92em;">' +
+        '<span style="color:#94a3b8;font-weight:600;">' + k + '：</span>' +
+        '<span>' + v + '</span></div>'
+      ).join('');
+    } else {
+      briefHtml = '<div style="color:#64748b;font-size:0.9em;">今日无 pending 策略，4 项例行检查全部通过</div>';
+    }
+    return '<div class="decision-node done">' +
+      '<div>' +
+        '<div class="d-time">' + t + '</div>' +
+        '<div class="d-status done">✅ 已执行</div>' +
+      '</div>' +
+      '<div class="d-body">' + briefHtml + '</div>' +
+    '</div>';
+  } else if (isToday && isFuture) {
+    // 今日未到时点
+    return '<div class="decision-node pending">' +
+      '<div>' +
+        '<div class="d-time">' + t + '</div>' +
+        '<div class="d-status" style="color:#3b82f6;">⏳ 今日待执行</div>' +
+      '</div>' +
+      '<div class="d-body" style="color:#64748b;">当前 ' + now + '，预计 ' + t + ' 触发盘中 automation</div>' +
+    '</div>';
+  } else {
+    // 应该运行但未运行（今日已过时点但没记录 / 历史日期）
+    return '<div class="decision-node pending">' +
+      '<div>' +
+        '<div class="d-time">' + t + '</div>' +
+        '<div class="d-status" style="color:#f59e0b;">⏸️ 未运行</div>' +
+      '</div>' +
+      '<div class="d-body" style="color:#64748b;">该时点 automation 未触发或未记录</div>' +
+    '</div>';
   }
-
-  // 计算当日合计盈亏
-  let aDaily = 0, fDaily = 0;
-  let aPositions = [], fPositions = [];
-  if (hasAstock) {
-    const ps = astockSnap.positions || {};
-    aPositions = Object.entries(ps).map(([code, p]) => ({...p, code}));
-    aDaily = aPositions.reduce((sum, p) => sum + (p.daily_pnl || 0), 0);
-  }
-  if (hasFund) {
-    const ps = fundSnap.positions || {};
-    fPositions = Object.entries(ps).map(([code, p]) => ({...p, code}));
-    fDaily = fPositions.reduce((sum, p) => sum + (p.daily_pnl || 0), 0);
-  }
-  const totalDaily = aDaily + fDaily;
-  const totalSign = totalDaily >= 0 ? '+' : '';
-  const totalCls = totalDaily >= 0 ? 'pos' : 'neg';
-
-  // 持仓数合计
-  const aCount = aPositions.length;
-  const fCount = fPositions.length;
-  const totalCount = aCount + fCount;
-
-  // 触发动作（简化：暂无 trade 触发，写"无买卖触发"）
-  const action = '无买卖触发';
-
-  let posHtml = '';
-  if (aPositions.length) {
-    posHtml += `<div style="margin-top:6px;font-size:0.85em;color:#94a3b8;font-weight:600;">A股持仓（${aCount}）</div>`;
-    aPositions.forEach(p => { posHtml += renderPositionRow(p, false); });
-  }
-  if (fPositions.length) {
-    posHtml += `<div style="margin-top:6px;font-size:0.85em;color:#94a3b8;font-weight:600;">基金持仓（${fCount}）</div>`;
-    fPositions.forEach(p => { posHtml += renderPositionRow(p, true); });
-  }
-
-  return `<div class="decision-node done">
-    <div>
-      <div class="d-time">${t}</div>
-      <div class="d-status done">✅ 已执行 · ${ts.replace('T', ' ').slice(5, 16)}</div>
-    </div>
-    <div class="d-body">
-      <div style="color:#cbd5e1;">
-        持仓 <strong>${totalCount}</strong> 只（A股 ${aCount} · 基金 ${fCount}）
-        ｜ 当日合计 <span class="${totalCls}"><strong>${totalSign}${totalDaily.toFixed(2)}</strong></span>
-        ｜ ${action}
-      </div>
-      ${posHtml}
-    </div>
-  </div>`;
 }
 
 function renderIntradayLog() {
   const container = document.getElementById('decisionLog');
   if (!container) return;
-  const a = INTRADAY_DATA.astock || {};
-  const f = INTRADAY_DATA.fund || {};
+  const runTimes = INTRADAY_DATA.run_times || [];
+  const now = INTRADAY_DATA.now || '00:00';
+  const briefs = INTRADAY_DATA.decision_briefs || {};
   let html = '';
-  let totalA = 0, totalF = 0, totalAstockCount = 0, totalFundCount = 0;
   STANDARD_TIMES.forEach(t => {
-    const as = a[t], fs = f[t];
-    if (as) {
-      const ps = Object.values(as.positions || {});
-      totalA = ps.reduce((s, p) => s + (p.daily_pnl || 0), 0);
-      totalAstockCount = ps.length;
-    }
-    if (fs) {
-      const ps = Object.values(fs.positions || {});
-      totalF = ps.reduce((s, p) => s + (p.daily_pnl || 0), 0);
-      totalFundCount = ps.length;
-    }
-    html += renderTimeSlot(t, as, fs);
+    html += renderTimeSlot(t, runTimes, now, briefs);
   });
   container.innerHTML = html;
 
-  // 更新 banner
+  // banner
   const banner = document.getElementById('intradayBanner');
   if (banner) {
-    const runTimes = STANDARD_TIMES.filter(t => a[t] || f[t]);
-    const grandTotal = totalA + totalF;
-    const sign = grandTotal >= 0 ? '+' : '';
-    const cls = grandTotal >= 0 ? 'up' : 'down';  // up=红涨（中国习惯），down=绿跌
+    const runCount = runTimes.length;
+    const isToday = INTRADAY_DATA.date === new Date().toISOString().slice(0, 10);
+    let cls = 'pending';
+    let text = '';
+    if (!isToday) {
+      cls = 'pending';
+      text = '📊 历史数据 · ' + INTRADAY_DATA.date.slice(5) + ' · ' + runCount + '/4 时点已记录';
+    } else if (runCount === 0) {
+      cls = 'pending';
+      text = '📊 今日 (' + INTRADAY_DATA.date.slice(5) + ') · 0/4 时点已执行 · 当前 ' + now;
+    } else if (runCount < 4) {
+      cls = 'pending';
+      text = '📊 今日 (' + INTRADAY_DATA.date.slice(5) + ') · ' + runCount + '/4 时点已执行 · 当前 ' + now;
+    } else {
+      cls = 'up';
+      text = '📊 今日 (' + INTRADAY_DATA.date.slice(5) + ') · 4/4 时点全部完成';
+    }
     banner.className = 'market-banner ' + cls;
-    banner.innerHTML = `📊 ${INTRADAY_DATA.date.slice(5)} · ${runTimes.length}/${STANDARD_TIMES.length} 时点已记录 · 当日合计 ${sign}${grandTotal.toFixed(2)}`;
+    banner.innerHTML = text;
   }
 }
 

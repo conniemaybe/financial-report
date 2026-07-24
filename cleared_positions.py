@@ -254,9 +254,6 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
       <button class="filter-btn active" onclick="switchClearedTab('astock')">A股</button>
       <button class="filter-btn" onclick="switchClearedTab('fund')">基金</button>
-      <span style="margin-left:auto;font-size:12px;color:#64748b;align-self:center;">
-        💡 清仓后收益率 = (现价 - 清仓均价) / 清仓均价，正值表示"卖早了"
-      </span>
     </div>
 
     <div class="table-wrap" id="clearedAstockTable">
