@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>推送格式规范样例 · 2026-07-24</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    padding: 20px;
+    line-height: 1.6;
+}
+.container { max-width: 820px; margin: 0 auto; }
+.header {
+    background: linear-gradient(135deg, #1a1f35 0%, #0d1528 100%);
+    border: 1px solid rgba(100, 180, 255, 0.2);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+}
+.header h1 { color: #e8f4ff; font-size: 1.3rem; margin-bottom: 6px; }
+.header .sub { color: #6b87b0; font-size: 0.88rem; }
+.header .meta { color: #8aa5c5; font-size: 0.82rem; margin-top: 8px; }
+
+/* Tab 切换 */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+    background: rgba(255,255,255,0.03);
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.tab-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: #8aa5c5;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.tab-btn:hover { background: rgba(255,255,255,0.04); color: #a0c4f5; }
+.tab-btn.active { background: rgba(74,144,226,0.2); color: #a8c8ff; }
+
+.panel { display: none; }
+.panel.visible { display: block; }
+
+/* 说明区 */
+.spec {
+    background: #161b2e;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
+}
+.spec h2 {
+    color: #a0c4f5;
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.spec h2::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: linear-gradient(180deg, #4a90e2, #7c3aed);
+    border-radius: 2px;
+}
+.spec-grid {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 6px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+.spec-grid .k { color: #6b87b0; }
+.spec-grid .v { color: #d0dce8; }
+.spec-notes {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(255,193,7,0.06);
+    border: 1px solid rgba(255,193,7,0.15);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: #c8b87a;
+    line-height: 1.7;
+}
+
+/* 推送卡片预览（手机样式） */
+.phone-frame {
+    max-width: 420px;
+    margin: 0 auto;
+    background: #1c2236;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.phone-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.phone-header .title { font-size: 0.95rem; font-weight: 600; color: #e8f4ff; }
+.phone-header .time { font-size: 0.74rem; color: #6b87b0; }
+.phone-body {
+    padding: 18px;
+    font-size: 0.86rem;
+    color: #d0dce8;
+    line-height: 1.75;
+}
+.phone-body h3 {
+    color: #a8c8ff;
+    font-size: 0.92rem;
+    margin: 14px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.phone-body h3:first-child { margin-top: 0; }
+.phone-body .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+}
+.phone-body .row .k { color: #8aa5c5; }
+.phone-body .row .v { color: #e8f4ff; font-weight: 600; }
+.phone-body .pos { color: #ef5350; }
+.phone-body .neg { color: #26a69a; }
+.phone-body .neu { color: #8aa5c5; }
+.phone-body .tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-left: 4px;
+}
+.phone-body .tag-red { background: rgba(239,83,80,0.15); color: #ef5350; }
+.phone-body .tag-blue { background: rgba(66,165,245,0.15); color: #42a5f5; }
+.phone-body ul { padding-left: 18px; margin: 6px 0; }
+.phone-body li { margin: 2px 0; }
+.phone-body .alert-box {
+    margin: 10px 0;
+    padding: 10px 12px;
+    background: rgba(255,180,60,0.08);
+    border: 1px solid rgba(255,180,60,0.2);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: #ffb43c;
+}
+.phone-body .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 14px 0;
+}
+.phone-body .section-label {
+    font-size: 0.78rem;
+    color: #6b87b0;
+    margin: 10px 0 6px;
+    letter-spacing: 0.5px;
+}
+
+.raw-markdown {
+    margin-top: 16px;
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'SF Mono', Consolas, Monaco, monospace;
+    font-size: 0.78rem;
+    color: #b0c4de;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+}
+.raw-markdown::before {
+    content: '📝 实际推送的 Markdown 源码';
+    display: block;
+    color: #6b87b0;
+    font-size: 0.72rem;
+    margin-bottom: 8px;
+    font-family: -apple-system, sans-serif;
+}
+
+/* 网站决策实录 */
+.timeline { display: flex; flex-direction: column; gap: 12px; }
+.tl-card {
+    background: #161b2e;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid #4a90e2;
+    border-radius: 8px;
+    padding: 14px 18px;
+}
+.tl-card .tl-time {
+    color: #a8c8ff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+.tl-card .tl-content { color: #b0c4de; font-size: 0.85rem; line-height: 1.7; }
+.tl-card .tl-status {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-left: 6px;
+}
+.tl-card .tl-status.ok { background: rgba(38,166,154,0.15); color: #26a69a; }
+.tl-card .tl-status.skip { background: rgba(120,144,156,0.15); color: #78909c; }
+
+.disclaimer {
+    text-align: center;
+    color: #445566;
+    font-size: 0.76rem;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+@media (max-width: 640px) {
+    body { padding: 10px 6px; }
+    .tab-btn { min-width: 100%; font-size: 0.8rem; padding: 8px 10px; }
+    .spec-grid { grid-template-columns: 1fr; gap: 2px; }
+    .spec-grid .k { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+    <h1>📡 推送格式规范样例</h1>
+    <div class="sub">基于 2026-07-24 真实数据 · 晨报/日报本体见同目录「样例_晨报网页样式.html」/「样例_日报网页样式.html」</div>
+    <div class="meta">评估完直接说哪里改，我汇总成规范落代码</div>
+</div>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="showTab('push-morning')">① 推送·晨报卡片</button>
+    <button class="tab-btn" onclick="showTab('push-evening')">② 推送·日报卡片</button>
+    <button class="tab-btn" onclick="showTab('push-trade')">③ 推送·交易提醒</button>
+    <button class="tab-btn" onclick="showTab('web-intraday')">④ 网站决策实录</button>
+</div>
+
+<!-- ========== ① 推送·晨报卡片 ========== -->
+<div id="push-morning" class="panel visible">
+
+<div class="spec">
+    <h2>推送·晨报卡片（A股+基金合并）</h2>
+    <div class="spec-grid">
+        <div class="k">推送时间</div><div class="v">交易日 08:55（开盘前 5 分钟）</div>
+        <div class="k">字数</div><div class="v">~350 字（手机一屏内）</div>
+        <div class="k">渠道</div><div class="v">飞书 / PushPlus（同一条消息）</div>
+        <div class="k">合并规则</div><div class="v">A股+基金合并成 1 条，不再分两条</div>
+        <div class="k">结构</div><div class="v">5 段：①账户总览 ②A股持仓 ③基金持仓 ④今日计划 ⑤风险提示</div>
+    </div>
+    <div class="spec-notes">
+        <strong>设计原则：</strong>晨报卡片只给"开盘前一眼能看完"的信息，详细分析在网页版晨报里。<br>
+        <strong>合并逻辑：</strong>账户总览取合并口径；A股段只列持仓和今日买卖计划；基金段只列持仓和申赎计划；不重复堆字段。
+    </div>
+</div>
+
+<div class="phone-frame">
+    <div class="phone-header">
+        <div class="title">🌅 模拟盘晨报 · 2026-07-24</div>
+        <div class="time">08:55</div>
+    </div>
+    <div class="phone-body">
+
+<h3>📊 账户总览（合并）</h3>
+<div class="row"><span class="k">合并净值</span><span class="v">¥1,058,642.30</span></div>
+<div class="row"><span class="k">累计盈亏</span><span class="v pos">+¥58,642 (+5.87%)</span></div>
+<div class="row"><span class="k">上个交易日</span><span class="v pos">+¥1,313 (+0.12%)</span></div>
+<div class="row"><span class="k">可用现金</span><span class="v">¥763,099.61</span></div>
+
+<div class="divider"></div>
+
+<h3>📈 A股持仓（2 支）</h3>
+<div class="row"><span class="k">新华保险 601336</span><span><span class="tag tag-red">持有</span> 200股 浮盈+13.84%</span></div>
+<div class="row"><span class="k">牧原股份 002714</span><span><span class="tag tag-red">持有</span> 500股 浮盈+2.88%</span></div>
+<div class="row"><span class="k">A股净值</span><span class="v">¥541,407.96 <span class="pos">(+8.28%)</span></span></div>
+
+<div class="divider"></div>
+
+<h3>💰 基金持仓（6 支）</h3>
+<ul>
+<li>沪深300ETF / 科创50ETF / 半导体ETF / 黄金ETF</li>
+<li>富国中证500增强 / 建信中证500增强</li>
+</ul>
+<div class="row"><span class="k">基金净值</span><span class="v">¥517,234.34 <span class="pos">(+3.45%)</span></span></div>
+
+<div class="divider"></div>
+
+<h3>🎯 今日计划</h3>
+<div class="alert-box">
+    ⚠️ 大盘风险判定：<strong>🟡 中性</strong>（隔夜美股-2.15% / A50夜盘-0.60%）<br>
+    A股 BUY 推迟至 14:45 尾盘窗口；基金申购同步推迟观察
+</div>
+<div class="row"><span class="k">A股买卖</span><span class="v neu">无（0 个标的）</span></div>
+<div class="row"><span class="k">基金申赎</span><span class="v neu">无（6 只全部继续持有）</span></div>
+
+<div class="divider"></div>
+
+<h3>🔔 风险提示</h3>
+<ul>
+<li>纳指隔夜-2.15%，科技股重挫，地缘风险升温</li>
+<li>布伦特原油突破 100 美元，通胀压力上升</li>
+</ul>
+
+    </div>
+</div>
+
+<div class="raw-markdown">## 🌅 模拟盘晨报 · 2026-07-24
+
+### 📊 账户总览（合并）
+- 合并净值: **¥1,058,642.30**
+- 累计盈亏: **+¥58,642 (+5.87%)**
+- 上个交易日: **+¥1,313 (+0.12%)**
+- 可用现金: **¥763,099.61**
+
+### 📈 A股持仓（2 支）
+- 新华保险(601336) 持有 200股 浮盈+13.84%
+- 牧原股份(002714) 持有 500股 浮盈+2.88%
+- A股净值: ¥541,407.96 (+8.28%)
+
+### 💰 基金持仓（6 支）
+- 沪深300ETF / 科创50ETF / 半导体ETF / 黄金ETF
+- 富国中证500增强 / 建信中证500增强
+- 基金净值: ¥517,234.34 (+3.45%)
+
+### 🎯 今日计划
+> ⚠️ 大盘风险判定: 🟡 中性
+> A股 BUY 推迟至 14:45 尾盘窗口；基金申购同步推迟观察
+- A股买卖: 无（0 个标的）
+- 基金申赎: 无（6 只全部继续持有）
+
+### 🔔 风险提示
+- 纳指隔夜-2.15%，科技股重挫，地缘风险升温
+- 布伦特原油突破 100 美元，通胀压力上升</div>
+
+</div>
+
+<!-- ========== ② 推送·日报卡片 ========== -->
+<div id="push-evening" class="panel">
+
+<div class="spec">
+    <h2>推送·日报卡片（A股+基金合并）</h2>
+    <div class="spec-grid">
+        <div class="k">推送时间</div><div class="v">交易日 15:30（收盘后）</div>
+        <div class="k">字数</div><div class="v">~400 字（手机一屏内）</div>
+        <div class="k">渠道</div><div class="v">飞书 / PushPlus（同一条消息）</div>
+        <div class="k">合并规则</div><div class="v">A股+基金合并成 1 条</div>
+        <div class="k">结构</div><div class="v">6 段：①当日业绩 ②A股收盘 ③基金收盘 ④今日操作 ⑤盘中决策实录 ⑥策略反思</div>
+    </div>
+    <div class="spec-notes">
+        <strong>与晨报的差异：</strong>日报多了"今日操作"（实际成交了什么）和"盘中决策实录"（4 时点执行情况），晨报没有这两段。<br>
+        <strong>反思段：</strong>只放 1-2 条核心反思，长反思放网页版日报。
+    </div>
+</div>
+
+<div class="phone-frame">
+    <div class="phone-header">
+        <div class="title">📊 模拟盘日报 · 2026-07-24</div>
+        <div class="time">15:30</div>
+    </div>
+    <div class="phone-body">
+
+<h3>📊 当日业绩（合并）</h3>
+<div class="row"><span class="k">合并净值</span><span class="v">¥1,054,847.48</span></div>
+<div class="row"><span class="k">今日盈亏</span><span class="v neg">-¥4,122 (-0.39%)</span></div>
+<div class="row"><span class="k">累计盈亏</span><span class="v pos">+¥54,847 (+5.48%)</span></div>
+
+<div class="divider"></div>
+
+<h3>📈 A股收盘</h3>
+<div class="row"><span class="k">新华保险 601336</span><span class="neg">-3.96% 收63.12</span></div>
+<div class="row"><span class="k">牧原股份 002714</span><span class="neg">-2.57% 收38.68</span></div>
+<div class="row"><span class="k">A股净值</span><span class="v">¥540,377.96 <span class="neg">(-¥1,030 -0.19%)</span></span></div>
+
+<div class="divider"></div>
+
+<h3>💰 基金收盘</h3>
+<div class="row"><span class="k">沪深300ETF</span><span class="neg">-1.80%</span></div>
+<div class="row"><span class="k">科创50ETF</span><span class="neg">-0.16%</span></div>
+<div class="row"><span class="k">半导体ETF</span><span class="pos">+0.63%</span></div>
+<div class="row"><span class="k">黄金ETF</span><span class="neg">-2.04%</span></div>
+<div class="row"><span class="k">基金净值</span><span class="v">¥514,393.52 <span class="neg">(-¥3,092 -0.60%)</span></span></div>
+
+<div class="divider"></div>
+
+<h3>📋 今日操作</h3>
+<div class="row"><span class="k">A股交易</span><span class="v neu">无成交</span></div>
+<div class="row"><span class="k">基金申赎</span><span class="v neu">无成交</span></div>
+
+<div class="divider"></div>
+
+<h3>⏰ 盘中决策实录（4 时点）</h3>
+<div class="row"><span class="k">10:00 / 10:30</span><span><span class="tag tag-blue">已执行</span> 无操作</span></div>
+<div class="row"><span class="k">13:30 / 14:45</span><span><span class="tag tag-blue">已执行</span> 无操作</span></div>
+
+<div class="divider"></div>
+
+<h3>🤔 策略反思</h3>
+<ul>
+<li>三大指数全线大跌（上证-1.61%），持仓随大盘下跌，未触发止损</li>
+<li>大盘风险中性判定有效，BUY 推迟至尾盘避免了追跌</li>
+</ul>
+
+    </div>
+</div>
+
+<div class="raw-markdown">## 📊 模拟盘日报 · 2026-07-24
+
+### 📊 当日业绩（合并）
+- 合并净值: **¥1,054,847.48**
+- 今日盈亏: **-¥4,122 (-0.39%)**
+- 累计盈亏: **+¥54,847 (+5.48%)**
+
+### 📈 A股收盘
+- 新华保险(601336) -3.96% 收63.12
+- 牧原股份(002714) -2.57% 收38.68
+- A股净值: ¥540,377.96 (-¥1,030 -0.19%)
+
+### 💰 基金收盘
+- 沪深300ETF -1.80% | 科创50ETF -0.16%
+- 半导体ETF +0.63% | 黄金ETF -2.04%
+- 基金净值: ¥514,393.52 (-¥3,092 -0.60%)
+
+### 📋 今日操作
+- A股交易: 无成交
+- 基金申赎: 无成交
+
+### ⏰ 盘中决策实录（4 时点）
+- 10:00 / 10:30 — 已执行，无操作
+- 13:30 / 14:45 — 已执行，无操作
+
+### 🤔 策略反思
+- 三大指数全线大跌（上证-1.61%），持仓随大盘下跌，未触发止损
+- 大盘风险中性判定有效，BUY 推迟至尾盘避免了追跌</div>
+
+</div>
+
+<!-- ========== ③ 推送·交易提醒 ========== -->
+<div id="push-trade" class="panel">
+
+<div class="spec">
+    <h2>推送·交易提醒（即时）</h2>
+    <div class="spec-grid">
+        <div class="k">推送时间</div><div class="v">成交后即时（不等收盘）</div>
+        <div class="k">字数</div><div class="v">~80 字（一行看完）</div>
+        <div class="k">渠道</div><div class="v">飞书 / PushPlus</div>
+        <div class="k">触发条件</div><div class="v">实际成交（BUY/SELL/申购/赎回）才推，无成交不推</div>
+        <div class="k">A股+基金</div><div class="v">同一天多笔交易，合并成一条消息（按时间顺序）</div>
+    </div>
+    <div class="spec-notes">
+        <strong>示例说明：</strong>7/24 无交易，下面用 7/23 的历史交易作示例。<br>
+        <strong>合并规则：</strong>同一天 A股+基金的交易，按时间戳排序，合并成 1 条消息推送（避免一天收到 3-4 条）。
+    </div>
+</div>
+
+<div class="phone-frame">
+    <div class="phone-header">
+        <div class="title">🔔 交易提醒 · 2026-07-23</div>
+        <div class="time">14:47</div>
+    </div>
+    <div class="phone-body">
+
+<h3>📋 今日成交（2 笔）</h3>
+<div class="row"><span class="k">14:45 A股</span><span><span class="tag tag-red">BUY</span> 600460 士兰微 300股 @70.66</span></div>
+<div class="row"><span class="k">15:00 基金</span><span><span class="tag tag-blue">申购</span> 161017 富国500增强 ¥10,000</span></div>
+
+<div class="divider"></div>
+
+<div class="row"><span class="k">成交合计</span><span class="v">¥31,198</span></div>
+<div class="row"><span class="k">现金变动</span><span class="v neg">-¥31,198</span></div>
+
+    </div>
+</div>
+
+<div class="raw-markdown">## 🔔 交易提醒 · 2026-07-23
+
+### 📋 今日成交（2 笔）
+- 14:45 [A股 BUY] 600460 士兰微 300股 @70.66 = ¥21,198
+- 15:00 [基金申购] 161017 富国500增强 ¥10,000
+
+**成交合计:** ¥31,198
+**现金变动:** -¥31,198</div>
+
+</div>
+
+<!-- ========== ④ 网站决策实录 ========== -->
+<div id="web-intraday" class="panel">
+
+<div class="spec">
+    <h2>网站首页 · 今日盘中决策实录</h2>
+    <div class="spec-grid">
+        <div class="k">更新时机</div><div class="v">4 个 automation 时点执行后实时写入（10:00 / 10:30 / 13:30 / 14:45）</div>
+        <div class="k">展示形式</div><div class="v">4 张时点卡片 + briefs 文字说明</div>
+        <div class="k">数据源</div><div class="v">portfolio.json → intraday_snapshots + briefs</div>
+        <div class="k">A股/基金</div><div class="v">同一页面上下排列（A股在上，基金在下）</div>
+    </div>
+    <div class="spec-notes">
+        <strong>规则：</strong>每个时点卡片必须显示"已执行"或"未运行"状态，不能空着。<br>
+        <strong>无操作时：</strong>显示"✅ 已执行 · 无操作"，让用户知道 automation 跑了但没触发买卖。
+    </div>
+</div>
+
+<div class="timeline">
+
+<div class="tl-card">
+    <div class="tl-time">⏰ 10:00 开盘观察 <span class="tl-status ok">✅ 已执行</span></div>
+    <div class="tl-content">
+        <strong>A股：</strong>新华保险开65.50（昨收65.72），牧原股份开39.55（昨收39.70），开盘平稳无异常。<br>
+        <strong>基金：</strong>ETF 集合竞价小幅低开，无异常。<br>
+        <strong>操作：</strong>无（未触发任何买卖信号）
+    </div>
+</div>
+
+<div class="tl-card">
+    <div class="tl-time">⏰ 10:30 早盘检查 <span class="tl-status ok">✅ 已执行</span></div>
+    <div class="tl-content">
+        <strong>A股：</strong>新华保险-1.2%，牧原股份-0.8%，跌幅温和。<br>
+        <strong>大盘：</strong>上证-0.45%，深证-0.62%，符合中性预期。<br>
+        <strong>操作：</strong>无
+    </div>
+</div>
+
+<div class="tl-card">
+    <div class="tl-time">⏰ 13:30 午盘检查 <span class="tl-status ok">✅ 已执行</span></div>
+    <div class="tl-content">
+        <strong>A股：</strong>午后跌幅扩大，新华保险-2.8%，牧原股份-1.9%。<br>
+        <strong>大盘：</strong>上证-1.2%，跌幅超预期。<br>
+        <strong>操作：</strong>无（未触发止损线）
+    </div>
+</div>
+
+<div class="tl-card">
+    <div class="tl-time">⏰ 14:45 尾盘决策 <span class="tl-status ok">✅ 已执行</span></div>
+    <div class="tl-content">
+        <strong>A股：</strong>新华保险-3.96%，牧原股份-2.57%，接近收盘。<br>
+        <strong>BUY 窗口：</strong>大盘风险仍为中性，未触发 BUY 信号，无新建仓。<br>
+        <strong>操作：</strong>无
+    </div>
+</div>
+
+</div>
+
+<div class="disclaimer">
+    ⚠️ 以上为 2026-07-24 真实数据模拟 · 评估后告知修改意见 · 晨报/日报网页样式见同目录「样例_晨报网页样式.html」「样例_日报网页样式.html」
+</div>
+
+</div>
+
+</div>
+
+<script>
+function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('visible');
+    event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
