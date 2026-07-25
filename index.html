@@ -83,10 +83,13 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
 .decision-node { display: flex; gap: 14px; padding: 14px; background: #0f172a; border-radius: 10px; border-left: 3px solid #334155; min-height: 0; }
 .decision-node.done { border-left-color: #22c55e; }
 .decision-node.pending { border-left-color: #f59e0b; opacity: 0.6; }
+/* 2026-07-25 alert 态：触发交易时只换左边框颜色为红色（不搞渐变/发光/三角警告，遵守"不要加戏"铁律）*/
+.decision-node.alert { border-left-color: #ef4444; opacity: 1; }
 .decision-node .d-time { min-width: 58px; font-weight: 700; font-size: 15px; color: #f8fafc; }
 .decision-node .d-status { font-size: 11px; font-weight: 600; margin-top: 2px; }
 .decision-node.done .d-status { color: #22c55e; }
 .decision-node.pending .d-status { color: #f59e0b; }
+.decision-node.alert .d-status { color: #ef4444; }
 .decision-node .d-body { flex: 1; font-size: 12px; color: #94a3b8; line-height: 1.7; }
 .decision-node .d-body b { color: #e2e8f0; }
 /* 涨跌色（中国习惯：红涨绿跌）*/
@@ -703,45 +706,52 @@ renderReports();
 
 
 
-<!-- === 今日盘中决策实录数据（v3，由 inject_intraday_to_site.py 生成）=== -->
+
+
+
+
+
+
+<!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-07-24，由 inject_intraday_to_site.py v3 生成）===
+// === 今日盘中决策实录数据（2026-07-25，由 inject_intraday_to_site.py v4 生成）===
+// v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
-  "date": "2026-07-24",
-  "now": "15:31",
+  "date": "2026-07-25",
+  "now": "16:02",
   "logs": [
     {
       "time_slot": "10:00",
-      "logged_at": "2026-07-24T15:29:45",
-      "status": "executed",
-      "summary": "卖出优先窗口。市场低开（沪指-0.64%），未触发止损/止盈，无新 BUY 信号触发。冷却期已退出但档位🟡，BUY 推迟",
+      "logged_at": "2026-07-25T11:12:35",
+      "status": "skipped",
+      "summary": "2026-07-25 周六休市，10:00盘中检查跳过",
       "triggered": [],
-      "reason": ""
+      "reason": "休市（周末）"
     },
     {
       "time_slot": "10:30",
-      "logged_at": "2026-07-24T15:29:45",
-      "status": "executed",
-      "summary": "回调低吸窗口。市场延续低开，未满足 BUY 触发条件（档位仍🟡），无交易",
+      "logged_at": "2026-07-25T11:02:38",
+      "status": "skipped",
+      "summary": "休市（周末），跳过10:30盘中检查",
       "triggered": [],
-      "reason": ""
+      "reason": "休市（2026-07-25周六，上海+深圳交易所均休市）"
     },
     {
       "time_slot": "13:30",
-      "logged_at": "2026-07-24T15:29:45",
-      "status": "executed",
-      "summary": "午后纯买入窗口。档位恢复正常，但今日无明显主线（板块涨幅均<5%），无新 BUY 信号",
+      "logged_at": "2026-07-25T13:27:36",
+      "status": "skipped",
+      "summary": "休市（周六），A股+基金均无交易，盘中检查跳过",
       "triggered": [],
-      "reason": ""
+      "reason": "休市"
     },
     {
       "time_slot": "14:45",
-      "logged_at": "2026-07-24T15:29:45",
-      "status": "executed",
-      "summary": "尾盘最佳买入窗口。市场全天低位震荡，未触发任何 pending 策略，今日无操作",
+      "logged_at": "2026-07-25T14:41:02",
+      "status": "skipped",
+      "summary": "2026-07-25 周六 A股休市，跳过盘中检查",
       "triggered": [],
-      "reason": ""
+      "reason": "休市"
     }
   ],
   "briefs": {
@@ -771,16 +781,23 @@ function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
   if (log) {
     // 有决策日志记录，按 status 渲染
     const status = log.status;
-    let statusIcon, statusText, statusColor, bodyColor;
+    let statusIcon, statusText, statusColor, bodyColor, nodeClass;
+
+    // 2026-07-25 v4：触发交易时用 alert 态（红色左边框），不搞渐变/发光（不要加戏铁律）
+    const hasTriggered = log.triggered && log.triggered.length > 0;
 
     if (status === 'executed') {
-      statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; bodyColor = '#cbd5e1';
+      if (hasTriggered) {
+        statusIcon = '🔔'; statusText = '触发交易'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'alert';
+      } else {
+        statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; bodyColor = '#cbd5e1'; nodeClass = 'done';
+      }
     } else if (status === 'skipped') {
-      statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b'; bodyColor = '#94a3b8';
+      statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b'; bodyColor = '#94a3b8'; nodeClass = 'done';
     } else if (status === 'failed') {
-      statusIcon = '❌'; statusText = '失败'; statusColor = '#ef4444'; bodyColor = '#fca5a5';
+      statusIcon = '❌'; statusText = '失败'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'done';
     } else {
-      statusIcon = '❓'; statusText = status; statusColor = '#94a3b8'; bodyColor = '#94a3b8';
+      statusIcon = '❓'; statusText = status; statusColor = '#94a3b8'; bodyColor = '#94a3b8'; nodeClass = 'done';
     }
 
     // 主体内容
@@ -788,13 +805,28 @@ function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
     if (log.reason) {
       bodyHtml += '<div style="color:#94a3b8;font-size:0.85em;margin-top:4px;">原因：' + log.reason + '</div>';
     }
-    if (log.triggered && log.triggered.length > 0) {
-      bodyHtml += '<div style="margin-top:4px;font-size:0.85em;">触发：' +
-        log.triggered.map(tg => tg.code + ' ' + tg.action + (tg.shares ? ' ' + tg.shares + '股' : '')).join('，') +
-        '</div>';
+    if (hasTriggered) {
+      // 2026-07-25 v4：triggered 渲染补上 name 和 price（名称+代码+价格+操作+数量）
+      bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #ef444433;font-size:0.88em;">';
+      bodyHtml += '<div style="color:#ef4444;font-weight:600;margin-bottom:4px;">🚨 触发交易</div>';
+      log.triggered.forEach(tg => {
+        const code = tg.code || '';
+        const name = tg.name || '';
+        const action = tg.action || '';
+        const shares = tg.shares || '';
+        const price = tg.price;
+        // 渲染：买入 新华保险 601336 @55.00 1000股
+        let line = '<b style="color:#f8fafc;">' + action + '</b> ';
+        if (name) line += '<b style="color:#f8fafc;">' + name + '</b> ';
+        if (code) line += '<span style="color:#94a3b8;">' + code + '</span> ';
+        if (typeof price === 'number') line += '<span style="color:#94a3b8;">@' + price.toFixed(2) + '</span> ';
+        if (shares) line += '<span style="color:#94a3b8;">' + shares + '股</span>';
+        bodyHtml += '<div style="padding:2px 0;">' + line + '</div>';
+      });
+      bodyHtml += '</div>';
     }
     // 已执行且无触发：附加决策摘要
-    if (status === 'executed' && briefs && Object.keys(briefs).length > 0 && (!log.triggered || log.triggered.length === 0)) {
+    if (status === 'executed' && briefs && Object.keys(briefs).length > 0 && (!hasTriggered)) {
       bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #334155;">';
       Object.entries(briefs).forEach(([k, v]) => {
         bodyHtml += '<div style="padding:2px 0;font-size:0.88em;">' +
@@ -804,7 +836,7 @@ function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
       bodyHtml += '</div>';
     }
 
-    return '<div class="decision-node done">' +
+    return '<div class="decision-node ' + nodeClass + '">' +
       '<div>' +
         '<div class="d-time">' + t + '</div>' +
         '<div class="d-status" style="color:' + statusColor + ';">' + statusIcon + ' ' + statusText + '</div>' +
