@@ -21,6 +21,7 @@ from pathlib import Path
 # schema v2 兼容工具（架构审查 #202，2026-07-23 从本地提取到共享模块）
 sys.path.insert(0, r"C:\Users\conniehe\.workbuddy\skills\astock-simulator\scripts")
 from schema_v2_compat import normalize_portfolio_v2  # noqa: E402
+from fund_state import calc_fund_position_pnl_by_trades  # noqa: E402
 
 
 def sub_assert(pattern, repl, html, *, label="未命名", expected=1, flags=0):
@@ -208,10 +209,13 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
         总盈亏 = (current_nav - avg_nav) × shares
     """
     if is_fund:
+        # v8.1 修复（2026-07-27）：基金总盈亏改用流水法（与 fund_state.build_fund_summary v3 对齐），
+        # 避免部分卖出后浮动盈亏公式丢失已实现收益（如 588000 多次止盈后仍应体现全部盈利）。
+        result = calc_fund_position_pnl_by_trades(portfolio, code, current_price)
+        total_pnl = result.get("total_pnl", 0)
+        buy_out = result.get("buy_out", 0)
+        total_pct = total_pnl / buy_out if buy_out > 0 else 0
         avg_cost = pos.get("avg_nav", 0)
-        shares = pos.get("shares", 0)
-        total_pnl = (current_price - avg_cost) * shares
-        total_pct = (current_price - avg_cost) / avg_cost if avg_cost > 0 else 0
         return total_pnl, total_pct, avg_cost
 
     # A股：v9 基于 price/shares + 独立费用字段重算（绕开 amount 字段语义在不同时期不一致的问题）
