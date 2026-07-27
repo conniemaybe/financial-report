@@ -478,6 +478,10 @@ def build_fund_rows(portfolio: dict) -> str:
             portfolio, code, pos, cur_nav, today, today_sells
         )
 
+        # v13（2026-07-27，踩坑#039）：场外基金 T+1 净值，盘中没有当日盈亏
+        # 标记 pending_close_confirm=True 时显示"⏳ 待收盘确认"
+        pending_close = pos.get("pending_close_confirm", False)
+
         ft_raw = pos.get("fund_type", "ETF")
         ft_display = ft_raw if "·" in ft_raw or len(ft_raw) > 6 else f"{ft_raw}·ETF"
 
@@ -486,7 +490,10 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
 
-        if daily_pnl is None:
+        if pending_close:
+            # 场外基金盘中：净值仍是 T-1（上一交易日收盘），当日盈亏待收盘确认
+            daily_cell = "<td class=''><span style='color:#f59e0b'>⏳ 待收盘确认</span></td>"
+        elif daily_pnl is None:
             # v11.19（2026-07-20）：新申购场外基金 T+1 确认当日无净值波动数据，
             # 用更友好的文案告知用户，而不是冷冰冰的"无数据"
             if is_new:
