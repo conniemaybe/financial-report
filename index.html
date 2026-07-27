@@ -713,52 +713,39 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-07-25，由 inject_intraday_to_site.py v4 生成）===
+// === 今日盘中决策实录数据（2026-07-27，由 inject_intraday_to_site.py v4 生成）===
 // v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
-  "date": "2026-07-25",
-  "now": "16:02",
+  "date": "2026-07-27",
+  "now": "09:57",
   "logs": [
     {
+      "time_slot": "08:30",
+      "logged_at": "2026-07-27T08:31:19",
+      "status": "executed",
+      "summary": "晨报automation执行完成：板块预筛9个/0趋势持续，1个确认主线，A股0条pending，基金0条pending，网站同步+推送成功",
+      "triggered": [],
+      "reason": ""
+    },
+    {
       "time_slot": "10:00",
-      "logged_at": "2026-07-25T11:12:35",
-      "status": "skipped",
-      "summary": "2026-07-25 周六休市，10:00盘中检查跳过",
+      "logged_at": "2026-07-27T09:54:10",
+      "status": "executed",
+      "summary": "卖出优先窗口：大盘上证+0.20%深指+0.94%创业板+1.16%，风险档位正常；持仓均未触止损/止盈，0成交。",
       "triggered": [],
-      "reason": "休市（周末）"
-    },
-    {
-      "time_slot": "10:30",
-      "logged_at": "2026-07-25T11:02:38",
-      "status": "skipped",
-      "summary": "休市（周末），跳过10:30盘中检查",
-      "triggered": [],
-      "reason": "休市（2026-07-25周六，上海+深圳交易所均休市）"
-    },
-    {
-      "time_slot": "13:30",
-      "logged_at": "2026-07-25T13:27:36",
-      "status": "skipped",
-      "summary": "休市（周六），A股+基金均无交易，盘中检查跳过",
-      "triggered": [],
-      "reason": "休市"
-    },
-    {
-      "time_slot": "14:45",
-      "logged_at": "2026-07-25T14:41:02",
-      "status": "skipped",
-      "summary": "2026-07-25 周六 A股休市，跳过盘中检查",
-      "triggered": [],
-      "reason": "休市"
+      "reason": ""
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：油服工程(+11.2%)、电网设备(+5.3%)、昨日涨停(+6.6%)",
-    "紫苏叶池": "实验池 7 只 · 今日无信号",
+    "板块主线": "5日强势：地面兵装Ⅱ(+9.6%)、中兵系(+7.7%)、昨日连板(+5.2%)",
+    "紫苏叶池": "实验池 8 只 · 今日无信号",
     "基金检查": "持仓 8 只 · 全部健康"
   },
   "standard_times": [
