@@ -881,9 +881,19 @@ function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
 function renderIntradayLog() {
   const container = document.getElementById('decisionLog');
   if (!container) return;
-  const logs = INTRADAY_DATA.logs || [];
-  const now = INTRADAY_DATA.now || '00:00';
-  const briefs = INTRADAY_DATA.briefs || {};
+  // v5 (2026-07-27)：日期兜底——如果 INTRADAY_DATA.date ≠ 今日，强制清空 logs 并用真实当前时间，
+  // 所有时点按时点 vs 当前时间走"今日待执行/今日未启动"分支，避免显示上一交易日的 stale 数据
+  const todayStr = new Date().toISOString().slice(0, 10);  // YYYY-MM-DD（UTC，但日期足够准确）
+  let logs = INTRADAY_DATA.logs || [];
+  let dataDate = INTRADAY_DATA.date || todayStr;
+  let now = INTRADAY_DATA.now || '00:00';
+  let briefs = INTRADAY_DATA.briefs || {};
+  if (dataDate !== todayStr) {
+    console.warn('[intraday] 数据日期 ' + dataDate + ' ≠ 今日 ' + todayStr + '，触发兜底：清空 logs，用真实时间渲染');
+    logs = [];
+    now = new Date().toTimeString().slice(0, 5);  // HH:MM 本地时间
+    briefs = {};
+  }
   const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '13:30', '14:45'];
   container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
 
