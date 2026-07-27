@@ -190,7 +190,14 @@ tr:hover { background: #1e293b60; }
     </table></div>
   </div>
 
-  {{ decision_section|safe }}
+  <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
+  <div class="section decision-section">
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;"></span></h2>
+    <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
+    <div class="decision-timeline" id="decisionLog">
+      <!-- 由 inject_intraday_to_site.py v5 动态填充 -->
+    </div>
+  </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
   <div class="section">

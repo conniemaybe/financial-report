@@ -177,10 +177,14 @@ def extract_preserved_sections(old_html: str) -> dict:
     else:
         raise AssertionError("[extract] 找不到 chart 段")
 
-    # decision_section: 提取今日盘中决策实录整个 div
-    m = re.search(r'(\s*<!-- 今日盘中决策实录.*?</div>\s*</div>\s*</div>)', old_html, re.DOTALL)
-    if m:
-        preserved['decision_section'] = m.group(1).strip()
+    # decision_section: 已废弃（v2，2026-07-27，踩坑#040）
+    # 之前从旧 HTML 提取静态 decision_section 是 bug 源头：
+    #   - inject 写完本地后，下一次 render_index 会把 inject 后的"快照"作为保留段
+    #   - 后续 inject 用正则匹配不到（HTML 结构变了），无法清空 decisionLog div
+    #   - 结果：线上永远显示某一次 inject 的静态快照（典型表现：只显示 13:30 这一条）
+    # 现在：模板内置空 decisionLog div，由 inject_intraday_to_site.py 每次动态填充
+    # 这里保留字段是为了不破坏下游 template.render 调用
+    preserved['decision_section'] = ''  # 留空：模板已内置 decision section 骨架
 
     # cleared_section: 提取已清仓标的整个 div（含 switchClearedTab script）
     m = re.search(r'(<!-- 已清仓标的.*?</script>)', old_html, re.DOTALL)
@@ -260,6 +264,15 @@ def render_index(check_only: bool = False) -> str:
     else:
         INDEX_HTML.write_text(new_html, encoding="utf-8")
         print(f"💾 已写入 {INDEX_HTML}")
+        # v2（2026-07-27，踩坑#040）：render_index 后必须立即调 inject_intraday_to_site.py
+        # 否则模板渲染出来的 decisionLog 是空 div，没数据。inject 会重新填充 + push。
+        print("💉 立即调用 inject_intraday_to_site.py 填充决策实录数据...")
+        import subprocess as _sp
+        INJECT = SCRIPTS_DIR / "inject_intraday_to_site.py"
+        try:
+            _sp.run(["python", str(INJECT), "--no-push"], check=False, cwd=str(FIN_REPORT_DIR))
+        except Exception as _e:
+            print(f"  ⚠️ inject 调用异常（不阻断）: {_e}")
 
     return new_html
 
