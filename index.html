@@ -719,6 +719,12 @@ renderReports();
 
 
 
+
+
+
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-27，由 inject_intraday_to_site.py v4 生成）===
@@ -726,7 +732,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-27",
-  "now": "10:00",
+  "now": "11:44",
   "logs": [
     {
       "time_slot": "08:30",
@@ -743,11 +749,19 @@ const INTRADAY_DATA = {
       "summary": "卖出优先窗口：大盘上证+0.20%深指+0.94%创业板+1.16%，风险档位正常；持仓均未触止损/止盈，0成交。",
       "triggered": [],
       "reason": ""
+    },
+    {
+      "time_slot": "10:30",
+      "logged_at": "2026-07-27T10:23:16",
+      "status": "executed",
+      "summary": "0笔成交，全部持有。A股2只持仓未触止损；基金6只持仓未触止盈；今日无pending策略；风险复评✅正常。",
+      "triggered": [],
+      "reason": ""
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：地面兵装Ⅱ(+9.6%)、中兵系(+7.7%)、昨日连板(+5.2%)",
+    "板块主线": "5日强势：电子化学品Ⅱ(+10.7%)、电子布(+5.3%)、工程咨询服务Ⅱ(+5.3%)",
     "紫苏叶池": "实验池 8 只 · 今日无信号",
     "基金检查": "持仓 8 只 · 全部健康"
   },
@@ -881,19 +895,9 @@ function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
 function renderIntradayLog() {
   const container = document.getElementById('decisionLog');
   if (!container) return;
-  // v5 (2026-07-27)：日期兜底——如果 INTRADAY_DATA.date ≠ 今日，强制清空 logs 并用真实当前时间，
-  // 所有时点按时点 vs 当前时间走"今日待执行/今日未启动"分支，避免显示上一交易日的 stale 数据
-  const todayStr = new Date().toISOString().slice(0, 10);  // YYYY-MM-DD（UTC，但日期足够准确）
-  let logs = INTRADAY_DATA.logs || [];
-  let dataDate = INTRADAY_DATA.date || todayStr;
-  let now = INTRADAY_DATA.now || '00:00';
-  let briefs = INTRADAY_DATA.briefs || {};
-  if (dataDate !== todayStr) {
-    console.warn('[intraday] 数据日期 ' + dataDate + ' ≠ 今日 ' + todayStr + '，触发兜底：清空 logs，用真实时间渲染');
-    logs = [];
-    now = new Date().toTimeString().slice(0, 5);  // HH:MM 本地时间
-    briefs = {};
-  }
+  const logs = INTRADAY_DATA.logs || [];
+  const now = INTRADAY_DATA.now || '00:00';
+  const briefs = INTRADAY_DATA.briefs || {};
   const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '13:30', '14:45'];
   container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
 
