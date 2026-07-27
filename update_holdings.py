@@ -114,14 +114,18 @@ def get_prev_snapshot(portfolio: dict, code: str) -> dict:
     65.72（取自 pos.current_price），结果 prev=today → 当日盈亏=0。
     根因：daily_records 是"日终定稿"不是"昨日数据"，混用了语义。
     """
-    # === 优先级 1：A股 pos.prev_close（单一真值源，与网站/日报口径一致）===
+    # === 优先级 1：pos.prev_close / prev_close_nav（单一真值源，A股与基金统一）===
+    # v12（2026-07-27，踩坑#037）：基金也加 prev_close_nav 优先级，避免
+    #   基金 T+1 净值发布 + daily_records 还没生成时回退到 records[-1]（其实是
+    #   T-1 数据）当作 prev，导致当日盈亏被算成 0
     pos = portfolio.get("positions", {}).get(code, {})
-    prev_close = pos.get("prev_close")
+    prev_close = pos.get("prev_close") or pos.get("prev_close_nav")
     if prev_close and prev_close > 0:
-        # 包成 snapshot dict 形式，让上层 .get("price") 能读到
+        # 包成 snapshot dict 形式，让上层 .get("price") / .get("current_nav") 都能读到
         return {
             "price": prev_close,
             "current_price": prev_close,
+            "current_nav": prev_close,
             "name": pos.get("name", ""),
             "shares": pos.get("shares", 0),
         }

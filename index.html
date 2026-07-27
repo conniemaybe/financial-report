@@ -38,17 +38,11 @@ body { font-family: -apple-system, 'Microsoft YaHei', sans-serif; background: #0
 
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: center; padding: 10px 12px; color: #64748b; font-weight: 500; border-bottom: 1px solid #334155; font-size: 12px; }
-/* 固定行高：用 height + line-height 防止内容多/少导致行高漂移 */
-td { text-align: center; padding: 8px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; height: 40px; line-height: 1.4; white-space: nowrap; }
+td { text-align: center; padding: 10px 12px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
 td.col-text { text-align: center; }
-td small { font-size: 0.85em; color: #64748b; }
 tr:hover { background: #1e293b60; }
-tr.placeholder-row:hover { background: transparent; }
-tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent; }
 .stock-name { font-weight: 600; color: #f8fafc; }
-.stock-code { color: #94a3b8; font-size: 13px; margin-left: 6px; font-variant-numeric: tabular-nums; }
-.reason-cell { color: #94a3b8; max-width: 240px; font-size: 12px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-td.hide-mobile { font-size: 13px; color: #cbd5e1; }
+.stock-code { color: #64748b; font-size: 11px; margin-left: 6px; }
 
 /* Pagination */
 .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
@@ -83,18 +77,12 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
 .decision-node { display: flex; gap: 14px; padding: 14px; background: #0f172a; border-radius: 10px; border-left: 3px solid #334155; min-height: 0; }
 .decision-node.done { border-left-color: #22c55e; }
 .decision-node.pending { border-left-color: #f59e0b; opacity: 0.6; }
-/* 2026-07-25 alert 态：触发交易时只换左边框颜色为红色（不搞渐变/发光/三角警告，遵守"不要加戏"铁律）*/
-.decision-node.alert { border-left-color: #ef4444; opacity: 1; }
 .decision-node .d-time { min-width: 58px; font-weight: 700; font-size: 15px; color: #f8fafc; }
 .decision-node .d-status { font-size: 11px; font-weight: 600; margin-top: 2px; }
 .decision-node.done .d-status { color: #22c55e; }
 .decision-node.pending .d-status { color: #f59e0b; }
-.decision-node.alert .d-status { color: #ef4444; }
 .decision-node .d-body { flex: 1; font-size: 12px; color: #94a3b8; line-height: 1.7; }
 .decision-node .d-body b { color: #e2e8f0; }
-/* 涨跌色（中国习惯：红涨绿跌）*/
-.pos { color: #ef4444; font-weight: 600; }
-.neg { color: #22c55e; font-weight: 600; }
 .strategy-updated { font-size: 11px; color: #475569; margin-top: 8px; }
 .market-banner { padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-top: 14px; }
 .market-banner.up { background: #ef444416; color: #ef4444; border: 1px solid #ef444430; }
@@ -148,7 +136,7 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-27 10:30</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-27 13:13</div>
   </div>
 
   <!-- Summary Cards -->
@@ -160,13 +148,13 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥513,603.11</div>
-      <div class="change"><span class="up">累计 +¥13,603.11 (+2.72%)</span> · <span class="down">今日 -¥790.41 (-0.15%)</span></div>
+      <div class="value">¥513,349.37</div>
+      <div class="change"><span class="up">累计 +¥13,349.37 (+2.67%)</span> · <span class="up">今日 +¥0.00 (+0.00%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,054,095.06</div>
-      <div class="change"><span class="up">累计 +¥54,095.06 (+5.41%)</span></div>
+      <div class="value">¥1,053,841.32</div>
+      <div class="change"><span class="up">累计 +¥53,841.32 (+5.38%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -198,17 +186,17 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
-        <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股宽基·ETF</td><td>27,000 份</td><td class='hide-mobile'>¥4.7944</td><td class='down'>¥4.7045↓</td><td>¥127,021.50</td><td class='up'>+¥94.50<br><small>+0.07%</small></td><td class='down'>-¥2,427.30<br><small>-1.88%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>588000</span></td><td class='col-text'><span class='stock-name'>科创50ETF</span></td><td class='hide-mobile col-text'>A股行业·ETF</td><td>8,600 份</td><td class='hide-mobile'>¥1.7386</td><td class='up'>¥1.8847↑</td><td>¥16,208.42</td><td class='down'>-¥2.58<br><small>-0.02%</small></td><td class='up'>+¥1,256.46<br><small>+8.40%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>512480</span></td><td class='col-text'><span class='stock-name'>半导体ETF</span></td><td class='hide-mobile col-text'>A股行业·ETF</td><td>24,200 份</td><td class='hide-mobile'>¥1.2388</td><td class='down'>¥1.1130↓</td><td>¥26,934.60</td><td class=''><span style='color:#64748b'>— 无变化</span></td><td class='down'>-¥3,044.36<br><small>-10.15%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>5,800 份</td><td class='hide-mobile'>¥8.4631</td><td class='down'>¥8.4129↓</td><td>¥48,794.82</td><td class='up'>+¥161.82<br><small>+0.33%</small></td><td class='down'>-¥291.16<br><small>-0.59%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股宽基·ETF</td><td>27,000 份</td><td class='hide-mobile'>¥4.7944</td><td class='down'>¥4.7010↓</td><td>¥126,927.00</td><td class='down'>-¥2,322.00<br><small>-1.80%</small></td><td class='down'>-¥2,521.80<br><small>-1.95%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>588000</span></td><td class='col-text'><span class='stock-name'>科创50ETF</span></td><td class='hide-mobile col-text'>A股行业·ETF</td><td>8,600 份</td><td class='hide-mobile'>¥1.7386</td><td class='up'>¥1.8850↑</td><td>¥16,211.00</td><td class='down'>-¥25.80<br><small>-0.16%</small></td><td class='up'>+¥1,259.04<br><small>+8.42%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>512480</span></td><td class='col-text'><span class='stock-name'>半导体ETF</span></td><td class='hide-mobile col-text'>A股行业·ETF</td><td>24,200 份</td><td class='hide-mobile'>¥1.2388</td><td class='down'>¥1.1130↓</td><td>¥26,934.60</td><td class='up'>+¥169.40<br><small>+0.63%</small></td><td class='down'>-¥3,044.36<br><small>-10.15%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>5,800 份</td><td class='hide-mobile'>¥8.4631</td><td class='down'>¥8.3850↓</td><td>¥48,633.00</td><td class='down'>-¥1,015.00<br><small>-2.04%</small></td><td class='down'>-¥452.98<br><small>-0.92%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>8,218 份</td><td class='hide-mobile'>¥2.4300</td><td class='up'>¥2.4330↑</td><td>¥19,994.66</td><td class='down'>-¥525.96<br><small>-2.56%</small></td><td class='up'>+¥24.65<br><small>+0.12%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥3.3517↓</td><td>¥19,963.46</td><td class='down'>-¥518.19<br><small>-2.53%</small></td><td class='down'>-¥6.55<br><small>-0.03%</small></td></tr>
       </tbody>
     </table></div>
   </div>
 
-                                    <!-- 今日盘中决策实录 -->
+  <!-- 今日盘中决策实录 -->
   <div class="section">
     <h2>📋 今日盘中决策实录 <span style="font-size:12px;color:#64748b;font-weight:400;">2026-07-27（周一）</span></h2>
     <div class="decision-timeline" id="decisionLog">
@@ -220,26 +208,16 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
         <div class="d-body"><b>回调低吸窗口</b><br>（系统巡查）(): 今日无 pending 策略（冷却期/主线未达标），本轮巡查无操作</div>
       </div>
     </div>
-    <div class="market-banner">📊 07-27 · 盘中策略检查完成</div>
-  </div>
 
   <!-- Trade History with Pagination — 仅真实数据 -->
   <div class="section">
     <h2>📋 近期交易记录</h2>
-    <div class="trade-toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
-      <input type="text" id="tradeSearch" placeholder="🔍 按代码或名称筛选（如 601336 / 新华保险）"
-             style="flex:1;min-width:240px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;background:#fff;color:#1e293b;"
-             oninput="onTradeSearch()" />
-      <span id="tradeSearchHint" style="font-size:12px;color:#64748b;"></span>
-      <button onclick="clearTradeSearch()" style="padding:6px 12px;border:1px solid #cbd5e1;background:#f8fafc;color:#475569;border-radius:6px;font-size:12px;cursor:pointer;">清除</button>
-    </div>
     <div class="table-wrap"><table>
       <thead><tr><th>日期</th><th class="hide-mobile">时间</th><th class="hide-mobile">账户</th><th>操作</th><th class="hide-mobile">代码</th><th>名称</th><th>价格/净值</th><th>数量</th><th>金额</th><th class="hide-mobile">触发原因</th></tr></thead>
       <tbody id="tradeBody"></tbody>
     </table></div>
     <div class="pagination" id="tradePagination"></div>
   </div>
-
 
   <!-- 已清仓标的 — 2026-07-08 新增 -->
   <div class="section" id="clearedSection">
@@ -305,6 +283,16 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     }
   </script>
 
+  <script>
+    function switchClearedTab(tab) {
+      document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${tab}"]`);
+      if (btn) btn.classList.add('active');
+      document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
+      document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
+    }
+  </script>
+
 <div class="section">
     <h2>📂 历史报告档案</h2>
     <div class="filters" id="reportFilters">
@@ -333,6 +321,8 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
 </div>
 
 <script>
+// ========== REAL TRADE DATA (auto-generated) ==========
+// ========== REAL TRADE DATA (auto-generated) ==========
 // ========== REAL TRADE DATA (auto-generated from portfolio.json + fund_portfolio.json) ==========
 // A股 + 基金 合计 47 笔（按时间倒序，同时刻卖出优先）
 // ⚠️ 本段由 html_report.generate_trade_records_js() 自动生成，请勿手改
@@ -463,6 +453,8 @@ const allReports = [
 // ========== CHART: Portfolio NAV vs 沪深300ETF + 纳指ETF 100万全仓模拟（同轴） ==========
 // ========== CHART: Portfolio NAV vs 沪深300ETF + 纳指ETF 100万全仓模拟（同轴） ==========
 // ========== CHART: Portfolio NAV vs 沪深300ETF + 纳指ETF 100万全仓模拟（同轴） ==========
+// ========== CHART: Portfolio NAV vs 沪深300ETF + 纳指ETF 100万全仓模拟（同轴） ==========
+// ========== CHART: Portfolio NAV vs 沪深300ETF + 纳指ETF 100万全仓模拟（同轴） ==========
 // 沪深300ETF 510300 收盘价 (neodata 来源): 6/8=4.739, 6/9=4.826, 6/10=4.784, 6/11=4.751, 6/12=4.818, 6/15=4.919, 6/16=4.910, 6/17=4.958, 6/18=4.984, 6/22=5.091, 6/23=4.942, 6/24=4.967, 6/25=5.048, 6/26=4.907, 6/29=4.959, 6/30=5.019, 7/1=4.998, 7/2=4.850, 7/3=4.876, 7/6=4.877, 7/7=4.826, 7/8=4.798, 7/9=4.916, 7/10=4.829, 7/13=4.744, 7/14=4.837, 7/15=4.838, 7/16=4.753, 7/17=4.589, 7/20=4.650, 7/21=4.787, 7/22=4.765
 // 纳指ETF 513110 收盘价: 6/8=2.367, 6/9=2.456, 6/10=2.389, 6/11=2.367, 6/12=2.405, 6/15=2.508, 6/16=2.543, 6/17=2.544, 6/18=2.531, 6/22=2.562, 6/23=2.454, 6/24=2.469, 6/25=2.5, 6/26=2.418, 6/29=2.446, 6/30=2.481, 7/1=2.468, 7/2=2.456, 7/3=2.445, 7/6=2.450, 7/7=2.438, 7/8=2.405, 7/9=2.439, 7/10=2.440, 7/13=2.44, 7/14=2.436, 7/15=2.46, 7/16=2.435, 7/17=2.352, 7/20=2.352, 7/21=2.396, 7/22=2.39, 7/23=2.389, 7/24=2.357
 //
@@ -515,83 +507,27 @@ new Chart(ctx, {
 // ========== TRADE PAGINATION ==========
 const TRADE_PER_PAGE = 5;
 let tradePage = 1;
-let tradeSearchKeyword = '';
-
-function getFilteredTrades() {
-  if (!tradeSearchKeyword) return allTrades;
-  const kw = tradeSearchKeyword.toLowerCase();
-  return allTrades.filter(t =>
-    (t.code && String(t.code).toLowerCase().indexOf(kw) >= 0) ||
-    (t.name && t.name.toLowerCase().indexOf(kw) >= 0)
-  );
-}
-
-function onTradeSearch() {
-  const v = document.getElementById('tradeSearch').value.trim();
-  tradeSearchKeyword = v;
-  tradePage = 1;
-  renderTrades();
-}
-
-function clearTradeSearch() {
-  document.getElementById('tradeSearch').value = '';
-  tradeSearchKeyword = '';
-  tradePage = 1;
-  renderTrades();
-}
-
-function fmtTradeAmount(raw) {
-  // 统一展示为含两位小数的金额（兼容字符串/数字）
-  if (raw === null || raw === undefined || raw === '') return '-';
-  let s = String(raw).replace(/[¥,]/g, '').trim();
-  let n = parseFloat(s);
-  if (isNaN(n)) return String(raw);
-  const sign = n < 0 ? '-' : '';
-  return sign + '¥' + Math.abs(n).toLocaleString('zh-CN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-}
+const totalTradePages = Math.ceil(allTrades.length / TRADE_PER_PAGE);
 
 function renderTrades() {
-  const filtered = getFilteredTrades();
-  const totalTradePagesDyn = Math.ceil(filtered.length / TRADE_PER_PAGE) || 1;
-  if (tradePage > totalTradePagesDyn) tradePage = totalTradePagesDyn;
   const start = (tradePage - 1) * TRADE_PER_PAGE;
-  const pageTrades = filtered.slice(start, start + TRADE_PER_PAGE);
-  let rowsHtml = pageTrades.map(t => {
-    // reason 统一截断到 36 字（防止长 reason 撑高行高），title 属性保留全文
-    const reasonFull = t.reason || '';
-    const reasonShort = reasonFull.length > 36 ? reasonFull.slice(0, 36) + '…' : reasonFull;
-    return '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile">' + t.acct + '</td>' +
+  const pageTrades = allTrades.slice(start, start + TRADE_PER_PAGE);
+  document.getElementById('tradeBody').innerHTML = pageTrades.map(t =>
+    '<tr><td>' + t.date + '</td><td class="hide-mobile">' + t.time + '</td><td class="hide-mobile"><span style="font-size:11px;color:#64748b;">' + t.acct + '</span></td>' +
     '<td><span class="' + t.cls + '">' + t.action + '</span></td>' +
     '<td class="stock-code hide-mobile">' + t.code + '</td><td class="stock-name col-text">' + t.name + '</td>' +
-    '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + fmtTradeAmount(t.amount) + '</td>' +
-    '<td class="hide-mobile col-text reason-cell" title="' + reasonFull.replace(/"/g, '&quot;') + '">' + reasonShort + '</td></tr>';
-  }).join('');
-  // 当本页条数不足 TRADE_PER_PAGE 时，补空行占位（防止最后一页高度缩短导致翻页抖动）
-  const cols = 10; // 表格列数
-  for (let i = pageTrades.length; i < TRADE_PER_PAGE; i++) {
-    rowsHtml += '<tr class="placeholder-row"><td colspan="' + cols + '">&nbsp;</td></tr>';
-  }
-  document.getElementById('tradeBody').innerHTML = rowsHtml;
-
-  // 搜索状态下展示提示
-  const hint = document.getElementById('tradeSearchHint');
-  if (tradeSearchKeyword) {
-    hint.textContent = '已筛选 ' + filtered.length + ' / ' + allTrades.length + ' 条';
-    hint.style.color = filtered.length === 0 ? '#dc2626' : '#475569';
-  } else {
-    hint.textContent = '';
-  }
+    '<td>' + t.price + '</td><td>' + t.qty + '</td><td>' + t.amount + '</td>' +
+    '<td class="hide-mobile col-text" style="font-size:11px;color:#94a3b8;max-width:220px;">' + t.reason + '</td></tr>'
+  ).join('');
 
   document.getElementById('tradePagination').innerHTML =
     '<button onclick="changeTradePage(-1)" ' + (tradePage<=1?'disabled':'') + '>◀ 上一页</button>' +
-    '<span class="page-info">' + tradePage + ' / ' + totalTradePagesDyn + ' 页（共 ' + filtered.length + ' 条）</span>' +
-    '<button onclick="changeTradePage(1)" ' + (tradePage>=totalTradePagesDyn?'disabled':'') + '>下一页 ▶</button>';
+    '<span class="page-info">' + tradePage + ' / ' + totalTradePages + ' 页（共 ' + allTrades.length + ' 条）</span>' +
+    '<button onclick="changeTradePage(1)" ' + (tradePage>=totalTradePages?'disabled':'') + '>下一页 ▶</button>';
 }
 
 function changeTradePage(delta) {
-  const filtered = getFilteredTrades();
-  const totalTradePagesDyn = Math.ceil(filtered.length / TRADE_PER_PAGE) || 1;
-  tradePage = Math.max(1, Math.min(totalTradePagesDyn, tradePage + delta));
+  tradePage = Math.max(1, Math.min(totalTradePages, tradePage + delta));
   renderTrades();
 }
 
@@ -676,252 +612,5 @@ function resetReportFilters() {
 renderTrades();
 renderReports();
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
-<script>
-// === 今日盘中决策实录数据（2026-07-27，由 inject_intraday_to_site.py v4 生成）===
-// v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
-// v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
-const INTRADAY_DATA = {
-  "date": "2026-07-27",
-  "now": "11:56",
-  "logs": [
-    {
-      "time_slot": "08:30",
-      "logged_at": "2026-07-27T08:31:19",
-      "status": "executed",
-      "summary": "晨报automation执行完成：板块预筛9个/0趋势持续，1个确认主线，A股0条pending，基金0条pending，网站同步+推送成功",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "10:00",
-      "logged_at": "2026-07-27T09:54:10",
-      "status": "executed",
-      "summary": "卖出优先窗口：大盘上证+0.20%深指+0.94%创业板+1.16%，风险档位正常；持仓均未触止损/止盈，0成交。",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "10:30",
-      "logged_at": "2026-07-27T10:23:16",
-      "status": "executed",
-      "summary": "0笔成交，全部持有。A股2只持仓未触止损；基金6只持仓未触止盈；今日无pending策略；风险复评✅正常。",
-      "triggered": [],
-      "reason": ""
-    }
-  ],
-  "briefs": {
-    "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：电子化学品Ⅱ(+10.7%)、电子布(+5.3%)、工程咨询服务Ⅱ(+5.3%)",
-    "紫苏叶池": "实验池 8 只 · 今日无信号",
-    "基金检查": "持仓 8 只 · 全部健康"
-  },
-  "standard_times": [
-    "10:00",
-    "10:30",
-    "13:30",
-    "14:45"
-  ]
-};
-
-function timeToMinutes(t) {
-  const parts = t.split(':');
-  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-}
-
-function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
-  const nowMin = timeToMinutes(nowStr);
-  const slotMin = timeToMinutes(t);
-  const log = logs.find(l => l.time_slot === t);
-
-  if (log) {
-    // 有决策日志记录，按 status 渲染
-    const status = log.status;
-    let statusIcon, statusText, statusColor, bodyColor, nodeClass;
-
-    // 2026-07-25 v4：触发交易时用 alert 态（红色左边框），不搞渐变/发光（不要加戏铁律）
-    const hasTriggered = log.triggered && log.triggered.length > 0;
-
-    if (status === 'executed') {
-      if (hasTriggered) {
-        statusIcon = '🔔'; statusText = '触发交易'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'alert';
-      } else {
-        statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; bodyColor = '#cbd5e1'; nodeClass = 'done';
-      }
-    } else if (status === 'skipped') {
-      statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b'; bodyColor = '#94a3b8'; nodeClass = 'done';
-    } else if (status === 'failed') {
-      statusIcon = '❌'; statusText = '失败'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'done';
-    } else {
-      statusIcon = '❓'; statusText = status; statusColor = '#94a3b8'; bodyColor = '#94a3b8'; nodeClass = 'done';
-    }
-
-    // 主体内容
-    let bodyHtml = '<div style="color:' + bodyColor + ';font-size:0.95em;">' + (log.summary || '无摘要') + '</div>';
-    if (log.reason) {
-      bodyHtml += '<div style="color:#94a3b8;font-size:0.85em;margin-top:4px;">原因：' + log.reason + '</div>';
-    }
-    if (hasTriggered) {
-      // 2026-07-25 v4：triggered 渲染补上 name 和 price（名称+代码+价格+操作+数量）
-      bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #ef444433;font-size:0.88em;">';
-      bodyHtml += '<div style="color:#ef4444;font-weight:600;margin-bottom:4px;">🚨 触发交易</div>';
-      log.triggered.forEach(tg => {
-        const code = tg.code || '';
-        const name = tg.name || '';
-        const action = tg.action || '';
-        const shares = tg.shares || '';
-        const price = tg.price;
-        // 渲染：买入 新华保险 601336 @55.00 1000股
-        let line = '<b style="color:#f8fafc;">' + action + '</b> ';
-        if (name) line += '<b style="color:#f8fafc;">' + name + '</b> ';
-        if (code) line += '<span style="color:#94a3b8;">' + code + '</span> ';
-        if (typeof price === 'number') line += '<span style="color:#94a3b8;">@' + price.toFixed(2) + '</span> ';
-        if (shares) line += '<span style="color:#94a3b8;">' + shares + '股</span>';
-        bodyHtml += '<div style="padding:2px 0;">' + line + '</div>';
-      });
-      bodyHtml += '</div>';
-    }
-    // 已执行且无触发：附加决策摘要
-    if (status === 'executed' && briefs && Object.keys(briefs).length > 0 && (!hasTriggered)) {
-      bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #334155;">';
-      Object.entries(briefs).forEach(([k, v]) => {
-        bodyHtml += '<div style="padding:2px 0;font-size:0.88em;">' +
-          '<span style="color:#94a3b8;font-weight:600;">' + k + '：</span>' +
-          '<span style="color:#cbd5e1;">' + v + '</span></div>';
-      });
-      bodyHtml += '</div>';
-    }
-
-    return '<div class="decision-node ' + nodeClass + '">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:' + statusColor + ';">' + statusIcon + ' ' + statusText + '</div>' +
-      '</div>' +
-      '<div class="d-body">' + bodyHtml + '</div>' +
-    '</div>';
-  }
-
-  // 无决策日志记录：按时点 vs 当前时间判断
-  const isFuture = slotMin > nowMin;
-  const isRunning = (nowMin >= slotMin) && (nowMin < slotMin + 5);
-  const hasAnyToday = logs.length > 0;
-
-  if (isFuture) {
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#3b82f6;">⏳ 今日待执行</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">当前 ' + nowStr + '，预计 ' + t + ' 触发盘中 automation</div>' +
-    '</div>';
-  } else if (isRunning) {
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#3b82f6;">🔄 运行中</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">automation 触发中，等待决策日志写入</div>' +
-    '</div>';
-  } else if (hasAnyToday) {
-    // 今日有其他时点记录，但这个时点没有 → automation 可能故障
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#f59e0b;">⚠️ 未触发</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">该时点 automation 未触发或未记录决策日志（可能 PENDING_REVIEW 未批准）</div>' +
-    '</div>';
-  } else {
-    // 今日完全无记录
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#f59e0b;">⚠️ 今日未启动</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">今日所有 automation 都未触发，请检查调度配置</div>' +
-    '</div>';
-  }
-}
-
-function renderIntradayLog() {
-  const container = document.getElementById('decisionLog');
-  if (!container) return;
-  const logs = INTRADAY_DATA.logs || [];
-  const now = INTRADAY_DATA.now || '00:00';
-  const briefs = INTRADAY_DATA.briefs || {};
-  const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '13:30', '14:45'];
-  container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
-
-  // banner
-  const banner = document.getElementById('intradayBanner');
-  if (banner) {
-    const runCount = logs.filter(l => l.status === 'executed' || l.status === 'skipped').length;
-    const failedCount = logs.filter(l => l.status === 'failed').length;
-    let text = '📊 今日 (' + INTRADAY_DATA.date.slice(5) + ') · ' + runCount + '/4 时点已记录';
-    if (failedCount > 0) text += ' · ❌ ' + failedCount + ' 个失败';
-    text += ' · 当前 ' + now;
-    banner.className = 'market-banner ' + (failedCount > 0 ? 'down' : (runCount === 4 ? 'up' : 'pending'));
-    banner.innerHTML = text;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', renderIntradayLog);
-</script>
-
 </body>
 </html>
