@@ -156,7 +156,7 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     <div class="card">
       <div class="label">A股账户净值</div>
       <div class="value">¥540,491.95</div>
-      <div class="change"><span class="up">累计 +¥40,491.95 (+8.10%)</span> · <span class="down">今日 -¥992.00 (-0.18%)</span></div>
+      <div class="change"><span class="up">累计 +¥40,491.95 (+8.10%)</span> · <span class="up">今日 +¥38.00 (+0.01%)</span></div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
@@ -186,8 +186,8 @@ td.hide-mobile { font-size: 13px; color: #cbd5e1; }
     <div class="table-wrap"><table>
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th>持仓</th><th class="hide-mobile">成本</th><th>现价</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
-        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>200 股</td><td class='hide-mobile'>¥59.75</td><td class='up'>¥62.71↑</td><td>¥12,542.00</td><td class='down'>-¥602.00<br><small>-4.58%</small></td><td class='up'>+¥2,046.05<br><small>+6.85%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>500 股</td><td class='hide-mobile'>¥38.59</td><td class='up'>¥38.92↑</td><td>¥19,460.00</td><td class='down'>-¥390.00<br><small>-1.96%</small></td><td class='down'>-¥321.14<br><small>-1.04%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>200 股</td><td class='hide-mobile'>¥59.75</td><td class='up'>¥62.71↑</td><td>¥12,542.00</td><td class='down'>-¥82.00<br><small>-0.65%</small></td><td class='up'>+¥2,046.05<br><small>+6.85%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002714</span></td><td class='col-text'><span class='stock-name'>牧原股份</span></td><td>500 股</td><td class='hide-mobile'>¥38.59</td><td class='up'>¥38.92↑</td><td>¥19,460.00</td><td class='up'>+¥120.00<br><small>+0.62%</small></td><td class='down'>-¥321.14<br><small>-1.04%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -728,6 +728,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-27，由 inject_intraday_to_site.py v4 生成）===
@@ -735,7 +738,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-27",
-  "now": "11:47",
+  "now": "11:56",
   "logs": [
     {
       "time_slot": "08:30",
