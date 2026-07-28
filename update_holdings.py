@@ -626,17 +626,20 @@ def get_prev_day_nav(portfolio: dict) -> float | None:
     "今日开盘前基准"（用今日 current_price 算的），导致 prev_nav == today_nav
     → 账户卡片当日盈亏=0。
     """
-    # === 优先级 1：用 pos.prev_close 重算（A股真值源）===
+    # === 优先级 1：用 pos.prev_close / prev_close_nav 重算（A股与基金统一）===
+    # v13（2026-07-28，踩坑#037姊妹坑）：get_prev_snapshot 已修成同时认 prev_close
+    # 和 prev_close_nav，但 get_prev_day_nav 漏了，导致基金永远走优先级2 daily_records，
+    # 被"同日重复记录"坑成 prev_nav==today_nav → 当日盈亏=0。
     positions = portfolio.get("positions", {})
-    has_prev_close = any(p.get("prev_close") for p in positions.values())
+    has_prev_close = any(p.get("prev_close") or p.get("prev_close_nav") for p in positions.values())
     if has_prev_close:
         cash = portfolio.get("cash", 0)
         total_mv = 0
         for code, p in positions.items():
             shares = p.get("shares", 0)
-            prev_price = p.get("prev_close")
+            prev_price = p.get("prev_close") or p.get("prev_close_nav")
             if not prev_price or prev_price <= 0:
-                # 该标的没有 prev_close → 用 avg_cost 兜底（新建仓的标的）
+                # 该标的没有 prev 基准 → 用 avg_cost 兜底（新建仓的标的）
                 prev_price = p.get("avg_cost") or p.get("avg_nav") or 0
             total_mv += shares * prev_price
         # 待确认订单的金额不变（资金昨日已扣，今日仍在待确认）
@@ -659,7 +662,12 @@ def get_prev_day_nav(portfolio: dict) -> float | None:
             today_idx = i
             break
     if today_idx is not None and today_idx > 0:
-        return records[today_idx - 1].get("nav")
+        # v13.1（2026-07-28）：跳过同日重复记录，往前找到第一条 date≠today 的
+        # 防止 daily_records 有两条同日记录时 prev_nav==today_nav → 当日盈亏=0
+        for j in range(today_idx - 1, -1, -1):
+            if records[j].get("date") != today:
+                return records[j].get("nav")
+        return None  # 全是今天的记录，没有昨日数据
     elif today_idx is None:
         return records[-1].get("nav")
     else:
