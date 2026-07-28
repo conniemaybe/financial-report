@@ -718,6 +718,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-28，由 inject_intraday_to_site.py v4 生成）===
@@ -725,7 +728,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-28",
-  "now": "10:26",
+  "now": "13:29",
   "logs": [
     {
       "time_slot": "08:30",
@@ -748,6 +751,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-07-28T10:23:20",
       "status": "executed",
       "summary": "回调低吸窗口 — 0笔成交，大盘普跌观望。上证-0.84% 深证-2.61% 创业板-4.12%，无pending策略，止损未触发，基金止盈未触发",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-07-28T13:27:23",
+      "status": "executed",
+      "summary": "午后纯买入窗口：A股2只持仓未触止损，0条pending；基金6只未触止盈/止损，0条pending；风险档位🚡系统性风险，BUY闸门关闭",
       "triggered": [],
       "reason": ""
     }
