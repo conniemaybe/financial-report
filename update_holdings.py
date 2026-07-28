@@ -495,8 +495,16 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_dly = css_cls(daily_pnl or 0)
 
         if pending_close:
-            # 场外基金盘中：净值仍是 T-1（上一交易日收盘），当日盈亏待收盘确认
-            daily_cell = "<td class=''><span style='color:#f59e0b'>⏳ 待收盘确认</span></td>"
+            # 场外基金 T+1 净值：当日净值尚未发布，current_nav 停在 T-1、
+            # prev_close_nav 停在 T-2，compute_daily_pnl_fund 算出的是"上一交易日盈亏"。
+            # 用户要求（2026-07-28）：场外基金当日盈亏改展示上一交易日盈亏并标注。
+            if daily_pnl is not None and (daily_pnl != 0 or daily_pct != 0):
+                daily_cell = (
+                    f"<td class='{cls_dly}'>{fmt_money(daily_pnl)}<br>"
+                    f"<small>{fmt_pct(daily_pct or 0)} · 上一交易日</small></td>"
+                )
+            else:
+                daily_cell = "<td class=''><span style='color:#64748b'>— 上一交易日无变化</span></td>"
         elif daily_pnl is None:
             # v11.19（2026-07-20）：新申购场外基金 T+1 确认当日无净值波动数据，
             # 用更友好的文案告知用户，而不是冷冰冰的"无数据"
