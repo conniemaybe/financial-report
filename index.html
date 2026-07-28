@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-07-28 08:29</div>
+    <div class="update-time" id="updateTime">数据更新：2026-07-28 08:31</div>
   </div>
 
   <!-- Summary Cards -->
@@ -706,6 +706,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-28，由 inject_intraday_to_site.py v4 生成）===
@@ -713,9 +716,23 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-28",
-  "now": "08:27",
-  "logs": [],
-  "briefs": {},
+  "now": "08:31",
+  "logs": [
+    {
+      "time_slot": "08:30",
+      "logged_at": "2026-07-28T08:31:18",
+      "status": "executed",
+      "summary": "A股+基金晨报生成。主题检测0确认主线，MLCC/陶瓷基板/元件L1全部不通过（20日-18%~-34%）。A股持仓601336新华保险+9.65%、002714牧原股份+1.92%继续持有；基金6只持仓全部未触止盈阈值（最高588000+9.92%）。无新增BUY/SELL。",
+      "triggered": [],
+      "reason": ""
+    }
+  ],
+  "briefs": {
+    "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
+    "板块主线": "5日强势：MLCC(+9.7%)、陶瓷基板(+8.1%)、博通概念(+7.4%)",
+    "紫苏叶池": "实验池 8 只 · 今日无信号",
+    "基金检查": "持仓 8 只 · 全部健康"
+  },
   "standard_times": [
     "10:00",
     "10:30",
