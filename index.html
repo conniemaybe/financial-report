@@ -744,6 +744,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-29，由 inject_intraday_to_site.py v4 生成）===
@@ -751,7 +754,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-29",
-  "now": "09:56",
+  "now": "10:32",
   "logs": [
     {
       "time_slot": "08:30",
@@ -766,6 +769,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-07-29T09:54:21",
       "status": "executed",
       "summary": "卖出优先窗口：0笔成交。新华保险62.86(+0.13%)浮盈+8.89%未触止盈，牧原39.15(-0.38%)浮盈+1.45%持有。基金全线浮亏未触止盈。0条pending策略。大盘-0.54%中性偏弱。",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:30",
+      "logged_at": "2026-07-29T10:29:14",
+      "status": "executed",
+      "summary": "大盘上证-0.64%深证-1.02%创指-1.21%，A股0 pending基金0 active pending，止损止盈均未触发，0笔成交",
       "triggered": [],
       "reason": ""
     }
