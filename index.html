@@ -747,6 +747,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-29，由 inject_intraday_to_site.py v4 生成）===
@@ -754,7 +757,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-29",
-  "now": "10:32",
+  "now": "13:29",
   "logs": [
     {
       "time_slot": "08:30",
@@ -777,6 +780,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-07-29T10:29:14",
       "status": "executed",
       "summary": "大盘上证-0.64%深证-1.02%创指-1.21%，A股0 pending基金0 active pending，止损止盈均未触发，0笔成交",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-07-29T13:26:42",
+      "status": "executed",
+      "summary": "午后纯买入窗口-0笔成交，全部持有。A股新华保险62.96(+0.29%)/牧原38.88(-1.07%)均未触止损。基金6只持仓浮盈均未触+20%止盈阈值(最高科创50ETF+0.25%)。0条今日策略。大盘小幅反弹上证+0.41%深证+0.92%。",
       "triggered": [],
       "reason": ""
     }
