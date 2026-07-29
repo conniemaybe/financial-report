@@ -741,6 +741,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-29，由 inject_intraday_to_site.py v4 生成）===
@@ -748,13 +751,21 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-29",
-  "now": "08:29",
+  "now": "09:56",
   "logs": [
     {
       "time_slot": "08:30",
       "logged_at": "2026-07-29T08:29:49",
       "status": "executed",
       "summary": "晨报生成完成。全球芯片黑色星期二后中性偏谨慎，0主线不建仓。A股2只持仓（新华保险+牧原股份）均防御性抗跌，未触止盈止损。基金6只全部未触止盈阈值。无BUY/SELL策略。",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-07-29T09:54:21",
+      "status": "executed",
+      "summary": "卖出优先窗口：0笔成交。新华保险62.86(+0.13%)浮盈+8.89%未触止盈，牧原39.15(-0.38%)浮盈+1.45%持有。基金全线浮亏未触止盈。0条pending策略。大盘-0.54%中性偏弱。",
       "triggered": [],
       "reason": ""
     }
