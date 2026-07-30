@@ -474,8 +474,17 @@ def build_fund_rows(portfolio: dict) -> str:
         )
         mv = cur_nav * shares
 
-        # 总盈亏：基金用 avg_nav（trades 历史不完整，详见 compute_total_pnl 注释）
+        # 总盈亏：基金用流水法（v8.1，已正确）；avg_nav 保留作"初始成本"参考
         pnl, pnl_pct, avg_nav = compute_total_pnl(portfolio, code, pos, cur_nav, is_fund=True)
+
+        # v14（2026-07-30，踩坑#042）：成本净值改用摊薄成本（考虑已实现盈亏）
+        # diluted_cost = (剩余份额初始成本 - 已实现盈亏) / 剩余份额，下限0
+        # 若为0，表示已实现盈亏已覆盖剩余份额成本（如多次止盈后）
+        diluted_cost = pos.get("diluted_cost")
+        if diluted_cost is None:
+            # 老数据兜底：用 avg_nav
+            diluted_cost = avg_nav
+        realized_pnl = pos.get("realized_pnl", 0) or 0
 
         # 当日盈亏：持仓浮动 + SELL 实现损益（v7）
         daily_pnl, daily_pct, is_new = compute_daily_pnl_fund(
@@ -489,10 +498,20 @@ def build_fund_rows(portfolio: dict) -> str:
         ft_raw = pos.get("fund_type", "ETF")
         ft_display = ft_raw if "·" in ft_raw or len(ft_raw) > 6 else f"{ft_raw}·ETF"
 
-        arrow = "↑" if cur_nav > avg_nav else ("↓" if cur_nav < avg_nav else "")
-        cls_price = css_cls(cur_nav - avg_nav)
+        # v14：箭头和颜色基于 diluted_cost（与"成本净值"列口径一致）
+        arrow = "↑" if cur_nav > diluted_cost else ("↓" if cur_nav < diluted_cost else "")
+        cls_price = css_cls(cur_nav - diluted_cost)
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
+
+        # v14：成本净值单元格——diluted_cost=0 显示"已覆盖"
+        if diluted_cost <= 0:
+            cost_cell = "<td class='hide-mobile'><span style='color:#10b981'>成本已覆盖</span><br><small style='color:#64748b'>已实现¥{:,}</small></td>".format(realized_pnl)
+        elif diluted_cost < avg_nav:
+            # 摊薄后成本 < 初始成本，显示摊薄值 + 小字标注初始成本
+            cost_cell = f"<td class='hide-mobile'>¥{diluted_cost:.4f}<br><small style='color:#64748b'>初始¥{avg_nav:.4f}</small></td>"
+        else:
+            cost_cell = f"<td class='hide-mobile'>¥{diluted_cost:.4f}</td>"
 
         if pending_close:
             # 场外基金 T+1 净值：当日净值尚未发布，current_nav 停在 T-1、
@@ -525,7 +544,7 @@ def build_fund_rows(portfolio: dict) -> str:
             f"<td class='col-text'><span class='stock-name'>{name}</span></td>"
             f"<td class='hide-mobile col-text'>{ft_display}</td>"
             f"<td>{shares:,.0f} 份</td>"
-            f"<td class='hide-mobile'>¥{avg_nav:.4f}</td>"
+            f"{cost_cell}"
             f"<td class='{cls_price}'>¥{cur_nav:.4f}{arrow}</td>"
             f"<td>¥{mv:,.2f}</td>"
             f"{daily_cell}"
