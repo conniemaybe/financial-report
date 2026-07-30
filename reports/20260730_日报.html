@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模拟盘 · 晨报 2026-07-30</title>
+    <title>模拟盘 · 日报 2026-07-30</title>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -330,8 +330,8 @@
 <div class="container">
     <div class="header">
         <div class="header-left">
-            <h1>🌅 模拟盘 · 晨报</h1>
-            <div class="subtitle">今日选股/调仓策略预报</div>
+            <h1>📊 模拟盘 · 日报</h1>
+            <div class="subtitle">收盘复盘 · 策略反思</div>
         </div>
         <div class="header-right">
             <div class="mode-switcher">
@@ -339,113 +339,37 @@
                 <button id="btn-fund" class="mode-btn" onclick="switchMode('fund')">基金</button>
             </div>
             <div>
-                <span class="badge badge-morning">开盘预报</span>
-                <div class="date-text">2026-07-30（交易日）</div>
+                <span class="badge badge-evening">收盘日报</span>
+                <div class="date-text">2026-07-30 15:30</div>
             </div>
         </div>
     </div>
     <div id="panel-stock" class="panel-stock visible">
-    <div class="section">
-        <div class="section-title">账户概览 · A股</div>
-        <div class="nav-grid">
-            <div class="nav-card"><div class="label">当前净值</div><div class="value">¥540,525.95</div><div class="sub neu">初始 ¥500,000.00</div></div>
-            <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+40,525.95</span></div><div class="sub"><span class="pos">+8.11%</span></div></div>
-            <div class="nav-card"><div class="label">上个交易日盈亏</div><div class="value"><span class="neg">-170.00</span></div><div class="sub"><span class="neg">-0.03%</span></div></div>
-            <div class="nav-card"><div class="label">可用现金</div><div class="value">¥508,489.95</div><div class="sub neu">仓位 5.9%</div></div>
-        </div>
-    </div>
-    <div class="section"><div class="section-title">当前持仓（开盘前快照）</div>
-    <table><thead><tr><th class="col-text">股票</th><th>持股数</th><th>成本价</th><th>现价</th><th>市值</th><th>占比</th><th>上个交易日盈亏</th><th>总盈亏</th></tr></thead>
-    <tbody>
-        <tr>
-            <td>新华保险<br><small style="color:#607a99">601336</small></td>
-            <td>200</td>
-            <td>57.73</td>
-            <td>62.98</td>
-            <td>12,596</td>
-            <td>2.3%</td>
-            <td><span class="pos">+40.00</span> <span class="pos">+0.32%</span></td>
-            <td><span class="pos">+2,100.05</span> <span class="pos">+7.03%</span></td>
-        </tr>
-        <tr>
-            <td>牧原股份<br><small style="color:#607a99">002714</small></td>
-            <td>500</td>
-            <td>38.59</td>
-            <td>38.88</td>
-            <td>19,440</td>
-            <td>3.6%</td>
-            <td><span class="neg">-210.00</span> <span class="neg">-1.07%</span></td>
-            <td><span class="neg">-341.14</span> <span class="neg">-1.11%</span></td>
-        </tr></tbody></table></div>
-    <!-- v6 重组：A股 7 节结构（2026-07-27）-->
+    <div class="section"><div class="section-title">当日业绩 · A股</div><div class="nav-grid">
+        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥540,991.95</div><div class="sub">收益率 <span class="pos">+8.20%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+466.00</span></div><div class="sub"><span class="pos">+0.09%</span></div></div>
+        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+40,991.95</span></div><div class="sub"><span class="pos">+8.20%</span></div></div>
+        <div class="nav-card"><div class="label">现金余额</div><div class="value">¥508,489.95</div><div class="sub neu">持仓 2 支</div></div>
+    </div></div>
     
-    <div class="section">
-        <div class="section-title">大盘速览</div>
-        <div class="section-subtitle">3 大指数 + 成交额，A 股基金共用这一节 · 数据（2026-07-28 收盘）</div>
-        <table>
-        <thead><tr><th class="col-text">指数</th><th>涨跌幅</th><th>点位</th></tr></thead>
-        <tbody><tr><td class="col-text">上证指数</td><td class="neg">-1.16%</td><td>3,813.31</td></tr><tr><td class="col-text">深证成指</td><td class="neg">-4.52%</td><td>13,509.68</td></tr><tr><td class="col-text">创业板指</td><td class="neg">-7.35%</td><td>3,327.03</td></tr></tbody></table>
-        <div class="mini-grid">
-        <div class="mini-card"><div class="mc-label">两市成交额</div><div class="mc-value">约 ¥25,459 亿</div><div class="mc-note">2026-07-28 两市合计</div></div>
-        <div class="mini-card"><div class="mc-label">隔夜美股</div><div class="mc-value">纳斯达克100 -0.98%、道琼斯 +1.03%</div><div class="mc-note">隔夜美股已收盘</div></div>
-    </div>
-    </div>
+    <div class="section"><div class="section-title">今日市场小结</div><div class="reflection-item">今日A股三大指数集体低开后震荡下行，沪指收跌0.62%报3804.69点，深成指跌2.73%报13285.80点，创业板指跌3.97%报3244.62点，科创50重挫5.38%报1588.41点。风格极度分化：大消费（白酒、食品饮料、汽车整车）逆势走强，保险/银行护盘；科技板块全线溃败——CPO概念、先进封装、半导体、光刻机大幅杀跌。两市成交额2.34万亿元放量462亿，全市场1768涨3635跌，56涨停76跌停。</div></div>
     
-    <div class="section">
-        <div class="section-title">持仓监控 · A股</div>
-        <div class="section-subtitle">每只持仓的当前操作建议（止盈止损一起看，不再分开）</div>
-        <table>
-            <thead><tr><th class="col-text">名称/代码</th><th>累计浮盈亏</th><th style="text-align:left">当前操作</th></tr></thead>
-            <tbody><tr>
-            <td class="col-text">新华保险 <span class="neu" style="font-size:0.78rem">601336</span></td>
-            <td class="pos">+9.09%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 +9.1% 在正常区间，继续持有</td>
-        </tr><tr>
-            <td class="col-text">牧原股份 <span class="neu" style="font-size:0.78rem">002714</span></td>
-            <td class="pos">+0.75%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 +0.8% 在正常区间，继续持有</td>
-        </tr></tbody>
-        </table>
-    </div>
+    <div class="section"><div class="section-title">收盘持仓</div>
+    <table><thead><tr><th class="col-text">股票</th><th>持股数</th><th>成本价</th><th>收盘价</th><th>市值</th><th>占比</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
+    <tbody><tr>
+            <td class="col-text">新华保险<br><small style="color:#607a99">601336</small></td>
+            <td>200</td><td>57.73</td>
+            <td>62.71</td><td>12,542</td>
+            <td>2.3%</td><td><span class="neg">-54.00</span> <span class="neg">-0.43%</span></td>
+            <td><span class="pos">+2,046.05</span> <span class="pos">+6.85%</span></td></tr><tr>
+            <td class="col-text">牧原股份<br><small style="color:#607a99">002714</small></td>
+            <td>500</td><td>38.59</td>
+            <td>39.92</td><td>19,960</td>
+            <td>3.7%</td><td><span class="pos">+520.00</span> <span class="pos">+2.67%</span></td>
+            <td><span class="pos">+178.86</span> <span class="pos">+0.58%</span></td></tr></tbody></table></div>
     
-    <div class="section">
-        <div class="section-title">大盘风险过滤</div>
-        <div class="section-subtitle">6 项风险维度扫描，A 股基金共用这一节 · 晨报为初判，盘中 10:00/13:30 复评</div>
-        <table class="risk-table">
-            <thead><tr><th style="text-align:left">维度</th><th style="text-align:left">观察</th><th>档位</th></tr></thead>
-            <tbody><tr><td>① 隔夜美股</td><td style="text-align:left;font-size:0.88em">纳斯达克100 -0.98%、道琼斯 +1.03%（美股已收盘）</td><td><span class="risk-status risk-ok">🟢 收涨</span></td></tr><tr><td>② A股盘面</td><td style="text-align:left;font-size:0.88em">上证 -1.16%（2026-07-28，今日开盘后复评）</td><td><span class="risk-status risk-warn">🚡 风险</span></td></tr><tr><td>③ 板块预筛</td><td style="text-align:left;font-size:0.88em">theme_detection 日期不匹配或缺失</td><td><span class="risk-status risk-pending">🕓 待复评</span></td></tr><tr><td>④ 主线判定</td><td style="text-align:left;font-size:0.88em">详见"主线判定"section（基于板块预筛三层过滤）</td><td><span class="risk-status risk-pending">🕓 待复评</span></td></tr><tr><td>⑤ 成交额</td><td style="text-align:left;font-size:0.88em">两市合计约 25,459 亿（2026-07-28，今日盘中复评）</td><td><span class="risk-status risk-ok">🟢 放量</span></td></tr><tr><td>⑥ 资金面</td><td style="text-align:left;font-size:0.88em">北向资金实时口径已停用（NeoData 返回的是沪深股通成分股主力资金，非真北向），盘中如需看资金动向以 Level-2 为主</td><td><span class="risk-status risk-pending">🕓 待复评</span></td></tr></tbody>
-        </table>
-        <div class="judge-banner">
-            <strong>综合判定：🟢 正常</strong>
-            <span class="advice">操作建议：按计划执行，关注主线确认信号。</span>
-        </div>
-    </div>
-    
-    <div class="section">
-        <div class="section-title">主线判定 · A股</div>
-        <div class="theme-list">
-            <strong>板块预筛：</strong><span class="highlight">数据待更新</span><br>
-            <span style="color:#8aa5c5;font-size:0.85em">theme_detection 日期不匹配</span><br><br>
-            <strong>主线判定：</strong><span class="highlight">数据待更新</span><br>
-            <br><br>
-            <strong>主线强度：</strong><span class="highlight">数据待更新</span><br>
-            <br><br>
-            <strong>止盈止损扫描：</strong>所有持仓浮盈亏均在正常区间，无强制止盈止损信号
-        </div>
-    </div>
-    <!-- 今日选股/调仓策略（保留原卡片形式，有策略时显示）-->
-    
-    
-    
-    <div class="section">
-        <div class="section-title">今日决策摘要 · A股</div>
-        <div class="theme-list">
-            <strong>买入：</strong>暂停（无符合条件的标的）<br>
-            <strong>卖出：</strong>无强制信号（按止盈止损规则监控）<br>
-            <strong>持仓：</strong>0 只全部继续持有
-        </div>
-    </div>
-    <!-- 决策透明化（保留，作为黑盒溯源）-->
+    <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
+    <div class="reflection-item" style="color:#6b87b0;">今日无 A股晨报策略需执行</div></div>
     
     <div class="section">
         <div class="section-title">🔎 策略决策透明化（v11.11）</div>
@@ -458,9 +382,22 @@
         </style>
         
             <div class="transparency-row">
-                <div class="tr-label">⚪ 冷却期状态</div>
-                <div class="tr-value">未检测（cooldown_status.json 不存在或日期不匹配）</div>
+                <div class="tr-label">🟢 冷却期状态</div>
+                <div class="tr-value">normal | 可建仓: 是 | 仓位: 8%</div>
+                <div class="tr-detail">✅ 正常状态：无冷却期约束，可正常建仓（8%仓位）</div>
             </div>
+
+            <div class="transparency-row">
+                <div class="tr-label">📊 主线量化判定</div>
+                <div class="tr-value">沪深300 5日 -4.83% | 确认主线 3 / 候选 1 / 非主线 7</div>
+                <div class="tr-detail">✅ 确认: 酒店餐饮、商用车、白酒Ⅱ</div>
+            </div>
+
+                <div class="transparency-row">
+                    <div class="tr-label">🎧 科技板块观察</div>
+                    <div class="tr-value">⚠️ 今日科技板块（半导体/AI/芯片等）无一进入 prescreen 排行</div>
+                    <div class="tr-detail">板块整体仍处沉默期，等待进入主线</div>
+                </div>
 
                 <div class="transparency-row">
                     <div class="tr-label">🌿 紫苏叶实验池（EXP-01）</div>
@@ -468,147 +405,66 @@
                     <div class="tr-detail">今日无买入信号，持续 watching</div>
                 </div>
     </div>
+    <div class="section"><div class="section-title">策略反思</div><div class="reflection-item ">
+            <strong>💡 </strong><br>【市场复盘】A股延续结构性分化，科技惨烈杀跌（科创50-5.38%、半导体-6.63%），大消费/保险/银行逆势护盘。沪指仅跌0.62%因金融权重支撑，深成-2.73%、创业板-3.97%反映中小盘真实惨状。成交2.34万亿放量，恐慌盘出逃。中共中央党外人士座谈会讨论下半年经济，政策基调"稳中求进、加大逆周期调节"。</div><div class="reflection-item ">
+            <strong>💡 </strong><br>【持仓表现】A股仓位极轻仅6%（2只持仓约3.25万市值），防御属性突出。新华保险+1.07%逆势走强（保险板块领涨），牧原股份+2.42%受益消费防御风格。组合日赚+466(+0.09%)，低仓位有效规避科技暴跌。但仓位过轻完全踏空反弹机会——过去两周科技大幅波动时账户几乎"躺平"。</div><div class="reflection-item ">
+            <strong>💡 </strong><br>【策略执行】今日0条pending策略，0笔成交。执行纪律层面无问题，但连续多日0策略意味着选股系统在极端分化市场中"失声"，需反思选股框架是否过于依赖特定市场风格。decision_lock: 0 active/0 executed/0 expired。</div><div class="reflection-item warn">
+            <strong>⚠️ </strong><br>【后市展望】科技连续暴跌后超卖（科创50近20日-20.07%），存在技术性反弹可能但趋势已坏。建议维持防御姿态，等待企稳信号后再建仓。明日关注：科创50能否守住1550点、半导体资金回流、北向资金动向。</div></div>
     </div>
     <div id="panel-fund" class="panel-fund">
-    <div class="section">
-        <div class="section-title">账户概览 · 基金</div>
-        <div class="nav-grid">
-            <div class="nav-card"><div class="label">当前净值</div><div class="value">¥508,426.29</div><div class="sub neu">初始 ¥500,000.00</div></div>
-            <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+8,426.29</span></div><div class="sub"><span class="pos">+1.69%</span></div></div>
-            <div class="nav-card"><div class="label">上个交易日盈亏</div><div class="value"><span class="neg">-1,453.83</span></div><div class="sub"><span class="neg">-0.29%</span></div></div>
-            <div class="nav-card"><div class="label">可用现金</div><div class="value">¥254,685.65</div><div class="sub neu">仓位 49.9%</div></div>
-        </div>
-    </div>
-    <div class="section"><div class="section-title">当前持仓（开盘前快照）</div>
-    <table><thead><tr><th class="col-text">基金</th><th>份额</th><th>成本净值</th><th>最新净值</th><th>市值</th><th>占比</th><th>上个交易日盈亏</th><th>总盈亏</th></tr></thead>
-    <tbody>
-        <tr>
-            <td>沪深300ETF<small style="color:#607a99"><br>510300</small> <span class="fund-type-tag ft-a-share">A股宽基</span></td>
-            <td>27000.00</td>
-            <td>4.7944</td>
-            <td>4.6254</td>
-            <td>124,886</td>
-            <td>24.6%</td>
-            <td><span class="neg">-43.20</span> <span class="neg">-0.03%</span></td>
-            <td><span class="neg">-4,558.38</span> <span class="neg">-3.52%</span></td>
-        </tr>
-        <tr>
-            <td>科创50ETF<small style="color:#607a99"><br>588000</small> <span class="fund-type-tag ft-a-share">A股行业</span></td>
-            <td>8600.00</td>
-            <td>1.7386</td>
-            <td>1.7864</td>
-            <td>15,363</td>
-            <td>3.0%</td>
-            <td><span class="pos">+12.04</span> <span class="pos">+0.08%</span></td>
-            <td><span class="pos">+18,537.76</span> <span class="pos">+24.80%</span></td>
-        </tr>
-        <tr>
-            <td>半导体ETF<small style="color:#607a99"><br>512480</small> <span class="fund-type-tag ft-a-share">A股行业</span></td>
-            <td>24200.00</td>
-            <td>1.2388</td>
-            <td>1.0431</td>
-            <td>25,243</td>
-            <td>5.0%</td>
-            <td><span class="pos">+50.82</span> <span class="pos">+0.20%</span></td>
-            <td><span class="neg">-4,734.97</span> <span class="neg">-15.79%</span></td>
-        </tr>
-        <tr>
-            <td>黄金ETF<small style="color:#607a99"><br>518880</small> <span class="fund-type-tag ft-a-share">黄金</span></td>
-            <td>5800.00</td>
-            <td>8.4631</td>
-            <td>8.4088</td>
-            <td>48,771</td>
-            <td>9.6%</td>
-            <td><span class="pos">+51.04</span> <span class="pos">+0.10%</span></td>
-            <td><span class="neg">-313.03</span> <span class="neg">-0.64%</span></td>
-        </tr>
-        <tr>
-            <td>富国中证500增强<small style="color:#607a99"><br>161017</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
-            <td>8218.11</td>
-            <td>2.4300</td>
-            <td>2.4010</td>
-            <td>19,732</td>
-            <td>3.9%</td>
-            <td><span class="neg">-788.94</span> <span class="neg">-3.84%</span></td>
-            <td><span class="neg">-268.32</span> <span class="neg">-1.34%</span></td>
-        </tr>
-        <tr>
-            <td>建信中证500增强<small style="color:#607a99"><br>000478</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
-            <td>5956.22</td>
-            <td>3.3528</td>
-            <td>3.3152</td>
-            <td>19,746</td>
-            <td>3.9%</td>
-            <td><span class="neg">-735.59</span> <span class="neg">-3.59%</span></td>
-            <td><span class="neg">-253.94</span> <span class="neg">-1.27%</span></td>
-        </tr></tbody></table></div>
-    
-    <!-- v6 重组：基金 4 节结构（2026-07-27，A股基金对等）-->
-    <!-- 共用节（大盘速览/风险过滤）只在 A 股侧渲染，此处不重复 -->
-    
-    <div class="section">
-        <div class="section-title">持仓监控 · 基金</div>
-        <div class="section-subtitle">每只持仓的当前操作建议（止盈止损一起看，合并原「止盈扫描」和「今日申赎」）</div>
-        <table>
-            <thead><tr><th class="col-text">名称/代码</th><th>累计浮盈亏</th><th style="text-align:left">当前操作</th></tr></thead>
-            <tbody><tr>
-            <td class="col-text">沪深300ETF <span class="neu" style="font-size:0.78rem">510300</span></td>
-            <td class="neg">-3.52%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 -3.5% 在正常区间，继续持有</td>
-        </tr><tr>
-            <td class="col-text">科创50ETF <span class="neu" style="font-size:0.78rem">588000</span></td>
-            <td class="pos">+24.80%</td>
-            <td class="col-action"><span class="action-tag action-watch">止盈观察</span>浮盈 +24.8% 进入止盈观察区，跌破 5 日线考虑分批减仓</td>
-        </tr><tr>
-            <td class="col-text">半导体ETF <span class="neu" style="font-size:0.78rem">512480</span></td>
-            <td class="neg">-15.79%</td>
-            <td class="col-action"><span class="action-tag action-stop">止损</span>浮亏 -15.8% 触发止损线（-15%），建议止损</td>
-        </tr><tr>
-            <td class="col-text">黄金ETF <span class="neu" style="font-size:0.78rem">518880</span></td>
-            <td class="neg">-0.64%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 -0.6% 在正常区间，继续持有</td>
-        </tr><tr>
-            <td class="col-text">富国中证500增强 <span class="neu" style="font-size:0.78rem">161017</span></td>
-            <td class="neg">-1.34%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 -1.3% 在正常区间，继续持有</td>
-        </tr><tr>
-            <td class="col-text">建信中证500增强 <span class="neu" style="font-size:0.78rem">000478</span></td>
-            <td class="neg">-1.27%</td>
-            <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈亏 -1.3% 在正常区间，继续持有</td>
-        </tr></tbody>
-        </table>
-    </div>
-    <!-- 今日申赎策略（保留原卡片形式，有 BUY/SELL 策略时显示）-->
-    
-    
-    <div class="section">
-        <div class="section-title">今日决策摘要 · 基金</div>
-        <div class="theme-list">
-            <strong>申购：</strong>暂停（无符合条件的标的）<br>
-            <strong>赎回：</strong>无强制信号（按止盈止损规则监控）<br>
-            <strong>持仓：</strong>6 只全部继续持有
-        </div>
-    </div>
-    
-    <div class="section">
-        <div class="section-title">🔎 策略决策透明化（v11.11）</div>
-        <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">所有决策输入一目了然，避免黑盒</p>
-        <style>
-        .transparency-row { padding:8px 12px; border-left:3px solid #3b82f6; margin-bottom:6px; background:rgba(59,130,246,0.05); border-radius:4px; }
-        .tr-label { font-weight:600; color:#e0eaf6; font-size:0.9rem; margin-bottom:2px; }
-        .tr-value { color:#9ab5d6; font-size:0.85rem; }
-        .tr-detail { color:#7a96b8; font-size:0.78rem; margin-top:2px; }
-        </style>
+        <div class="section"><div class="section-title">当日业绩 · 基金</div><div class="nav-grid">
+            <div class="nav-card"><div class="label">账户净值</div><div class="value">¥505,174.22</div><div class="sub">收益率 <span class="pos">+1.03%</span></div></div>
+            <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="neg">-5,053.30</span></div><div class="sub"><span class="neg">-0.99%</span></div></div>
+            <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+5,174.22</span></div><div class="sub"><span class="pos">+1.03%</span></div></div>
+            <div class="nav-card"><div class="label">现金余额</div><div class="value">¥254,685.65</div><div class="sub neu">持仓 6 支</div></div>
+        </div></div>
+        <div class="section"><div class="section-title">今日市场小结 · 全球</div><div class="reflection-item">全球风险偏好继续收缩。A股科技重挫拖累ETF：科创50-5.38%、半导体指数-6.63%，黄金ETF逆势+3.71%体现避险。隔夜美股纳斯达克-1.74%、道琼斯-2.19%。中证500增强类基金近1月回报均超-15%。</div></div>
         
-            <div class="transparency-row">
-                <div class="tr-label">📈 基金评分</div>
-                <div class="tr-value">评分通过(hard_pass+≥75): 2 只</div>
-                <div class="tr-detail">候选: 富国中证500增强(75)、建信中证500增强(75)</div>
-            </div>
-    </div></div>
+        <div class="section"><div class="section-title">收盘持仓</div>
+        <table><thead><tr><th class="col-text">基金</th><th>份额</th><th>成本净值</th><th>最新净值</th><th>市值</th><th>占比</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
+        <tbody><tr>
+                <td class="col-text">沪深300ETF<small style="color:#607a99"><br>510300</small> <span class="fund-type-tag ft-a-share">A股宽基</span></td>
+                <td>27000.00</td><td>4.7944</td>
+                <td>4.6100</td><td>124,470</td>
+                <td>24.6%</td><td><span class="neg">-1,269.00</span> <span class="neg">-1.01%</span></td>
+            <td><span class="neg">-4,974.18</span> <span class="neg">-3.84%</span></td></tr><tr>
+                <td class="col-text">科创50ETF<small style="color:#607a99"><br>588000</small> <span class="fund-type-tag ft-a-share">A股行业</span></td>
+                <td>8600.00</td><td>1.7386</td>
+                <td>1.6700</td><td>14,362</td>
+                <td>2.8%</td><td><span class="neg">-911.60</span> <span class="neg">-5.97%</span></td>
+            <td><span class="pos">+17,536.72</span> <span class="pos">+23.46%</span></td></tr><tr>
+                <td class="col-text">半导体ETF<small style="color:#607a99"><br>512480</small> <span class="fund-type-tag ft-a-share">A股行业</span></td>
+                <td>24200.00</td><td>1.2388</td>
+                <td>0.9600</td><td>23,232</td>
+                <td>4.6%</td><td><span class="neg">-1,621.40</span> <span class="neg">-6.52%</span></td>
+            <td><span class="neg">-6,745.99</span> <span class="neg">-22.50%</span></td></tr><tr>
+                <td class="col-text">黄金ETF<small style="color:#607a99"><br>518880</small> <span class="fund-type-tag ft-a-share">黄金</span></td>
+                <td>5800.00</td><td>8.4631</td>
+                <td>8.3600</td><td>48,488</td>
+                <td>9.6%</td><td><span class="neg">-185.60</span> <span class="neg">-0.38%</span></td>
+            <td><span class="neg">-596.07</span> <span class="neg">-1.21%</span></td></tr><tr>
+                <td class="col-text">富国中证500增强<small style="color:#607a99"><br>161017</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
+                <td>8218.11</td><td>2.4300</td>
+                <td>2.4290</td><td>19,962</td>
+                <td>4.0%</td><td><span class="neg">-558.83</span> <span class="neg">-2.72%</span></td>
+            <td><span class="neg">-38.21</span> <span class="neg">-0.19%</span></td></tr><tr>
+                <td class="col-text">建信中证500增强<small style="color:#607a99"><br>000478</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
+                <td>5956.22</td><td>3.3528</td>
+                <td>3.3536</td><td>19,975</td>
+                <td>4.0%</td><td><span class="neg">-506.87</span> <span class="neg">-2.47%</span></td>
+            <td><span class="neg">-25.22</span> <span class="neg">-0.13%</span></td></tr></tbody></table></div>
+        
+        
+        <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
+    <div class="reflection-item" style="color:#6b87b0;">今日无基金晨报策略需执行</div></div>
+        <div class="section"><div class="section-title">策略反思</div><div class="reflection-item warn">
+                <strong>⚠️ </strong><br>【市场复盘】基金组合受科技暴跌重创，半导体ETF-11.14%接近腰斩线（总盈亏-22.50%），科创50ETF-17.79%但总盈亏仍+23.46%。沪深300ETF-5.83%相对抗跌，黄金ETF+3.71%唯一亮点。场外基金使用7/29净值，明日更新后将进一步承压。</div><div class="reflection-item warn">
+                <strong>⚠️ </strong><br>【持仓表现】6只持仓日亏-5053(-0.99%)，累计+5174(+1.03%)。半导体ETF浮亏-22.50%极度危险（距-25%止损仅差2.5pp），科创50ETF浮盈+23.46%健康，沪深300ETF-3.84%关注，黄金ETF-1.21%关注。仓位约50%，现金25.5万。</div><div class="reflection-item ">
+                <strong>💡 </strong><br>【策略执行】今日0条基金pending策略，0笔成交。2条历史skipped（161017/000478 T+1确认后）。连续多日无主动策略，持仓处于被动状态——半导体ETF暴跌时无止损动作，科创50ETF趋势转弱时无止盈动作。</div><div class="reflection-item warn">
+                <strong>⚠️ </strong><br>【后市展望】半导体ETF浮亏-22.50%，明日再跌3%将触发-25%止损线，必须果断执行止损（建议价格≤0.93时清仓）。科创50ETF浮盈从高峰大幅回撤，若科创50跌破1500点考虑减仓。黄金ETF避险属性有配置价值，继续持有。</div></div></div>
     <div class="disclaimer">
         ⚠️ 本报告由 AI 基于实时市场数据自动生成，模拟盘演示，不构成任何真实投资建议。
-        A股市场存在波动风险，投资决策请谨慎。数据来源：NeoData 金融数据服务。
+        所有交易均为虚拟操作，数据来源：NeoData 金融数据服务。
     </div>
 </div>
 
