@@ -782,6 +782,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-30，由 inject_intraday_to_site.py v4 生成）===
@@ -789,7 +792,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-30",
-  "now": "10:27",
+  "now": "13:30",
   "logs": [
     {
       "time_slot": "08:30",
@@ -814,11 +817,19 @@ const INTRADAY_DATA = {
       "summary": "回调低吸窗口：大盘偏弱（创业板-3.83%），持仓未触止损止盈，无pending策略，0笔成交",
       "triggered": [],
       "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-07-30T13:27:24",
+      "status": "executed",
+      "summary": "A股0/基金0 pending；601336 61.87(浮盈+7%)/002714 39.42(浮盈+2%)均未触止损；基金最高浮盈远低+20%阈值；6维风险🟡中性偏弱",
+      "triggered": [],
+      "reason": "巡查通过，0笔成交"
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：MLCC(+9.7%)、陶瓷基板(+8.1%)、博通概念(+7.4%)",
+    "板块主线": "5日强势：华为汽车股权合作(+7.5%)、酒店餐饮(+8.9%)、电子签名(+8.0%)",
     "紫苏叶池": "实验池 8 只 · 今日无信号",
     "基金检查": "持仓 8 只 · 全部健康"
   },
