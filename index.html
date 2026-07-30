@@ -776,6 +776,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-30，由 inject_intraday_to_site.py v4 生成）===
@@ -783,13 +786,21 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-30",
-  "now": "09:57",
+  "now": "09:58",
   "logs": [
     {
       "time_slot": "08:30",
       "logged_at": "2026-07-30T08:24:41",
       "status": "executed",
       "summary": "晨报生成完成。A股0新增策略（0主线+风险中性），基金0新增策略（6只持仓均未触止盈阈值）。",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-07-30T09:58:28",
+      "status": "executed",
+      "summary": "卖出优先窗口：A股2只持仓检查，无止损/止盈触发；基金6只止盈巡检，无SELL信号；无当天pending策略；0笔成交",
       "triggered": [],
       "reason": ""
     }
