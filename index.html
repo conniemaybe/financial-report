@@ -785,6 +785,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-30，由 inject_intraday_to_site.py v4 生成）===
@@ -792,7 +795,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-30",
-  "now": "13:30",
+  "now": "14:46",
   "logs": [
     {
       "time_slot": "08:30",
@@ -825,6 +828,14 @@ const INTRADAY_DATA = {
       "summary": "A股0/基金0 pending；601336 61.87(浮盈+7%)/002714 39.42(浮盈+2%)均未触止损；基金最高浮盈远低+20%阈值；6维风险🟡中性偏弱",
       "triggered": [],
       "reason": "巡查通过，0笔成交"
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-07-30T14:43:21",
+      "status": "skipped",
+      "summary": "尾盘最佳买入窗口—0笔成交，全部持有。新华保险62.70(-0.44%)浮盈+8.61%未触止损，牧原39.89(+2.60%)浮盈+3.37%未触止损。基金6只均未触止盈阈值。今日无pending策略。大盘上证-0.59%/深证-2.24%偏弱但持仓板块逆势走强(保险+1.80%/养殖+1.63%)。风险档位✅正常。",
+      "triggered": [],
+      "reason": "今日无pending策略(A股0/基金0)，持仓均未触止损/止盈阈值，14:45窗口无需执行交易"
     }
   ],
   "briefs": {
