@@ -808,6 +808,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-31，由 inject_intraday_to_site.py v4 生成）===
@@ -815,7 +818,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-31",
-  "now": "13:30",
+  "now": "14:46",
   "logs": [
     {
       "time_slot": "08:30",
@@ -848,6 +851,14 @@ const INTRADAY_DATA = {
       "summary": "午后纯买入窗口：A股0条pending，基金0条pending，止损未触发，止盈未触发，无交易",
       "triggered": [],
       "reason": ""
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-07-31T14:42:34",
+      "status": "skipped",
+      "summary": "A股2只持仓持有(新华保险+0.65%/牧原-1.83%)，0条pending；基金6只均未触止盈阈值，2条历史策略skipped。0笔成交",
+      "triggered": [],
+      "reason": "无活跃pending策略，无触发止损/止盈条件，持仓全部正常持有"
     }
   ],
   "briefs": {
