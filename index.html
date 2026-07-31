@@ -805,6 +805,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-31，由 inject_intraday_to_site.py v4 生成）===
@@ -812,7 +815,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-31",
-  "now": "10:25",
+  "now": "13:30",
   "logs": [
     {
       "time_slot": "08:30",
@@ -835,6 +838,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-07-31T10:22:32",
       "status": "executed",
       "summary": "回调低吸窗口 — 0笔成交。A股+0.91%/深证+3.55%/创业板+5.54%/科创50+6.84%全线反弹，半导体受隔夜费城+9%催化。新华63.40(+1.10%)浮盈+9.78%持有，牧原39.08(-2.10%)浮盈+1.27%持有未触止损。全基金未触止盈阈值。",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-07-31T13:30:44",
+      "status": "executed",
+      "summary": "午后纯买入窗口：A股0条pending，基金0条pending，止损未触发，止盈未触发，无交易",
       "triggered": [],
       "reason": ""
     }
