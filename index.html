@@ -796,6 +796,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-07-31，由 inject_intraday_to_site.py v4 生成）===
@@ -803,9 +806,23 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-07-31",
-  "now": "08:24",
-  "logs": [],
-  "briefs": {},
+  "now": "08:26",
+  "logs": [
+    {
+      "time_slot": "08:30",
+      "logged_at": "2026-07-31T08:26:51",
+      "status": "executed",
+      "summary": "晨报生成：A股2持仓持有（新华保险+8.6%/牧原+3.4%均未触止盈），3确认主线（酒店餐饮/商用车/白酒II）+1候选（消费精选），BUY推迟至盘中。基金6持仓0止盈触发，无新申购。",
+      "triggered": [],
+      "reason": ""
+    }
+  ],
+  "briefs": {
+    "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
+    "板块主线": "5日强势：华为汽车股权合作(+7.5%)、酒店餐饮(+8.9%)、电子签名(+8.0%)",
+    "紫苏叶池": "实验池 8 只 · 今日无信号",
+    "基金检查": "持仓 8 只 · 全部健康"
+  },
   "standard_times": [
     "10:00",
     "10:30",
