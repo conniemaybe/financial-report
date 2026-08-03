@@ -504,9 +504,11 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
 
-        # v14：成本净值单元格——diluted_cost=0 显示"已覆盖"
+        # v14：成本净值单元格——diluted_cost=0 显示"成本已覆盖"
+        # v15（2026-08-03）：用户反馈"成本已覆盖 已实现¥18k"太抽象，改为显示
+        # 具体的摊薄成本净值（0.0000）+ 小字标注"已实现¥X 覆盖成本"，让数字可读
         if diluted_cost <= 0:
-            cost_cell = "<td class='hide-mobile'><span style='color:#10b981'>成本已覆盖</span><br><small style='color:#64748b'>已实现¥{:,}</small></td>".format(realized_pnl)
+            cost_cell = f"<td class='hide-mobile'><span style='color:#10b981'>¥0.0000</span><br><small style='color:#64748b'>已实现¥{realized_pnl:,.0f} 覆盖成本</small></td>"
         elif diluted_cost < avg_nav:
             # 摊薄后成本 < 初始成本，显示摊薄值 + 小字标注初始成本
             cost_cell = f"<td class='hide-mobile'>¥{diluted_cost:.4f}<br><small style='color:#64748b'>初始¥{avg_nav:.4f}</small></td>"
