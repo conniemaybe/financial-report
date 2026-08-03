@@ -837,6 +837,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-03，由 inject_intraday_to_site.py v4 生成）===
@@ -844,7 +847,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-03",
-  "now": "10:25",
+  "now": "13:29",
   "logs": [
     {
       "time_slot": "08:30",
@@ -867,6 +870,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-08-03T10:22:17",
       "status": "executed",
       "summary": "A股0条pending+基金0条pending，持仓止损未触发，风险🟡中性。科创50-3.67%局部杀跌但非系统性。0笔成交",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-08-03T13:28:05",
+      "status": "executed",
+      "summary": "午后纯买入窗口：无pending策略，A股2只持仓未触止损(新华保险+8.3%牧原+1.4%)，基金6只持仓均未达止盈阈值(最高科创50ETF浮盈-4.87%)，0笔成交",
       "triggered": [],
       "reason": ""
     }
