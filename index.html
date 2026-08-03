@@ -840,6 +840,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-03，由 inject_intraday_to_site.py v4 生成）===
@@ -847,7 +850,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-03",
-  "now": "13:29",
+  "now": "14:45",
   "logs": [
     {
       "time_slot": "08:30",
@@ -880,6 +883,14 @@ const INTRADAY_DATA = {
       "summary": "午后纯买入窗口：无pending策略，A股2只持仓未触止损(新华保险+8.3%牧原+1.4%)，基金6只持仓均未达止盈阈值(最高科创50ETF浮盈-4.87%)，0笔成交",
       "triggered": [],
       "reason": ""
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-08-03T14:41:25",
+      "status": "executed",
+      "summary": "尾盘最佳买入窗口：A股+基金均无活跃pending策略；0笔成交，全部持仓继续持有。6只基金浮盈3正3负，均未触+30%止盈阈值，无需减仓",
+      "triggered": [],
+      "reason": "A股持仓新华保险+8.31%、牧原股份+1.43%，浮盈均<10%且远离-15%止损线，全部持有；6只基金净值稳定（沪深300/科创50/半导体/黄金/中证500两支均浮亏-0.2%~-25%但已过-8%止损观察期或属正常波动），未触止盈+30%阈值"
     }
   ],
   "briefs": {
