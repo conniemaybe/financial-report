@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-07-31（周五）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-03（周一）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v5 动态填充 -->
@@ -824,52 +824,23 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-07-31，由 inject_intraday_to_site.py v4 生成）===
+// === 今日盘中决策实录数据（2026-08-03，由 inject_intraday_to_site.py v4 生成）===
 // v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
-  "date": "2026-07-31",
-  "now": "19:28",
+  "date": "2026-08-03",
+  "now": "08:25",
   "logs": [
     {
       "time_slot": "08:30",
-      "logged_at": "2026-07-31T08:26:51",
+      "logged_at": "2026-08-03T08:25:43",
       "status": "executed",
-      "summary": "晨报生成：A股2持仓持有（新华保险+8.6%/牧原+3.4%均未触止盈），3确认主线（酒店餐饮/商用车/白酒II）+1候选（消费精选），BUY推迟至盘中。基金6持仓0止盈触发，无新申购。",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "10:00",
-      "logged_at": "2026-07-31T09:52:24",
-      "status": "executed",
-      "summary": "卖出优先窗口：0笔成交。新华保险62.88(+0.27%)浮盈+8.92%持有，牧原39.02(-2.25%)浮盈+1.11%持有。基金6只均未触止盈阈值。A股/基金pending均为0条。",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "10:30",
-      "logged_at": "2026-07-31T10:22:32",
-      "status": "executed",
-      "summary": "回调低吸窗口 — 0笔成交。A股+0.91%/深证+3.55%/创业板+5.54%/科创50+6.84%全线反弹，半导体受隔夜费城+9%催化。新华63.40(+1.10%)浮盈+9.78%持有，牧原39.08(-2.10%)浮盈+1.27%持有未触止损。全基金未触止盈阈值。",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "13:30",
-      "logged_at": "2026-07-31T13:30:44",
-      "status": "executed",
-      "summary": "午后纯买入窗口：A股0条pending，基金0条pending，止损未触发，止盈未触发，无交易",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "14:45",
-      "logged_at": "2026-07-31T14:42:34",
-      "status": "executed",
-      "summary": "A股2只持仓持有(新华保险+0.65%/牧原-1.83%)，0条pending；基金6只均未触止盈阈值，2条历史策略skipped。0笔成交",
+      "summary": "晨报生成。A股0主线不建仓，2持仓(新华保险63.14/牧原39.26)未触止盈止损。基金6持仓未触止盈，0新增。美股隔夜全线上涨。风险中性BUY推迟14:45。",
       "triggered": [],
       "reason": ""
     }
