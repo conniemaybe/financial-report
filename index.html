@@ -491,11 +491,12 @@ const csiCash = 203.38;
 const csiEtfPrice = [4.739, 4.826, 4.784, 4.751, 4.818, 4.919, 4.91, 4.958, 4.984, 5.091, 4.942, 4.967, 5.048, 4.907, 4.959, 5.019, 4.998, 4.85, 4.876, 4.877, 4.826, 4.798, 4.916, 4.829, 4.744, 4.837, 4.838, 4.753, 4.589, 4.65, 4.787, 4.765, 4.787, 4.701, 4.753, 4.627, 4.657, 4.605, 4.653, 4.599, 4.651];
 const csiNav = csiEtfPrice.map(v => Math.round(csiShares * v + csiCash));
 
-// 纳指ETF基准：6/8按均价2.373全仓买入，含手续费250+过户费100，剩余现金
-// 买入份额=421200份（取整100），剩余现金¥142.40
+// 纳指ETF 513100 基准：6/8按当日均价2.129全仓买入（同花顺VWAP，westock OHLC均价2.123近似一致）
+// 买入花费=469500×2.129=999,565.50，佣金(万2.5)=249.89，过户费(沪市0.001%)=10.00，剩余现金¥174.61
+// v18(2026-08-04)：修正旧注释错误（原标注2.373是6/1价格非6/8），份额从421200→469500重算
 const ndxPrice = [2.114, 2.2, 2.143, 2.13, 2.162, 2.258, 2.28, 2.279, 2.266, 2.25, 2.174, 2.187, 2.208, 2.158, 2.178, 2.204, 2.209, 2.158, 2.167, 2.171, 2.169, 2.141, 2.166, 2.174, 2.168, 2.17, 2.188, 2.167, 2.107, 2.096, 2.13, 2.13, 2.131, 2.104, 2.118, 2.068, 2.074, 2.041, 2.112, 2.127, 2.192];
-const ndxShares = 421200;
-const ndxCash = 142.40;
+const ndxShares = 469500;
+const ndxCash = 174.61;
 const ndxNav = ndxPrice.map(v => Math.round(ndxShares * v + ndxCash));
 
 const ctx = document.getElementById('navChart').getContext('2d');
@@ -523,8 +524,8 @@ new Chart(ctx, {
       }
     },
     scales: {
-      x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 } } },
-      y: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, callback: v => '¥' + (v/10000).toFixed(0) + '万' }, min: 920000 }
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, autoSkip: true, maxRotation: 0, maxTicksLimit: 12 } },
+      y: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 }, callback: v => '¥' + (v/10000).toFixed(0) + '万' } }
     }
   }
 });
