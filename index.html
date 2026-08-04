@@ -515,7 +515,7 @@ new Chart(ctx, {
     responsive: true, maintainAspectRatio: false,
     interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: { labels: { color: '#94a3b8', usePointStyle: true, padding: 20, font: { size: 12 } } },
+      legend: { labels: { color: '#94a3b8', usePointStyle: true, padding: 20, font: { size: 12 }, filter: function(item) { return item.text !== '本金100万 (参考线)'; } } },
       tooltip: {
         filter: function(item) { return item.dataset.label !== '本金100万 (参考线)'; },
         callbacks: {
