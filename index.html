@@ -864,6 +864,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-04，由 inject_intraday_to_site.py v4 生成）===
@@ -871,7 +874,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-04",
-  "now": "11:17",
+  "now": "13:31",
   "logs": [
     {
       "time_slot": "08:30",
@@ -895,6 +898,23 @@ const INTRADAY_DATA = {
       "status": "executed",
       "summary": "0笔成交，全部持有。上证-0.12%/深证+1.90%/创业板+3.38%/科创50+1.69%，✅正常档位。A股卖出检查：新华62.49(-0.60%)浮盈+8.25%持有、牧原38.12(-2.08%)浮亏-1.22%持有。A股买入0条pending。基金SELL：588000现价1.668>区间上沿1.6442不执行、512480现价0.942>区间上沿0.9256不执行，均推迟13:30/",
       "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-08-04T13:29:04",
+      "status": "executed",
+      "summary": "午后纯买入窗口：A股持仓2只均未触止损，基金科创50ETF止盈重评估触发减仓2800份@1.699，半导体ETF未触发",
+      "triggered": [
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "shares": 2800,
+          "price": 1.699,
+          "reason": "浮盈+23.5%在+20%~+30%区间，科创50指数5日跌幅-8.3%>5%，减仓1/3"
+        }
+      ],
       "reason": ""
     }
   ],
