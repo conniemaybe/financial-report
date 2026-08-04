@@ -854,6 +854,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-04，由 inject_intraday_to_site.py v4 生成）===
@@ -861,7 +864,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-04",
-  "now": "08:25",
+  "now": "09:58",
   "logs": [
     {
       "time_slot": "08:30",
@@ -870,6 +873,14 @@ const INTRADAY_DATA = {
       "summary": "A股+基金晨报生成：板块预筛NeoData异常沿用T-1数据，无新BUY/SELL；新华保险+8.90%/牧原+0.88%浮盈未触止盈；基金全部浮亏无止盈信号；512480半导体-25.66%接近止损线",
       "triggered": [],
       "reason": "无新增策略（A股0主线+大盘风险中性推迟14:45 / 基金全suspended+无止盈触发）"
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-08-04T09:58:25",
+      "status": "executed",
+      "summary": "8/4 10:00 卖出优先窗口：A股空仓无pending；基金2条SELL pending(科创50ETF浮亏-3.4% / 半导体ETF浮亏-23.5%)均在SELL区间上沿之上未触发，check_results已追加，0笔成交",
+      "triggered": [],
+      "reason": ""
     }
   ],
   "briefs": {
