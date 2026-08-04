@@ -142,7 +142,49 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
     return cleared
 
 
-def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
+def _alert_cleared_failures(failures: list, ok_count: int):
+    """清仓标的现价查询失败时飞书告警（2026-08-04 #P5 新增）。
+
+    避免静默降级——以前查不到就显示 "—"，用户无法区分"正常无数据"还是"查询失败"。
+    """
+    import datetime
+    try:
+        # 复用 astock-simulator scripts 的 notify
+        sys.path.insert(0, r"C:\Users\conniehe\.workbuddy\skills\astock-simulator\scripts")
+        from notify import notify_with_retry
+    except ImportError:
+        print("  ⚠️ notify 模块加载失败，无法飞书告警")
+        return False
+
+    today = datetime.date.today().isoformat()
+    details = []
+    for acct, code, name, reason in failures:
+        details.append(f"  • [{acct}] {name}({code}): {reason}")
+
+    title = f"⚠️【模拟盘】{today} 已清仓标的现价查询失败 {len(failures)} 只"
+    content = f"""## ⚠️ 已清仓标的现价查询失败 · {today}
+
+**失败 {len(failures)} 只 / 成功 {ok_count} 只**
+
+**失败清单**：
+{chr(10).join(details)}
+
+**网站影响**：
+失败标的的"清仓后距今"列将显示 ⚠️ 数据缺失，而不是具体收益率
+
+**可能原因**：
+- NeoData token 失效（检查 ~/.workbuddy/.../.neodata_token）
+- NeoData 限流（5-10 分钟后重试）
+- westock-data bfq 接口异常（罕见，3 次重试都失败才报）
+
+**建议处理**：
+1. 检查 NeoData token：python query.py --query '山东黄金 600547 最新价'
+2. 重跑 cleared_positions.py
+"""
+    return notify_with_retry(title, content, context=f"清仓查询失败-{today}")
+
+
+def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> dict:
     """查询清仓标的的现价，填充 current_price 和 post_clear_pct。
 
     **2026-07-24 永久改造（前复权教训）**：
@@ -150,18 +192,31 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
       原因：NeoData 对股票返回前复权价，分红股（如 600460 士兰微、601336 新华保险等）
       现价会偏低，"清仓后距今收益率"失真
     - 基金清仓标的 → 继续走 NeoData（基金通道不带前复权，安全）
+
+    **2026-08-04 #P5 改造（用户："山东黄金清仓后距今为什么没值"）**：
+    - 旧版查不到时只 print 警告，渲染显示 "—"（用户无法区分"无数据"还是"数据缺失"）
+    - 新版：失败时写入 status 字段、收集 failures 列表、返回失败清单供主流程告警
+    - 返回 dict：{"failures": [(acct, code, name, reason)], "ok_count": int}
     """
+    failures = []
+    ok_count = 0
+
     # 股票：走 westock-data bfq
     for item in cleared_astock:
         code = item["code"]
         price = _westock_bfq_price(code)
         if price is not None:
             item["current_price"] = price
+            item["price_status"] = "ok"
             if item["avg_sell"] > 0:
                 item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
             print(f"  ✅ {item['name']}({code}) 现价 {price}")
+            ok_count += 1
         else:
-            print(f"  ⚠️ {item['name']}({code}) 未查到现价")
+            item["price_status"] = "data_missing"
+            reason = f"westock-data bfq 3 次重试后仍失败"
+            failures.append(("A股", code, item["name"], reason))
+            print(f"  ❌ {item['name']}({code}) {reason}")
 
     # 基金：继续走 NeoData（基金通道不带前复权）
     for item in cleared_fund:
@@ -172,11 +227,24 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> None:
         if m:
             price = float(m.group(1))
             item["current_price"] = price
+            item["price_status"] = "ok"
             if item["avg_sell"] > 0:
                 item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
             print(f"  ✅ {item['name']}({code}) 现净值 {price}")
+            ok_count += 1
         else:
-            print(f"  ⚠️ {item['name']}({code}) 未解析到净值")
+            # 区分原因：NeoData 返回空 / 返回无匹配 / token 失效
+            if "TOKEN_EXPIRED" in out or "TOKEN_MISSING" in out:
+                reason = "NeoData token 失效"
+            elif not out.strip():
+                reason = "NeoData 返回空（疑似限流或网络）"
+            else:
+                reason = f"NeoData 返回但未解析到净值（前 80 字符：{out[:80]}）"
+            item["price_status"] = "data_missing"
+            failures.append(("基金", code, item["name"], reason))
+            print(f"  ❌ {item['name']}({code}) {reason}")
+
+    return {"failures": failures, "ok_count": ok_count}
 
 
 def _westock_bfq_price(code: str):
@@ -268,7 +336,14 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
         post_cls = cls(item["post_clear_pct"] or 0)
         price_label = "净值" if is_fund else "价格"
         # 清仓后收益率（带现价）
-        if item["current_price"] is not None and item["post_clear_pct"] is not None:
+        # 2026-08-04 #P5：data_missing 时显示"⚠️ 数据缺失"而不是 "—"，
+        # 让用户知道这是异常而非正常状态
+        if item.get("price_status") == "data_missing":
+            post_cell = (
+                "<td><span style='color:#f59e0b' title='NeoData 或 westock 查价失败'>"
+                "⚠️ 数据缺失</span></td>"
+            )
+        elif item["current_price"] is not None and item["post_clear_pct"] is not None:
             post_cell = (
                 f"<td class='{post_cls}'>{fmt_pct(item['post_clear_pct'])}<br>"
                 f"<small>现{price_label} ¥{item['current_price']:.{4 if is_fund else 2}f}</small></td>"
@@ -418,7 +493,16 @@ def main():
         print(f"  {c['name']}({c['code']}) 清仓日={c['clear_date']} 实现={c['realized']:+.2f}({c['realized_pct']*100:+.2f}%)")
 
     print("\n🌐 NeoData 查询清仓标的现价...")
-    fetch_current_prices(cleared_a, cleared_f)
+    fetch_result = fetch_current_prices(cleared_a, cleared_f)
+    failures = fetch_result["failures"]
+    ok_count = fetch_result["ok_count"]
+
+    # 2026-08-04 #P5：失败时飞书告警（避免静默降级）
+    if failures:
+        print(f"\n⚠️ {len(failures)} 只清仓标的现价查询失败，发送飞书告警...")
+        _alert_cleared_failures(failures, ok_count)
+    else:
+        print(f"\n✅ 全部 {ok_count} 只清仓标的现价查询成功")
 
     print("\n🏗️  构造 HTML 模块...")
     module = build_cleared_module(cleared_a, cleared_f)
