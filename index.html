@@ -867,6 +867,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-04，由 inject_intraday_to_site.py v4 生成）===
@@ -874,7 +877,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-04",
-  "now": "13:31",
+  "now": "14:50",
   "logs": [
     {
       "time_slot": "08:30",
@@ -915,6 +918,14 @@ const INTRADAY_DATA = {
           "reason": "浮盈+23.5%在+20%~+30%区间，科创50指数5日跌幅-8.3%>5%，减仓1/3"
         }
       ],
+      "reason": ""
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-08-04T14:46:30",
+      "status": "executed",
+      "summary": "尾盘最佳买入窗口：A股0 pending，基金512480 SELL未触发（现价0.966>区间上沿0.9256）；科创50ETF已于13:30减仓；0笔成交",
+      "triggered": [],
       "reason": ""
     }
   ],
