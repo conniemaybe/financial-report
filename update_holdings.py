@@ -219,13 +219,20 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
         return total_pnl, total_pct, avg_cost
 
     # A股：v9 基于 price/shares + 独立费用字段重算（绕开 amount 字段语义在不同时期不一致的问题）
+    # 2026-08-04 #P5：兼容基金 trade（用 nav 字段，不是 price）
+    # 否则 588000 这种基金 BUY 总成本算成 0，导致 diluted_cost = 0 显示在网站上
     trades = [t for t in portfolio.get("trades", []) if t.get("code") == code]
+
+    def _trade_price(t: dict) -> float:
+        """trade 价格字段：A 股用 price，基金用 nav。"""
+        return t.get("price") or t.get("nav") or 0
+
     buy_total = sum(
-        t.get("price", 0) * t.get("shares", 0) + t.get("commission", 0) + t.get("transfer_fee", 0)
+        _trade_price(t) * t.get("shares", 0) + t.get("commission", 0) + t.get("transfer_fee", 0)
         for t in trades if t.get("action") == "BUY"
     )
     sell_net = sum(
-        t.get("price", 0) * t.get("shares", 0) - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+        _trade_price(t) * t.get("shares", 0) - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
         for t in trades if t.get("action") == "SELL"
     )
     div_total = sum(t.get("amount", 0) for t in trades if t.get("action") == "DIVIDEND")
@@ -504,10 +511,12 @@ def build_fund_rows(portfolio: dict) -> str:
         cls_pnl = css_cls(pnl)
         cls_dly = css_cls(daily_pnl or 0)
 
-        # v16（2026-08-04）：用户反馈"成本净值列只该是数字，不要文字解释"
-        # diluted_cost=0 时直接显示 ¥0.0000，不加任何小字说明
-        # 如需查看已实现盈亏详情，看"总盈亏"列即可
-        cost_cell = f"<td class='hide-mobile'>¥{diluted_cost:.4f}</td>"
+        # v17（2026-08-04）：diluted_cost <= 0 时（止盈覆盖成本）显示 avg_nav 原始成本
+        # 旧版直接显示 ¥0.0000，用户看不懂（"成本净值显示0"反馈）
+        # 数学上 diluted_cost 为 0 是对的（赚的比投入多），但显示初始成本更易理解
+        # 不加任何文字说明（用户铁律：数据列只显示数字）
+        cost_display = diluted_cost if diluted_cost > 0 else (avg_nav or 0)
+        cost_cell = f"<td class='hide-mobile'>¥{cost_display:.4f}</td>"
 
         if pending_close:
             # 场外基金 T+1 净值：当日净值尚未发布，current_nav 停在 T-1、
