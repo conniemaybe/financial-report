@@ -200,11 +200,13 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
     """计算持仓标的的总盈亏（v9 修正：绕开 amount 歧义，直接用 price/shares 重算）。
     返回 (total_pnl, total_pct, avg_cost)
 
-    A股：基于完整交易历史
-        BUY 成本  = Σ(price × shares + commission + transfer_fee)
-        SELL 净额 = Σ(price × shares - commission - stamp_tax - transfer_fee)
-        总盈亏 = SELL净额 + 持仓浮动市值 + Σ(分红) - BUY总成本
+    v18(2026-08-04)：成本价改用同花顺标准算法（移动加权平均法 + 净投入法）
+    - 买入：累加买入金额+费用
+    - 卖出：成本价不变，累计实现盈亏（从净投入里扣除卖出净额）
+    - 分红：现金入账，不影响成本价（从净投入里扣除）
+    - 最终 avg_cost = 净投入 ÷ 当前持仓股数（反映"手上股票的真实平均成本"）
 
+    A股总盈亏 = SELL净额 + 持仓浮动市值 + Σ(分红) - BUY总成本
     基金：基于 pos.avg_nav（trades 历史可能有遗漏，fund_state.avg_nav 是权威值）
         总盈亏 = (current_nav - avg_nav) × shares
     """
@@ -221,6 +223,7 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
     # A股：v9 基于 price/shares + 独立费用字段重算（绕开 amount 字段语义在不同时期不一致的问题）
     # 2026-08-04 #P5：兼容基金 trade（用 nav 字段，不是 price）
     # 否则 588000 这种基金 BUY 总成本算成 0，导致 diluted_cost = 0 显示在网站上
+    # v18(2026-08-04)：成本价改用同花顺标准——净投入 ÷ 当前持仓股数
     trades = [t for t in portfolio.get("trades", []) if t.get("code") == code]
 
     def _trade_price(t: dict) -> float:
@@ -240,9 +243,26 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
     shares = pos.get("shares", 0)
     holding_mv = shares * current_price
     total_pnl = sell_net + holding_mv + div_total - buy_total
+
+    # v18(2026-08-04)：成本价改用同花顺标准——净投入法
+    # 旧算法：avg_cost = buy_total / buy_shares（只算历史所有买入的加权，忽略卖出）
+    #   问题：卖出盈利的标的，成本被高估；卖出亏损的标的，成本被低估
+    # 新算法：avg_cost = (买入总成本 - 卖出净额 - 分红) ÷ 当前持仓股数
+    #   含义：当前手上股票的真实净投入（已扣除卖出回收的资金和分红）
+    #   跟同花顺"移动加权平均法"在数学上等价（都是反映当前持仓的真实成本）
     buy_shares = sum(t.get("shares", 0) for t in trades if t.get("action") == "BUY")
-    avg_cost = buy_total / buy_shares if buy_shares > 0 else 0
-    total_pct = total_pnl / buy_total if buy_total > 0 else 0
+    net_invested = buy_total - sell_net - div_total
+    if shares > 0:
+        avg_cost = net_invested / shares
+        # 兜底：如果止盈覆盖了全部成本（net_invested ≤ 0），回退到买入加权均价
+        # 这种情况说明已经纯盈利，成本显示为 0 会误导，用历史买入均价更直观
+        if avg_cost <= 0 and buy_shares > 0:
+            avg_cost = buy_total / buy_shares
+    else:
+        avg_cost = buy_total / buy_shares if buy_shares > 0 else 0
+
+    # total_pct 用净投入做分母更合理（反映相对当前持仓资金的收益率）
+    total_pct = total_pnl / net_invested if net_invested > 0 else (total_pnl / buy_total if buy_total > 0 else 0)
     return total_pnl, total_pct, avg_cost
 
 
