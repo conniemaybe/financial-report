@@ -247,6 +247,52 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> dict:
     return {"failures": failures, "ok_count": ok_count}
 
 
+def _eastmoney_fallback_price(code: str):
+    """P60 (2026-08-05) 新增：兜底查价接口。
+
+    问题：westock-data 对部分科创板股票返回「数据为空」（如 688131 皓元医药）。
+    原因：westock-data 对科创板 688 系列覆盖不完整。
+
+    兜底方案（覆盖所有 A 股含科创板/北交所/创业板）：
+    新浪 KLine API（http://money.finance.sina.com.cn/quotes_service/）
+    - 沪市（6/9/688/689）→ sh 前缀
+    - 深市（0/3/30）→ sz 前缀
+    - 北交所（4/8）→ bj 前缀
+
+    **🔴 永久教训**：688131 皓元医药属于沪市科创板（sh），不是深市（sz）！
+    之前 _westock_bfq_price 把 688 开头归为 sz 是错的——科创板代码格式为
+    「688xxx」「689xxx」，均属于沪市。
+
+    Returns: float or None
+    """
+    import json as _json
+    import urllib.request as _url
+    try:
+        # 688/689 开头是科创板，属于沪市 sh（不是 sz！）
+        if code.startswith(("6", "9", "688", "689", "11", "13")):
+            sina_symbol = "sh" + code
+        elif code.startswith(("4", "8")):
+            sina_symbol = "bj" + code
+        else:
+            sina_symbol = "sz" + code
+        url = (f"http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/"
+               f"CN_MarketData.getKLineData?symbol={sina_symbol}&scale=240&datalen=1")
+        req = _url.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with _url.urlopen(req, timeout=15) as resp:
+            out = resp.read().decode("utf-8", errors="replace")
+        if not out or out.strip() == "null":
+            return None
+        arr = _json.loads(out)
+        if not arr:
+            return None
+        price = float(arr[-1].get("close", 0))
+        if 0.01 < price < 100000:
+            return price
+    except Exception as e:
+        print(f"    ⚠️ 新浪兜底失败 ({code}): {e}")
+    return None
+
+
 def _westock_bfq_price(code: str):
     """用 westock-data kline --fq bfq 查询股票最新收盘价（不复权）。
 
@@ -274,6 +320,12 @@ def _westock_bfq_price(code: str):
                 if attempt < 2:
                     _t.sleep(3)
                     continue
+                # P60 (2026-08-05): westock 对部分科创板股票返回「数据为空」
+                # 改用东方财富 push2 接口兜底（覆盖所有 A 股含科创板/北交所）
+                fallback = _eastmoney_fallback_price(code)
+                if fallback is not None:
+                    print(f"    ↩️ westock 失败，东方财富兜底成功: {fallback}")
+                    return fallback
                 return None
             # 解析 markdown 表格第一行数据
             date_pat = re.compile(r"(20\d{2}-\d{2}-\d{2})")
