@@ -893,6 +893,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-05，由 inject_intraday_to_site.py v4 生成）===
@@ -900,7 +903,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-05",
-  "now": "13:32",
+  "now": "14:48",
   "logs": [
     {
       "time_slot": "08:30",
@@ -936,6 +939,14 @@ const INTRADAY_DATA = {
       "summary": "A股无pending、止损未触发；基金2条SELL因现价突破区间上沿跳过；0成交",
       "triggered": [],
       "reason": ""
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-08-05T14:44:18",
+      "status": "executed",
+      "summary": "尾盘最佳买入窗口 — 0笔成交，全部持有。A股无pending策略，2只持仓均未触止损；基金2只SELL pending均因日内强势反弹未执行，无BUY pending",
+      "triggered": [],
+      "reason": "A股：新华保险+9.44%、牧原股份-0.80%，均未触-15%硬止损；基金：科创50ETF趋势止损因科创50指数日内+4.35%反弹未执行，半导体ETF硬止损因板块+5.97%反弹暂缓。大盘上证+1.33%、深证+1.58%，全天强势反弹，尾盘无买入策略触发。"
     }
   ],
   "briefs": {
