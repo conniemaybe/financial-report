@@ -890,6 +890,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-05，由 inject_intraday_to_site.py v4 生成）===
@@ -897,7 +900,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-05",
-  "now": "10:26",
+  "now": "13:32",
   "logs": [
     {
       "time_slot": "08:30",
@@ -923,6 +926,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-08-05T10:22:13",
       "status": "executed",
       "summary": "回调低吸窗口0笔成交。上证+0.33%/深证+3.25%/创业板+5.64%/科创50+4.09%全线反弹。新华62.31浮盈+7.93%持有，牧原38.46浮亏-0.34%持有。基金2条SELL(588000/512480)现价超区间上沿skipped推迟13:30。无A股pending，无基金BUY pending。风险复评✅正常。",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "13:30",
+      "logged_at": "2026-08-05T13:28:27",
+      "status": "executed",
+      "summary": "A股无pending、止损未触发；基金2条SELL因现价突破区间上沿跳过；0成交",
       "triggered": [],
       "reason": ""
     }
