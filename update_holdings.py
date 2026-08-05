@@ -119,8 +119,11 @@ def get_prev_snapshot(portfolio: dict, code: str) -> dict:
     # v12（2026-07-27，踩坑#037）：基金也加 prev_close_nav 优先级，避免
     #   基金 T+1 净值发布 + daily_records 还没生成时回退到 records[-1]（其实是
     #   T-1 数据）当作 prev，导致当日盈亏被算成 0
+    # ⚠️ P52 修复（2026-08-05）：优先取 prev_close_nav（语义更明确，ETF盘中实时更新），
+    #   prev_close 可能跟 prev_close_nav 不一致（intraday_snapshot.update_fund_positions
+    #   历史 bug：只更新 prev_close_nav 没同步 prev_close）
     pos = portfolio.get("positions", {}).get(code, {})
-    prev_close = pos.get("prev_close") or pos.get("prev_close_nav")
+    prev_close = pos.get("prev_close_nav") or pos.get("prev_close")
     if prev_close and prev_close > 0:
         # 包成 snapshot dict 形式，让上层 .get("price") / .get("current_nav") 都能读到
         return {
