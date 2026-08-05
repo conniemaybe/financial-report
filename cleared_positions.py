@@ -12,6 +12,7 @@ import json
 import re
 import subprocess
 import sys
+import os
 from pathlib import Path
 
 ASTOCK_PORTFOLIO = Path(r"C:\Users\conniehe\.workbuddy\astock-simulator\portfolio.json")
@@ -550,9 +551,14 @@ def main():
     ok_count = fetch_result["ok_count"]
 
     # 2026-08-04 #P5：失败时飞书告警（避免静默降级）
+    # P60 (2026-08-05): 支持 SKIP_ALERT=1 环境变量跳过推送（手动重跑不刷屏）
+    skip_alert = os.environ.get("SKIP_ALERT") == "1"
     if failures:
-        print(f"\n⚠️ {len(failures)} 只清仓标的现价查询失败，发送飞书告警...")
-        _alert_cleared_failures(failures, ok_count)
+        if skip_alert:
+            print(f"\n⚠️ {len(failures)} 只清仓标的现价查询失败（SKIP_ALERT=1，不推送）")
+        else:
+            print(f"\n⚠️ {len(failures)} 只清仓标的现价查询失败，发送飞书告警...")
+            _alert_cleared_failures(failures, ok_count)
     else:
         print(f"\n✅ 全部 {ok_count} 只清仓标的现价查询成功")
 
