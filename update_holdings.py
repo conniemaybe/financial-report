@@ -887,30 +887,13 @@ if __name__ == "__main__":
     f_rows = build_fund_rows(fund_pf)
     update_index(a_rows, f_rows, astock_pf, fund_pf)
 
-    # === 独立交叉校验（2026-08-04 #050 新增）===
-    # 用腾讯行情接口（与 NeoData 完全独立）校验 portfolio 当日盈亏
-    # 失败不阻断主流程：主流程职责是更新 HTML，校验职责是发现问题发告警
-    # 任何异常都吞掉只打印，避免校验 bug 把更新流程搞挂
-    try:
-        sys.path.insert(0, r"C:\Users\conniehe\.workbuddy\skills\astock-simulator\scripts")
-        from cross_validate_pnl import validate_portfolio, alert_via_feishu
-        print("\n🔍 [独立交叉校验] 用腾讯行情校验 portfolio 当日盈亏...")
-        results = []
-        for pf_path, label in [(ASTOCK_PORTFOLIO, "A股"), (FUND_PORTFOLIO, "基金")]:
-            r = validate_portfolio(pf_path, label=label)
-            results.append(r)
-            status = "✅ OK" if r.get("all_ok") else f"❌ {len(r.get('mismatches', []))} 处不一致"
-            print(f"  [{label}] 校验 {r.get('checked_count', 0)} 只 → {status}")
-            if not r.get("all_ok"):
-                for m in r.get("mismatches", []):
-                    print(f"     ⚠️ {m.get('code')} {m.get('name', '')}: {m.get('issue') or m.get('issues')}")
-        # 有不一致才发飞书（全 OK 不打扰）
-        if any(not r.get("all_ok") for r in results):
-            alert_via_feishu(results)
-            print("  🚨 已飞书告警")
-        else:
-            print("  ✨ 两个 portfolio 全部通过独立校验")
-    except Exception as e:
-        import traceback
-        print(f"\n⚠️ 交叉校验异常（不影响主流程）: {e}")
-        traceback.print_exc()
+    # P57 (2026-08-05): 剥离 cross_validate_pnl 耦合
+    # 原本这里会调用 cross_validate_pnl.validate_portfolio + alert_via_feishu
+    # 导致盘中每次 update_holdings（10:30/13:30/14:45）都顺带发飞书告警
+    # 用户一天收到 3-4 条告警，主因就是这里
+    #
+    # 现在：盘中 update_holdings 只更新首页持仓表，不发告警
+    #      交叉校验由 evening_finalize.py 步骤 5.4 盘后统一跑一次
+    #      用户一天最多收到 1 条告警（日报后）
+    #
+    # 如需手动跑校验：python cross_validate_pnl.py
