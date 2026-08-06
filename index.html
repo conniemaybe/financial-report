@@ -915,6 +915,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-06，由 inject_intraday_to_site.py v4 生成）===
@@ -922,7 +925,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-06",
-  "now": "10:24",
+  "now": "13:27",
   "logs": [
     {
       "time_slot": "08:30",
@@ -958,6 +961,14 @@ const INTRADAY_DATA = {
         "588000科创50ETF SELL减仓1900份@1.794"
       ],
       "reason": ""
+    },
+    {
+      "time_slot": "11:00",
+      "logged_at": "2026-08-06T13:27:19",
+      "status": "executed",
+      "summary": "11:00检查：A股无pending策略，基金2条SELL均已在10:00/10:30执行完毕（科创50ETF减仓1900份、半导体ETF硬止损12100份），11:00无新动作",
+      "triggered": [],
+      "reason": ""
     }
   ],
   "briefs": {
@@ -968,7 +979,7 @@ const INTRADAY_DATA = {
   },
   "standard_times": [
     "10:00",
-    "10:30",
+    "11:00",
     "13:30",
     "14:45"
   ]
@@ -1099,7 +1110,7 @@ function renderIntradayLog() {
   const logs = INTRADAY_DATA.logs || [];
   const now = INTRADAY_DATA.now || '00:00';
   const briefs = INTRADAY_DATA.briefs || {};
-  const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '13:30', '14:45'];
+  const times = INTRADAY_DATA.standard_times || ['10:00', '11:00', '13:30', '14:45'];  // v1.1 10:30→11:00
   container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
 
   // banner
