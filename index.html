@@ -934,6 +934,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-06，由 inject_intraday_to_site.py v4 生成）===
@@ -941,7 +944,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-06",
-  "now": "19:59",
+  "now": "20:00",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1012,6 +1015,7 @@ const INTRADAY_DATA = {
   "standard_times": [
     "10:00",
     "10:30",
+    "11:00",
     "13:30",
     "14:45"
   ]
@@ -1142,7 +1146,7 @@ function renderIntradayLog() {
   const logs = INTRADAY_DATA.logs || [];
   const now = INTRADAY_DATA.now || '00:00';
   const briefs = INTRADAY_DATA.briefs || {};
-  const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '13:30', '14:45'];  // v1.2 恢复 10:30
+  const times = INTRADAY_DATA.standard_times || ['10:00', '10:30', '11:00', '13:30', '14:45'];  // v1.2 恢复 10:30
   container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
 
   // banner
