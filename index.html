@@ -912,6 +912,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-06，由 inject_intraday_to_site.py v4 生成）===
@@ -919,7 +922,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-06",
-  "now": "09:56",
+  "now": "10:24",
   "logs": [
     {
       "time_slot": "08:30",
@@ -943,6 +946,16 @@ const INTRADAY_DATA = {
           "price": 1.028,
           "reason": "硬止损浮亏-16.62%"
         }
+      ],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:30",
+      "logged_at": "2026-08-06T10:22:32",
+      "status": "executed",
+      "summary": "A股无pending SELL/BUY策略，2持仓浮盈+8.78%/+浮亏-0.72%均未触止损；基金588000科创50ETF在SELL区间[1.777,1.795]内✅触发减仓1900份@1.794，到账¥3,403.57，剩余3900份",
+      "triggered": [
+        "588000科创50ETF SELL减仓1900份@1.794"
       ],
       "reason": ""
     }
