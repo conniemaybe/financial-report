@@ -908,6 +908,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-06，由 inject_intraday_to_site.py v4 生成）===
@@ -915,7 +918,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-06",
-  "now": "08:25",
+  "now": "09:56",
   "logs": [
     {
       "time_slot": "08:30",
@@ -923,6 +926,23 @@ const INTRADAY_DATA = {
       "status": "executed",
       "summary": "晨报生成完成。A股0主线不建仓，新华保险浮盈+9.66%接近止盈线关注，牧原持有。基金0新增策略，512480半导体ETF浮亏-16.62%触止损但8/5反弹+6.6%暂缓观察。",
       "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-08-06T09:54:13",
+      "status": "executed",
+      "summary": "卖出优先窗口—1笔成交。512480半导体ETF硬止损触发@1.028减仓12100份到账12433.68；588000科创50ETF现价1.770低于SELL区间下沿1.777未触发；A股0条pending，新华保险浮盈+8.85%牧原浮亏-0.57%均持有",
+      "triggered": [
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "shares": 12100,
+          "price": 1.028,
+          "reason": "硬止损浮亏-16.62%"
+        }
+      ],
       "reason": ""
     }
   ],
