@@ -56,9 +56,12 @@ else
 fi
 
 # 5. 推送（3次重试）
+# P0 修复 (2026-08-07): 原 `for i in $(seq 1 $MAX_RETRIES)` 在 Git Bash 环境里
+# 因 `seq: command not found` 直接跳过整个循环——"3 次重试"从来没真正执行过。
+# 改用 bash 内置 C 风格 for 循环，不依赖外部命令。
 echo "🔄 正在推送..."
 PUSH_SUCCESS=0
-for i in $(seq 1 $MAX_RETRIES); do
+for ((i=1; i<=MAX_RETRIES; i++)); do
     if git $GIT_PROXY_OPTS push origin main 2>&1; then
         echo "✅ 第 $i 次 PUSH 成功"
         PUSH_SUCCESS=1
@@ -94,7 +97,7 @@ LOCAL_UPDATE_TIME=$(grep -oE '数据更新：[0-9-]+ [0-9:]+' "$REPO_DIR/index.h
 if [ -n "$LOCAL_UPDATE_TIME" ]; then
     echo "🔍 验证 raw 仓库内容是否已更新（本地 updateTime: $LOCAL_UPDATE_TIME）"
     sleep 3  # 给 GitHub 一点时间把 commit 同步到 raw CDN
-    for i in $(seq 1 3); do
+    for ((i=1; i<=3; i++)); do
         REMOTE_UPDATE_TIME=$(curl -s "https://raw.githubusercontent.com/conniemaybe/financial-report/main/index.html?_t=$(date +%s%N)" \
             | grep -oE '数据更新：[0-9-]+ [0-9:]+' | head -1)
         if [ "$REMOTE_UPDATE_TIME" = "$LOCAL_UPDATE_TIME" ]; then
@@ -199,7 +202,7 @@ print(runs[0]['id'] if runs else '')
         elif [ "$CONCL" = "failure" ] || [ "$CONCL" = "timeout" ]; then
             # 失败重试：用 API rerun，指数退避
             MAX_DEPLOY_RETRIES=3
-            for RETRY in $(seq 1 $MAX_DEPLOY_RETRIES); do
+            for ((RETRY=1; RETRY<=MAX_DEPLOY_RETRIES; RETRY++)); do
                 echo "❌ Pages deploy $CONCL，触发 API rerun（$RETRY/$MAX_DEPLOY_RETRIES）"
                 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
                     -H "Authorization: token $GH_TOKEN" \
@@ -255,7 +258,7 @@ PAGES_BUILD_OK=0
 if [ -n "$GH_TOKEN" ]; then
     echo "🏗️  校验最新一次 Pages build 状态（第四重验证）..."
     sleep 10  # 等 Pages build pipeline 启动
-    for i in $(seq 1 6); do
+    for ((i=1; i<=6; i++)); do
         LATEST_BUILD_STATUS=$(curl -s -H "Authorization: token $GH_TOKEN" \
             "https://api.github.com/repos/$REPO/pages/builds?per_page=1" \
             | python -c "
