@@ -4,13 +4,22 @@
 #
 # 原理：先探测 127.0.0.1:7892 端口是否在监听
 #   - 开着代理 → 走代理（git -c http.proxy=http://127.0.0.1:7892）
-#   - 没开代理 → 直连（git -c http.proxy= 清空配置）
+#   - 没开代理 → 直连（不传 proxy 配置，用 git 默认行为）
 #   不依赖全局 git config，避免"代理关了推不了"的陷阱
+#
+# P0 修复 (2026-08-07): Git for Windows 自带的 minimal bash 缺 seq / sleep 等外部命令，
+# 导致原 `for i in $(seq ...)` + `sleep N` 直接报错跳过，"3 次重试"从来没真正执行过。
+# 改用 bash 内置 C 风格 for 循环 + Python 实现跨平台 sleep。
 
 set -e
 REPO_DIR="/e/temp/financial-report"
 COMMIT_MSG="${1:-auto sync}"
 MAX_RETRIES=3
+
+# 跨平台 sleep：Git for Windows minimal bash 无 sleep 命令，用 Python time.sleep 替代
+psleep() {
+    python -c "import time; time.sleep($1)" 2>/dev/null || python3 -c "import time; time.sleep($1)" 2>/dev/null || true
+}
 
 cd "$REPO_DIR"
 
@@ -47,12 +56,15 @@ else
 fi
 
 # 4. 根据代理状态决定推送策略
+# P0 修复 (2026-08-07): 原直连分支用 `GIT_PROXY_OPTS="-c http.proxy= -c https.proxy="`
+# 显式清空代理配置，但在 Git for Windows 上触发 libcurl 的 `getsockname() failed errno 10022`。
+# 直连时不应传任何 proxy 配置（让 git 用默认行为），传空字符串反而让 libcurl 抓狂。
 if [ "$PROXY_ACTIVE" -eq 1 ]; then
     echo "🌐 检测到代理在 127.0.0.1:$PROXY_PORT → 走代理推送"
     GIT_PROXY_OPTS="-c http.proxy=http://127.0.0.1:$PROXY_PORT -c https.proxy=http://127.0.0.1:$PROXY_PORT"
 else
-    echo "📡 未检测到代理 → 直连推送"
-    GIT_PROXY_OPTS="-c http.proxy= -c https.proxy="
+    echo "📡 未检测到代理 → 直连推送（不传 proxy 配置，用 git 默认行为）"
+    GIT_PROXY_OPTS=""
 fi
 
 # 5. 推送（3次重试）
@@ -69,7 +81,7 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     else
         echo "⚠️ 第 $i 次 push 失败"
         if [ "$i" -lt "$MAX_RETRIES" ]; then
-            sleep 2
+            psleep 2
         fi
     fi
 done
@@ -96,7 +108,7 @@ echo "✅ git 验证通过：本地与 origin/main 同步"
 LOCAL_UPDATE_TIME=$(grep -oE '数据更新：[0-9-]+ [0-9:]+' "$REPO_DIR/index.html" | head -1)
 if [ -n "$LOCAL_UPDATE_TIME" ]; then
     echo "🔍 验证 raw 仓库内容是否已更新（本地 updateTime: $LOCAL_UPDATE_TIME）"
-    sleep 3  # 给 GitHub 一点时间把 commit 同步到 raw CDN
+    psleep 3  # 给 GitHub 一点时间把 commit 同步到 raw CDN
     for ((i=1; i<=3; i++)); do
         REMOTE_UPDATE_TIME=$(curl -s "https://raw.githubusercontent.com/conniemaybe/financial-report/main/index.html?_t=$(date +%s%N)" \
             | grep -oE '数据更新：[0-9-]+ [0-9:]+' | head -1)
@@ -105,7 +117,7 @@ if [ -n "$LOCAL_UPDATE_TIME" ]; then
             break
         else
             echo "⚠️ 第 $i 次校验：远程=$REMOTE_UPDATE_TIME（预期 $LOCAL_UPDATE_TIME）"
-            if [ "$i" -lt 3 ]; then sleep 5; fi
+            if [ "$i" -lt 3 ]; then psleep 5; fi
         fi
     done
 
@@ -164,7 +176,7 @@ except:
             echo "$CONCL"
             return 0
         fi
-        sleep 15
+        psleep 15
         ELAPSED=$((ELAPSED + 15))
     done
     echo "timeout"
@@ -213,7 +225,7 @@ print(runs[0]['id'] if runs else '')
                 # 指数退避：60s → 120s → 180s
                 BACKOFF=$((60 * RETRY))
                 echo "   退避 ${BACKOFF}s 后重新检查..."
-                sleep "$BACKOFF"
+                psleep "$BACKOFF"
                 CONCL=$(wait_pages_run_complete "$LATEST_RUN")
                 echo "   rerun 后 run $LATEST_RUN 结论: $CONCL"
                 if [ "$CONCL" = "success" ]; then
@@ -257,7 +269,7 @@ fi
 PAGES_BUILD_OK=0
 if [ -n "$GH_TOKEN" ]; then
     echo "🏗️  校验最新一次 Pages build 状态（第四重验证）..."
-    sleep 10  # 等 Pages build pipeline 启动
+    psleep 10  # 等 Pages build pipeline 启动
     for ((i=1; i<=6; i++)); do
         LATEST_BUILD_STATUS=$(curl -s -H "Authorization: token $GH_TOKEN" \
             "https://api.github.com/repos/$REPO/pages/builds?per_page=1" \
@@ -283,7 +295,7 @@ except:
             break
         else
             echo "⏳ 第 $i 次查询：status=$LATEST_BUILD_STATUS（构建中），15s 后重试..."
-            sleep 15
+            psleep 15
         fi
     done
 fi
