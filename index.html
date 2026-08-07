@@ -964,6 +964,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-07，由 inject_intraday_to_site.py v4 生成）===
@@ -971,7 +974,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-07",
-  "now": "13:29",
+  "now": "14:45",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1011,6 +1014,14 @@ const INTRADAY_DATA = {
       "logged_at": "2026-08-07T13:26:55",
       "status": "executed",
       "summary": "午后纯买入窗口：A股3只持仓均未触止损（新华+0.07%/牧原+0.18%/三祥+2.54%）；基金6只均未触止盈阈值（最高黄金ETF+4.31%）；半导体ETF SELL pending现价1.082>区间上沿不触发；0笔成交",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "14:45",
+      "logged_at": "2026-08-07T14:42:14",
+      "status": "executed",
+      "summary": "尾盘最佳买入窗口 — 0笔成交，全部持有。A股2只止损均未触发；基金512480/588000 SELL均不满足触发条件；大盘✅普涨(上证+0.85%/深证+1.28%/科创50+2.11%)",
       "triggered": [],
       "reason": ""
     }
