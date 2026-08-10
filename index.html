@@ -990,6 +990,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-10，由 inject_intraday_to_site.py v4 生成）===
@@ -997,7 +1000,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-10",
-  "now": "09:56",
+  "now": "10:57",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1010,6 +1013,14 @@ const INTRADAY_DATA = {
     {
       "time_slot": "10:00",
       "logged_at": "2026-08-10T09:53:40",
+      "status": "executed",
+      "summary": "全部 HOLD",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "11:00",
+      "logged_at": "2026-08-10T10:57:34",
       "status": "executed",
       "summary": "全部 HOLD",
       "triggered": [],
