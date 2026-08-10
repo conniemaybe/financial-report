@@ -1001,6 +1001,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-10，由 inject_intraday_to_site.py v4 生成）===
@@ -1008,7 +1011,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-10",
-  "now": "13:34",
+  "now": "13:36",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1036,10 +1039,27 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "13:30",
-      "logged_at": "2026-08-10T13:26:09",
+      "logged_at": "2026-08-10T13:36:35",
       "status": "executed",
-      "summary": "全部 HOLD",
-      "triggered": [],
+      "summary": "午后纯买入窗口 — 2笔基金卖出成交（科创50ETF减仓1300份@1.804；半导体ETF减仓4033.33份@1.059），A股全部HOLD",
+      "triggered": [
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "shares": 1300.0,
+          "price": 1.804,
+          "reason": "纯趋势止损：行业趋势（5日-16.9%/20日-14.1%）"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "shares": 4033.33,
+          "price": 1.059,
+          "reason": "趋势止损加强：浮亏-14.5%+指数5日-19.9%"
+        }
+      ],
       "reason": ""
     }
   ],
