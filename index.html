@@ -987,6 +987,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-10，由 inject_intraday_to_site.py v4 生成）===
@@ -994,13 +997,21 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-10",
-  "now": "08:40",
+  "now": "09:56",
   "logs": [
     {
       "time_slot": "08:30",
       "logged_at": "2026-08-10T08:25:43",
       "status": "executed",
       "summary": "8/10周日: A股0新增(0主线/3持仓未触止盈), 基金0新增(6持仓未触止盈, QDII限购). NeoData token过期影响板块/基金评分.",
+      "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-08-10T09:53:40",
+      "status": "executed",
+      "summary": "全部 HOLD",
       "triggered": [],
       "reason": ""
     }
