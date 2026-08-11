@@ -1004,6 +1004,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v4 生成）===
@@ -1011,7 +1014,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-11",
-  "now": "08:35",
+  "now": "10:07",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1019,6 +1022,25 @@ const INTRADAY_DATA = {
       "status": "executed",
       "summary": "A股0新增(2主线但候选跟涨高估,3持仓未触止盈),基金0新增(6持仓未触止盈),风险中性BUY推迟14:45",
       "triggered": [],
+      "reason": ""
+    },
+    {
+      "time_slot": "10:00",
+      "logged_at": "2026-08-11T09:54:36",
+      "status": "executed",
+      "summary": "[科创50ETF] execute_sell（现价1.83在SELL区间[1.82085,1.8391499999999998]内，触发卖出）",
+      "triggered": [
+        {
+          "code": "588000",
+          "action": "execute_sell（现价1.83在SELL区间[1.82085,1.8391499999999998]内，触发卖出）",
+          "name": "科创50ETF"
+        },
+        {
+          "code": "512480",
+          "action": "execute_sell（现价1.08在SELL区间[1.0746,1.0854]内，触发卖出）",
+          "name": "半导体ETF"
+        }
+      ],
       "reason": ""
     }
   ],
