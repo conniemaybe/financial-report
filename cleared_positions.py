@@ -74,10 +74,33 @@ def _query_neodata(query: str) -> str:
 
 # ============== 数据层 ==============
 
+def _normalize_v2(portfolio: dict) -> dict:
+    """归一化 schema v2 → v1 扁平结构（兼容老代码）。
+    v2: strategy_groups.A.{positions, trades, cash}
+    v1: 顶层 {positions, trades, cash}
+    """
+    if "strategy_groups" not in portfolio:
+        return portfolio
+    groups = portfolio.get("strategy_groups", {})
+    # 合并所有 group（A 优先）
+    all_positions = {}
+    all_trades = []
+    for g_name in ("A", "B"):
+        g = groups.get(g_name) or {}
+        all_positions.update(g.get("positions", {}))
+        all_trades.extend(g.get("trades", []))
+    merged = dict(portfolio)
+    merged["positions"] = all_positions
+    merged["trades"] = all_trades
+    return merged
+
+
 def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[dict]:
     """识别已清仓标的。
     清仓判定：① 已不在 positions；② SELL 总份额 ≥ BUY 总份额；③ BUY 总份额 > 0
     """
+    # v2 schema 归一化
+    portfolio = _normalize_v2(portfolio)
     current_positions = set(portfolio.get("positions", {}).keys())
     trades_by_code = {}
     for t in portfolio.get("trades", []):
