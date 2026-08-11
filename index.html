@@ -1090,6 +1090,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v6 生成）===
@@ -1097,7 +1100,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-11",
-  "now": "15:07",
+  "now": "15:08",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1130,21 +1133,6 @@ const INTRADAY_DATA = {
           "commission": 5.0,
           "transfer_fee": 0.029160000000000002,
           "reason": "SELL pending 触发：现价1.08在卖出区间[1.0746,1.0854]内",
-          "group": "A"
-        },
-        {
-          "date": "2026-08-11",
-          "time": "14:57",
-          "action": "SELL",
-          "code": "512480",
-          "name": "半导体ETF",
-          "price": 1.07,
-          "shares": 5400,
-          "amount": 5770.05322,
-          "stamp_tax": 2.8890000000000002,
-          "commission": 5.0,
-          "transfer_fee": 0.057780000000000005,
-          "reason": "止损铁律触发：浮亏-13.6% ≤ -8%",
           "group": "A"
         }
       ],
@@ -1222,7 +1210,23 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "14:45",
-      "trades": [],
+      "trades": [
+        {
+          "date": "2026-08-11",
+          "time": "14:57",
+          "action": "SELL",
+          "code": "512480",
+          "name": "半导体ETF",
+          "price": 1.07,
+          "shares": 5400,
+          "amount": 5770.05322,
+          "stamp_tax": 2.8890000000000002,
+          "commission": 5.0,
+          "transfer_fee": 0.057780000000000005,
+          "reason": "止损铁律触发：浮亏-13.6% ≤ -8%",
+          "group": "A"
+        }
+      ],
       "checked": true,
       "pending_states": [
         {
