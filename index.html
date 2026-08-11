@@ -1007,6 +1007,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v4 生成）===
@@ -1014,7 +1017,7 @@ renderReports();
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
   "date": "2026-08-11",
-  "now": "10:07",
+  "now": "11:01",
   "logs": [
     {
       "time_slot": "08:30",
@@ -1038,6 +1041,20 @@ const INTRADAY_DATA = {
         {
           "code": "512480",
           "action": "execute_sell（现价1.08在SELL区间[1.0746,1.0854]内，触发卖出）",
+          "name": "半导体ETF"
+        }
+      ],
+      "reason": ""
+    },
+    {
+      "time_slot": "11:00",
+      "logged_at": "2026-08-11T10:57:55",
+      "status": "executed",
+      "summary": "[半导体ETF] execute_sell 全部（止损铁律触发：浮亏-12.0% ≤ -8%） @ 1.09",
+      "triggered": [
+        {
+          "code": "512480",
+          "action": "execute_sell 全部（止损铁律触发：浮亏-12.0% ≤ -8%）",
           "name": "半导体ETF"
         }
       ],
