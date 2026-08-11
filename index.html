@@ -202,7 +202,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-10（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-11（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v5 动态填充 -->
@@ -1014,76 +1014,30 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-10，由 inject_intraday_to_site.py v4 生成）===
+// === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v4 生成）===
 // v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
 // v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
 const INTRADAY_DATA = {
-  "date": "2026-08-10",
-  "now": "16:03",
+  "date": "2026-08-11",
+  "now": "08:28",
   "logs": [
     {
       "time_slot": "08:30",
-      "logged_at": "2026-08-10T08:25:43",
+      "logged_at": "2026-08-11T08:28:25",
       "status": "executed",
-      "summary": "8/10周日: A股0新增(0主线/3持仓未触止盈), 基金0新增(6持仓未触止盈, QDII限购). NeoData token过期影响板块/基金评分.",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "10:00",
-      "logged_at": "2026-08-10T09:53:40",
-      "status": "executed",
-      "summary": "全部 HOLD",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "11:00",
-      "logged_at": "2026-08-10T10:57:34",
-      "status": "executed",
-      "summary": "全部 HOLD",
-      "triggered": [],
-      "reason": ""
-    },
-    {
-      "time_slot": "13:30",
-      "logged_at": "2026-08-10T13:36:35",
-      "status": "executed",
-      "summary": "午后纯买入窗口 — 2笔基金卖出成交（科创50ETF减仓1300份@1.804；半导体ETF减仓4033.33份@1.059），A股全部HOLD",
-      "triggered": [
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "shares": 1300.0,
-          "price": 1.804,
-          "reason": "纯趋势止损：行业趋势（5日-16.9%/20日-14.1%）"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "shares": 4033.33,
-          "price": 1.059,
-          "reason": "趋势止损加强：浮亏-14.5%+指数5日-19.9%"
-        }
-      ],
-      "reason": ""
-    },
-    {
-      "time_slot": "14:45",
-      "logged_at": "2026-08-10T14:41:32",
-      "status": "executed",
-      "summary": "全部 HOLD",
+      "summary": "A股0新增(2主线但候选跟涨高估,3持仓未触止盈),基金0新增(6持仓未触止盈),风险中性BUY推迟14:45",
       "triggered": [],
       "reason": ""
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：靶材(+25.9%)、电子特气(+17.0%)、氦气(+13.4%)",
+    "板块主线": "5日强势：有色(铋)(+26.1%)、无人战机(+7.3%)、印巴冲突概念(+6.3%)",
     "紫苏叶池": "实验池 8 只 · 今日无信号",
     "基金检查": "持仓 8 只 · 全部健康"
   },
