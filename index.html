@@ -208,7 +208,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-11（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
-      <!-- 由 inject_intraday_to_site.py v5 动态填充 -->
+      <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
     </div>
   </div>
 
@@ -1013,56 +1013,149 @@ renderReports();
 
 
 
-<!-- === 今日盘中决策实录数据（v4，由 inject_intraday_to_site.py 生成）=== -->
+
+
+
+<!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v4 生成）===
-// v4 (2026-07-25): 新增 alert 态（触发交易时红色左边框），triggered 补 name+price
-// v3: 数据源从 intraday_snapshots 改为 decision_runs，独立于持仓快照
+// === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v6 生成）===
+// v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
+// 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-11",
-  "now": "11:17",
-  "logs": [
-    {
-      "time_slot": "08:30",
-      "logged_at": "2026-08-11T08:28:25",
-      "status": "executed",
-      "summary": "A股0新增(2主线但候选跟涨高估,3持仓未触止盈),基金0新增(6持仓未触止盈),风险中性BUY推迟14:45",
-      "triggered": [],
-      "reason": ""
-    },
+  "now": "11:37",
+  "slots": [
     {
       "time_slot": "10:00",
-      "logged_at": "2026-08-11T09:54:36",
-      "status": "executed",
-      "summary": "[科创50ETF] execute_sell（现价1.83在SELL区间[1.82085,1.8391499999999998]内，触发卖出）",
-      "triggered": [
+      "trades": [
+        {
+          "date": "2026-08-11",
+          "time": "09:59",
+          "action": "SELL",
+          "code": "588000",
+          "name": "科创50ETF",
+          "price": 1.83,
+          "shares": 800,
+          "amount": 1458.25336,
+          "stamp_tax": 0.732,
+          "commission": 5.0,
+          "transfer_fee": 0.014640000000000002,
+          "reason": "SELL pending 触发：现价1.83在卖出区间[1.82085,1.83915]内",
+          "group": "A"
+        },
+        {
+          "date": "2026-08-11",
+          "time": "09:59",
+          "action": "SELL",
+          "code": "512480",
+          "name": "半导体ETF",
+          "price": 1.08,
+          "shares": 2700,
+          "amount": 2909.51284,
+          "stamp_tax": 1.458,
+          "commission": 5.0,
+          "transfer_fee": 0.029160000000000002,
+          "reason": "SELL pending 触发：现价1.08在卖出区间[1.0746,1.0854]内",
+          "group": "A"
+        }
+      ],
+      "pending_states": [
         {
           "code": "588000",
-          "action": "execute_sell（现价1.83在SELL区间[1.82085,1.8391499999999998]内，触发卖出）",
-          "name": "科创50ETF"
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
+          "shares_plan": 866.67,
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "512480",
-          "action": "execute_sell（现价1.08在SELL区间[1.0746,1.0854]内，触发卖出）",
-          "name": "半导体ETF"
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
+          "shares_plan": 2700.0,
+          "status": "executed",
+          "reason": ""
         }
-      ],
-      "reason": ""
+      ]
     },
     {
       "time_slot": "11:00",
-      "logged_at": "2026-08-11T11:15:00",
-      "status": "skipped",
-      "summary": "11:00 检查：半导体ETF剩余5400股持仓未变，无新信号触发（10:00已卖2700股）",
-      "triggered": [],
-      "reason": "原 11:00 记录为 LLM 误写的幽灵决策（声称 execute_sell 全部@1.09，但 portfolio.trades 无对应记录），已清理"
+      "trades": [],
+      "pending_states": [
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
+          "shares_plan": 866.67,
+          "status": "pending",
+          "reason": "未检查"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
+          "shares_plan": 2700.0,
+          "status": "pending",
+          "reason": "未检查"
+        }
+      ]
+    },
+    {
+      "time_slot": "13:30",
+      "trades": [],
+      "pending_states": [
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
+          "shares_plan": 866.67,
+          "status": "pending",
+          "reason": "未检查"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
+          "shares_plan": 2700.0,
+          "status": "pending",
+          "reason": "未检查"
+        }
+      ]
+    },
+    {
+      "time_slot": "14:45",
+      "trades": [],
+      "pending_states": [
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
+          "shares_plan": 866.67,
+          "status": "pending",
+          "reason": "未检查"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
+          "shares_plan": 2700.0,
+          "status": "pending",
+          "reason": "未检查"
+        }
+      ]
     }
   ],
   "briefs": {
-    "冷却期": "仓位 0.1% · 可加仓 ｜ normal",
-    "板块主线": "5日强势：有色(铋)(+26.1%)、无人战机(+7.3%)、印巴冲突概念(+6.3%)",
-    "紫苏叶池": "实验池 8 只 · 今日无信号",
-    "基金检查": "持仓 8 只 · 全部健康"
+    "冷却期": "仓位 0.1% · 可加仓",
+    "板块主线": "5日强势：有色(铋)(+26.1%)、无人战机(+7.3%)、印巴冲突概念(+6.3%)"
   },
   "standard_times": [
     "10:00",
@@ -1077,138 +1170,146 @@ function timeToMinutes(t) {
   return parseInt(parts[0]) * 60 + parseInt(parts[1]);
 }
 
-function renderTimeSlot(t, logs, nowStr, briefs, standardTimes) {
-  const nowMin = timeToMinutes(nowStr);
-  const slotMin = timeToMinutes(t);
-  const log = logs.find(l => l.time_slot === t);
+function fmtNum(n) {
+  if (typeof n !== 'number') return n;
+  return n.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
+}
 
-  if (log) {
-    // 有决策日志记录，按 status 渲染
-    const status = log.status;
-    let statusIcon, statusText, statusColor, bodyColor, nodeClass;
+function renderTradeLine(t) {
+  const action = t.action || '';
+  const actionColor = action === 'SELL' ? '#ef4444' : '#10b981';
+  const actionText = action === 'SELL' ? '卖出' : (action === 'BUY' ? '买入' : action);
+  const code = t.code || '';
+  const name = t.name || '';
+  const price = t.price || 0;
+  const shares = t.shares || 0;
+  const amount = t.amount || 0;
+  const reason = t.reason || '';
+  const unit = (t.fund_type || t.is_etf) ? '份' : '股';
 
-    // 2026-07-25 v4：触发交易时用 alert 态（红色左边框），不搞渐变/发光（不要加戏铁律）
-    const hasTriggered = log.triggered && log.triggered.length > 0;
+  let line = '<div style="padding:4px 0;">';
+  line += '<b style="color:' + actionColor + ';">' + actionText + '</b> ';
+  line += '<b style="color:#f8fafc;">' + name + '</b> ';
+  line += '<span style="color:#94a3b8;">' + code + '</span> ';
+  line += '<span style="color:#cbd5e1;">@' + price.toFixed(2) + '</span> ';
+  line += '<span style="color:#cbd5e1;">' + fmtNum(shares) + unit + '</span> ';
+  line += '<span style="color:#cbd5e1;">¥' + fmtNum(amount) + '</span>';
+  if (reason) {
+    line += '<div style="color:#94a3b8;font-size:0.85em;margin-top:2px;padding-left:8px;">' + reason + '</div>';
+  }
+  line += '</div>';
+  return line;
+}
 
-    if (status === 'executed') {
-      if (hasTriggered) {
-        statusIcon = '🔔'; statusText = '触发交易'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'alert';
-      } else {
-        statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; bodyColor = '#cbd5e1'; nodeClass = 'done';
-      }
-    } else if (status === 'skipped') {
-      statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b'; bodyColor = '#94a3b8'; nodeClass = 'done';
-    } else if (status === 'failed') {
-      statusIcon = '❌'; statusText = '失败'; statusColor = '#ef4444'; bodyColor = '#fca5a5'; nodeClass = 'done';
-    } else {
-      statusIcon = '❓'; statusText = status; statusColor = '#94a3b8'; bodyColor = '#94a3b8'; nodeClass = 'done';
-    }
+function renderPendingState(ps) {
+  const code = ps.code || '';
+  const name = ps.name || '';
+  const action = ps.action || '';
+  const trigger = ps.trigger_conditions || '';
+  const status = ps.status || 'pending';
+  const reason = ps.reason || '';
+  const sharesPlan = ps.shares_plan || 0;
 
-    // 主体内容
-    let bodyHtml = '<div style="color:' + bodyColor + ';font-size:0.95em;">' + (log.summary || '无摘要') + '</div>';
-    if (log.reason) {
-      bodyHtml += '<div style="color:#94a3b8;font-size:0.85em;margin-top:4px;">原因：' + log.reason + '</div>';
-    }
-    if (hasTriggered) {
-      // 2026-07-25 v4：triggered 渲染补上 name 和 price（名称+代码+价格+操作+数量）
-      bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #ef444433;font-size:0.88em;">';
-      bodyHtml += '<div style="color:#ef4444;font-weight:600;margin-bottom:4px;">🚨 触发交易</div>';
-      log.triggered.forEach(tg => {
-        const code = tg.code || '';
-        const name = tg.name || '';
-        const action = tg.action || '';
-        const shares = tg.shares || '';
-        const price = tg.price;
-        // 渲染：买入 新华保险 601336 @55.00 1000股
-        let line = '<b style="color:#f8fafc;">' + action + '</b> ';
-        if (name) line += '<b style="color:#f8fafc;">' + name + '</b> ';
-        if (code) line += '<span style="color:#94a3b8;">' + code + '</span> ';
-        if (typeof price === 'number') line += '<span style="color:#94a3b8;">@' + price.toFixed(2) + '</span> ';
-        if (shares) line += '<span style="color:#94a3b8;">' + shares + '股</span>';
-        bodyHtml += '<div style="padding:2px 0;">' + line + '</div>';
-      });
-      bodyHtml += '</div>';
-    }
-    // 已执行且无触发：附加决策摘要
-    if (status === 'executed' && briefs && Object.keys(briefs).length > 0 && (!hasTriggered)) {
-      bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #334155;">';
-      Object.entries(briefs).forEach(([k, v]) => {
-        bodyHtml += '<div style="padding:2px 0;font-size:0.88em;">' +
-          '<span style="color:#94a3b8;font-weight:600;">' + k + '：</span>' +
-          '<span style="color:#cbd5e1;">' + v + '</span></div>';
-      });
-      bodyHtml += '</div>';
-    }
-
-    return '<div class="decision-node ' + nodeClass + '">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:' + statusColor + ';">' + statusIcon + ' ' + statusText + '</div>' +
-      '</div>' +
-      '<div class="d-body">' + bodyHtml + '</div>' +
-    '</div>';
+  let statusIcon, statusText, statusColor;
+  if (status === 'executed') {
+    statusIcon = '✅'; statusText = '已成交'; statusColor = '#10b981';
+  } else if (status === 'checked') {
+    statusIcon = '⏸️'; statusText = '未触发'; statusColor = '#f59e0b';
+  } else if (status === 'skipped') {
+    statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b';
+  } else if (status === 'expired') {
+    statusIcon = '❌'; statusText = '已过期'; statusColor = '#ef4444';
+  } else {
+    statusIcon = '⏳'; statusText = '待评估'; statusColor = '#3b82f6';
   }
 
-  // 无决策日志记录：按时点 vs 当前时间判断
+  const actionColor = action === 'SELL' ? '#ef4444' : '#10b981';
+  const actionText = action === 'SELL' ? '卖出' : '买入';
+
+  let line = '<div style="padding:3px 0;font-size:0.88em;">';
+  line += '<span style="color:' + statusColor + ';">' + statusIcon + ' ' + statusText + '</span> ';
+  line += '<span style="color:' + actionColor + ';font-weight:600;">[' + actionText + '计划]</span> ';
+  line += '<b style="color:#cbd5e1;">' + name + '</b> ';
+  line += '<span style="color:#64748b;">' + code + '</span> ';
+  if (sharesPlan) line += '<span style="color:#64748b;">计划' + fmtNum(sharesPlan) + '</span> ';
+  if (reason) {
+    line += '<div style="color:#94a3b8;padding-left:18px;margin-top:2px;font-size:0.92em;">' + reason + '</div>';
+  }
+  line += '</div>';
+  return line;
+}
+
+function renderSlot(slotData, nowStr, briefs) {
+  const slot = slotData.time_slot;
+  const trades = slotData.trades || [];
+  const pendingStates = slotData.pending_states || [];
+  const nowMin = timeToMinutes(nowStr);
+  const slotMin = timeToMinutes(slot);
   const isFuture = slotMin > nowMin;
   const isRunning = (nowMin >= slotMin) && (nowMin < slotMin + 5);
-  const hasAnyToday = logs.length > 0;
 
-  if (isFuture) {
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#3b82f6;">⏳ 今日待执行</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">当前 ' + nowStr + '，预计 ' + t + ' 触发盘中 automation</div>' +
-    '</div>';
-  } else if (isRunning) {
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#3b82f6;">🔄 运行中</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">automation 触发中，等待决策日志写入</div>' +
-    '</div>';
-  } else if (hasAnyToday) {
-    // 今日有其他时点记录，但这个时点没有 → automation 可能故障
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#f59e0b;">⚠️ 未触发</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">该时点 automation 未触发或未记录决策日志（可能 PENDING_REVIEW 未批准）</div>' +
-    '</div>';
+  let bodyHtml = '';
+  let statusIcon, statusText, statusColor, nodeClass;
+
+  if (trades.length > 0) {
+    // 有真实成交
+    statusIcon = '🔔'; statusText = trades.length + '笔成交'; statusColor = '#10b981'; nodeClass = 'done';
+    bodyHtml += '<div style="border-bottom:1px dashed #334155;padding-bottom:6px;margin-bottom:6px;">';
+    trades.forEach(t => { bodyHtml += renderTradeLine(t); });
+    bodyHtml += '</div>';
   } else {
-    // 今日完全无记录
-    return '<div class="decision-node pending">' +
-      '<div>' +
-        '<div class="d-time">' + t + '</div>' +
-        '<div class="d-status" style="color:#f59e0b;">⚠️ 今日未启动</div>' +
-      '</div>' +
-      '<div class="d-body" style="color:#64748b;">今日所有 automation 都未触发，请检查调度配置</div>' +
-    '</div>';
+    // 无成交
+    if (isFuture) {
+      statusIcon = '⏳'; statusText = '今日待执行'; statusColor = '#3b82f6'; nodeClass = 'pending';
+      bodyHtml += '<div style="color:#64748b;font-size:0.9em;">当前 ' + nowStr + '，预计 ' + slot + ' 触发盘中 automation</div>';
+    } else {
+      statusIcon = '⏸️'; statusText = '无成交'; statusColor = '#64748b'; nodeClass = 'pending';
+      bodyHtml += '<div style="color:#64748b;font-size:0.9em;">本时段无成交</div>';
+    }
   }
+
+  // pending 策略状态对照（如果有今日 pending）
+  if (pendingStates.length > 0) {
+    bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #334155;">';
+    bodyHtml += '<div style="color:#94a3b8;font-size:0.85em;font-weight:600;margin-bottom:4px;">晨报策略对照</div>';
+    pendingStates.forEach(ps => { bodyHtml += renderPendingState(ps); });
+    bodyHtml += '</div>';
+  }
+
+  // 决策依据（冷却期/板块主线等）
+  if (briefs && Object.keys(briefs).length > 0 && trades.length === 0) {
+    bodyHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed #334155;">';
+    Object.entries(briefs).forEach(([k, v]) => {
+      bodyHtml += '<div style="padding:2px 0;font-size:0.85em;">' +
+        '<span style="color:#94a3b8;font-weight:600;">' + k + '：</span>' +
+        '<span style="color:#cbd5e1;">' + v + '</span></div>';
+    });
+    bodyHtml += '</div>';
+  }
+
+  return '<div class="decision-node ' + nodeClass + '">' +
+    '<div>' +
+      '<div class="d-time">' + slot + '</div>' +
+      '<div class="d-status" style="color:' + statusColor + ';">' + statusIcon + ' ' + statusText + '</div>' +
+    '</div>' +
+    '<div class="d-body">' + bodyHtml + '</div>' +
+  '</div>';
 }
 
 function renderIntradayLog() {
   const container = document.getElementById('decisionLog');
   if (!container) return;
-  const logs = INTRADAY_DATA.logs || [];
+  const slots = INTRADAY_DATA.slots || [];
   const now = INTRADAY_DATA.now || '00:00';
   const briefs = INTRADAY_DATA.briefs || {};
-  const times = INTRADAY_DATA.standard_times || ['10:00', '11:00', '13:30', '14:45'];  // 与 automation 对齐
-  container.innerHTML = times.map(t => renderTimeSlot(t, logs, now, briefs, times)).join('');
+  container.innerHTML = slots.map(s => renderSlot(s, now, briefs)).join('');
 
-  // banner
   const banner = document.getElementById('intradayBanner');
   if (banner) {
-    const runCount = logs.filter(l => l.status === 'executed' || l.status === 'skipped').length;
-    const failedCount = logs.filter(l => l.status === 'failed').length;
-    let text = '📊 今日 (' + INTRADAY_DATA.date.slice(5) + ') · ' + runCount + '/' + times.length + ' 时点已记录';
-    if (failedCount > 0) text += ' · ❌ ' + failedCount + ' 个失败';
-    text += ' · 当前 ' + now;
-    banner.className = 'market-banner ' + (failedCount > 0 ? 'down' : (runCount === times.length ? 'up' : 'pending'));
+    const totalTrades = slots.reduce((sum, s) => sum + (s.trades || []).length, 0);
+    const executedSlots = slots.filter(s => (s.trades || []).length > 0).length;
+    let text = '📊 ' + INTRADAY_DATA.date.slice(5) + ' · ' + executedSlots + '/' + slots.length + ' 时点有成交 · 共 ' + totalTrades + ' 笔 · 当前 ' + now;
+    banner.className = 'market-banner ' + (totalTrades > 0 ? 'up' : 'pending');
     banner.innerHTML = text;
   }
 }
