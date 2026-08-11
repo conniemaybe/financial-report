@@ -146,8 +146,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="cards">
     <div class="card">
       <div class="label">A股账户净值</div>
-      <div class="value">¥790,832.83</div>
-      <div class="change"><span class="up">累计 +¥290,832.83 (+58.17%)</span> · <span class="up">今日 +¥936.00 (+0.12%)</span></div>
+      <div class="value">¥540,832.83</div>
+      <div class="change"><span class="up">累计 +¥40,832.83 (+8.17%)</span> · <span class="up">今日 +¥936.00 (+0.17%)</span></div>
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
@@ -156,12 +156,12 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,309,698.75</div>
-      <div class="change"><span class="up">累计 +¥309,698.75 (+30.97%)</span></div>
+      <div class="value">¥1,059,698.75</div>
+      <div class="change"><span class="up">累计 +¥59,698.75 (+5.97%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
-      <div class="value" style="font-size:20px;">¥746,493.83 / ¥281,846.19</div>
+      <div class="value" style="font-size:20px;">¥496,493.83 / ¥281,846.19</div>
     </div>
   </div>
 
@@ -523,7 +523,7 @@ new Chart(ctx, {
   data: {
     labels: navLabels,
     datasets: [
-      { label: '合并净值 (A股+基金)', data: [1000000,998916,997320,999950,1008186,1006391,1009576,1025012,1042276,1027627,1044128,1059680,1037922,1062052,1077843,1071846,1049442,1043667,1052730,1052909,1059419,1081494,1077307,1066631,1069342,1066100,1061077,1047963,1050600,1058253,1060094,1058969,1054847,1056737,1050437,1048951,1046165,1048356,1044414,1046603,1053006,1054855,1057038,1057040, 1059358, 1059358, 1059358, 1059358], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '合并净值 (A股+基金)', data: [1000000,998916,997320,999950,1008186,1006391,1009576,1025012,1042276,1027627,1044128,1059680,1037922,1062052,1077843,1071846,1049442,1043667,1052730,1052909,1059419,1081494,1077307,1066631,1069342,1066100,1061077,1047963,1050600,1058253,1060094,1058969,1054847,1056737,1050437,1048951,1046165,1048356,1044414,1046603,1053006,1054855,1057038,1057040,1059571], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
       { label: '沪深300ETF基准 (100万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
       { label: '纳指ETF基准 (100万全仓模拟)', data: ndxNav, borderColor: '#a78bfa', backgroundColor: '#a78bfa10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#a78bfa', borderWidth: 2, borderDash: [8,4] },
       { label: '本金100万 (参考线)', data: new Array(navLabels.length).fill(1000000), borderColor: '#64748b', backgroundColor: 'transparent', fill: false, tension: 0, pointRadius: 0, pointHoverRadius: 0, borderWidth: 1, borderDash: [3,3], order: 99 }
