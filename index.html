@@ -1037,6 +1037,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v6 生成）===
@@ -1044,7 +1047,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-11",
-  "now": "13:29",
+  "now": "14:06",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1239,9 +1242,9 @@ function renderPendingState(ps) {
   if (status === 'executed') {
     statusIcon = '✅'; statusText = '已成交'; statusColor = '#10b981';
   } else if (status === 'checked') {
-    statusIcon = '⏸️'; statusText = '未触发'; statusColor = '#f59e0b';
+    statusIcon = '⏸️'; statusText = '未触发'; statusColor = '#94a3b8';
   } else if (status === 'skipped') {
-    statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#f59e0b';
+    statusIcon = '⏸️'; statusText = '已跳过'; statusColor = '#94a3b8';
   } else if (status === 'expired') {
     statusIcon = '❌'; statusText = '已过期'; statusColor = '#ef4444';
   } else {
@@ -1269,10 +1272,12 @@ function renderSlot(slotData, nowStr, briefs) {
   const trades = slotData.trades || [];
   const pendingStates = slotData.pending_states || [];
   const checked = slotData.checked || false;
-  const nowMin = timeToMinutes(nowStr);
+  // 用浏览器实时时间，不用注入时的静态 now（注入后页面可能停留数小时）
+  const d = new Date();
+  const realNow = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  const nowMin = timeToMinutes(realNow);
   const slotMin = timeToMinutes(slot);
   const isFuture = slotMin > nowMin;
-  const isRunning = (nowMin >= slotMin) && (nowMin < slotMin + 5);
 
   let bodyHtml = '';
   let statusIcon, statusText, statusColor, nodeClass;
@@ -1283,20 +1288,18 @@ function renderSlot(slotData, nowStr, briefs) {
     bodyHtml += '<div style="border-bottom:1px dashed #334155;padding-bottom:6px;margin-bottom:6px;">';
     trades.forEach(t => { bodyHtml += renderTradeLine(t); });
     bodyHtml += '</div>';
+  } else if (checked) {
+    // automation 已运行，无成交 = 合法结果
+    statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; nodeClass = 'done';
+    bodyHtml += '<div style="color:#64748b;font-size:0.9em;">本时段无 SELL/BUY 触发</div>';
+  } else if (isFuture) {
+    // 时段还没到
+    statusIcon = '⏳'; statusText = '待执行'; statusColor = '#3b82f6'; nodeClass = 'pending';
+    bodyHtml += '<div style="color:#64748b;font-size:0.9em;">预计 ' + slot + ' 触发盘中 automation</div>';
   } else {
-    // 无成交
-    if (isFuture) {
-      statusIcon = '⏳'; statusText = '今日待执行'; statusColor = '#3b82f6'; nodeClass = 'pending';
-      bodyHtml += '<div style="color:#64748b;font-size:0.9em;">当前 ' + nowStr + '，预计 ' + slot + ' 触发盘中 automation</div>';
-    } else if (checked) {
-      // automation 已跑过但无成交
-      statusIcon = '⏸️'; statusText = '已检查·无成交'; statusColor = '#94a3b8'; nodeClass = 'pending';
-      bodyHtml += '<div style="color:#64748b;font-size:0.9em;">本时段 automation 已运行，无 SELL/BUY 触发</div>';
-    } else {
-      // 时段已过但 automation 未跑
-      statusIcon = '⚠️'; statusText = '未运行'; statusColor = '#f59e0b'; nodeClass = 'pending';
-      bodyHtml += '<div style="color:#f59e0b;font-size:0.9em;">⚠️ 时段已过但 automation 未写入快照（可能故障）</div>';
-    }
+    // 时段已过但 automation 未跑（无 snapshot）
+    statusIcon = '⚠️'; statusText = '未运行'; statusColor = '#f59e0b'; nodeClass = 'pending';
+    bodyHtml += '<div style="color:#f59e0b;font-size:0.9em;">时段已过但 automation 未写入快照（可能故障）</div>';
   }
 
   // pending 策略状态对照（如果有今日 pending）
@@ -1340,8 +1343,10 @@ function renderIntradayLog() {
     const totalTrades = slots.reduce((sum, s) => sum + (s.trades || []).length, 0);
     const executedSlots = slots.filter(s => (s.trades || []).length > 0).length;
     const checkedSlots = slots.filter(s => s.checked).length;
-    let text = '📊 ' + INTRADAY_DATA.date.slice(5) + ' · ' + checkedSlots + '/' + slots.length + ' 时点已检查 · ' + executedSlots + ' 时点有成交 · 共 ' + totalTrades + ' 笔 · 当前 ' + now;
-    banner.className = 'market-banner ' + (totalTrades > 0 ? 'up' : (checkedSlots > 0 ? 'pending' : 'down'));
+    const d = new Date();
+    const realNow = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    let text = '📊 ' + INTRADAY_DATA.date.slice(5) + ' · ' + checkedSlots + '/' + slots.length + ' 时点已执行 · ' + executedSlots + ' 时点有成交 · 共 ' + totalTrades + ' 笔 · 当前 ' + realNow;
+    banner.className = 'market-banner ' + (totalTrades > 0 ? 'up' : (checkedSlots > 0 ? 'up' : 'pending'));
     banner.innerHTML = text;
   }
 }
