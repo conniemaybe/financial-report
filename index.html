@@ -151,17 +151,17 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥517,990.50</div>
-      <div class="change"><span class="up">累计 +¥17,990.50 (+3.60%)</span> · <span class="down">今日 -¥722.66 (-0.14%)</span></div>
+      <div class="value">¥523,768.34</div>
+      <div class="change"><span class="up">累计 +¥23,768.34 (+4.75%)</span> · <span class="down">今日 -¥722.66 (-0.14%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,058,359.22</div>
-      <div class="change"><span class="up">累计 +¥58,359.22 (+5.84%)</span></div>
+      <div class="value">¥1,064,137.06</div>
+      <div class="change"><span class="up">累计 +¥64,137.06 (+6.41%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
-      <div class="value" style="font-size:20px;">¥496,506.72 / ¥286,213.96</div>
+      <div class="value" style="font-size:20px;">¥496,506.72 / ¥291,991.80</div>
     </div>
   </div>
 
@@ -202,7 +202,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-11（周二）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-07-22（周三）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -392,6 +392,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-08-11', type: 'evening', file: '20260811_日报.html', label: '8/11 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-08-11', type: 'morning', file: '20260811_晨报.html', label: '8/11 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-08-10', type: 'evening', file: '20260810_日报.html', label: '8/10 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-08-10', type: 'morning', file: '20260810_晨报.html', label: '8/10 晨报', ico: '🌅', cls: 'morning' },
@@ -1065,161 +1066,57 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-11，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-07-22，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-08-11",
-  "now": "16:27",
+  "date": "2026-07-22",
+  "now": "08:26",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [
         {
-          "date": "2026-08-11",
-          "time": "09:59",
+          "date": "2026-07-22",
+          "time": "09:55",
           "action": "SELL",
-          "code": "588000",
-          "name": "科创50ETF",
-          "price": 1.83,
-          "shares": 800,
-          "amount": 1458.25336,
-          "stamp_tax": 0.732,
+          "code": "600460",
+          "name": "士兰微",
+          "price": 33.85,
+          "shares": 300,
+          "amount": 10144.820950000001,
+          "stamp_tax": 5.0775,
           "commission": 5.0,
-          "transfer_fee": 0.014640000000000002,
-          "reason": "SELL pending 触发：现价1.83在卖出区间[1.82085,1.83915]内",
-          "group": "A"
-        },
-        {
-          "date": "2026-08-11",
-          "time": "09:59",
-          "action": "SELL",
-          "code": "512480",
-          "name": "半导体ETF",
-          "price": 1.08,
-          "shares": 2700,
-          "amount": 2909.51284,
-          "stamp_tax": 1.458,
-          "commission": 5.0,
-          "transfer_fee": 0.029160000000000002,
-          "reason": "SELL pending 触发：现价1.08在卖出区间[1.0746,1.0854]内",
+          "transfer_fee": 0.10155,
+          "reason": "清仓卖出（剩余300股最后批次）：7/2已在¥51.5/52.7止盈两批共700股（盈利¥10,235），剩余300股今日¥33.85清仓。整体持仓盈利¥5,617，第三批相对7/21收盘¥32.87当日盈亏+¥289",
           "group": "A"
         }
       ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 866.67,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
-          "shares_plan": 2700.0,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 866.67,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
-          "shares_plan": 2700.0,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 866.67,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
-          "shares_plan": 2700.0,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
-      "trades": [
-        {
-          "date": "2026-08-11",
-          "time": "14:57",
-          "action": "SELL",
-          "code": "512480",
-          "name": "半导体ETF",
-          "price": 1.07,
-          "shares": 5400,
-          "amount": 5770.05322,
-          "stamp_tax": 2.8890000000000002,
-          "commission": 5.0,
-          "transfer_fee": 0.057780000000000005,
-          "reason": "止损铁律触发：浮亏-13.6% ≤ -8%",
-          "group": "A"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 866.67,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-12.8% + 指数5日-19.9%",
-          "shares_plan": 2700.0,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
