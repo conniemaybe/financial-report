@@ -151,17 +151,17 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥524,566.06</div>
-      <div class="change"><span class="up">累计 +¥24,566.06 (+4.91%)</span> · <span class="up">今日 +¥909.16 (+0.17%)</span></div>
+      <div class="value">¥518,796.01</div>
+      <div class="change"><span class="up">累计 +¥18,796.01 (+3.76%)</span> · <span class="up">今日 +¥909.16 (+0.18%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,065,196.77</div>
-      <div class="change"><span class="up">累计 +¥65,196.77 (+6.52%)</span></div>
+      <div class="value">¥1,059,426.72</div>
+      <div class="change"><span class="up">累计 +¥59,426.72 (+5.94%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
-      <div class="value" style="font-size:20px;">¥496,506.72 / ¥294,993.77</div>
+      <div class="value" style="font-size:20px;">¥496,506.72 / ¥289,223.72</div>
     </div>
   </div>
 
@@ -338,7 +338,6 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 const allTrades = [
   { date: '2026-08-12', time: '09:55', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥1.8100', qty: '600 份', amount: '¥1,086.00', reason: 'SELL区间[1.80095,1.81905]触发卖出,科创50ETF趋势止损 （佣金¥5.00+过户费¥0.01=¥5.01，净到账¥1080.99）', cls: 'neutral' },
   { date: '2026-08-12', time: '09:55', acct: '基金', action: '卖出', code: '512480', name: '半导体ETF', price: '¥1.0700', qty: '1,800 份', amount: '¥1,926.00', reason: 'SELL区间[1.06465,1.07535]触发卖出,半导体ETF趋势止损 （佣金¥5.00+过户费¥0.02=¥5.02，净到账¥1920.98）', cls: 'neutral' },
-  { date: '2026-08-11', time: '14:57', acct: '基金', action: '卖出', code: '512480', name: '半导体ETF', price: '¥1.0700', qty: '5,400 份', amount: '¥5,778.00', reason: '止损铁律触发：浮亏-13.6% ≤ -8% （佣金¥5.00+印花税¥2.89+过户费¥0.06=¥7.95，净到账¥5770.05）', cls: 'neutral' },
   { date: '2026-08-11', time: '09:59', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥1.8300', qty: '800 份', amount: '¥1,464.00', reason: 'SELL pending 触发：现价1.83在卖出区间[1.82085,1.83915]内 （佣金¥5.00+印花税¥0.73+过户费¥0.01=¥5.75，净到账¥1458.25）', cls: 'neutral' },
   { date: '2026-08-11', time: '09:59', acct: '基金', action: '卖出', code: '512480', name: '半导体ETF', price: '¥1.0800', qty: '2,700 份', amount: '¥2,916.00', reason: 'SELL pending 触发：现价1.08在卖出区间[1.0746,1.0854]内 （佣金¥5.00+印花税¥1.46+过户费¥0.03=¥6.49，净到账¥2909.51）', cls: 'neutral' },
   { date: '2026-08-10', time: '13:31', acct: '基金', action: '卖出', code: '588000', name: '科创50ETF', price: '¥1.8040', qty: '1,300 份', amount: '¥2,345.20', reason: '止盈巡检自动生成：纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%），浮盈 +3.76% （佣金¥5.00+过户费¥0.02=¥5.02，净到账¥2340.18）', cls: 'neutral' },
@@ -520,7 +519,7 @@ new Chart(ctx, {
   data: {
     labels: navLabels,
     datasets: [
-      { label: '合并净值 (A股+基金)', data: [1000000,998916,997320,999950,1008186,1006391,1009576,1025012,1042276,1027627,1044128,1059680,1037922,1062052,1077843,1071846,1049442,1043667,1052730,1052909,1059419,1081494,1077307,1066631,1069342,1066100,1061077,1047963,1050600,1058253,1060094,1058969,1054847,1056737,1050437,1048951,1046165,1048356,1044414,1046603,1053006,1054855,1057038,1057040,1037476,1035644,1065197], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
+      { label: '合并净值 (A股+基金)', data: [1000000,998916,997320,999950,1008186,1006391,1009576,1025012,1042276,1027627,1044128,1059680,1037922,1062052,1077843,1071846,1049442,1043667,1052730,1052909,1059419,1081494,1077307,1066631,1069342,1066100,1061077,1047963,1050600,1058253,1060094,1058969,1054847,1056737,1050437,1048951,1046165,1048356,1044414,1046603,1053006,1054855,1057038,1057040,1037476,1035644,1059427], borderColor: '#3b82f6', backgroundColor: '#3b82f620', fill: false, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6', borderWidth: 2.5 },
       { label: '沪深300ETF基准 (100万全仓模拟)', data: csiNav, borderColor: '#f59e0b', backgroundColor: '#f59e0b10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#f59e0b', borderWidth: 2, borderDash: [8,4] },
       { label: '纳指ETF基准 (100万全仓模拟)', data: ndxNav, borderColor: '#a78bfa', backgroundColor: '#a78bfa10', fill: false, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#a78bfa', borderWidth: 2, borderDash: [8,4] },
       { label: '本金100万 (参考线)', data: new Array(navLabels.length).fill(1000000), borderColor: '#64748b', backgroundColor: 'transparent', fill: false, tension: 0, pointRadius: 0, pointHoverRadius: 0, borderWidth: 1, borderDash: [3,3], order: 99 }
