@@ -216,7 +216,10 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
     if is_fund:
         # v8.1 修复（2026-07-27）：基金总盈亏改用流水法（与 fund_state.build_fund_summary v3 对齐），
         # 避免部分卖出后浮动盈亏公式丢失已实现收益（如 588000 多次止盈后仍应体现全部盈利）。
-        result = calc_fund_position_pnl_by_trades(portfolio, code, current_price)
+        # v8.2 修复（2026-08-14）：过滤 voided trades，否则作废的卖出会被算成"回收资金"
+        # 导致亏损标的显示成盈利（512480 半导体ETF voided 的 5770 被算进 sell_in → +3.71% 实际 -15.5%）
+        clean_portfolio = {**portfolio, "trades": [t for t in portfolio.get("trades", []) if t.get("status") != "voided"]}
+        result = calc_fund_position_pnl_by_trades(clean_portfolio, code, current_price)
         total_pnl = result.get("total_pnl", 0)
         buy_out = result.get("buy_out", 0)
         total_pct = total_pnl / buy_out if buy_out > 0 else 0
@@ -227,7 +230,8 @@ def compute_total_pnl(portfolio: dict, code: str, pos: dict, current_price: floa
     # 2026-08-04 #P5：兼容基金 trade（用 nav 字段，不是 price）
     # 否则 588000 这种基金 BUY 总成本算成 0，导致 diluted_cost = 0 显示在网站上
     # v18(2026-08-04)：成本价改用同花顺标准——净投入 ÷ 当前持仓股数
-    trades = [t for t in portfolio.get("trades", []) if t.get("code") == code]
+    # v8.2 修复（2026-08-14）：同步过滤 voided trades（防御性，与基金分支一致）
+    trades = [t for t in portfolio.get("trades", []) if t.get("code") == code and t.get("status") != "voided"]
 
     def _trade_price(t: dict) -> float:
         """trade 价格字段：A 股用 price，基金用 nav。"""
