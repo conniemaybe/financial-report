@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟盘 · 晨报 2026-07-27（v6 对等去重版）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0f1117; color: #e0e0e0; min-height: 100vh; padding: 24px; }
+.container { max-width: 960px; margin: 0 auto; }
+.header { background: linear-gradient(135deg, #1a1f35 0%, #0d1528 100%); border: 1px solid rgba(100,180,255,0.2); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+.header-left h1 { font-size: 1.6rem; font-weight: 700; color: #e8f4ff; letter-spacing: 0.5px; }
+.header-left .subtitle { color: #6b87b0; margin-top: 6px; font-size: 0.9rem; }
+.header-right { text-align: right; display: flex; align-items: center; gap: 12px; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; }
+.badge-morning { background: rgba(255,180,60,0.15); color: #ffb43c; border: 1px solid rgba(255,180,60,0.3); }
+.date-text { color: #8aa5c5; font-size: 0.85rem; margin-top: 6px; }
+.mode-switcher { display: flex; background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+.mode-btn { padding: 6px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: #6b87b0; transition: all 0.2s; }
+.mode-btn:hover { color: #a0c4f5; background: rgba(255,255,255,0.05); }
+.mode-btn.active-stock { background: rgba(239,83,80,0.2); color: #ef5350; }
+.mode-btn.active-fund { background: rgba(66,165,245,0.2); color: #42a5f5; }
+
+.section { background: #161b2e; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+.section-title { font-size: 1.0rem; font-weight: 600; color: #a0c4f5; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; display: block; width: 4px; height: 16px; background: linear-gradient(180deg, #4a90e2, #7c3aed); border-radius: 2px; }
+.section-subtitle { font-size: 0.85rem; color: #8aa5c5; margin-bottom: 12px; }
+
+.nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 0; }
+.nav-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 16px 18px; text-align: center; }
+.nav-card .label { font-size: 0.78rem; color: #607a99; margin-bottom: 6px; }
+.nav-card .value { font-size: 1.35rem; font-weight: 700; color: #e8f4ff; }
+.nav-card .sub { font-size: 0.78rem; margin-top: 4px; }
+.pos { color: #ef5350; }  /* A股约定：红涨 */
+.neg { color: #26a69a; }  /* 绿跌 */
+.neu { color: #8aa5c5; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th { background: rgba(255,255,255,0.04); color: #6b87b0; font-weight: 500; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); text-align: center; }
+td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #d0dce8; text-align: center; }
+td.col-text { text-align: left; color: #e0eaf6; font-weight: 500; }
+td.col-action { text-align: left; color: #b0c4de; font-size: 0.85rem; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+.mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+.mini-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; }
+.mini-card .label { font-size: 0.78rem; color: #607a99; margin-bottom: 4px; }
+.mini-card .value { font-size: 1.1rem; font-weight: 600; color: #e8f4ff; }
+.mini-card .note { font-size: 0.72rem; color: #8aa5c5; margin-top: 4px; }
+
+.risk-table td:first-child { color: #8aa5c5; text-align: left; }
+.risk-status { font-weight: 500; padding: 2px 10px; border-radius: 4px; font-size: 0.85rem; }
+.risk-warn { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.risk-pending { background: rgba(245,158,11,0.08); color: #fbbf24; }
+.risk-ok { background: rgba(16,185,129,0.15); color: #10b981; }
+
+.judge-banner { margin-top: 12px; padding: 10px 14px; background: rgba(245,158,11,0.12); border-radius: 6px; }
+.judge-banner strong { color: #ffb43c; }
+.judge-banner .advice { color: #a0c4f5; font-size: 0.9em; display: block; margin-top: 4px; }
+
+.theme-list { font-size: 0.88rem; color: #b0c4de; line-height: 1.9; }
+.theme-list strong { color: #a0c4f5; }
+.theme-list .highlight { color: #e8f4ff; font-weight: 500; }
+
+.action-tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 600; margin-right: 8px; }
+.action-hold { background: rgba(255,167,38,0.15); color: #ffa726; }
+.action-watch { background: rgba(120,144,156,0.15); color: #78909c; }
+.action-sell { background: rgba(38,166,154,0.15); color: #26a69a; }
+.action-stop { background: rgba(239,83,80,0.15); color: #ef5350; }
+
+.empty-hint { padding: 18px 22px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; color: #8aa5c5; font-size: 0.88rem; text-align: center; }
+
+.mock-banner { background: linear-gradient(90deg, rgba(171,71,188,0.15), rgba(74,144,226,0.15)); border: 1px solid rgba(171,71,188,0.3); padding: 14px 20px; border-radius: 10px; margin-bottom: 24px; }
+.mock-banner strong { color: #d4a5ff; }
+.mock-banner span { color: #8aa5c5; font-size: 0.85rem; }
+
+.panel-divider { height: 28px; display: flex; align-items: center; }
+.panel-divider::before, .panel-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+.panel-divider span { padding: 0 16px; color: #6b87b0; font-size: 0.78rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="mock-banner">
+    <strong>🧪 v6 模拟版（A股基金对等 + 去重 + 黑话改白话）</strong><br>
+    <span>用 2026-07-27 真实数据。改完后所有紫色提示/yellow tag 都会消失。</span>
+  </div>
+
+  <div class="header">
+    <div class="header-left">
+      <h1>🌅 模拟盘 · 晨报</h1>
+      <div class="subtitle">今日选股/调仓策略预报</div>
+    </div>
+    <div class="header-right">
+      <div class="mode-switcher">
+        <button class="mode-btn active-stock">A股</button>
+        <button class="mode-btn">基金</button>
+      </div>
+      <div>
+        <span class="badge badge-morning">开盘预报</span>
+        <div class="date-text">2026-07-27（交易日）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ A股部分 6 个 section ============ -->
+
+  <!-- ① 账户概览 -->
+  <div class="section">
+    <div class="section-title">账户概览 · A股</div>
+    <div class="nav-grid">
+      <div class="nav-card"><div class="label">A股总资产</div><div class="value">¥540,453.95</div><div class="sub neg">-¥520.00（-0.10%）</div></div>
+      <div class="nav-card"><div class="label">累计盈亏</div><div class="value pos">+¥40,453.95</div><div class="sub pos">+8.09%</div></div>
+      <div class="nav-card"><div class="label">仓位</div><div class="value neu">5.9%</div><div class="sub">冷却期：正常</div></div>
+      <div class="nav-card"><div class="label">现金</div><div class="value">¥508,489.95</div><div class="sub neu">可加仓</div></div>
+    </div>
+    <div style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>名称/代码</th><th>持仓</th><th>成本</th><th>现价</th><th>市值</th><th>仓位</th><th>当日</th><th>累计</th></tr></thead>
+        <tbody>
+          <tr><td class="col-text">新华保险 <span class="neu" style="font-size:0.78rem">601336</span></td><td>200</td><td>57.73</td><td>63.12</td><td>12,624</td><td>2.3%</td><td class="neg">-3.96%</td><td class="pos">+20.27%</td></tr>
+          <tr><td class="col-text">牧原股份 <span class="neu" style="font-size:0.78rem">002714</span></td><td>500</td><td>38.59</td><td>38.68</td><td>19,340</td><td>3.6%</td><td class="neg">-2.57%</td><td class="neg">-2.23%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ② 大盘速览（共用，只放 A股侧） -->
+  <div class="section">
+    <div class="section-title">大盘速览</div>
+    <div class="section-subtitle">3 大指数 + 资金流向，A 股基金共用这一节</div>
+    <table>
+      <thead><tr><th>指数</th><th>涨跌幅</th><th>点位</th></tr></thead>
+      <tbody>
+        <tr><td class="col-text">上证指数</td><td class="neg">-1.61%</td><td>3,814.20</td></tr>
+        <tr><td class="col-text">深证成指</td><td class="neg">-2.47%</td><td>13,774.68</td></tr>
+        <tr><td class="col-text">创业板指</td><td class="neg">-2.65%</td><td>3,480.87</td></tr>
+      </tbody>
+    </table>
+    <div class="mini-grid">
+      <div class="mini-card"><div class="label">两市成交额</div><div class="value">约 ¥1.93万亿</div><div class="note">量能仍在，但指数承压</div></div>
+      <div class="mini-card"><div class="label">北向资金净流入</div><div class="value neu">+0.0 亿</div><div class="note">无明显方向</div></div>
+    </div>
+  </div>
+
+  <!-- ③ 持仓监控（A股） -->
+  <div class="section">
+    <div class="section-title">持仓监控 · A股</div>
+    <div class="section-subtitle">每只持仓的当前操作建议（止盈/止损一起看，不再分开）</div>
+    <table>
+      <thead><tr><th>名称/代码</th><th>累计浮盈亏</th><th style="text-align:left">当前操作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="col-text">新华保险 <span class="neu" style="font-size:0.78rem">601336</span></td>
+          <td class="pos">+20.27%</td>
+          <td class="col-action"><span class="action-tag action-watch">止盈观察</span>浮盈超过 15% 阈值，进入观察区，跌破 5 日线考虑分批减仓</td>
+        </tr>
+        <tr>
+          <td class="col-text">牧原股份 <span class="neu" style="font-size:0.78rem">002714</span></td>
+          <td class="neg">-2.23%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮亏未触发止损线（-15%），继续持有</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ④ 大盘风险过滤（共用） -->
+  <div class="section">
+    <div class="section-title">大盘风险过滤</div>
+    <div class="section-subtitle">6 项风险维度扫描，A 股基金共用这一节</div>
+    <table class="risk-table">
+      <thead><tr><th style="text-align:left">维度</th><th style="text-align:left">观察</th><th>档位</th></tr></thead>
+      <tbody>
+        <tr><td>① 隔夜美股</td><td style="text-align:left;font-size:0.88em">上周五美股科技股承压，特斯拉跌超 14%</td><td><span class="risk-status risk-warn">🚡 风险</span></td></tr>
+        <tr><td>② A股7/24盘面</td><td style="text-align:left;font-size:0.88em">三大指数均跌超 1.6%，全市场普跌</td><td><span class="risk-status risk-warn">🚡 风险</span></td></tr>
+        <tr><td>③ 板块预筛</td><td style="text-align:left;font-size:0.88em">9 个强势板块，0 个趋势持续板块（3 日主力净流入不足）</td><td><span class="risk-status risk-warn">🚡 风险</span></td></tr>
+        <tr><td>④ 主线判定</td><td style="text-align:left;font-size:0.88em">0 个确认主线，无候选主线，科技板块持续沉默</td><td><span class="risk-status risk-warn">🚡 风险</span></td></tr>
+        <tr><td>⑤ 成交额</td><td style="text-align:left;font-size:0.88em">两市合计约 1.93 万亿，量能仍在但指数承压</td><td><span class="risk-status risk-pending">🟡 待确认</span></td></tr>
+        <tr><td>⑥ 北向资金</td><td style="text-align:left;font-size:0.88em">净流入 +0.0 亿，无明显方向</td><td><span class="risk-status risk-pending">🟡 待确认</span></td></tr>
+      </tbody>
+    </table>
+    <div class="judge-banner">
+      <strong>综合判定：🚡 系统性风险</strong>（4 项风险 + 2 项待确认）
+      <span class="advice">操作建议：买入暂停，仅观察。持仓按止盈/止损规则监控，不主动加仓。</span>
+    </div>
+  </div>
+
+  <!-- ⑤ 主线判定 -->
+  <div class="section">
+    <div class="section-title">主线判定 · A股</div>
+    <div class="theme-list">
+      <strong>板块预筛：</strong><span class="highlight">9 个强势板块 / 0 个趋势持续 / 30 只候选股</span><br>
+      <span style="color:#8aa5c5;font-size:0.85em">强势板块代表最近 5 天涨幅靠前，但还需要看是否有持续资金流入</span><br><br>
+      <strong>主线判定：</strong><span class="highlight">0 个确认主线 / 0 个候选主线</span><br>
+      <span style="color:#8aa5c5;font-size:0.85em">主线 = 持续有资金流入的强势板块。当前无主线，科技板块持续沉默</span><br><br>
+      <strong>主线强度：</strong><span class="highlight">38/100（极弱）</span><br>
+      <span style="color:#8aa5c5;font-size:0.85em">目前没有可建仓的主线，建议空仓等待主线确认后再入场</span><br><br>
+      <strong>止盈扫描：</strong>新华保险浮盈 +9.34% 进入止盈观察区；牧原股份浮盈 +0.23% 未触发；无强制卖出信号
+    </div>
+  </div>
+
+  <!-- ⑥ 跟踪观察池 -->
+  <div class="section">
+    <div class="section-title">跟踪观察池 · A股（2 个标的）</div>
+    <div class="section-subtitle">候选股票 — 还没入场，只盯盘</div>
+    <table>
+      <thead><tr><th>名称/代码</th><th>加入日期</th><th style="text-align:left">观察理由</th></tr></thead>
+      <tbody>
+        <tr><td class="col-text">新华保险 <span class="neu" style="font-size:0.78rem">601336</span></td><td>2026-06-15</td><td style="text-align:left;font-size:0.85rem;color:#8aa5c5">浮盈 +20.27%，进入止盈观察区，跌破 5 日线考虑分批减</td></tr>
+        <tr><td class="col-text">牧原股份 <span class="neu" style="font-size:0.78rem">002714</span></td><td>2026-06-20</td><td style="text-align:left;font-size:0.85rem;color:#8aa5c5">猪肉周期底部观察，浮亏 -2.23%，未触发止损线</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- A股决策摘要 -->
+  <div class="section">
+    <div class="section-title">今日决策摘要 · A股</div>
+    <div class="theme-list">
+      <strong>买入：</strong>暂停（主线强度 38/100，系统性风险）<br>
+      <strong>卖出：</strong>无强制信号（新华保险进入止盈观察，未破位）<br>
+      <strong>持仓：</strong>2 只全部继续持有
+    </div>
+  </div>
+
+  <!-- 分隔 -->
+  <div class="panel-divider"><span>基金部分（共用大盘速览和风险过滤，不重复）</span></div>
+
+  <!-- ============ 基金部分 4 个 section ============ -->
+
+  <!-- ① 账户概览 · 基金 -->
+  <div class="section">
+    <div class="section-title">账户概览 · 基金</div>
+    <div class="nav-grid">
+      <div class="nav-card"><div class="label">基金总资产</div><div class="value">¥327,056.31</div><div class="sub neg">-¥5,162.42（-1.55%）</div></div>
+      <div class="nav-card"><div class="label">累计盈亏</div><div class="value neg">-¥3,943.69</div><div class="sub neg">-1.19%</div></div>
+      <div class="nav-card"><div class="label">仓位</div><div class="value neu">100%</div><div class="sub neu">满仓</div></div>
+      <div class="nav-card"><div class="label">持仓数</div><div class="value">6 只</div><div class="sub neu">A 股 ETF × 4 / 场外 × 2</div></div>
+    </div>
+    <div style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>名称/代码</th><th>类型</th><th>持仓</th><th>成本</th><th>现价</th><th>市值</th><th>当日</th><th>累计</th></tr></thead>
+        <tbody>
+          <tr><td class="col-text">沪深300ETF <span class="neu" style="font-size:0.78rem">510300</span></td><td>A股宽基</td><td>60,200</td><td>4.0125</td><td>3.9372</td><td>236,979</td><td class="neg">-2.36%</td><td class="neg">-1.88%</td></tr>
+          <tr><td class="col-text">科创50ETF <span class="neu" style="font-size:0.78rem">588000</span></td><td>A股宽基</td><td>20,000</td><td>1.0200</td><td>1.1056</td><td>22,112</td><td class="pos">+1.20%</td><td class="pos">+8.40%</td></tr>
+          <tr><td class="col-text">半导体ETF <span class="neu" style="font-size:0.78rem">512480</span></td><td>A股行业</td><td>15,000</td><td>1.4860</td><td>1.3352</td><td>20,028</td><td class="neg">-3.15%</td><td class="neg">-10.15%</td></tr>
+          <tr><td class="col-text">黄金ETF <span class="neu" style="font-size:0.78rem">518880</span></td><td>商品</td><td>5,000</td><td>5.4910</td><td>5.4585</td><td>27,293</td><td class="neg">-0.60%</td><td class="neg">-0.59%</td></tr>
+          <tr><td class="col-text">富国500增强 <span class="neu" style="font-size:0.78rem">161017</span></td><td>场外指数</td><td>8,218</td><td>2.4337</td><td>2.4366</td><td>20,024</td><td class="pos">+0.12%</td><td class="pos">+0.12%</td></tr>
+          <tr><td class="col-text">建信500增强 <span class="neu" style="font-size:0.78rem">000478</span></td><td>场外指数</td><td>5,956</td><td>3.3558</td><td>3.3548</td><td>19,980</td><td class="neg">-0.03%</td><td class="neg">-0.03%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ② 持仓监控 · 基金（合并原止盈扫描+今日申赎策略） -->
+  <div class="section">
+    <div class="section-title">持仓监控 · 基金</div>
+    <div class="section-subtitle">每只持仓的当前操作建议（止盈止损一起看，合并原"止盈扫描"和"今日申赎"）</div>
+    <table>
+      <thead><tr><th>名称/代码</th><th>累计浮盈亏</th><th style="text-align:left">当前操作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="col-text">沪深300ETF <span class="neu" style="font-size:0.78rem">510300</span></td>
+          <td class="neg">-1.88%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮亏未触发止损（-15%），未触发止盈（+15%）</td>
+        </tr>
+        <tr>
+          <td class="col-text">科创50ETF <span class="neu" style="font-size:0.78rem">588000</span></td>
+          <td class="pos">+8.40%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>浮盈 +8.40%，距 +15% 止盈阈值还有空间</td>
+        </tr>
+        <tr>
+          <td class="col-text">半导体ETF <span class="neu" style="font-size:0.78rem">512480</span></td>
+          <td class="neg">-10.15%</td>
+          <td class="col-action"><span class="action-tag action-watch">深度观察</span>浮亏 -10.15%，逼近 -15% 止损线，等半导体周期反转</td>
+        </tr>
+        <tr>
+          <td class="col-text">黄金ETF <span class="neu" style="font-size:0.78rem">518880</span></td>
+          <td class="neg">-0.59%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>避险资产配置，浮亏极小</td>
+        </tr>
+        <tr>
+          <td class="col-text">富国500增强 <span class="neu" style="font-size:0.78rem">161017</span></td>
+          <td class="pos">+0.12%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>7/20 申购确认的新持仓，净值小幅波动</td>
+        </tr>
+        <tr>
+          <td class="col-text">建信500增强 <span class="neu" style="font-size:0.78rem">000478</span></td>
+          <td class="neg">-0.03%</td>
+          <td class="col-action"><span class="action-tag action-hold">继续持有</span>7/20 申购确认的新持仓，净值小幅波动</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ③ 场外基金观察池（去掉已持仓的 161017/000478） -->
+  <div class="section">
+    <div class="section-title">场外基金观察池（6 只候选）</div>
+    <div class="section-subtitle">未持仓的候选基金 — 评分/限购/申购窗口决定是否入场</div>
+    <table>
+      <thead><tr><th>名称/代码</th><th>评分</th><th>限购</th><th style="text-align:left">状态</th></tr></thead>
+      <tbody>
+        <tr><td class="col-text">国金量化多因子A <span class="neu" style="font-size:0.78rem">006195</span></td><td>74/B</td><td>limited</td><td style="text-align:left;color:#fbbf24">⏳ 评分 74 略低于 75 门槛，限购中</td></tr>
+        <tr><td class="col-text">景顺长城量化小盘 <span class="neu" style="font-size:0.78rem">005457</span></td><td>71/B</td><td>open</td><td style="text-align:left;color:#fbbf24">⏳ 评分 71 低于 75 门槛</td></tr>
+        <tr><td class="col-text">华安国际龙头(DAX)联接 <span class="neu" style="font-size:0.78rem">000614</span></td><td>76/B</td><td>limited</td><td style="text-align:left;color:#fbbf24">⏳ 评分达标但限购中</td></tr>
+        <tr><td class="col-text">诺安成长混合A <span class="neu" style="font-size:0.78rem">320007</span></td><td>60/D</td><td>open</td><td style="text-align:left;color:#fbbf24">⏳ 评分不足</td></tr>
+        <tr><td class="col-text">博时标普500联接 <span class="neu" style="font-size:0.78rem">050025</span></td><td>57/D</td><td><span class="risk-status risk-warn">暂停</span></td><td style="text-align:left;color:#ef5350">🔴 暂停申购</td></tr>
+        <tr><td class="col-text">华夏纳指100联接 <span class="neu" style="font-size:0.78rem">015299</span></td><td>—</td><td><span class="risk-status risk-warn">暂停</span></td><td style="text-align:left;color:#ef5350">🔴 暂停申购</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ④ 基金决策摘要 -->
+  <div class="section">
+    <div class="section-title">今日决策摘要 · 基金</div>
+    <div class="theme-list">
+      <strong>申购：</strong>暂停（系统性风险 + 观察池无就绪基金）<br>
+      <strong>赎回：</strong>无（持仓最高浮盈 +8.40% 距 +15% 止盈阈值还有空间）<br>
+      <strong>持仓：</strong>6 只全部继续持有，半导体 ETF 浮亏 -10.15% 进入深度观察<br>
+      <strong>QDII 窗口：</strong>博时标普 500、华夏纳指 100 仍暂停申购
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
