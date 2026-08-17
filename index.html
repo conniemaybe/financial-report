@@ -1164,6 +1164,12 @@ renderReports();
 
 
 
+
+
+
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-17，由 inject_intraday_to_site.py v6 生成）===
@@ -1171,12 +1177,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-17",
-  "now": "08:59",
+  "now": "09:58",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300124",
@@ -1184,8 +1190,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 19.520265% < 30% 触发 | 方向：机器人/工控 | 当前价 61.2 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "未触发"
         },
         {
           "code": "588000",
@@ -1193,8 +1199,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "全部 HOLD"
         },
         {
           "code": "512480",
@@ -1202,8 +1208,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-13.7% + 指数5日-19.9%",
           "shares_plan": 1200.0,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "全部 HOLD"
         }
       ]
     },
