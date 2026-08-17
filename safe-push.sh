@@ -55,17 +55,24 @@ else
     PROXY_ACTIVE=0
 fi
 
-# 4. 根据代理状态决定推送策略
-# P0 修复 (2026-08-07): 原直连分支用 `GIT_PROXY_OPTS="-c http.proxy= -c https.proxy="`
-# 显式清空代理配置，但在 Git for Windows 上触发 libcurl 的 `getsockname() failed errno 10022`。
-# 直连时不应传任何 proxy 配置（让 git 用默认行为），传空字符串反而让 libcurl 抓狂。
-if [ "$PROXY_ACTIVE" -eq 1 ]; then
-    echo "🌐 检测到代理在 127.0.0.1:$PROXY_PORT → 走代理推送"
-    GIT_PROXY_OPTS="-c http.proxy=http://127.0.0.1:$PROXY_PORT -c https.proxy=http://127.0.0.1:$PROXY_PORT"
-else
-    echo "📡 未检测到代理 → 直连推送（不传 proxy 配置，用 git 默认行为）"
-    GIT_PROXY_OPTS=""
-fi
+# 4. 推送策略：直连优先，代理兜底（2026-08-17 P0 反转）
+# 旧逻辑：检测到 Clash 7892 端口就走代理推送 → 实测 git 显式走该代理会无限挂起
+#   （Clash 规则本身分流 GitHub，git 再指定代理端口等于双层代理死锁，8/17 卡死根因之一）。
+# 新逻辑：① 第 1 轮直连（不传任何 proxy 配置，避免 libcurl getsockname 报错）
+#         ② 直连失败才试代理（限超时 60s，防挂起）
+PUSH_TIMEOUT=60   # 单次 push 超时秒数
+
+try_push() {
+    # $1 = 描述; 其余为 git 额外参数
+    local desc="$1"; shift
+    echo "🔄 $desc ..."
+    if timeout $PUSH_TIMEOUT git "$@" push origin main 2>&1; then
+        return 0
+    fi
+    return 1
+}
+
+PROXY_OPTS="-c http.proxy=http://127.0.0.1:$PROXY_PORT -c https.proxy=http://127.0.0.1:$PROXY_PORT"
 
 # 4.8 防凭据交互卡死护栏（2026-08-17 P0 修复）
 # 事故：remote URL 的 token 曾被重写为空值（conniemaybe:@github.com），
@@ -89,24 +96,32 @@ case "$REMOTE_URL" in
 esac
 export GIT_TERMINAL_PROMPT=0
 
-# 5. 推送（3次重试）
-# P0 修复 (2026-08-07): 原 `for i in $(seq 1 $MAX_RETRIES)` 在 Git Bash 环境里
-# 因 `seq: command not found` 直接跳过整个循环——"3 次重试"从来没真正执行过。
-# 改用 bash 内置 C 风格 for 循环，不依赖外部命令。
-echo "🔄 正在推送..."
+# 5. 推送：直连优先（每轮最多 2 次直连），全失败后若代理在线再试 1 次代理
+# P0 修复 (2026-08-07): 原 `for i in $(seq 1 $MAX_RETRIES)` 因 `seq: command not found`
+# 直接跳过整个循环。改用 bash 内置 C 风格 for 循环，不依赖外部命令。
 PUSH_SUCCESS=0
 for ((i=1; i<=MAX_RETRIES; i++)); do
-    if git $GIT_PROXY_OPTS push origin main 2>&1; then
-        echo "✅ 第 $i 次 PUSH 成功"
+    if try_push "第 $i 次推送（直连）"; then
+        echo "✅ 第 $i 次 PUSH 成功（直连）"
         PUSH_SUCCESS=1
         break
-    else
-        echo "⚠️ 第 $i 次 push 失败"
-        if [ "$i" -lt "$MAX_RETRIES" ]; then
-            psleep 2
-        fi
+    fi
+    echo "⚠️ 第 $i 次直连 push 失败"
+    if [ "$i" -lt "$MAX_RETRIES" ]; then
+        psleep 2
     fi
 done
+
+# 5.5 代理兜底：直连 3 次全败 + Clash 端口在监听 → 走代理最后一搏（限 60s）
+if [ "$PUSH_SUCCESS" -eq 0 ] && [ "$PROXY_ACTIVE" -eq 1 ]; then
+    echo "🛟 直连全部失败，检测到代理 $PROXY_PORT 在线 → 代理兜底尝试（限 ${PUSH_TIMEOUT}s）"
+    if try_push "代理兜底" $PROXY_OPTS; then
+        echo "✅ 代理兜底 PUSH 成功"
+        PUSH_SUCCESS=1
+    else
+        echo "⚠️ 代理兜底也失败"
+    fi
+fi
 
 if [ "$PUSH_SUCCESS" -eq 0 ]; then
     echo "❌ PUSH 失败 ($MAX_RETRIES 次重试均失败)"
