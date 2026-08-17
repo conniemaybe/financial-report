@@ -67,6 +67,28 @@ else
     GIT_PROXY_OPTS=""
 fi
 
+# 4.8 防凭据交互卡死护栏（2026-08-17 P0 修复）
+# 事故：remote URL 的 token 曾被重写为空值（conniemaybe:@github.com），
+#       push 回退到 Windows credential-helper-selector 交互弹窗，非交互环境永久挂起
+#       （8/17 晨报收尾卡死 41 分钟的根因）。
+# 护栏：① push 前自检 remote token 非空，空则立即从 .gh_token 重嵌并报警
+#       ② 环境强制 GIT_TERMINAL_PROMPT=0（凭据缺失时报错退出而非挂起等待输入）
+REMOTE_URL=$(git remote get-url origin)
+case "$REMOTE_URL" in
+    *":@github.com"*|*"github.com"*":@"*)
+        echo "❌ remote token 为空（$REMOTE_URL 中凭据位缺失），将导致 credential 弹窗卡死"
+        if [ -f "$HOME/.workbuddy/astock-simulator/.gh_token" ]; then
+            GH_TOKEN=$(tr -d '\r\n ' < "$HOME/.workbuddy/astock-simulator/.gh_token")
+            git remote set-url origin "https://conniemaybe:${GH_TOKEN}@github.com/conniemaybe/financial-report.git"
+            echo "🔧 已自动重嵌 token（来自 .gh_token），继续推送"
+        else
+            echo "   且 .gh_token 不存在，无法自动修复，退出"
+            exit 1
+        fi
+        ;;
+esac
+export GIT_TERMINAL_PROMPT=0
+
 # 5. 推送（3次重试）
 # P0 修复 (2026-08-07): 原 `for i in $(seq 1 $MAX_RETRIES)` 在 Git Bash 环境里
 # 因 `seq: command not found` 直接跳过整个循环——"3 次重试"从来没真正执行过。
