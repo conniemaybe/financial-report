@@ -202,7 +202,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-14（周五）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-17（周一）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1154,14 +1154,17 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-14，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-08-17，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-08-14",
-  "now": "16:40",
+  "date": "2026-08-17",
+  "now": "08:31",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1172,130 +1175,58 @@ const INTRADAY_DATA = {
           "code": "300124",
           "name": "汇川技术",
           "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 | 现价 61.21 | PE 分位 < 30% 触发 | 方向：机器人/工控 | 尾盘 14:45 买入窗口优先",
-          "shares_plan": 300,
-          "status": "expired",
-          "reason": "已过期"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 400.0,
-          "status": "expired",
-          "reason": "已过期"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-13.5% + 指数5日-19.9%",
-          "shares_plan": 1200.0,
-          "status": "expired",
-          "reason": "已过期"
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 19.520265% < 30% 触发 | 方向：机器人/工控 | 当前价 61.2 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "300124",
           "name": "汇川技术",
           "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 | 现价 61.21 | PE 分位 < 30% 触发 | 方向：机器人/工控 | 尾盘 14:45 买入窗口优先",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "未执行：现价 61.2 在买入区间 [60.50~62.50] 内，但 A股处于止损冷却期 L1（8/11 触发，至 8/18，剩余2个交易日），禁止新买入"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "未触发：实时价 1.796 低于执行区间下沿 1.797（止损信号 11:00 已生成，等价格回到区间执行）"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-13.5% + 指数5日-19.9%",
-          "shares_plan": 1200.0,
-          "status": "checked",
-          "reason": "未触发：实时价 1.063 低于执行区间下沿 1.0656（止损信号 11:00 已生成，等价格回到区间执行）"
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 19.520265% < 30% 触发 | 方向：机器人/工控 | 当前价 61.2 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "300124",
           "name": "汇川技术",
           "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 | 现价 61.21 | PE 分位 < 30% 触发 | 方向：机器人/工控 | 尾盘 14:45 买入窗口优先",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "未执行：现价在买入区间内，冷却期 L1 禁止新买入"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "未触发：实时价 1.793 低于执行区间下沿 1.797"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-13.5% + 指数5日-19.9%",
-          "shares_plan": 1200.0,
-          "status": "checked",
-          "reason": "未触发：实时价 1.061 低于执行区间下沿 1.0656"
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 19.520265% < 30% 触发 | 方向：机器人/工控 | 当前价 61.2 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "300124",
           "name": "汇川技术",
           "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 | 现价 61.21 | PE 分位 < 30% 触发 | 方向：机器人/工控 | 尾盘 14:45 买入窗口优先",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "未执行：现价 61.20 在买入区间内，冷却期 L1 禁止新买入（尾盘买入窗口也无法执行）"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
-          "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "异常：实时价 1.806 已进入执行区间 [1.797~1.815]，应卖出 400 份，但盘中检查④未执行（记录为全部HOLD）→ 漏执行"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-13.5% + 指数5日-19.9%",
-          "shares_plan": 1200.0,
-          "status": "checked",
-          "reason": "异常：实时价 1.072 已进入执行区间 [1.0656~1.0764]，应卖出 1200 份，但盘中检查④未执行（记录为全部HOLD）→ 漏执行"
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 19.520265% < 30% 触发 | 方向：机器人/工控 | 当前价 61.2 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     }
