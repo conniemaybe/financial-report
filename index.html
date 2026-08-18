@@ -1206,6 +1206,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-18，由 inject_intraday_to_site.py v6 生成）===
@@ -1213,7 +1216,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-18",
-  "now": "13:37",
+  "now": "15:03",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1235,8 +1238,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：高带宽存储器HBM（当日 5.62% / 5日 7.62%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 41.57 在区间 [40.74-42.4] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "checked",
-          "reason": "[10:00] 无现价或区间缺失（price=None, range=[40.74,42.4]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "300124",
@@ -1253,8 +1256,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.1% 低于目标带下沿 40%（欠 6.9pct ≈ ¥35,845） | 本次补足批次 50% = ¥17,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 17000,
-          "status": "checked",
-          "reason": "[10:00] 无现价或区间缺失（price=4.79, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1262,8 +1265,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 10.1% 低于目标带下沿 15%（欠 4.9pct ≈ ¥25,484） | 本次补足批次 50% = ¥12,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 12000,
-          "status": "checked",
-          "reason": "[10:00] 无现价或区间缺失（price=9.08, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1271,8 +1274,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "[10:00] 现价1.89在区间[1.8785599999999998,1.8974399999999998]内，触发（现价1.89）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "512480",
@@ -1280,8 +1283,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.6% + 指数5日-19.9%；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 3600,
-          "status": "checked",
-          "reason": "[10:00] 现价1.14高于上沿1.1376599999999997，未触发（反弹了）（现价1.14）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         }
       ]
     },
@@ -1305,8 +1308,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：高带宽存储器HBM（当日 5.62% / 5日 7.62%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 41.57 在区间 [40.74-42.4] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "checked",
-          "reason": "[11:00] 无现价或区间缺失（price=None, range=[40.74,42.4]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "300124",
@@ -1323,8 +1326,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.1% 低于目标带下沿 40%（欠 6.9pct ≈ ¥35,845） | 本次补足批次 50% = ¥17,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 17000,
-          "status": "checked",
-          "reason": "[11:00] 无现价或区间缺失（price=4.76, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1332,8 +1335,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 10.1% 低于目标带下沿 15%（欠 4.9pct ≈ ¥25,484） | 本次补足批次 50% = ¥12,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 12000,
-          "status": "checked",
-          "reason": "[11:00] 无现价或区间缺失（price=9.07, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1341,8 +1344,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "[11:00] 现价1.86低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.86）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "512480",
@@ -1350,8 +1353,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.6% + 指数5日-19.9%；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 3600,
-          "status": "checked",
-          "reason": "[11:00] 现价1.11低于下沿1.12634，未触发（跳空或急跌，等重评）（现价1.11）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         }
       ]
     },
@@ -1390,8 +1393,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：高带宽存储器HBM（当日 5.62% / 5日 7.62%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 41.57 在区间 [40.74-42.4] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "checked",
-          "reason": "[13:30] 现价40.95在买入区间[40.74,42.4]内，满足触发条件"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "300124",
@@ -1408,8 +1411,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.1% 低于目标带下沿 40%（欠 6.9pct ≈ ¥35,845） | 本次补足批次 50% = ¥17,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 17000,
-          "status": "checked",
-          "reason": "[13:30] 无现价或区间缺失（price=4.76, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1417,8 +1420,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 10.1% 低于目标带下沿 15%（欠 4.9pct ≈ ¥25,484） | 本次补足批次 50% = ¥12,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 12000,
-          "status": "checked",
-          "reason": "[13:30] 无现价或区间缺失（price=9.07, range=[0,0]），无法判定"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1426,8 +1429,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "checked",
-          "reason": "[13:30] 现价1.86低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.86）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "512480",
@@ -1435,14 +1438,91 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.6% + 指数5日-19.9%；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 3600,
-          "status": "checked",
-          "reason": "[13:30] 现价1.11低于下沿1.12634，未触发（跳空或急跌，等重评）（现价1.11）"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         }
       ]
     },
     {
       "time_slot": "14:45",
-      "trades": [],
+      "trades": [
+        {
+          "date": "2026-08-18",
+          "time": "14:58",
+          "action": "BUY",
+          "code": "688206",
+          "name": "概伦电子",
+          "price": 41.91,
+          "shares": 900,
+          "amount": 37726.92099,
+          "commission": 7.5438,
+          "transfer_fee": 0.37719,
+          "reason": "S1主线BUY触发：HBM概念龙头，现价41.91在区间[40.74,42.4]内，14:45尾盘建仓",
+          "group": "A"
+        },
+        {
+          "date": "2026-08-18",
+          "time": "14:56",
+          "action": "SELL",
+          "code": "588000",
+          "name": "科创50ETF",
+          "nav": 1.89,
+          "shares": 400,
+          "amount": 750.99,
+          "fee": 5.01,
+          "commission": 5.0,
+          "transfer_fee": 0.01,
+          "is_etf": true,
+          "reason": "趋势止损SELL触发：现价1.89在区间内，1/3减仓，浮盈+8.59%"
+        },
+        {
+          "date": "2026-08-18",
+          "time": "14:56",
+          "action": "SELL",
+          "code": "512480",
+          "name": "半导体ETF",
+          "nav": 1.13,
+          "shares": 3600,
+          "amount": 4062.96,
+          "fee": 5.04,
+          "commission": 5.0,
+          "transfer_fee": 0.04,
+          "is_etf": true,
+          "reason": "趋势止损加强：浮亏-8.6%+指数5日-19.9%，止损分批上限触发全清"
+        },
+        {
+          "date": "2026-08-18",
+          "time": "14:56",
+          "action": "BUY",
+          "code": "510300",
+          "name": "沪深300ETF",
+          "nav": 4.79,
+          "shares": 3500,
+          "amount": 16770.17,
+          "fee": 5.17,
+          "commission": 5.0,
+          "transfer_fee": 0.17,
+          "fund_type": "A股宽基",
+          "is_etf": true,
+          "reason": "RB-F01再平衡：F1欠配补足50%批次"
+        },
+        {
+          "date": "2026-08-18",
+          "time": "14:56",
+          "action": "BUY",
+          "code": "518880",
+          "name": "黄金ETF",
+          "nav": 9.08,
+          "shares": 1300,
+          "amount": 11809.12,
+          "fee": 5.12,
+          "commission": 5.0,
+          "transfer_fee": 0.12,
+          "fund_type": "黄金",
+          "is_etf": true,
+          "reason": "RB-F01再平衡：F3欠配补足50%批次"
+        }
+      ],
       "checked": false,
       "pending_states": [
         {
@@ -1451,8 +1531,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：博通概念（当日 5.98% / 5日 7.43%） | 龙头标的 量比 1.26 ≥ 1.0 | 现价 193.8 在区间 [189.92-197.68] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[14:45] 现价198.81高于买入区间上沿197.68，差0.6%，未触发（等回调）"
         },
         {
           "code": "688206",
@@ -1460,8 +1540,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：高带宽存储器HBM（当日 5.62% / 5日 7.62%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 41.57 在区间 [40.74-42.4] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "300124",
@@ -1478,8 +1558,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.1% 低于目标带下沿 40%（欠 6.9pct ≈ ¥35,845） | 本次补足批次 50% = ¥17,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 17000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "518880",
@@ -1487,8 +1567,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 10.1% 低于目标带下沿 15%（欠 4.9pct ≈ ¥25,484） | 本次补足批次 50% = ¥12,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 12000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "588000",
@@ -1496,8 +1576,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "512480",
@@ -1505,8 +1585,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.6% + 指数5日-19.9%；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 3600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     }
