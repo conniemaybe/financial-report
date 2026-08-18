@@ -1193,6 +1193,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-18，由 inject_intraday_to_site.py v6 生成）===
@@ -1200,7 +1203,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-18",
-  "now": "09:59",
+  "now": "11:01",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1275,7 +1278,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300570",
@@ -1283,8 +1286,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：博通概念（当日 5.98% / 5日 7.43%） | 龙头标的 量比 1.26 ≥ 1.0 | 现价 193.8 在区间 [189.92-197.68] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 无现价或区间缺失（price=None, range=[189.92,197.68]），无法判定"
         },
         {
           "code": "688206",
@@ -1292,8 +1295,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：高带宽存储器HBM（当日 5.62% / 5日 7.62%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 41.57 在区间 [40.74-42.4] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 无现价或区间缺失（price=None, range=[40.74,42.4]），无法判定"
         },
         {
           "code": "300124",
@@ -1301,8 +1304,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 23.655914% < 30% 触发 | 方向：机器人/工控 | 当前价 61.97 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 无现价或区间缺失（price=None, range=[60.730599999999995,63.2094]），无法判定"
         },
         {
           "code": "510300",
@@ -1310,8 +1313,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.1% 低于目标带下沿 40%（欠 6.9pct ≈ ¥35,845） | 本次补足批次 50% = ¥17,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 17000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 无现价或区间缺失（price=4.76, range=[0,0]），无法判定"
         },
         {
           "code": "518880",
@@ -1319,8 +1322,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 10.1% 低于目标带下沿 15%（欠 4.9pct ≈ ¥25,484） | 本次补足批次 50% = ¥12,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 12000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 无现价或区间缺失（price=9.07, range=[0,0]），无法判定"
         },
         {
           "code": "588000",
@@ -1328,8 +1331,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日-14.1%）",
           "shares_plan": 400.0,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价1.86低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.86）"
         },
         {
           "code": "512480",
@@ -1337,8 +1340,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.6% + 指数5日-19.9%；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 3600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价1.11低于下沿1.12634，未触发（跳空或急跌，等重评）（现价1.11）"
         }
       ]
     },
