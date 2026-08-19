@@ -461,9 +461,11 @@
     <div class="section">
         <div class="section-title">今日决策摘要 · A股</div>
         <div class="theme-list">
-            <strong>买入：</strong>暂停（无符合条件的标的）<br>
+            <strong>买入：</strong>待执行 2 条（尾盘窗口触发）<br>
+            <strong>神农种业（300189）</strong>：BUY 5500 股，区间 [6.11-6.35]，[S1 · 玉米 · 龙头]<br>
+            <strong>京粮控股（000505）</strong>：BUY 5100 股，区间 [6.65-6.93]，[S1 · 粮食概念 · 龙头]<br>
             <strong>卖出：</strong>无强制信号（按止盈止损规则监控）<br>
-            <strong>持仓：</strong>0 只全部继续持有
+            <strong>持仓：</strong>5 只全部继续持有
         </div>
     </div>
     <!-- 决策透明化（保留，作为黑盒溯源）-->
@@ -514,14 +516,14 @@
                     <div class="tr-label">🌿 S2 入口2 紫苏叶候选池 <small style="font-weight:normal;color:#8aa5c5">（供应链咽喉·三层判定）</small></div>
                     <div class="tr-value">Tier1 3只 | Tier2/观察 6只 | 今日进区间 0只</div>
                     <div class="tr-detail">今日无三层全绿标的</div>
-                    <div class="tr-detail" style="margin-top:6px;padding:6px 8px;background:rgba(245,158,11,0.08);border-radius:3px;font-size:0.78rem;"><div style="color:#f59e0b;font-weight:600;margin-bottom:4px;">📋 候选阻挡明细（为什么没有 BUY）</div><b>江丰电子</b> (价 278.28/区间[170-210]) → <span style="color:#10b981">仅差当日市场环境校验（沪深300/板块/个股三维度）</span><br><b>绿的谐波</b> (价 380.80/区间[180-230]) → 估值阻挡｜等：PE回落至300附近（股价约180-200元区间）<br><b>鼎龙股份</b> (价 81.48/区间[45-55]) → 估值阻挡｜等：PE分位<80%（约PE 65以下，股价约55元）</div>
+                    <div class="tr-detail" style="margin-top:6px;padding:6px 8px;background:rgba(245,158,11,0.08);border-radius:3px;font-size:0.78rem;"><div style="color:#f59e0b;font-weight:600;margin-bottom:4px;">📋 候选阻挡明细（为什么没有 BUY）</div><b>江丰电子</b> (价 278.28/区间[170-210]) → <span style="color:#f59e0b">现价 278 高于区间上限 210，未进入买入区间 → 当前不建仓；市场环境校验仅是三层判定的最后一层，价格维度未满足前不构成建仓信号</span><br><b>绿的谐波</b> (价 380.80/区间[180-230]) → 估值阻挡｜等：PE回落至300附近（股价约180-200元区间）<br><b>鼎龙股份</b> (价 81.48/区间[45-55]) → 估值阻挡｜等：PE分位<80%（约PE 65以下，股价约55元）</div>
                 </div>
 
                 <div class="transparency-row">
                     <div class="tr-label">🚀 S2 入口1 科技龙头池 <small style="font-weight:normal;color:#8aa5c5">（季度评审·估值分位&lt;30%触发）</small></div>
                     <div class="tr-value">共 8 只 | 🔴触发 2 | 🟡接近 0 | ⚪观察 1 | ⚪临时缺失 2 | ⚫永久缺失 3</div>
-                    <div class="tr-detail">触发: 宁德时代(PE分位 27.3%)、汇川技术(PE分位 25.1%)</div>
-                    <div class="tr-detail" style="margin-top:6px;padding:6px 8px;background:rgba(59,130,246,0.08);border-radius:3px;font-size:0.78rem;"><div style="color:#3b82f6;font-weight:600;margin-bottom:4px;">📋 龙头池逐只明细（PE 分位 &lt; 30% 触发建仓评估）</div><b>士兰微</b> [半导体] (价 34.88) → <span style="color:#9ca3af">⚪ PE 分位数据缺失（NeoData 未返回）</span><br><b>浪潮信息</b> [AI算力] (价 80.97) → <span style="color:#9ca3af">⚪ PE 分位数据缺失（NeoData 未返回）</span><br><b>寒武纪-U</b> [AI算力] (价 1162.50) → <span style="color:#6b7280">⚫ PS 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span><br><b>宁德时代</b> [新能源] (价 396.26) → <span style="color:#ef4444">🔴 PE 分位 27.3% &lt; 30% 触发</span><br>&nbsp;&nbsp;├ 市场环境 🟢: 三维度全绿，可正常建仓<br>&nbsp;&nbsp;├ 利空检查 🔴: shareholder 触发红线，当日不建仓，加入观察名单<br>&nbsp;&nbsp;└ 最终: <span style="color:#ef4444">❌ 不建仓（利空红线）</span><br><b>绿的谐波</b> [机器人] (价 380.80) → <span style="color:#6b7280">⚫ PS 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span><br><b>汇川技术</b> [机器人/工控] (价 62.18) → <span style="color:#ef4444">🔴 PE 分位 25.1% &lt; 30% 触发</span><br>&nbsp;&nbsp;├ 市场环境 🟢: 三维度全绿，可正常建仓<br>&nbsp;&nbsp;├ 利空检查 🟢: 5 项检查全绿，可正常建仓<br>&nbsp;&nbsp;└ 最终: <span style="color:#10b981">✅ 可正常建仓</span><br><b>立讯精密</b> [消费电子] (价 57.74) → 观察中（PE 分位 60.7%，距 30% 差 30.7）<br><b>中芯国际</b> [半导体] (价 134.98) → <span style="color:#6b7280">⚫ PB 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span></div>
+                    <div class="tr-detail">触发: 宁德时代(PE分位 27.3%)、汇川技术(PE分位 25.1% · 已持仓)</div>
+                    <div class="tr-detail" style="margin-top:6px;padding:6px 8px;background:rgba(59,130,246,0.08);border-radius:3px;font-size:0.78rem;"><div style="color:#3b82f6;font-weight:600;margin-bottom:4px;">📋 龙头池逐只明细（PE 分位 &lt; 30% 触发建仓评估）</div><b>士兰微</b> [半导体] (价 34.88) → <span style="color:#9ca3af">⚪ PE 分位数据缺失（NeoData 未返回）</span><br><b>浪潮信息</b> [AI算力] (价 80.97) → <span style="color:#9ca3af">⚪ PE 分位数据缺失（NeoData 未返回）</span><br><b>寒武纪-U</b> [AI算力] (价 1162.50) → <span style="color:#6b7280">⚫ PS 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span><br><b>宁德时代</b> [新能源] (价 396.26) → <span style="color:#ef4444">🔴 PE 分位 27.3% &lt; 30% 触发</span><br>&nbsp;&nbsp;├ 市场环境 🟢: 三维度全绿，可正常建仓<br>&nbsp;&nbsp;├ 利空检查 🔴: shareholder 触发红线，当日不建仓，加入观察名单<br>&nbsp;&nbsp;└ 最终: <span style="color:#ef4444">❌ 不建仓（利空红线）</span><br><b>绿的谐波</b> [机器人] (价 380.80) → <span style="color:#6b7280">⚫ PS 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span><br><b>汇川技术</b> [机器人/工控] (价 62.18) → <span style="color:#ef4444">🔴 PE 分位 25.1% &lt; 30% 触发</span><br>&nbsp;&nbsp;├ 市场环境 🟢: 三维度全绿，可正常建仓<br>&nbsp;&nbsp;├ 利空检查 🟢: 5 项检查全绿，可正常建仓<br>&nbsp;&nbsp;└ 最终: <span style="color:#f59e0b">⏸ 已持仓 400 股（8/18 建仓），PE 分位信号仅为状态展示，不加仓</span><br><b>立讯精密</b> [消费电子] (价 57.74) → 观察中（PE 分位 60.7%，距 30% 差 30.7）<br><b>中芯国际</b> [半导体] (价 134.98) → <span style="color:#6b7280">⚫ PB 分位永久缺失（NeoData 不支持），决策下放紫苏叶池/用户提名</span></div>
                 </div>
             <div class="group-conclusion"><span class="conclusion-tag conclusion-buy">✅ 龙头池 2 只触发 PE 分位条件</span></div>
         </div>
@@ -605,8 +607,8 @@
     <div class="section">
         <div class="section-title">今日决策摘要 · 基金</div>
         <div class="theme-list">
-            <strong>申购：</strong>暂停（无符合条件的标的）<br>
-            <strong>赎回：</strong>无强制信号（按止盈止损规则监控）<br>
+            <strong>申购：</strong>沪深300ETF（rebalance_F1，计划 ¥9,000，尾盘窗口按现价执行）；黄金ETF（rebalance_F3，计划 ¥6,000，尾盘窗口按现价执行）<br>
+            <strong>赎回：</strong>科创50ETF（现价跌破 1.879 触发减仓）（按止盈止损规则监控）<br>
             <strong>持仓：</strong>5 只全部继续持有
         </div>
     </div>
