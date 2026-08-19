@@ -65,11 +65,31 @@ def _query_neodata(query: str) -> str:
                     [PYTHON, str(NEODATA_QUERY), "--query", query, "--token", tok],
                     capture_output=True, text=True, encoding="utf-8", timeout=60
                 )
-                return r2.stdout or ""
-        return out
+                return _extract_content(r2.stdout or "")
+        return _extract_content(out)
     except Exception as e:
         print(f"  ⚠️ NeoData 查询异常: {e}")
         return ""
+
+
+def _extract_content(raw: str) -> str:
+    """2026-08-19 修复：query.py 返回 JSON 包裹的 content。
+
+    {suc, data.apiData.apiRecall[].content} —— 之前直接拿 stdout 做正则
+    永远匹配不上（512480 现净值查询失败根因）。先解 JSON 提 content，
+    非 JSON 原样返回（兼容 TOKEN_EXPIRED 等提示文本）。
+    """
+    try:
+        import json as _json
+        data = _json.loads(raw)
+        if data.get("suc"):
+            for recall in data.get("data", {}).get("apiData", {}).get("apiRecall", []):
+                c = recall.get("content", "")
+                if c:
+                    return c
+    except Exception:
+        pass
+    return raw
 
 
 # ============== 数据层 ==============
@@ -113,34 +133,58 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
     for code, trades in trades_by_code.items():
         if code in current_positions:
             continue
-        buys = [t for t in trades if t["action"] == "BUY"]
-        sells = [t for t in trades if t["action"] == "SELL"]
-        divs = [t for t in trades if t["action"] == "DIVIDEND"]
+        # 2026-08-19 修复①（铁律）：voided 交易不参与清仓判定与盈亏计算
+        # 事故：512480 有 1 笔 8/11 SELL 5400 份被作废，不过滤会虚增卖出份额
+        valid = [t for t in trades if t.get("status") != "voided"]
+        buys = [t for t in valid if t["action"] == "BUY"]
+        sells = [t for t in valid if t["action"] == "SELL"]
+        divs = [t for t in valid if t["action"] == "DIVIDEND"]
+        splits = [t for t in valid if t["action"] == "SPLIT"]
         buy_shares = sum(t["shares"] for t in buys)
         sell_shares = sum(t["shares"] for t in sells)
         if buy_shares == 0:
             continue
-        if sell_shares < buy_shares:
+
+        # 2026-08-19 修复②：SPLIT 拆分份额口径
+        # SPLIT.shares 记录的是「拆分后持仓总份额」，按时间重放：
+        #   BUY → 累加；SPLIT → 直接置为拆分后总量（权威值）
+        # 得到 buy_equiv = 与卖出份额同口径的"买入等效份额"（拆分后）
+        sorted_valid = sorted(valid, key=lambda x: str(x.get("date", "")))
+        buy_equiv = 0
+        for t in sorted_valid:
+            if t["action"] == "BUY":
+                buy_equiv += t["shares"]
+            elif t["action"] == "SPLIT" and t.get("shares"):
+                buy_equiv = t["shares"]  # 拆分后总份额（已含拆分前全部持仓）
+
+        if sell_shares < buy_equiv:
             # 部分清仓但 positions 里没有 → 数据残留，跳过避免误导
             continue
 
         name = trades[0].get("name", code)
+        # 2026-08-19 修复③：基金 trades 价格字段兼容
+        # 基金账户 SELL 多数只有 nav 无 price（27 条中 23 条），
+        # 读 t["price"] 直接 KeyError（8/19 晨报 morning_finalize 崩溃根因）
+        def _t_price(t) -> float:
+            return float(t.get("price") or t.get("nav") or 0)
+
         # ⚠️ v9 正确口径：绕开 amount 字段歧义（早期 amount=price×shares，后期 amount=total_cost/net_proceeds）
         # 直接基于 price/shares + 独立费用字段重算
         # BUY 成本 = Σ(price × shares + commission + transfer_fee)
         buy_total = sum(
-            t["price"] * t["shares"] + t.get("commission", 0) + t.get("transfer_fee", 0)
+            _t_price(t) * t["shares"] + t.get("commission", 0) + t.get("transfer_fee", 0)
             for t in buys
         )
         # SELL 净额 = Σ(price × shares - commission - stamp_tax - transfer_fee)
         sell_total = sum(
-            t["price"] * t["shares"] - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
+            _t_price(t) * t["shares"] - t.get("commission", 0) - t.get("stamp_tax", 0) - t.get("transfer_fee", 0)
             for t in sells
         )
         div_total = sum(t.get("amount", 0) for t in divs)
         realized = sell_total - buy_total + div_total
         realized_pct = realized / buy_total if buy_total > 0 else 0
-        avg_buy = buy_total / buy_shares
+        # 均价用同口径：拆分后等效份额（与 avg_sell 可比），无拆分时即 buy_shares
+        avg_buy = buy_total / buy_equiv if buy_equiv > 0 else 0
         avg_sell = sell_total / sell_shares if sell_shares > 0 else 0
         last_sell_date = max(t["date"] for t in sells)
 
@@ -148,7 +192,7 @@ def identify_cleared_positions(portfolio: dict, is_fund: bool = False) -> list[d
             "code": code,
             "name": name,
             "is_fund": is_fund,
-            "shares": buy_shares,
+            "shares": buy_equiv,
             "avg_buy": avg_buy,
             "avg_sell": avg_sell,
             "buy_total": buy_total,
@@ -248,6 +292,35 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> dict:
         query = f"{item['name']} {code} 最新净值"
         out = _query_neodata(query)
         m = re.search(r"最新(?:价格|净值)[:：]\s*([\d.]+)", out)
+        # 2026-08-19 修复：ETF 返回行情表格（| 最新价（元） | 昨收… |），
+        # 字段式正则匹配不上 → 表格解析：表头定位「最新价（元）」列，读数据行对应列
+        if not m:
+            # 2026-08-19 修复：ETF 返回行情表格（| 最新价（元） | 昨收… |），
+            # 字段式正则匹配不上 → 表格解析：表头定位「最新价（元）」列，读数据行对应列
+            lines = out.split("\n")
+            header_idx = None
+            for i, ln in enumerate(lines):
+                if "最新价" in ln and "|" in ln:
+                    header_idx = i
+                    break
+            if header_idx is not None:
+                header_cells = [c.strip() for c in lines[header_idx].split("|")]
+                for j, c in enumerate(header_cells):
+                    if "最新价" in c:
+                        # 找 header 之后第一条数据行（跳过 :---: 分隔行）
+                        for ln in lines[header_idx + 1:]:
+                            if "---" in ln or "|" not in ln:
+                                continue
+                            cells = [c2.strip() for c2 in ln.split("|")]
+                            if len(cells) > j:
+                                try:
+                                    v = float(cells[j])
+                                    if 0.01 < v < 10000:
+                                        m = re.match(r"([\d.]+)", str(v))
+                                        break
+                                except ValueError:
+                                    continue
+                        break
         if m:
             price = float(m.group(1))
             item["current_price"] = price
