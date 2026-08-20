@@ -203,7 +203,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-19（周三）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-20（周四）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -520,7 +520,7 @@ const csiNav = csiEtfPrice.map(v => Math.round(csiShares * v + csiCash));
 // 纳指ETF 513100 基准：6/8按当日均价2.129全仓买入（同花顺VWAP，westock OHLC均价2.123近似一致）
 // 买入花费=469500×2.129=999,565.50，佣金(万2.5)=249.89，过户费(沪市0.001%)=10.00，剩余现金¥174.61
 // v18(2026-08-04)：修正旧注释错误（原标注2.373是6/1价格非6/8），份额从421200→469500重算
-const ndxPrice = [2.114, 2.2, 2.143, 2.13, 2.162, 2.258, 2.28, 2.279, 2.266, 2.25, 2.174, 2.187, 2.208, 2.158, 2.178, 2.204, 2.209, 2.158, 2.167, 2.171, 2.169, 2.141, 2.166, 2.174, 2.168, 2.17, 2.188, 2.167, 2.107, 2.096, 2.13, 2.13, 2.131, 2.104, 2.118, 2.068, 2.074, 2.041, 2.112, 2.127, 2.192, 2.267, 2.24, 2.27, 2.261, 2.215, 2.226, 2.226, 2.264, 2.274,2.192,2.267];
+const ndxPrice = [2.114, 2.2, 2.143, 2.13, 2.162, 2.258, 2.28, 2.279, 2.266, 2.25, 2.174, 2.187, 2.208, 2.158, 2.178, 2.204, 2.209, 2.158, 2.167, 2.171, 2.169, 2.141, 2.166, 2.174, 2.168, 2.17, 2.188, 2.167, 2.107, 2.096, 2.13, 2.13, 2.131, 2.104, 2.118, 2.068, 2.074, 2.041, 2.112, 2.127, 2.192, 2.267, 2.24, 2.27, 2.261, 2.215, 2.226, 2.226, 2.264, 2.274, 2.192, 2.2];
 const ndxShares = 469500;
 const ndxCash = 174.61;
 const ndxNav = ndxPrice.map(v => Math.round(ndxShares * v + ndxCash));
@@ -1236,227 +1236,45 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-19，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-08-20，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-08-19",
-  "now": "14:47",
+  "date": "2026-08-20",
+  "now": "08:38",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300189",
-          "name": "神农种业",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：玉米（当日 7.76% / 5日 10.27%） | 龙头标的 量比 3.02 ≥ 1.0 | 现价 6.23 在区间 [6.11-6.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5500,
-          "status": "checked",
-          "reason": "[10:00] 现价6.52高于买入区间上沿6.35，差2.7%，未触发（等回调）"
-        },
-        {
-          "code": "000505",
-          "name": "京粮控股",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：粮食概念（当日 6.52% / 5日 9.96%） | 龙头标的 量比 6.64 ≥ 1.0 | 现价 6.79 在区间 [6.65-6.93] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5100,
-          "status": "checked",
-          "reason": "[10:00] 现价7.47高于买入区间上沿6.93，差7.8%，未触发（等回调）"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 36.4% 低于目标带下沿 40%（欠 3.6pct ≈ ¥18,679） | 本次补足批次 50% = ¥9,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 9000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥9,000，无价格区间），于尾盘窗口按现价4.72执行"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F3 实际 12.4% 低于目标带下沿 15%（欠 2.6pct ≈ ¥13,722） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价9.0执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+0.1%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "checked",
-          "reason": "[10:00] 现价1.83低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.83）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300189",
-          "name": "神农种业",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：玉米（当日 7.76% / 5日 10.27%） | 龙头标的 量比 3.02 ≥ 1.0 | 现价 6.23 在区间 [6.11-6.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5500,
-          "status": "checked",
-          "reason": "[11:00] 现价6.25在买入区间[6.11,6.35]内，满足触发条件"
-        },
-        {
-          "code": "000505",
-          "name": "京粮控股",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：粮食概念（当日 6.52% / 5日 9.96%） | 龙头标的 量比 6.64 ≥ 1.0 | 现价 6.79 在区间 [6.65-6.93] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5100,
-          "status": "checked",
-          "reason": "[11:00] 现价7.47高于买入区间上沿6.93，差7.8%，未触发（等回调）"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 36.4% 低于目标带下沿 40%（欠 3.6pct ≈ ¥18,679） | 本次补足批次 50% = ¥9,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 9000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥9,000，无价格区间），于尾盘窗口按现价4.68执行"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F3 实际 12.4% 低于目标带下沿 15%（欠 2.6pct ≈ ¥13,722） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价8.99执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+0.1%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "checked",
-          "reason": "[11:00] 现价1.8低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.8）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300189",
-          "name": "神农种业",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：玉米（当日 7.76% / 5日 10.27%） | 龙头标的 量比 3.02 ≥ 1.0 | 现价 6.23 在区间 [6.11-6.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5500,
-          "status": "checked",
-          "reason": "[13:30] 现价6.24在买入区间[6.11,6.35]内，满足触发条件"
-        },
-        {
-          "code": "000505",
-          "name": "京粮控股",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：粮食概念（当日 6.52% / 5日 9.96%） | 龙头标的 量比 6.64 ≥ 1.0 | 现价 6.79 在区间 [6.65-6.93] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5100,
-          "status": "checked",
-          "reason": "[13:30] 现价7.47高于买入区间上沿6.93，差7.8%，未触发（等回调）"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 36.4% 低于目标带下沿 40%（欠 3.6pct ≈ ¥18,679） | 本次补足批次 50% = ¥9,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 9000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥9,000，无价格区间），于尾盘窗口按现价4.66执行"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F3 实际 12.4% 低于目标带下沿 15%（欠 2.6pct ≈ ¥13,722） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价8.96执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+0.1%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "checked",
-          "reason": "[13:30] 现价1.77低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.77）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300189",
-          "name": "神农种业",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：玉米（当日 7.76% / 5日 10.27%） | 龙头标的 量比 3.02 ≥ 1.0 | 现价 6.23 在区间 [6.11-6.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5500,
-          "status": "checked",
-          "reason": "[14:45] 现价6.19在买入区间[6.11,6.35]内，满足触发条件"
-        },
-        {
-          "code": "000505",
-          "name": "京粮控股",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：粮食概念（当日 6.52% / 5日 9.96%） | 龙头标的 量比 6.64 ≥ 1.0 | 现价 6.79 在区间 [6.65-6.93] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 5100,
-          "status": "checked",
-          "reason": "[14:45] 现价7.47高于买入区间上沿6.93，差7.8%，未触发（等回调）"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 36.4% 低于目标带下沿 40%（欠 3.6pct ≈ ¥18,679） | 本次补足批次 50% = ¥9,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 9000,
-          "status": "checked",
-          "reason": "[14:45] 按金额执行的单（计划金额 ¥9,000，无价格区间），于尾盘窗口按现价4.63执行"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F3 实际 12.4% 低于目标带下沿 15%（欠 2.6pct ≈ ¥13,722） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[14:45] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价8.96执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+0.1%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "checked",
-          "reason": "[14:45] 现价1.75低于下沿1.8785599999999998，未触发（跳空或急跌，等重评）（现价1.75）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
-    "冷却期": "仓位 0.1% · 可加仓",
-    "板块主线": "5日强势：大硅片(+9.2%)、玉米(+10.3%)、粮食概念(+10.0%)"
+    "冷却期": "仓位 0.1% · 可加仓"
   },
   "standard_times": [
     "10:00",
