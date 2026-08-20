@@ -1254,6 +1254,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-20，由 inject_intraday_to_site.py v6 生成）===
@@ -1261,7 +1264,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-20",
-  "now": "13:35",
+  "now": "14:50",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1274,8 +1277,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 36.0% 低于目标带下沿 40%（欠 4.0pct ≈ ¥20,830） | 本次补足批次 50% = ¥10,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 10000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥10,000，无价格区间），于尾盘窗口按现价4.67执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1283,8 +1286,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 12.3% 低于目标带下沿 15%（欠 2.7pct ≈ ¥13,723） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价9.24执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1308,8 +1311,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 36.0% 低于目标带下沿 40%（欠 4.0pct ≈ ¥20,830） | 本次补足批次 50% = ¥10,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 10000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥10,000，无价格区间），于尾盘窗口按现价4.66执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1317,8 +1320,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 12.3% 低于目标带下沿 15%（欠 2.7pct ≈ ¥13,723） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价9.23执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1342,8 +1345,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 36.0% 低于目标带下沿 40%（欠 4.0pct ≈ ¥20,830） | 本次补足批次 50% = ¥10,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 10000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥10,000，无价格区间），于尾盘窗口按现价4.65执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "518880",
@@ -1351,8 +1354,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 12.3% 低于目标带下沿 15%（欠 2.7pct ≈ ¥13,723） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价9.21执行"
+          "status": "already_done",
+          "reason": "已于 14:45 成交"
         },
         {
           "code": "588000",
@@ -1367,8 +1370,41 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "14:45",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-08-20",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "510300",
+          "name": "沪深300ETF",
+          "nav": 4.65,
+          "shares": 2100,
+          "amount": 9770.1,
+          "fee": 5.1,
+          "commission": 5.0,
+          "transfer_fee": 0.1,
+          "fund_type": "A股基金",
+          "is_etf": true,
+          "reason": "rebalance_F1 尾盘硬执行：按金额 ¥10,000 尾盘执行（现价4.65）（v13 机械执行）"
+        },
+        {
+          "date": "2026-08-20",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "518880",
+          "name": "黄金ETF",
+          "nav": 9.24,
+          "shares": 600,
+          "amount": 5549.06,
+          "fee": 5.06,
+          "commission": 5.0,
+          "transfer_fee": 0.06,
+          "fund_type": "黄金基金",
+          "is_etf": true,
+          "reason": "rebalance_F3 尾盘硬执行：按金额 ¥6,000 尾盘执行（现价9.24）（v13 机械执行）"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "510300",
@@ -1376,8 +1412,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 36.0% 低于目标带下沿 40%（欠 4.0pct ≈ ¥20,830） | 本次补足批次 50% = ¥10,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 10000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "518880",
@@ -1385,8 +1421,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F3 实际 12.3% 低于目标带下沿 15%（欠 2.7pct ≈ ¥13,723） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "588000",
@@ -1394,8 +1430,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 800,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[14:45] 现价1.74低于下沿1.752195，未触发（跳空或急跌，等重评）（现价1.74）"
         }
       ]
     }
