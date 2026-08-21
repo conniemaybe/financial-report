@@ -1277,6 +1277,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-21，由 inject_intraday_to_site.py v6 生成）===
@@ -1284,10 +1287,78 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-21",
-  "now": "14:27",
+  "now": "14:29",
   "slots": [
     {
       "time_slot": "10:00",
+      "trades": [],
+      "checked": true,
+      "pending_states": [
+        {
+          "code": "601336",
+          "name": "新华保险",
+          "action": "SELL",
+          "trigger_conditions": "测试全清",
+          "shares_plan": 200,
+          "status": "already_done",
+          "reason": "已于 13:30 成交"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 6000,
+          "status": "checked",
+          "reason": "[10:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行"
+        },
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
+          "shares_plan": 800,
+          "status": "already_done",
+          "reason": "已于 13:30 成交"
+        }
+      ]
+    },
+    {
+      "time_slot": "11:00",
+      "trades": [],
+      "checked": true,
+      "pending_states": [
+        {
+          "code": "601336",
+          "name": "新华保险",
+          "action": "SELL",
+          "trigger_conditions": "测试全清",
+          "shares_plan": 200,
+          "status": "already_done",
+          "reason": "已于 13:30 成交"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 6000,
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行"
+        },
+        {
+          "code": "588000",
+          "name": "科创50ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
+          "shares_plan": 800,
+          "status": "already_done",
+          "reason": "已于 13:30 成交"
+        }
+      ]
+    },
+    {
+      "time_slot": "13:30",
       "trades": [
         {
           "date": "2026-08-21",
@@ -1342,7 +1413,7 @@ const INTRADAY_DATA = {
           "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
           "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行"
+          "reason": "[13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.67执行"
         },
         {
           "code": "588000",
@@ -1352,74 +1423,6 @@ const INTRADAY_DATA = {
           "shares_plan": 800,
           "status": "executed",
           "reason": ""
-        }
-      ]
-    },
-    {
-      "time_slot": "11:00",
-      "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "601336",
-          "name": "新华保险",
-          "action": "SELL",
-          "trigger_conditions": "测试全清",
-          "shares_plan": 200,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
-    },
-    {
-      "time_slot": "13:30",
-      "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "601336",
-          "name": "新华保险",
-          "action": "SELL",
-          "trigger_conditions": "测试全清",
-          "shares_plan": 200,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 6000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.67执行"
-        },
-        {
-          "code": "588000",
-          "name": "科创50ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
-          "shares_plan": 800,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -1435,7 +1438,7 @@ const INTRADAY_DATA = {
           "trigger_conditions": "测试全清",
           "shares_plan": 200,
           "status": "already_done",
-          "reason": "已于 10:00 成交"
+          "reason": "已于 13:30 成交"
         },
         {
           "code": "510300",
@@ -1453,7 +1456,7 @@ const INTRADAY_DATA = {
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 800,
           "status": "already_done",
-          "reason": "已于 10:00 成交"
+          "reason": "已于 13:30 成交"
         }
       ]
     }
