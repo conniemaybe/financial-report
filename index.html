@@ -1268,6 +1268,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-21，由 inject_intraday_to_site.py v6 生成）===
@@ -1275,7 +1278,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-21",
-  "now": "10:15",
+  "now": "11:11",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1305,7 +1308,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "510300",
@@ -1313,8 +1316,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 37.5% 低于目标带下沿 40%（欠 2.5pct ≈ ¥12,960） | 本次补足批次 50% = ¥6,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 6000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行"
         },
         {
           "code": "588000",
@@ -1322,8 +1325,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 800,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价1.75在区间[1.73528,1.7527199999999998]内，触发（现价1.75）"
         }
       ]
     },
