@@ -327,6 +327,7 @@
     
 </head>
 <body>
+
 <div class="container">
     <div class="header">
         <div class="header-left">
@@ -340,23 +341,25 @@
             </div>
             <div>
                 <span class="badge badge-evening">收盘日报</span>
-                <div class="date-text">2026-08-21 15:30</div>
+                <div class="date-text">2026-08-21 18:30</div>
             </div>
         </div>
     </div>
     <div id="panel-stock" class="panel-stock visible">
     <div class="section"><div class="section-title">当日业绩 · A股 · 周报</div><div class="nav-grid">
         <div class="nav-card"><div class="label">账户净值</div><div class="value">¥540,899.56</div><div class="sub">收益率 <span class="pos">+8.18%</span></div></div>
-        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+4,199.02</span></div><div class="sub"><span class="pos">+0.78%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+4,208.00</span></div><div class="sub neu">vs 昨日净值 ¥536,691.56</div></div>
         <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+40,899.56</span></div><div class="sub"><span class="pos">+8.18%</span></div></div>
         <div class="nav-card"><div class="label">现金余额</div><div class="value">¥445,849.56</div><div class="sub neu">持仓 4 支</div></div>
     </div></div>
-    
-    <div class="section" style="border-left: 3px solid rgba(239,83,80,0.5);">
-        <div class="section-title">本周业绩</div>
+        <div class="section" style="border-left: 3px solid rgba(239,83,80,0.5);">
+        <div class="section-title">本周业绩（合并 · 8/14→8/21）</div>
         <div class="nav-grid">
-            <div class="nav-card"><div class="label">本周收益</div><div class="value">+0</div><div class="sub" style="color:#ef5350">+0.00%</div></div>
-            <div class="nav-card"><div class="label">累计收益</div><div class="value">+40,900</div><div class="sub" style="color:#ef5350">+8.18%</div></div>
+            <div class="nav-card"><div class="label">本周收益</div><div class="value" style="color:#ef5350">+960</div><div class="sub" style="color:#ef5350">+0.09%</div></div>
+            <div class="nav-card"><div class="label">周内净值区间</div><div class="value" style="font-size:1rem;">¥1053k~1063k</div><div class="sub">A股+基金合并</div></div>
+        </div>
+    </div>
+<div class="nav-card"><div class="label">累计收益</div><div class="value">+40,900</div><div class="sub" style="color:#ef5350">+817.99%</div></div>
             <div class="nav-card"><div class="label">周内净值区间</div><div class="value" style="font-size:1rem;">—</div><div class="sub">最大回撤 -0.0%</div></div>
         </div>
     </div>
@@ -367,13 +370,13 @@
             <tbody>
                 <tr>
                     <td class="col-text">本周操作</td>
-                    <td>1 笔</td>
-                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;">买 0 / 卖 1</td>
+                    <td>3 笔</td>
+                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;">买 2 / 卖 1</td>
                 </tr>
                 <tr>
                     <td class="col-text">盈亏来源</td>
                     <td>+0</td>
-                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;"><br>　新华保险 +11,723</td>
+                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;"><br>　汇川技术 -24,653<br>　概伦电子 -37,727<br>　新华保险 +11,723</td>
                 </tr>
             </tbody>
         </table>
@@ -407,39 +410,48 @@
             数据驱动（trades 的 strategy/entry_point 标签）。legacy = 2026-08-19 标签机制上线前的历史单。平仓盈亏明细见清仓复盘模块。
         </div>
     </div>
-    <div class="section"><div class="section-title">今日市场小结</div><div class="reflection-item">周五 A 股三大指数集体收红。沪指微涨 0.04% 报 3905.20，深成指涨 0.87% 报 14094.17，创业板指涨 1.43% 报 3545.58，创业板领涨凸显成长股强势。两市成交额合计约 1.88 万亿（沪市 8834 亿 + 深市 9958 亿），量能较前一交易日略有萎缩。市场风格：成长跑赢价值，AI 算力/半导体/新能源领涨；金融/地产/消费偏弱。北向资金本周累计净流出，需关注下周一开盘前美股走势（纳指/标普周五晚）。</div></div>
-    <div class="section"><div class="section-title">今日成交记录</div>
+        <div class="section"><div class="section-title">今日成交记录</div>
     <table><thead><tr><th>时间</th><th>操作</th><th class="col-text">股票</th><th>价格</th><th>数量</th><th>金额</th><th class="col-text">原因</th></tr></thead>
-    <tbody><tr>
+    <tbody>
+        <tr>
             <td>13:41</td><td><span class="neg">卖出</span></td>
             <td class="col-text">新华保险（601336）</td><td>58.67</td>
             <td>200</td><td>11,723.02</td>
-            <td class="col-text" style="font-size:0.8rem;color:#607a99">SELL pending触发，现价58.67在区间[0.01,999999.0]内，测试全清</td></tr></tbody></table></div>
-    <div class="section"><div class="section-title">收盘持仓</div>
-    <table><thead><tr><th class="col-text">股票</th><th>持股数</th><th>成本价</th><th>收盘价</th><th>市值</th><th>占比</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
-    <tbody><tr>
-            <td class="col-text">牧原股份<br><small style="color:#607a99">002714</small></td>
-            <td>500</td><td>38.59</td>
-            <td>39.07</td><td>19,535</td>
-            <td>3.6%</td><td><span class="neg">-375.00</span> <span class="neg">-1.88%</span></td>
-            <td><span class="neg">-251.47</span> <span class="neg">-1.27%</span></td></tr><tr>
-            <td class="col-text">三祥新材<br><small style="color:#607a99">603663</small></td>
-            <td>300</td><td>39.99</td>
-            <td>43.11</td><td>12,933</td>
-            <td>2.4%</td><td><span class="pos">+705.00</span> <span class="pos">+5.77%</span></td>
-            <td><span class="pos">+936.88</span> <span class="pos">+7.81%</span></td></tr><tr>
-            <td class="col-text">汇川技术<br><small style="color:#607a99">300124</small></td>
-            <td>400</td><td>61.63</td>
-            <td>59.03</td><td>23,612</td>
-            <td>4.4%</td><td><span class="neg">-36.00</span> <span class="neg">-0.15%</span></td>
-            <td><span class="neg">-1,041.25</span> <span class="neg">-4.22%</span></td></tr><tr>
+            <td class="col-text" style="font-size:0.8rem;color:#607a99">SELL pending触发，现价58.67在区间[0.01,999999.0]内，测试全清</td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">收盘持仓</div>
+    <table><thead><tr><th class="col-text">股票</th><th>持股数</th><th>成本价</th><th>收盘价</th><th>市值</th><th>占持仓比</th><th>浮盈亏%</th><th>浮盈亏额</th></tr></thead>
+    <tbody>
+        <tr>
             <td class="col-text">概伦电子<br><small style="color:#607a99">688206</small></td>
             <td>900</td><td>41.92</td>
             <td>43.30</td><td>38,970</td>
-            <td>7.2%</td><td><span class="pos">+3,798.00</span> <span class="pos">+10.80%</span></td>
-            <td><span class="pos">+1,243.08</span> <span class="pos">+3.29%</span></td></tr></tbody></table></div>
-    
-    <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
+            <td>41.0%</td>
+            <td><span class="pos">+3.29%</span></td>
+            <td><span class="pos">+1,243</span></td></tr>
+        <tr>
+            <td class="col-text">汇川技术<br><small style="color:#607a99">300124</small></td>
+            <td>400</td><td>61.63</td>
+            <td>59.03</td><td>23,612</td>
+            <td>24.8%</td>
+            <td><span class="neg">-4.22%</span></td>
+            <td><span class="neg">-1,041</span></td></tr>
+        <tr>
+            <td class="col-text">牧原股份<br><small style="color:#607a99">002714</small></td>
+            <td>500</td><td>38.59</td>
+            <td>39.07</td><td>19,535</td>
+            <td>20.6%</td>
+            <td><span class="pos">+1.24%</span></td>
+            <td><span class="pos">+240</span></td></tr>
+        <tr>
+            <td class="col-text">三祥新材<br><small style="color:#607a99">603663</small></td>
+            <td>300</td><td>39.99</td>
+            <td>43.11</td><td>12,933</td>
+            <td>13.6%</td>
+            <td><span class="pos">+7.81%</span></td>
+            <td><span class="pos">+937</span></td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
     <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
     <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
     <tbody><tr>
@@ -448,90 +460,186 @@
                 <td>✅ 已执行</td>
                 <td class="col-reason">13:30 [13:30] 现价58.66在区间[0.01,999999.0]内，触发（现价58.66）<br><br>13:41 已执行 SELL 200股 @58.67</td>
             </tr></tbody></table></div>
-    <div class="section"><div class="section-title">策略反思</div><div class="reflection-item ">
-            <strong>💡 📊 当日市场复盘</strong><br>周五三大指数集体收红：上证+0.04%（3905.20）、深证+0.87%（14094.17）、创业板+1.43%（3545.58）。</div><div class="reflection-item ">
-            <strong>💡 💼 持仓组合表现</strong><br>A股组合当日+0.78%（+¥4,199.02），三祥新材+5.77%领涨，概伦电子+10.80%反弹最猛，汇川技术-0.15%微跌；新华保险按测试全清指令清仓（-¥11,723到账）。基金组合+0.40%（+¥2,036.29），黄金ETF +1.67%贡献最大；科创50ETF强制全清（+¥1,386.99到账），沪深300ETF尾盘补仓（-¥5,621.06建仓）。</div><div class="reflection-item ">
-            <strong>💡 📋 策略执行追踪</strong><br>A股1/1执行：601336测试全清13:41成交@58.67。基金2/2执行：588000趋势止损强制全清13:44成交@1.74；510300 RB-F01再平衡补仓14:46成交@4.68。今日无 expired/skip 策略。</div><div class="reflection-item ">
-            <strong>💡 🔮 后市展望</strong><br>创业板指+1.43%领涨，深证收复14000关口，半导体/新能源反弹明显。周末关注：①美股纳指/标普周五走势影响周一开盘；②8/22-23 周六日无重大宏观事件；③下周一关注半导体ETF是否能延续反弹——S1 HBM主线已现+10%超跌反弹。仓位概伦电子占比41%超25%红线（成本41.92 vs 现价43.30，市值¥38,970 / NAV ¥540,899=7.2%，但相对建仓本金¥37,727 计占比偏高），需盘中关注是否触发止盈减仓。</div></div>
-    <div class="section"><div class="section-title">📋 本周市场回顾（8/17-8/21）</div><div class="reflection-item ">本周 A 股三大指数窄幅震荡，周一/周三回调（沪指 8/19 跌-0.91% / 8/20 -0.07%），周五集体反弹收红（创业板+1.43%）。成交量日均约 1.85 万亿（沪市 8800 亿 + 深市 9700 亿），较上周略缩。市场风格：周一 AI 算力/PCB 走强 → 周三防御板块领涨 → 周五成长板块反弹。沪指周线微跌-0.18%，深成指+0.12%，创业板指+0.65%，科创50周线+1.85%最强势。北向资金本周累计净流出约 35 亿（外资偏防御）。</div></div>
-    <div class="section"><div class="section-title">📈 本周策略表现统计</div><div class="reflection-item ">A股本周 3 笔交易：2 BUY + 1 SELL。① 8/18 尾盘建仓汇川技术(300124) 400股@61.62（S2 入口1·科技龙头池，PE 分位 23.66%）；② 8/18 尾盘建仓概伦电子(688206) 900股@41.91（S1 HBM 主线）；③ 8/21 测试全清新华保险(601336) 200股@58.67（+1.62%）。A股本周净值 541,259.72 → 540,899.56（-¥360.16 / -0.07%），周表现基本持平。组合当前 4 支：002714 牧原(+1.24%)、603663 三祥新材(+7.81%)、300124 汇川(-4.22%)、688206 概伦(+3.29%)；概伦电子单一持仓占比偏高（建仓本金 ¥37,727 / 初始 50 万 = 7.5%，但相对于剩余可用 5 万现金计占比偏高），下周一关注是否触发止盈减仓。</div></div>
-    <div class="section"><div class="section-title">明日关注</div><div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                <span style="color:#a8c8ff;font-weight:600">概伦电子（688206）</span>
-                <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px"></span></div><div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                <span style="color:#a8c8ff;font-weight:600">三祥新材（603663）</span>
-                <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px"></span></div><div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                <span style="color:#a8c8ff;font-weight:600">汇川技术（300124）</span>
-                <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px"></span></div><div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                <span style="color:#a8c8ff;font-weight:600">牧原股份（002714）</span>
-                <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px"></span></div></div></div>
+        <div class="section"><div class="section-title">策略反思 · A股</div>
+        <div class="reflection-item">
+            <strong>🔍 策略执行质量评估</strong><br>今日待执行策略 1 条：✅执行 1 / ❌过期 0 / 🟡跳过 0，执行率 100%<br>&nbsp;&nbsp;SELL 新华保险(601336) 200股@58.67 到账¥11,723.02
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：decision_lock 清仓指令应盘中触发 → 验证：13:41 全清新华保险 200股@58.67，执行率100% → 结论：执行链路正常 → 下一步：无需调整</div>        <div class="reflection-item">
+            <strong>📊 选股方向复盘</strong><br>当前持仓 4 只，集中度：<br>&nbsp;&nbsp;牧原股份(002714) 占比21% 份额500股 成本38.59<br>&nbsp;&nbsp;三祥新材(603663) 占比14% 份额300股 成本39.99<br>&nbsp;&nbsp;汇川技术(300124) 占比25% 份额400股 成本61.63<br>&nbsp;&nbsp;概伦电子(688206) 占比41% 份额900股 成本41.92
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：单一持仓占市值≤25% → 验证：概伦电子占41%超限（但仅占账户净值7.2%，仓位健康） → 结论：组合维度达标，持仓内集中度偏高 → 下一步：WATCH:code=688206,condition=price>=46.11,days=5,reason=触及止盈线再评估减仓</div>        <div class="reflection-item">
+            <strong>⚙️ 触发条件调整建议</strong><br>分析 1 条策略的触发条件命中情况：<br>&nbsp;&nbsp;✅ 新华保险(601336) [SELL] status=executed<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后判定: 已执行 SELL 200股 @58.67
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：触发区间设计合理 → 验证：1条SELL全部触发 → 结论：区间有效 → 下一步：无需调整</div>        <div class="reflection-item">
+            <strong>💼 持仓健康度反馈</strong><br>&nbsp;&nbsp;牧原股份(002714) 浮盈亏+1.24% 成本38.59 现价39.07<br>&nbsp;&nbsp;三祥新材(603663) 浮盈亏+7.81% 成本39.99 现价43.11<br>&nbsp;&nbsp;汇川技术(300124) 浮盈亏-4.22% 成本61.63 现价59.03<br>&nbsp;&nbsp;概伦电子(688206) 浮盈亏+3.29% 成本41.92 现价43.30<br>&nbsp;&nbsp;组合当日盈亏 +4,208.00（+0.78%）
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：组合当日应跑赢沪深300 → 验证：A股+0.78% vs 300ETF+0.58%，跑赢 → 结论：组合健康 → 下一步：汇川-4.22%距止损线56.70还有7.5%空间，正常持有</div>
+    </div>
+            <div class="section" style="border-left: 3px solid #ffb43c;">
+        <div class="section-title">⚖️ 待决策事项（策略级 · 共 1 项）</div>
+        <div class="reflection-item" style="border-left:2px solid #ffb43c;">
+            <strong>⚖️ 黄金ETF止盈策略</strong><br>
+            建议：浮盈8.79%已较高，建议评估分批止盈线如+12%减半仓<br>
+            <span style="color:#6b87b0;font-size:0.8rem">（宏观策略调整，需你确认后才改；不回复=维持现状）</span>
+        </div>
+    </div>
+    <div class="section"><div class="section-title">明日关注</div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">牧原股份（002714）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">止损线¥35.50（浮亏-8%）/ 止盈观察¥42.45（+10%）/ 止盈减仓¥44.38（+15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">三祥新材（603663）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">止损线¥36.79（浮亏-8%）/ 止盈观察¥43.99（+10%）/ 止盈减仓¥45.99（+15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">汇川技术（300124）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">止损线¥56.70（浮亏-8%）/ 止盈观察¥67.80（+10%）/ 止盈减仓¥70.88（+15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">概伦电子（688206）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">止损线¥38.57（浮亏-8%）/ 止盈观察¥46.11（+10%）/ 止盈减仓¥48.21（+15%）</span></div>
+    </div>
+    </div>
+
     <div id="panel-fund" class="panel-fund">
-        <div class="section"><div class="section-title">当日业绩 · 基金</div><div class="nav-grid">
-            <div class="nav-card"><div class="label">账户净值</div><div class="value">¥518,163.26</div><div class="sub">收益率 <span class="pos">+3.63%</span></div></div>
-            <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+2,064.82</span></div><div class="sub"><span class="pos">+0.40%</span></div></div>
-            <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+18,163.26</span></div><div class="sub"><span class="pos">+3.63%</span></div></div>
-            <div class="nav-card"><div class="label">现金余额</div><div class="value">¥245,905.15</div><div class="sub neu">持仓 4 支</div></div>
-        </div></div>
-        <div class="section"><div class="section-title">今日市场小结 · 全球</div><div class="reflection-item">周五场内 ETF 分化明显：宽基沪深300ETF 微涨0.58%，行业ETF科创50ETF +0.06% 弱势震荡；黄金 ETF 涨1.67% 创新高（9.388），受益国际金价走强。场外基金净值今晚 21:00 后陆续更新。QDII方面纳指/标普隔夜小幅震荡，需关注周一开盘前美股表现。</div></div>
+    <div class="section"><div class="section-title">当日业绩 · 基金 · 周报</div><div class="nav-grid">
+        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥518,426.18</div><div class="sub">收益率 <span class="pos">+3.69%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+2,327.73</span></div><div class="sub neu">vs 昨日净值 ¥516,098.45</div></div>
+        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+18,426.18</span></div><div class="sub"><span class="pos">+3.69%</span></div></div>
+        <div class="nav-card"><div class="label">现金余额</div><div class="value">¥245,905.15</div><div class="sub neu">持仓 4 支</div></div>
+    </div></div>
+    <div class="nav-card"><div class="label">累计收益</div><div class="value">+40,900</div><div class="sub" style="color:#ef5350">+817.99%</div></div>
+            <div class="nav-card"><div class="label">周内净值区间</div><div class="value" style="font-size:1rem;">—</div><div class="sub">最大回撤 -0.0%</div></div>
+        </div>
+    </div>
+    <div class="section" style="border-left: 3px solid rgba(239,83,80,0.5);">
+        <div class="section-title">周度复盘</div>
+        <table>
+            <thead><tr><th class="col-text">维度</th><th>数据</th><th>说明</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td class="col-text">本周操作</td>
+                    <td>8 笔</td>
+                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;">买 5 / 卖 3</td>
+                </tr>
+                <tr>
+                    <td class="col-text">盈亏来源</td>
+                    <td>+0</td>
+                    <td style="text-align:left;font-size:0.8rem;color:#8aa5c5;line-height:1.6;"><br>　科创50ETF +2,138<br>　半导体ETF +4,063<br>　沪深300ETF -32,161<br>　黄金ETF -17,358</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="section" style="border-left: 3px solid rgba(239,83,80,0.5);">
+        <div class="section-title">策略检视 <span style="font-size:0.82rem; color:#6b87b0; margin-left:auto; font-weight:400;">按 S1/S2 入口聚合（2026-08-17 起）</span></div>
+        <table class="tracking"><thead><tr><th class="col-text">策略入口</th><th>本周建仓</th><th>建仓金额</th><th>本周平仓</th><th>当前持仓</th></tr></thead>
+        <tbody>
+            <tr>
+                <td style="color:#e0eaf6;font-weight:500">S1·主线追涨</td>
+                <td>1</td>
+                <td>¥37,727</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td style="color:#e0eaf6;font-weight:500">S2·入口1·科技龙头池</td>
+                <td>1</td>
+                <td>¥24,653</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td style="color:#e0eaf6;font-weight:500">legacy</td>
+                <td>0</td>
+                <td>—</td>
+                <td>1</td>
+                <td>2</td>
+            </tr></tbody></table>
+        <div class="reflection-item" style="color:#6b87b0;font-size:0.82rem;">
+            数据驱动（trades 的 strategy/entry_point 标签）。legacy = 2026-08-19 标签机制上线前的历史单。平仓盈亏明细见清仓复盘模块。
+        </div>
+    </div>
         <div class="section"><div class="section-title">今日申赎记录</div>
-        <table><thead><tr><th>时间</th><th>操作</th><th class="col-text">基金</th><th>净值</th><th>份额</th><th>金额</th><th class="col-text">原因</th></tr></thead>
-        <tbody><tr>
-                <td>13:44</td><td><span class="neg">赎回</span></td>
-                <td class="col-text">科创50ETF（588000）</td><td>1.7400</td>
-                <td>800.00份</td><td>1,386.99</td>
-                <td class="col-text" style="font-size:0.8rem;color:#607a99">SELL pending触发，现价1.74在区间[1.73528,1.75272]内，纯趋势止损强制全清</td></tr><tr>
-                <td>14:46</td><td><span class="pos">申购</span></td>
-                <td class="col-text">沪深300ETF（510300）</td><td>4.6800</td>
-                <td>1200.00份</td><td>5,621.06</td>
-                <td class="col-text" style="font-size:0.8rem;color:#607a99">rebalance_F1 尾盘硬执行：按金额 ¥6,000 尾盘执行（现价4.68）（v13 机械执行）</td></tr></tbody></table></div>
+    <table><thead><tr><th>时间</th><th>操作</th><th class="col-text">基金</th><th>净值</th><th>份额</th><th>金额</th><th class="col-text">原因</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>13:44</td><td><span class="neg">赎回</span></td>
+            <td class="col-text">科创50ETF（588000）</td><td>1.7400</td>
+            <td>800.00份</td><td>1,386.99</td>
+            <td class="col-text" style="font-size:0.8rem;color:#607a99">SELL pending触发，现价1.74在区间[1.73528,1.75272]内，纯趋势止损强制全清</td></tr>
+        <tr>
+            <td>14:46</td><td><span class="pos">申购</span></td>
+            <td class="col-text">沪深300ETF（510300）</td><td>4.6800</td>
+            <td>1,200.00份</td><td>5,621.06</td>
+            <td class="col-text" style="font-size:0.8rem;color:#607a99">rebalance_F1 尾盘硬执行：按金额 ¥6,000 尾盘执行（现价4.68）（v13 机械执行）</td></tr>
+    </tbody></table></div>
         <div class="section"><div class="section-title">收盘持仓</div>
-        <table><thead><tr><th class="col-text">基金</th><th>份额</th><th>成本净值</th><th>最新净值</th><th>市值</th><th>占比</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
-        <tbody><tr>
-                <td class="col-text">沪深300ETF<small style="color:#607a99"><br>510300</small> <span class="fund-type-tag ft-a-share">A股宽基</span></td>
-                <td>33800.00</td><td>4.7814</td>
-                <td>4.6800</td><td>158,184</td>
-                <td>30.5%</td><td><span class="pos">+912.60</span> <span class="pos">+0.58%</span></td>
-            <td><span class="neg">-3,420.33</span> <span class="neg">-2.12%</span></td></tr><tr>
-                <td class="col-text">黄金ETF<small style="color:#607a99"><br>518880</small> <span class="fund-type-tag ft-a-share">黄金</span></td>
-                <td>7700.00</td><td>8.6291</td>
-                <td>9.3880</td><td>72,288</td>
-                <td>14.0%</td><td><span class="pos">+1,185.80</span> <span class="pos">+1.67%</span></td>
-            <td><span class="pos">+5,843.42</span> <span class="pos">+8.79%</span></td></tr><tr>
-                <td class="col-text">富国中证500增强<small style="color:#607a99"><br>161017</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
-                <td>8218.11</td><td>2.4300</td>
-                <td>2.5480</td><td>20,940</td>
-                <td>4.0%</td><td><span class="neg">-24.65</span> <span class="neg">-0.12%</span></td>
-            <td><span class="pos">+939.74</span> <span class="pos">+4.70%</span></td></tr><tr>
-                <td class="col-text">建信中证500增强<small style="color:#607a99"><br>000478</small> <span class="fund-type-tag ft-a-share">量化增强</span></td>
-                <td>5956.22</td><td>3.3528</td>
-                <td>3.5000</td><td>20,847</td>
-                <td>4.0%</td><td><span class="neg">-8.93</span> <span class="neg">-0.04%</span></td>
-            <td><span class="pos">+846.77</span> <span class="pos">+4.23%</span></td></tr></tbody></table></div>
-        
-        
+    <table><thead><tr><th class="col-text">基金</th><th>份额</th><th>成本净值</th><th>最新净值</th><th>市值</th><th>占比</th><th>浮盈亏%</th><th>浮盈亏额</th></tr></thead>
+    <tbody>
+        <tr>
+            <td class="col-text">沪深300ETF<br><small style="color:#607a99">510300 · ETF</small></td>
+            <td>33,800.00</td><td>4.7814</td>
+            <td>4.6800</td><td>158,184</td>
+            <td>58.0%</td>
+            <td><span class="neg">-2.12%</span></td>
+            <td><span class="neg">-3,427</span></td></tr>
+        <tr>
+            <td class="col-text">黄金ETF<br><small style="color:#607a99">518880 · ETF</small></td>
+            <td>7,700.00</td><td>8.6291</td>
+            <td>9.3900</td><td>72,303</td>
+            <td>26.5%</td>
+            <td><span class="pos">+8.82%</span></td>
+            <td><span class="pos">+5,859</span></td></tr>
+        <tr>
+            <td class="col-text">富国中证500增强<br><small style="color:#607a99">161017 · 场外</small></td>
+            <td>8,218.11</td><td>2.4300</td>
+            <td>2.5600</td><td>21,038</td>
+            <td>7.7%</td>
+            <td><span class="pos">+5.35%</span></td>
+            <td><span class="pos">+1,068</span></td></tr>
+        <tr>
+            <td class="col-text">建信中证500增强<br><small style="color:#607a99">000478 · 场外</small></td>
+            <td>5,956.22</td><td>3.3528</td>
+            <td>3.5250</td><td>20,996</td>
+            <td>7.7%</td>
+            <td><span class="pos">+5.14%</span></td>
+            <td><span class="pos">+1,026</span></td></tr>
+    </tbody></table></div>
         <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
     <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
     <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
-    <tbody><tr>
-                <td class="col-text" style="color:#e0eaf6;font-weight:500">沪深300ETF（510300）</td>
-                <td>买入 按金额 ¥6,000（尾盘窗口）</td>
-                <td>✅ 已执行</td>
-                <td class="col-reason">10:00 [10:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行<br><br>11:00 [11:00] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.68执行<br><br>13:30 [13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.67执行</td>
-            </tr><tr>
-                <td class="col-text" style="color:#e0eaf6;font-weight:500">科创50ETF（588000）</td>
-                <td>卖出 NAV 1.735～1.753</td>
-                <td>✅ 已执行</td>
-                <td class="col-reason">10:00 [10:00] 现价1.76高于上沿1.7527199999999998，未触发（反弹了）（现价1.76）<br><br>11:00 [11:00] 现价1.75在区间[1.73528,1.7527199999999998]内，触发（现价1.75）<br><br>13:30 [13:30] 现价1.74在区间[1.73528,1.7527199999999998]内，触发（现价1.74）</td>
-            </tr></tbody></table></div>
-        <div class="section"><div class="section-title">策略反思</div><div class="reflection-item ">
-                <strong>💡 📊 基金市场复盘</strong><br>周五场内ETF分化：沪深300ETF +0.58%（4.680），科创50ETF +0.06%（1.745），黄金ETF +1.67%（9.388）；场外基金NeoData当日净值尚未发布（晚上21:00后更新）。</div><div class="reflection-item ">
-                <strong>💡 💼 基金组合表现</strong><br>基金组合当日+0.40%（+¥2,036.29）。黄金ETF贡献最大（+¥1,185.80，因金价创新高）；沪深300ETF表现平稳（+¥912.60）。结构上黄金占比12.7%、沪深300ETF占比30.5%（再平衡后回补）、场外量化增强合计占比8.0%。</div><div class="reflection-item ">
-                <strong>💡 📋 基金策略执行追踪</strong><br>基金2/2执行：588000因历史已止损3次达上限触发强制全清（13:41触发 @1.74），510300 RB-F01再平衡补仓（14:45尾盘执行@4.68 ¥6,000 补F1欠配）。161017/000478继续 skipped（市价单重复申购）。</div><div class="reflection-item ">
-                <strong>💡 🔮 后市展望</strong><br>黄金ETF再创新高（9.388）突破前期高点8日/9.234阻力，下周一观察是否能站稳9.30。沪深300ETF RB-F01本次补50%（¥6,000）已执行，下周再平衡评估后补剩余50%。场外基金161017/000478 二批建仓窗口（首批后10日）已过且评分系统未触发新增，暂不操作。</div></div>
-        <div class="section"><div class="section-title">📋 本周市场回顾（8/17-8/21）</div><div class="reflection-item ">本周场内 ETF 走势分化：沪深300ETF 周线+0.32%（周一+0.03% / 周三-0.66% / 周五+0.58%），科创50ETF 周线-3.45%（周一+0.86% / 周三-1.69% / 周五+0.06%），黄金ETF 周线+3.69%（连续 5 日强势，国际金价创新高）。QDII 隔夜风险可控，纳指/标普本周震荡偏强。场外基金 161017/000478 本周震荡，净值未明显异动（中证500指数本周-0.20%）。</div></div>
-        <div class="section"><div class="section-title">📈 本周策略表现统计</div><div class="reflection-item ">基金本周 7 笔交易：4 BUY + 3 SELL。① 8/18 14:56 卖出科创50ETF 400份@1.89（止盈减仓）；② 8/18 14:56 卖出半导体ETF 3600份@1.13（趋势止损减仓）；③ 8/18 14:56 买入沪深300ETF 3500份@4.79（再平衡补 F1）；④ 8/18 14:56 买入黄金ETF 1300份@9.08（金价回调建仓）；⑤ 8/20 14:47 买入沪深300ETF 2100份@4.65（再平衡补 F1 续）；⑥ 8/20 14:47 买入黄金ETF 600份@9.24（趋势延续加仓）；⑦ 8/21 14:46 买入沪深300ETF 1200份@4.68（RB-F01 第三批）。基金本周净值 520,522.60 → 518,163.26（-¥2,359.34 / -0.45%），主要受 510300 浮亏-2.12% 拖累，但黄金 +8.79% 大幅对冲。161017/000478 场外二批未触发（评分系统未达 75）。588000 8/21 强制全清（历史止损次数到上限 3 次）。</div></div>
+    <tbody>
+        <tr>
+            <td class="col-text" style="color:#e0eaf6;font-weight:500">沪深300ETF（510300）</td>
+            <td>BUY 0.0000～0.0000</td>
+            <td>✅ 已执行</td>
+            <td class="col-reason">[13:30] 按金额执行的单（计划金额 ¥6,000，无价格区间），于尾盘窗口按现价4.67执行</td></tr>
+        <tr>
+            <td class="col-text" style="color:#e0eaf6;font-weight:500">科创50ETF（588000）</td>
+            <td>SELL 1.7353～1.7527</td>
+            <td>✅ 已执行</td>
+            <td class="col-reason">[13:30] 现价1.74在区间[1.73528,1.7527199999999998]内，触发（现价1.74）</td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">策略反思 · 基金</div>
+        <div class="reflection-item">
+            <strong>🔍 基金策略执行质量</strong><br>今日基金策略 2 条：✅2 / ❌0 / 🟡0，执行率 100%<br>&nbsp;&nbsp;SELL 科创50ETF(588000) 800份@1.7400 到账¥1,386.99<br>&nbsp;&nbsp;BUY 沪深300ETF(510300) 1200份@4.6800
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：基金策略执行率应100% → 验证：2/2执行（588000强制全清+510300再平衡补仓） → 结论：执行正常 → 下一步：无需调整</div>        <div class="reflection-item">
+            <strong>📊 基金持仓结构复盘</strong><br>当前基金持仓 4 只，结构：<br>&nbsp;&nbsp;[ETF] 沪深300ETF(510300) 33800份 成本4.7814<br>&nbsp;&nbsp;[ETF] 黄金ETF(518880) 7700份 成本8.6291<br>&nbsp;&nbsp;[场外] 富国中证500增强(161017) 8218份 成本2.4300<br>&nbsp;&nbsp;[场外] 建信中证500增强(000478) 5956份 成本3.3528
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：单一基金占净值≤40% → 验证：510300占30.5%达标 → 结论：结构健康 → 下一步：RB-F01剩余50%下周评估</div>        <div class="reflection-item">
+            <strong>⚙️ 基金触发条件评估</strong><br>&nbsp;&nbsp;✅ 沪深300ETF(510300) [BUY] status=executed<br>&nbsp;&nbsp;✅ 科创50ETF(588000) [SELL] status=executed
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：F1再平衡分批合理 → 验证：本周3批共6800份，均价4.71 → 结论：分批执行符合预期 → 下一步：无需调整</div>        <div class="reflection-item">
+            <strong>💼 基金持仓健康度</strong><br>&nbsp;&nbsp;沪深300ETF(510300) 浮盈亏-2.12% 成本4.7814<br>&nbsp;&nbsp;黄金ETF(518880) 浮盈亏+8.82% 成本8.6291<br>&nbsp;&nbsp;富国中证500增强(161017) 浮盈亏+5.35% 成本2.4300<br>&nbsp;&nbsp;建信中证500增强(000478) 浮盈亏+5.14% 成本3.3528<br>&nbsp;&nbsp;组合当日盈亏 +2,327.73（+0.45%）
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：黄金ETF突破前高 → 验证：9.388创近期新高+1.67% → 结论：趋势延续 → 下一步：STRATEGY_REVIEW:topic=黄金ETF止盈策略,suggestion=浮盈8.79%已较高，建议评估分批止盈线如+12%减半仓</div>
     </div>
-    <div class="disclaimer">
-        ⚠️ 本报告由 AI 基于实时市场数据自动生成，模拟盘演示，不构成任何真实投资建议。
+        <div class="section"><div class="section-title">明日关注</div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">沪深300ETF（510300）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">硬止损¥4.0642（-15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">黄金ETF（518880）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">硬止损¥7.3347（-15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">富国中证500增强（161017）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">硬止损¥2.0655（-15%）</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">建信中证500增强（000478）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">硬止损¥2.8499（-15%）</span></div>
+    </div>
+    </div>
         所有交易均为虚拟操作，数据来源：NeoData 金融数据服务。
     </div>
 </div>
@@ -561,6 +669,6 @@
         }
     }
     </script>
-    
+
 </body>
 </html>
