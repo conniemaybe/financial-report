@@ -1287,6 +1287,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-21，由 inject_intraday_to_site.py v6 生成）===
@@ -1294,7 +1297,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-21",
-  "now": "19:15",
+  "now": "19:36",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1461,8 +1464,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "测试全清",
           "shares_plan": 200,
-          "status": "already_done",
-          "reason": "已于 13:30 成交"
+          "status": "pending",
+          "reason": "时段未到"
         },
         {
           "code": "510300",
@@ -1479,8 +1482,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业趋势（5日-16.9% / 20日+4.3%）；止损分批上限触发（历史已止损3次>=3次，强制全清）",
           "shares_plan": 800,
-          "status": "already_done",
-          "reason": "已于 13:30 成交"
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     }
@@ -1594,7 +1597,7 @@ function renderSlot(slotData, nowStr, briefs) {
   } else if (checked) {
     // automation 已运行，无成交 = 合法结果
     statusIcon = '✅'; statusText = '已执行'; statusColor = '#10b981'; nodeClass = 'done';
-    bodyHtml += '<div style="color:#64748b;font-size:0.9em;">本时段无 SELL/BUY 触发</div>';
+    bodyHtml += '<div style="color:#64748b;font-size:0.9em;">本时段无成交（各策略检查明细见下方对照）</div>';
   } else if (isFuture) {
     // 时段还没到
     statusIcon = '⏳'; statusText = '待执行'; statusColor = '#3b82f6'; nodeClass = 'pending';
