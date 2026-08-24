@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-08-21 18:31</div>
+    <div class="update-time" id="updateTime">数据更新：2026-08-24 08:46</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥518,426.19</div>
-      <div class="change"><span class="up">累计 +¥18,426.19 (+3.69%)</span> · <span class="up">今日 +¥2,327.73 (+0.45%)</span></div>
+      <div class="value">¥518,523.02</div>
+      <div class="change"><span class="up">累计 +¥18,523.02 (+3.70%)</span> · <span class="up">今日 +¥2,424.57 (+0.47%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,059,325.75</div>
-      <div class="change"><span class="up">累计 +¥59,325.75 (+5.93%)</span></div>
+      <div class="value">¥1,059,422.59</div>
+      <div class="change"><span class="up">累计 +¥59,422.59 (+5.94%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -193,8 +193,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股宽基·ETF</td><td>33,800 份</td><td class='hide-mobile'>¥4.7814</td><td class='down'>¥4.6800↓</td><td>¥158,184.00</td><td class='up'>+¥912.60<br><small>+0.58%</small></td><td class='down'>-¥3,420.33<br><small>-2.12%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='up'>¥9.3900↑</td><td>¥72,303.00</td><td class='up'>+¥1,201.20<br><small>+1.69%</small></td><td class='up'>+¥5,858.82<br><small>+8.82%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>8,218 份</td><td class='hide-mobile'>¥2.4300</td><td class='up'>¥2.5600↑</td><td>¥21,038.36</td><td class='up'>+¥73.96<br><small>+0.35% · 上一交易日</small></td><td class='up'>+¥1,038.36<br><small>+5.19%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='up'>¥3.5250↑</td><td>¥20,995.68</td><td class='up'>+¥139.97<br><small>+0.67% · 上一交易日</small></td><td class='up'>+¥995.68<br><small>+4.98%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>8,218 份</td><td class='hide-mobile'>¥2.4300</td><td class='up'>¥2.5670↑</td><td>¥21,095.89</td><td class='up'>+¥131.49<br><small>+0.63% · 上一交易日</small></td><td class='up'>+¥1,095.89<br><small>+5.48%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='up'>¥3.5316↑</td><td>¥21,034.99</td><td class='up'>+¥179.28<br><small>+0.86% · 上一交易日</small></td><td class='up'>+¥1,034.99<br><small>+5.17%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -406,6 +406,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-08-24', type: 'morning', file: '20260824_晨报.html', label: '8/24 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-08-21', type: 'evening', file: '20260821_日报.html', label: '8/21 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-08-21', type: 'morning', file: '20260821_晨报.html', label: '8/21 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-08-20', type: 'evening', file: '20260820_日报.html', label: '8/20 日报', ico: '🌙', cls: 'evening' },
@@ -1296,6 +1297,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-24，由 inject_intraday_to_site.py v6 生成）===
@@ -1303,31 +1307,71 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-24",
-  "now": "08:40",
+  "now": "08:45",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "002716",
+          "name": "湖南白银",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 3400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "002716",
+          "name": "湖南白银",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 3400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "002716",
+          "name": "湖南白银",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 3400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "002716",
+          "name": "湖南白银",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 3400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
