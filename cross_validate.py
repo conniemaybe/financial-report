@@ -204,13 +204,15 @@ def _parse_daily_tbody(tbody: str) -> list[dict]:
         name_match = re.search(r"class=['\"]col-text['\"][^>]*>\s*([^<\r\n]+?)(?:<br|<small)", row_html)
         row["name"] = name_match.group(1).strip() if name_match else None
 
-        # 表头固定 8 列，索引：0名称 1持股数 2成本 3现价/最新净值 4市值 5占比 6当日盈亏 7总盈亏
+        # 表头固定 8 列。2026-08-24 修复（8/24 误报事故）：日报 v2 表头已改版——
+        # 6=浮盈亏%（总盈亏口径） 7=浮盈亏额，"当日盈亏"列已删除。
+        # 旧解析把 6 当"当日"→ 与首页"当日(vs昨收)"口径错配 → 天天 8 处假 FAIL
         try:
             row["current_price"] = parse_money(cells[3])  # A股
             row["current_nav"] = parse_money(cells[3])    # 基金（同一个字段，不同语义）
             row["market_value"] = parse_money(cells[4])
-            row["daily_pnl"] = parse_money(cells[6])
-            row["daily_pnl_pct"] = parse_pct(cells[6])
+            row["daily_pnl"] = None  # 日报 v2 已无当日列
+            row["daily_pnl_pct"] = None
             row["total_pnl"] = parse_money(cells[7])
             row["total_pnl_pct"] = parse_pct(cells[7])
         except IndexError:
