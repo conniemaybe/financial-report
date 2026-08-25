@@ -1326,6 +1326,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-25，由 inject_intraday_to_site.py v6 生成）===
@@ -1333,12 +1336,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-25",
-  "now": "08:45",
+  "now": "10:14",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "002716",
@@ -1346,8 +1349,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价10.92高于买入区间上沿10.8，差1.1%，未触发（等回调）"
         }
       ]
     },
