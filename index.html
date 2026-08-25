@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-24（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-25（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1319,19 +1319,22 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-24，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-08-25，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-08-24",
-  "now": "15:44",
+  "date": "2026-08-25",
+  "now": "08:39",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "002716",
@@ -1339,15 +1342,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3400,
-          "status": "checked",
-          "reason": "[10:00] 现价11.41高于买入区间上沿10.63，差7.3%，未触发（等回调）"
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "002716",
@@ -1355,15 +1358,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3400,
-          "status": "checked",
-          "reason": "[11:00] 现价11.26高于买入区间上沿10.63，差5.9%，未触发（等回调）"
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "002716",
@@ -1371,15 +1374,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3400,
-          "status": "checked",
-          "reason": "[13:30] 现价11.15高于买入区间上沿10.63，差4.9%，未触发（等回调）"
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": [
         {
           "code": "002716",
@@ -1387,8 +1390,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：白银概念（当日 4.57% / 5日 7.27%） | 龙头标的 量比 2.21 ≥ 1.0 | 现价 10.42 在区间 [10.21-10.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3400,
-          "status": "checked",
-          "reason": "未触发"
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     }
