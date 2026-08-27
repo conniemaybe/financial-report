@@ -1377,6 +1377,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-27，由 inject_intraday_to_site.py v6 生成）===
@@ -1384,7 +1387,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-27",
-  "now": "13:35",
+  "now": "15:01",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1463,8 +1466,27 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "14:45",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-08-27",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "601212",
+          "name": "白银有色",
+          "price": 7.23,
+          "shares": 4900,
+          "amount": 35434.43967000001,
+          "commission": 7.0854,
+          "transfer_fee": 0.35427000000000003,
+          "reason": "S1 pending 尾盘硬执行：现价7.23在区间[7.1,7.38]内（v13 机械执行）",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "铅锌概念",
+          "tier": "龙头"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "300122",
@@ -1472,8 +1494,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：肿瘤疫苗（当日 7.02% / 5日 10.37%） | 龙头标的 量比 1.75 ≥ 1.0 | 现价 14.17 在区间 [13.89-14.45] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 2500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "未触发"
         },
         {
           "code": "601212",
@@ -1481,8 +1503,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：铅锌概念（当日 3.08% / 5日 7.37%） | 龙头标的 量比 1.85 ≥ 1.0 | 现价 7.24 在区间 [7.1-7.38] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 4900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     }
