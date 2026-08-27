@@ -1366,6 +1366,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-27，由 inject_intraday_to_site.py v6 生成）===
@@ -1373,12 +1376,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-27",
-  "now": "08:46",
+  "now": "10:14",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300122",
@@ -1386,8 +1389,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：肿瘤疫苗（当日 7.02% / 5日 10.37%） | 龙头标的 量比 1.75 ≥ 1.0 | 现价 14.17 在区间 [13.89-14.45] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 2500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价13.92在买入区间[13.89,14.45]内，满足触发条件"
         },
         {
           "code": "601212",
@@ -1395,8 +1398,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：铅锌概念（当日 3.08% / 5日 7.37%） | 龙头标的 量比 1.85 ≥ 1.0 | 现价 7.24 在区间 [7.1-7.38] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 4900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价7.49高于买入区间上沿7.38，差1.5%，未触发（等回调）"
         }
       ]
     },
