@@ -1399,6 +1399,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-28，由 inject_intraday_to_site.py v6 生成）===
@@ -1406,7 +1409,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-28",
-  "now": "13:35",
+  "now": "14:51",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1512,8 +1515,61 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "14:45",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-08-28",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "688368",
+          "name": "晶丰明源",
+          "price": 141.23,
+          "shares": 200,
+          "amount": 28251.931659999995,
+          "commission": 5.6491999999999996,
+          "transfer_fee": 0.28246,
+          "reason": "S1 pending 尾盘硬执行：现价141.23在区间[137.47,143.09]内（v13 机械执行）",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "模拟芯片",
+          "tier": "龙头"
+        },
+        {
+          "date": "2026-08-28",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "688585",
+          "name": "上纬新材",
+          "price": 159.24,
+          "shares": 200,
+          "amount": 31854.688080000004,
+          "commission": 6.3696,
+          "transfer_fee": 0.31848000000000004,
+          "reason": "S1 pending 尾盘硬执行：现价159.24在区间[156.68,163.08]内（v13 机械执行）",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "电子树脂",
+          "tier": "龙头"
+        },
+        {
+          "date": "2026-08-28",
+          "time": "14:47",
+          "action": "BUY",
+          "code": "512480",
+          "name": "半导体ETF",
+          "nav": 1.04,
+          "shares": 29800,
+          "amount": 30998.51,
+          "fee": 6.51,
+          "commission": 6.2,
+          "transfer_fee": 0.31,
+          "fund_type": "行业ETF",
+          "is_etf": true,
+          "reason": "rebalance_F2_signal 尾盘硬执行：按金额 ¥31,000 尾盘执行（现价1.04）（v13 机械执行）"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "688368",
@@ -1521,8 +1577,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：模拟芯片（当日 7.39% / 5日 6.11%） | 龙头标的 量比 1.54 ≥ 1.0 | 现价 140.28 在区间 [137.47-143.09] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "688585",
@@ -1530,8 +1586,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：电子树脂（当日 5.65% / 5日 6.42%） | 龙头标的 量比 1.06 ≥ 1.0 | 现价 159.88 在区间 [156.68-163.08] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "512480",
@@ -1539,8 +1595,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥31,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
           "shares_plan": 31000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     }
