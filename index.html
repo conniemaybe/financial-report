@@ -1391,6 +1391,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-28，由 inject_intraday_to_site.py v6 生成）===
@@ -1398,7 +1401,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-28",
-  "now": "10:14",
+  "now": "13:35",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1437,7 +1440,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "688368",
@@ -1445,8 +1448,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：模拟芯片（当日 7.39% / 5日 6.11%） | 龙头标的 量比 1.54 ≥ 1.0 | 现价 140.28 在区间 [137.47-143.09] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价145.8高于买入区间上沿143.09，差1.9%，未触发（等回调）"
         },
         {
           "code": "688585",
@@ -1454,8 +1457,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：电子树脂（当日 5.65% / 5日 6.42%） | 龙头标的 量比 1.06 ≥ 1.0 | 现价 159.88 在区间 [156.68-163.08] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价154.37低于买入区间下沿156.68，差1.5%，未触发（等回落）"
         },
         {
           "code": "512480",
@@ -1463,15 +1466,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥31,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
           "shares_plan": 31000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥31,000，无价格区间），于尾盘窗口按现价None执行"
         }
       ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "688368",
@@ -1479,8 +1482,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：模拟芯片（当日 7.39% / 5日 6.11%） | 龙头标的 量比 1.54 ≥ 1.0 | 现价 140.28 在区间 [137.47-143.09] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 现价141.17在买入区间[137.47,143.09]内，满足触发条件"
         },
         {
           "code": "688585",
@@ -1488,8 +1491,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：电子树脂（当日 5.65% / 5日 6.42%） | 龙头标的 量比 1.06 ≥ 1.0 | 现价 159.88 在区间 [156.68-163.08] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 现价160.44在买入区间[156.68,163.08]内，满足触发条件"
         },
         {
           "code": "512480",
@@ -1497,8 +1500,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥31,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
           "shares_plan": 31000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 按金额执行的单（计划金额 ¥31,000，无价格区间），于尾盘窗口按现价None执行"
         }
       ]
     },
