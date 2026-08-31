@@ -1422,6 +1422,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-08-31，由 inject_intraday_to_site.py v6 生成）===
@@ -1429,7 +1432,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-08-31",
-  "now": "10:15",
+  "now": "11:08",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1459,7 +1462,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300750",
@@ -1467,8 +1470,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 20.843672% < 30% 触发 | 方向：新能源 | 当前价 359.69 | S2 价格优先，任意时段可建仓",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价359.4在买入区间[352.4962,366.8838]内，满足触发条件"
         },
         {
           "code": "512480",
@@ -1476,8 +1479,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥21,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
           "shares_plan": 21000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥21,000，无价格区间），于尾盘窗口按现价1.02执行"
         }
       ]
     },
