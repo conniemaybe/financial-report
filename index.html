@@ -206,7 +206,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-08-31（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-01（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1435,154 +1435,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-08-31，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-09-01，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-08-31",
-  "now": "14:49",
+  "date": "2026-09-01",
+  "now": "08:39",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300750",
-          "name": "宁德时代",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 20.843672% < 30% 触发 | 方向：新能源 | 当前价 359.69 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[10:00] 现价360.73在买入区间[352.4962,366.8838]内，满足触发条件"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "BUY",
-          "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥21,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
-          "shares_plan": 21000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥21,000，无价格区间），于尾盘窗口按现价1.03执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300750",
-          "name": "宁德时代",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 20.843672% < 30% 触发 | 方向：新能源 | 当前价 359.69 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[11:00] 现价359.4在买入区间[352.4962,366.8838]内，满足触发条件"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "BUY",
-          "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥21,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
-          "shares_plan": 21000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥21,000，无价格区间），于尾盘窗口按现价1.02执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300750",
-          "name": "宁德时代",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 20.843672% < 30% 触发 | 方向：新能源 | 当前价 359.69 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[13:30] 现价361.88在买入区间[352.4962,366.8838]内，满足触发条件"
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "BUY",
-          "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥21,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
-          "shares_plan": 21000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥21,000，无价格区间），于尾盘窗口按现价1.04执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
-      "trades": [
-        {
-          "date": "2026-08-31",
-          "time": "14:47",
-          "action": "BUY",
-          "code": "300750",
-          "name": "宁德时代",
-          "price": 364.58,
-          "shares": 100,
-          "amount": 36465.65618,
-          "commission": 7.291600000000001,
-          "transfer_fee": 0.36458,
-          "reason": "S2 pending 尾盘硬执行：现价364.58在区间[352.4962,366.8838]内（v13 机械执行）",
-          "group": "A",
-          "strategy": "S2",
-          "entry_point": "入口1·科技龙头池",
-          "sector": "",
-          "tier": ""
-        },
-        {
-          "date": "2026-08-31",
-          "time": "14:47",
-          "action": "BUY",
-          "code": "512480",
-          "name": "半导体ETF",
-          "nav": 1.06,
-          "shares": 19800,
-          "amount": 20993.21,
-          "fee": 5.21,
-          "commission": 5.0,
-          "transfer_fee": 0.21,
-          "fund_type": "行业ETF",
-          "is_etf": true,
-          "reason": "rebalance_F2_signal 尾盘硬执行：按金额 ¥21,000 尾盘执行（现价1.06）（v13 机械执行）"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300750",
-          "name": "宁德时代",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 20.843672% < 30% 触发 | 方向：新能源 | 当前价 359.69 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 100,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "512480",
-          "name": "半导体ETF",
-          "action": "BUY",
-          "trigger_conditions": "F2 信号回补：模拟芯片 confirmed 行业主线（5日 +6.1%，当日 +7.4%）→ 512480 半导体ETF | 首批探针 30% = ¥21,000 | 确认信号：次日 S1 生成器若仍产出该板块 BUY，视为趋势确认，加仓批次提至 50%",
-          "shares_plan": 21000,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓",
-    "板块主线": "5日强势：覆铜板(+18.1%)、爱奇艺概念(+6.3%)"
+    "板块主线": "5日强势：爱奇艺概念(+11.9%)、Kimi概念(+8.8%)、短剧/互动游戏(+8.1%)"
   },
   "standard_times": [
     "10:00",
