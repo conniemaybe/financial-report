@@ -1475,6 +1475,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-02，由 inject_intraday_to_site.py v6 生成）===
@@ -1482,7 +1485,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-02",
-  "now": "13:34",
+  "now": "14:50",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1504,8 +1507,28 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "14:45",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-09-02",
+          "time": "14:46",
+          "action": "SELL",
+          "code": "601212",
+          "name": "白银有色",
+          "price": 6.61,
+          "shares": 4900,
+          "amount": 32366.00381,
+          "stamp_tax": 16.1945,
+          "commission": 6.4778,
+          "transfer_fee": 0.32389,
+          "reason": "止损铁律触发：浮亏-8.6% ≤ -8%",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "铅锌概念",
+          "tier": "龙头"
+        }
+      ],
+      "checked": true,
       "pending_states": []
     }
   ],
