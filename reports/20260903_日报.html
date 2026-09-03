@@ -413,33 +413,32 @@
         <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
     <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
     <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
-    <tbody>
-        <tr>
-            <td class="col-text" style="color:#e0eaf6;font-weight:500">神农种业（300189）</td>
-            <td>BUY 6.37～6.63</td>
-            <td>⏰ 已过期</td>
-            <td class="col-reason">[14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新材)。现价7.03高于买入区间上沿6.63，差6.0%，未触发（等回调）</td></tr>
-        <tr>
-            <td class="col-text" style="color:#e0eaf6;font-weight:500">*ST西旅（000610）</td>
-            <td>BUY 7.54～7.84</td>
-            <td>⏰ 已过期</td>
-            <td class="col-reason">[14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新材)。现价7.32低于买入区间下沿7.54，差2.9%，未触发（等回落）</td></tr>
-        <tr>
-            <td class="col-text" style="color:#e0eaf6;font-weight:500">上纬新材（688585）</td>
-            <td>SELL 0.01～999999.00</td>
-            <td>✅ 已执行</td>
-            <td class="col-reason">[11:00] 现价148.8在区间[0.01,999999.0]内，触发（现价148.8）</td></tr>
-    </tbody></table></div>
+    <tbody><tr>
+                <td class="col-text" style="color:#e0eaf6;font-weight:500">神农种业（300189）</td>
+                <td>买入 6.37～6.63</td>
+                <td>⏳ 过期未执行</td>
+                <td class="col-reason">10:00 [10:00] 现价6.83高于买入区间上沿6.63，差3.0%，未触发（等回调）<br><br>11:00 [11:00] 现价6.87高于买入区间上沿6.63，差3.6%，未触发（等回调）<br><br>14:45 [14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新材)。现价7.03高于买入区间上沿6.63，差6.0%，未触发（等回调）</td>
+            </tr><tr>
+                <td class="col-text" style="color:#e0eaf6;font-weight:500">*ST西旅（000610）</td>
+                <td>买入 7.54～7.84</td>
+                <td>⏳ 过期未执行</td>
+                <td class="col-reason">10:00 [10:00] 现价7.37低于买入区间下沿7.54，差2.3%，未触发（等回落）<br><br>11:00 [11:00] 现价7.29低于买入区间下沿7.54，差3.3%，未触发（等回落）<br><br>14:45 [14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新材)。现价7.32低于买入区间下沿7.54，差2.9%，未触发（等回落）</td>
+            </tr><tr>
+                <td class="col-text" style="color:#e0eaf6;font-weight:500">上纬新材（688585）</td>
+                <td>卖出 0.01～999999.00</td>
+                <td>✅ 已执行</td>
+                <td class="col-reason">11:00 [11:00] 现价148.8在区间[0.01,999999.0]内，触发（现价148.8）</td>
+            </tr></tbody></table></div>
         <div class="section"><div class="section-title">策略反思 · A股</div>
         <div class="reflection-item">
             <strong>🔍 策略执行质量评估</strong><br>今日待执行策略 3 条：✅执行 1 / ❌过期 2 / 🟡跳过 0，执行率 33%<br>&nbsp;&nbsp;SELL 上纬新材(688585) 200股@149.48 到账¥29,874.77
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日反思生成的上纬新材止损次日单应在本日兑现。→ 验证：11:00 SELL 触发并执行，200股@149.48 到账¥29,874.77；神农种业、*ST西旅 2 条 BUY 因冷却期拦截转 expired（合规）。→ 结论：反思→执行链路兑现，止损纪律执行到位；冷却期拦截正常发挥保护作用。→ 下一步：无需新指令，冷却期内不建仓，观察持仓即可。</div>        <div class="reflection-item">
             <strong>📊 选股方向复盘</strong><br>当前持仓 6 只，集中度：<br>&nbsp;&nbsp;牧原股份(002714) 占比13% 份额500股 成本38.59<br>&nbsp;&nbsp;三祥新材(603663) 占比8% 份额300股 成本39.99<br>&nbsp;&nbsp;汇川技术(300124) 占比15% 份额400股 成本61.63<br>&nbsp;&nbsp;概伦电子(688206) 占比23% 份额900股 成本41.92<br>&nbsp;&nbsp;晶丰明源(688368) 占比19% 份额200股 成本141.26<br>&nbsp;&nbsp;宁德时代(300750) 占比22% 份额100股 成本364.66
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：清仓白银有色、上纬新材后组合应更集中于盈利主线。→ 验证：当前 6 只持仓，概伦电子23%、宁德时代22%为前两大仓位；牧原+9.04%、晶丰+9.39%贡献主要盈利，宁德-4.16%为主要拖累。→ 结论：结构比昨日改善（去掉两只止损标的），但宁德时代浮亏加深需关注；当日组合+916（+0.17%）。→ 下一步：无操作，冷却期内不动。</div>        <div class="reflection-item">
             <strong>⚙️ 触发条件调整建议</strong><br>分析 3 条策略的触发条件命中情况：<br>&nbsp;&nbsp;❌ 神农种业(300189) [BUY] status=expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后判定: [14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新<br>&nbsp;&nbsp;❌ *ST西旅(000610) [BUY] status=expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后判定: [14:45] BUY 被冷却期拦截：冷却期L1生效中（2026-09-03触发，至2026-09-10）：L1b: 3个交易日内2只持仓止损(白银有色、上纬新<br>&nbsp;&nbsp;✅ 上纬新材(688585) [SELL] status=executed<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后判定: [11:00] 现价148.8在区间[0.01,999999.0]内，触发（现价148.8）
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：今日 BUY 均未触发属价格原因。→ 验证：神农种业现价7.03高于买入区间上沿（等回调）、*ST西旅7.32低于下沿（等回落）均未进区间，且 14:45 被冷却期双重拦截——价格与规则双重未命中，非区间设置问题。→ 结论：触发条件无需调整，未成交属正常等待。→ 下一步：不下达 ADJUST_TRIGGER 指令。</div>        <div class="reflection-item">
             <strong>💼 持仓健康度反馈</strong><br>&nbsp;&nbsp;牧原股份(002714) 浮盈亏+9.04% 成本38.59 现价42.08<br>&nbsp;&nbsp;三祥新材(603663) 浮盈亏+1.06% 成本39.99 现价40.41<br>&nbsp;&nbsp;汇川技术(300124) 浮盈亏-2.41% 成本61.63 现价60.15<br>&nbsp;&nbsp;概伦电子(688206) 浮盈亏-1.36% 成本41.92 现价41.35<br>&nbsp;&nbsp;晶丰明源(688368) 浮盈亏+9.39% 成本141.26 现价154.52<br>&nbsp;&nbsp;宁德时代(300750) 浮盈亏-4.16% 成本364.66 现价349.50<br>&nbsp;&nbsp;组合当日盈亏 +916.00（+0.17%）
-        </div>
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：止损清仓后应无新风险点逼近阈值。→ 验证：6 只持仓中牧原+9.04%、晶丰+9.39%健康，三祥+1.06%微利，汇川-2.41%、概伦-1.36%线内，宁德-4.16%最深但距-8%止损线尚有约4个百分点。→ 结论：组合健康度良好，无逼近止损标的；当日+916（+0.17%）。→ 下一步：无指令，明日继续观察宁德时代浮亏是否收窄。</div>
     </div>
         <div class="section"><div class="section-title">明日关注</div>
         <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
@@ -513,13 +512,13 @@
         <div class="section"><div class="section-title">策略反思 · 基金</div>
         <div class="reflection-item">
             <strong>🔍 基金策略执行质量</strong><br>今日基金策略 0 条：✅0 / ❌0 / 🟡0，执行率 0%<br>&nbsp;&nbsp;今日无成交
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：今日无基金策略任务。→ 验证：今日基金 0 条 pending、0 笔成交，F1/F3 再平衡未到触发条件。→ 结论：正常空转，无异常。→ 下一步：无需指令。</div>        <div class="reflection-item">
             <strong>📊 基金持仓结构复盘</strong><br>当前基金持仓 5 只，结构：<br>&nbsp;&nbsp;[ETF] 沪深300ETF(510300) 33800份 成本4.7814<br>&nbsp;&nbsp;[ETF] 黄金ETF(518880) 7700份 成本8.6291<br>&nbsp;&nbsp;[场外] 富国中证500增强(161017) 8218份 成本2.4300<br>&nbsp;&nbsp;[场外] 建信中证500增强(000478) 5956份 成本3.3528<br>&nbsp;&nbsp;[ETF] 半导体ETF(512480) 49600份 成本1.0482
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：5 只持仓结构稳定。→ 验证：ETF 3 只（沪深300/黄金/半导体）+场外 2 只（富国/建信500增强），黄金+5.57%最强，半导体-4.60%最弱，结构未变。→ 结论：结构均衡，当日+478.82（+0.09%）。→ 下一步：无操作。</div>        <div class="reflection-item">
             <strong>⚙️ 基金触发条件评估</strong><br>今日无基金 pending 策略
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：今日无基金 pending。→ 验证：确认 0 条，无触发条件可评估。→ 结论：不适用。→ 下一步：无指令。</div>        <div class="reflection-item">
             <strong>💼 基金持仓健康度</strong><br>&nbsp;&nbsp;沪深300ETF(510300) 浮盈亏-3.38% 成本4.7814<br>&nbsp;&nbsp;黄金ETF(518880) 浮盈亏+5.57% 成本8.6291<br>&nbsp;&nbsp;富国中证500增强(161017) 浮盈亏+3.46% 成本2.4300<br>&nbsp;&nbsp;建信中证500增强(000478) 浮盈亏+4.49% 成本3.3528<br>&nbsp;&nbsp;半导体ETF(512480) 浮盈亏-4.60% 成本1.0482<br>&nbsp;&nbsp;组合当日盈亏 +478.82（+0.09%）
-        </div>
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：无基金逼近止盈/止损阈值。→ 验证：黄金+5.57%、富国+3.46%、建信+4.49%盈利；沪深300-3.38%、半导体-4.60%浮亏但均远离阈值（黄金+5.57%临近+6%观察线，尚差0.4个百分点）。→ 结论：整体健康，黄金需留意止盈观察线。→ 下一步：无指令，明日关注黄金ETF是否触及+6%。</div>
     </div>
         <div class="section"><div class="section-title">明日关注</div>
         <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
