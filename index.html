@@ -1483,6 +1483,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-03，由 inject_intraday_to_site.py v6 生成）===
@@ -1490,12 +1493,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-03",
-  "now": "09:25",
+  "now": "10:30",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300189",
@@ -1503,8 +1506,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：玉米（当日 7.06% / 5日 13.11%） | 龙头标的 量比 1.02 ≥ 1.0 | 现价 6.5 在区间 [6.37-6.63] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 4200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价6.83高于买入区间上沿6.63，差3.0%，未触发（等回调）"
         },
         {
           "code": "000610",
@@ -1512,8 +1515,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：西安自贸区（当日 5.79% / 5日 10.63%） | 龙头标的 量比 3.69 ≥ 1.0 | 现价 7.69 在区间 [7.54-7.84] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价7.37低于买入区间下沿7.54，差2.3%，未触发（等回落）"
         }
       ]
     },
