@@ -204,7 +204,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-04（周五）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-07（周一）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1499,25 +1499,28 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-09-04，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-09-07，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-09-04",
-  "now": "12:29",
+  "date": "2026-09-07",
+  "now": "08:36",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
@@ -1535,7 +1538,7 @@ const INTRADAY_DATA = {
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：玉米(+13.1%)、西安自贸区(+10.6%)"
+    "板块主线": "5日强势：黄酒概念(+10.2%)、稳定币概念(+7.4%)"
   },
   "standard_times": [
     "10:00",
