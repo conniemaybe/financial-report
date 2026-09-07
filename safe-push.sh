@@ -10,6 +10,12 @@
 # P0 修复 (2026-08-07): Git for Windows 自带的 minimal bash 缺 seq / sleep 等外部命令，
 # 导致原 `for i in $(seq ...)` + `sleep N` 直接报错跳过，"3 次重试"从来没真正执行过。
 # 改用 bash 内置 C 风格 for 循环 + Python 实现跨平台 sleep。
+#
+# 🔐 认证修复 (2026-09-07): 9/2 起无人值守环境凭据管理器不再供 git 使用，
+# remote URL 又是干净的（无内嵌 token）→ push 报 "could not read Username" 全败。
+# 方案：push 一律带 Authorization 头（token 来自 ~/.workbuddy/astock-simulator/.gh_token，
+# 与历次手动救场推送同源），并用 -c credential.helper= 显式禁用凭据管理器，
+# 彻底摆脱对 Windows credential manager 的依赖。
 
 set -e
 REPO_DIR="/e/temp/financial-report"
@@ -55,18 +61,31 @@ else
     PROXY_ACTIVE=0
 fi
 
-# 4. 推送策略：直连优先，代理兜底（2026-08-17 P0 反转）
-# 旧逻辑：检测到 Clash 7892 端口就走代理推送 → 实测 git 显式走该代理会无限挂起
-#   （Clash 规则本身分流 GitHub，git 再指定代理端口等于双层代理死锁，8/17 卡死根因之一）。
-# 新逻辑：① 第 1 轮直连（不传任何 proxy 配置，避免 libcurl getsockname 报错）
-#         ② 直连失败才试代理（限超时 60s，防挂起）
+# 4. 推送策略：带认证头直连优先，代理兜底（2026-09-07 认证重构）
+# 背景：9/2 起无人值守环境无凭据来源，任何不带显式认证的 push 都会
+#       "could not read Username for 'https://github.com'"。
+# 新逻辑：① 所有 push 一律带 Authorization: Basic base64(x-access-token:<token>)
+#         ② -c credential.helper= 禁用凭据管理器（防交互卡死/防旧凭据干扰）
+#         ③ 第 1 轮直连；失败再走 Clash 代理（限超时 60s，防挂起）
 PUSH_TIMEOUT=60   # 单次 push 超时秒数
+
+# 4.1 加载 token 并构造认证头（token 缺失 = 立即失败，绝不盲目重试）
+AUTH_HEADER_ARGS=()
+TOKEN_FILE_FOR_AUTH="$HOME/.workbuddy/astock-simulator/.gh_token"
+if [ -f "$TOKEN_FILE_FOR_AUTH" ]; then
+    PUSH_TOKEN=$(tr -d '\r\n ' < "$TOKEN_FILE_FOR_AUTH")
+    AUTH_B64=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')
+    AUTH_HEADER_ARGS=(-c http.extraHeader="Authorization: Basic $AUTH_B64" -c credential.helper=)
+else
+    echo "❌ 未找到 token 文件 $TOKEN_FILE_FOR_AUTH，无法构造认证头，退出"
+    exit 1
+fi
 
 try_push() {
     # $1 = 描述; 其余为 git 额外参数
     local desc="$1"; shift
     echo "🔄 $desc ..."
-    if timeout $PUSH_TIMEOUT git "$@" push origin main 2>&1; then
+    if timeout $PUSH_TIMEOUT git "${AUTH_HEADER_ARGS[@]}" "$@" push origin main 2>&1; then
         return 0
     fi
     return 1
