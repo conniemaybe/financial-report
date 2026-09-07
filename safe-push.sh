@@ -149,13 +149,26 @@ if [ "$PUSH_SUCCESS" -eq 0 ]; then
 fi
 
 # 6. 验证 git 本地状态（必须 ahead=0 才算 push 真正成功）
-REMAINING=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
-if [ "$REMAINING" -gt 0 ]; then
-    echo "❌ 验证失败：仍有 $REMAINING 个 commit 未推送到 origin/main"
-    echo "   git 显示 push 成功但本地仍 ahead，说明 push 被静默拒绝"
+#    🔧 引用回写修复 (2026-09-07)：本仓库 refs/remotes/origin/ 目录为空、
+#    remote-tracking ref 只存在 packed-refs 中，push 成功后引用经常不回写，
+#    导致"push 明明成功却报 ahead>0"假失败（9/7 晨报警告即此假象）。
+#    方案：先向远端查询真实 HEAD，与本地比对——一致才算成功；
+#          本地引用落后时用 update-ref 强制回写，而不是误报失败。
+REMOTE_HEAD_SHA=$(timeout 30 git "${AUTH_HEADER_ARGS[@]}" ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')
+LOCAL_HEAD_SHA=$(git rev-parse HEAD)
+if [ "$REMOTE_HEAD_SHA" = "$LOCAL_HEAD_SHA" ]; then
+    # 远端已是本地 HEAD → push 确实成功；若本地 tracking ref 落后则修复它
+    TRACKING_SHA=$(git rev-parse refs/remotes/origin/main 2>/dev/null || echo "")
+    if [ "$TRACKING_SHA" != "$LOCAL_HEAD_SHA" ]; then
+        echo "🔧 push 已成功但本地 tracking ref 落后（$TRACKING_SHA），强制回写为 $LOCAL_HEAD_SHA"
+        git update-ref refs/remotes/origin/main "$LOCAL_HEAD_SHA"
+    fi
+    echo "✅ git 验证通过：远端 main = 本地 HEAD = $LOCAL_HEAD_SHA"
+else
+    echo "❌ 验证失败：远端 main（$REMOTE_HEAD_SHA）≠ 本地 HEAD（$LOCAL_HEAD_SHA）"
+    echo "   push 可能被静默拒绝或网络中断，需人工核查"
     exit 1
 fi
-echo "✅ git 验证通过：本地与 origin/main 同步"
 
 # 7. 强制验证 raw.githubusercontent.com 上的实际内容（绕过 GitHub Pages CDN 缓存）
 #    ⚠️ 教训：2026-07-02 出现"git push 显示成功但 GitHub Pages 没更新"的误判，
