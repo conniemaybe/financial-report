@@ -1527,6 +1527,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-08，由 inject_intraday_to_site.py v6 生成）===
@@ -1534,12 +1537,32 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-08",
-  "now": "08:44",
+  "now": "10:14",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-09-08",
+          "time": "10:11",
+          "action": "SELL",
+          "code": "300750",
+          "name": "宁德时代",
+          "price": 331.46,
+          "shares": 100,
+          "amount": 33122.46634,
+          "stamp_tax": 16.573,
+          "commission": 6.6292,
+          "transfer_fee": 0.33146000000000003,
+          "reason": "止损铁律触发：浮亏-9.1% ≤ -8%",
+          "group": "A",
+          "strategy": "S2",
+          "entry_point": "入口1·科技龙头池",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "512480",
@@ -1547,8 +1570,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "纯趋势止损：行业ETF趋势双确认（5日-19.9% / 20日-12.2%）；止损分批上限触发（历史已止损4次>=3次，强制全清）",
           "shares_plan": 49600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价1.0在区间[0.995,1.005]内，触发（现价1.0）"
         }
       ]
     },
