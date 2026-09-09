@@ -1548,6 +1548,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-09，由 inject_intraday_to_site.py v6 生成）===
@@ -1555,12 +1558,32 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-09",
-  "now": "08:43",
+  "now": "10:09",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-09-09",
+          "time": "10:07",
+          "action": "SELL",
+          "code": "300124",
+          "name": "汇川技术",
+          "price": 56.07,
+          "shares": 400,
+          "amount": 22411.56172,
+          "stamp_tax": 11.214,
+          "commission": 5.0,
+          "transfer_fee": 0.22428,
+          "reason": "止损铁律触发：浮亏-9.0% ≤ -8%",
+          "group": "A",
+          "strategy": "S2",
+          "entry_point": "入口1·科技龙头池",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": []
     },
     {
