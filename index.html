@@ -1578,6 +1578,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-10，由 inject_intraday_to_site.py v6 生成）===
@@ -1585,7 +1588,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-10",
-  "now": "13:35",
+  "now": "14:50",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1658,7 +1661,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300124",
@@ -1666,8 +1669,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 6.617039% < 30% 触发 | 方向：机器人/工控 | 当前价 55.92 | S2 价格优先，任意时段可建仓",
           "shares_plan": 300,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "未触发"
         }
       ]
     }
