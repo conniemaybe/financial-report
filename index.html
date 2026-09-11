@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-10（周四）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-11（周五）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1582,103 +1582,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-09-10，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-09-11，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-09-10",
-  "now": "14:50",
+  "date": "2026-09-11",
+  "now": "08:37",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-09-10",
-          "time": "10:09",
-          "action": "SELL",
-          "code": "688206",
-          "name": "概伦电子",
-          "price": 38.02,
-          "shares": 900,
-          "amount": 34193.70522,
-          "stamp_tax": 17.109,
-          "commission": 6.8436,
-          "transfer_fee": 0.34218000000000004,
-          "reason": "止损铁律触发：浮亏-9.3% ≤ -8%",
-          "group": "A",
-          "strategy": "S1",
-          "entry_point": "主线追涨",
-          "sector": "",
-          "tier": ""
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300124",
-          "name": "汇川技术",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 6.617039% < 30% 触发 | 方向：机器人/工控 | 当前价 55.92 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "[10:00] 现价54.52低于买入区间下沿54.8016，差0.5%，未触发（等回落）"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300124",
-          "name": "汇川技术",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 6.617039% < 30% 触发 | 方向：机器人/工控 | 当前价 55.92 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "[11:00] 现价54.56低于买入区间下沿54.8016，差0.4%，未触发（等回落）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300124",
-          "name": "汇川技术",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 6.617039% < 30% 触发 | 方向：机器人/工控 | 当前价 55.92 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "[13:30] 现价54.64低于买入区间下沿54.8016，差0.3%，未触发（等回落）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300124",
-          "name": "汇川技术",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 6.617039% < 30% 触发 | 方向：机器人/工控 | 当前价 55.92 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 300,
-          "status": "checked",
-          "reason": "未触发"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：黄酒概念(+10.9%)、白糖(+17.1%)、培育钻石(+10.0%)"
+    "板块主线": "5日强势：覆铜板(+12.8%)、昨日首板(+7.9%)、中船系(+6.4%)"
   },
   "standard_times": [
     "10:00",
