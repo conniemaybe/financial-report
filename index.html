@@ -1589,6 +1589,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-11，由 inject_intraday_to_site.py v6 生成）===
@@ -1596,12 +1599,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-11",
-  "now": "08:42",
+  "now": "10:09",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "000823",
@@ -1609,8 +1612,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：覆铜板（当日 5.0% / 5日 12.84%） | 龙头标的 量比 2.0 ≥ 1.0 | 现价 18.7 在区间 [18.33-19.07] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价19.0在买入区间[18.33,19.07]内，满足触发条件"
         },
         {
           "code": "600491",
@@ -1618,8 +1621,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：昨日首板（当日 1.16% / 5日 7.86%） | 龙头标的 量比 1.48 ≥ 1.0 | 现价 1.73 在区间 [1.7-1.76] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 10700,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价1.87高于买入区间上沿1.76，差6.3%，未触发（等回调）"
         },
         {
           "code": "300124",
@@ -1627,8 +1630,17 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 5.872622% < 30% 触发 | 方向：机器人/工控 | 当前价 54.46 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价54.14在买入区间[53.3708,55.5492]内，满足触发条件"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
+          "shares_plan": 49600,
+          "status": "checked",
+          "reason": "未触发"
         }
       ]
     },
@@ -1661,6 +1673,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 5.872622% < 30% 触发 | 方向：机器人/工控 | 当前价 54.46 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
+          "shares_plan": 49600,
           "status": "pending",
           "reason": "时段未到"
         }
@@ -1697,6 +1718,15 @@ const INTRADAY_DATA = {
           "shares_plan": 400,
           "status": "pending",
           "reason": "时段未到"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
+          "shares_plan": 49600,
+          "status": "pending",
+          "reason": "时段未到"
         }
       ]
     },
@@ -1729,6 +1759,15 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 5.872622% < 30% 触发 | 方向：机器人/工控 | 当前价 54.46 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "512480",
+          "name": "半导体ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
+          "shares_plan": 49600,
           "status": "pending",
           "reason": "时段未到"
         }
