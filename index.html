@@ -1597,6 +1597,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-11，由 inject_intraday_to_site.py v6 生成）===
@@ -1604,7 +1607,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-11",
-  "now": "11:07",
+  "now": "13:35",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1714,8 +1717,24 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "13:30",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-09-11",
+          "time": "13:32",
+          "action": "SELL",
+          "code": "512480",
+          "name": "半导体ETF",
+          "nav": 0.95,
+          "shares": 49600,
+          "amount": 47110.1,
+          "fee": 9.9,
+          "commission": 9.42,
+          "transfer_fee": 0.47,
+          "is_etf": true,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "000823",
@@ -1723,8 +1742,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：覆铜板（当日 5.0% / 5日 12.84%） | 龙头标的 量比 2.0 ≥ 1.0 | 现价 18.7 在区间 [18.33-19.07] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 900,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] BUY 被冷却期拦截：冷却期L3生效中（2026-09-11触发，至2026-09-25）：L3升级: L1b: 3个交易日内2只持仓止损(概伦电子、晶丰明源)。现价20.57高于买入区间上沿19.07，差7.9%，未触发（等回调）"
         },
         {
           "code": "600491",
@@ -1732,8 +1751,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：昨日首板（当日 1.16% / 5日 7.86%） | 龙头标的 量比 1.48 ≥ 1.0 | 现价 1.73 在区间 [1.7-1.76] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 10700,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] BUY 被冷却期拦截：冷却期L3生效中（2026-09-11触发，至2026-09-25）：L3升级: L1b: 3个交易日内2只持仓止损(概伦电子、晶丰明源)。现价1.81高于买入区间上沿1.76，差2.8%，未触发（等回调）"
         },
         {
           "code": "300124",
@@ -1741,8 +1760,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 5.872622% < 30% 触发 | 方向：机器人/工控 | 当前价 54.46 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] BUY 被冷却期拦截：冷却期L3生效中（2026-09-11触发，至2026-09-25）：L3升级: L1b: 3个交易日内2只持仓止损(概伦电子、晶丰明源)。现价54.15在买入区间[53.3708,55.5492]内，满足触发条件"
         },
         {
           "code": "512480",
@@ -1750,8 +1769,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
           "shares_plan": 49600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     },
@@ -1793,8 +1812,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.2% + 指数5日-19.1%；止损分批上限触发（历史已止损4次>=3次，强制全清）",
           "shares_plan": 49600,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 13:30 成交"
         }
       ]
     }
