@@ -526,14 +526,24 @@ def build_summary_row(cleared: list) -> str:
 
 
 def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
-    """构造完整模块 HTML（含 A股/基金切换）"""
+    """构造完整模块 HTML（含 A股/基金切换 + 分页，2026-09-14 分页改造）
+
+    分页：每页 5 条，A股/基金各自独立分页状态（clearedAstockPage / clearedFundPage）。
+    复用全局 .pagination 样式与交易记录模块同款控件，不新增 CSS。
+    按钮 onclick 用固定函数名拼接（changeClearedAPage/changeClearedFPage），
+    避免在 f-string 里嵌套引号转义。
+    """
     a_rows = build_cleared_rows(cleared_astock, is_fund=False)
     a_summary = build_summary_row(cleared_astock)
     f_rows = build_cleared_rows(cleared_fund, is_fund=True)
     f_summary = build_summary_row(cleared_fund)
 
+    # 空列表时不显示分页条（只有占位行）
+    a_pager_display = "" if cleared_astock else "display:none;"
+    f_pager_display = "" if cleared_fund else "display:none;"
+
     return f'''
-  <!-- 已清仓标的 — 2026-07-08 新增 -->
+  <!-- 已清仓标的 — 2026-07-08 新增；2026-09-14 加分页 -->
   <div class="section" id="clearedSection">
     <h2>📦 已清仓标的</h2>
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
@@ -553,12 +563,13 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
           <th class="hide-mobile">成本均价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
+        <tbody id="clearedAstockBody">
           {a_rows}
           {a_summary}
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="clearedAstockPager" style="{a_pager_display}"></div>
 
     <div class="table-wrap" id="clearedFundTable" style="display:none;">
       <table>
@@ -572,22 +583,71 @@ def build_cleared_module(cleared_astock: list, cleared_fund: list) -> str:
           <th class="hide-mobile">成本净价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
+        <tbody id="clearedFundBody">
           {f_rows}
           {f_summary}
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="clearedFundPager" style="{f_pager_display}"></div>
   </div>
 
   <script>
+    // 已清仓标的分页（2026-09-14）：每页 5 条，A股/基金独立分页
+    const CLEARED_PAGE_SIZE = 5;
+    var clearedAstockPage = 1;
+    var clearedFundPage = 1;
+
+    function _renderClearedPager(kind) {{
+      var bodyId = kind === 'fund' ? 'clearedFundBody' : 'clearedAstockBody';
+      var pagerId = kind === 'fund' ? 'clearedFundPager' : 'clearedAstockPager';
+      var body = document.getElementById(bodyId);
+      var pager = document.getElementById(pagerId);
+      if (!body || !pager) return;
+      var rows = body.querySelectorAll('tr');
+      var total = rows.length;
+      if (total <= CLEARED_PAGE_SIZE) {{ pager.style.display = 'none'; return; }}
+      var totalPages = Math.ceil(total / CLEARED_PAGE_SIZE);
+      var page = kind === 'fund' ? clearedFundPage : clearedAstockPage;
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      rows.forEach(function(row, idx) {{
+        row.style.display = (idx >= (page - 1) * CLEARED_PAGE_SIZE && idx < page * CLEARED_PAGE_SIZE) ? '' : 'none';
+      }});
+      var prevFn = kind === 'fund' ? 'changeClearedFPage' : 'changeClearedAPage';
+      pager.style.display = '';
+      pager.innerHTML =
+        '<button onclick="' + prevFn + '(-1)" ' + (page <= 1 ? 'disabled' : '') + '>◀ 上一页</button>' +
+        '<span class="page-info">' + page + ' / ' + totalPages + ' 页（共 ' + total + ' 条）</span>' +
+        '<button onclick="' + prevFn + '(1)" ' + (page >= totalPages ? 'disabled' : '') + '>下一页 ▶</button>';
+    }}
+
+    function changeClearedAPage(delta) {{
+      clearedAstockPage += delta;
+      _renderClearedPager('astock');
+    }}
+
+    function changeClearedFPage(delta) {{
+      clearedFundPage += delta;
+      _renderClearedPager('fund');
+    }}
+
     function switchClearedTab(tab) {{
       document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
       const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${{tab}}"]`);
       if (btn) btn.classList.add('active');
       document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
+      document.getElementById('clearedAstockPager').style.display = tab === 'astock' ? '' : 'none';
       document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
+      document.getElementById('clearedFundPager').style.display = tab === 'fund' ? '' : 'none';
+      _renderClearedPager(tab === 'fund' ? 'fund' : 'astock');
     }}
+
+    // 初始渲染两套分页（当前可见的 A股表 + 隐藏的基金表都先算好）
+    (function() {{
+      _renderClearedPager('astock');
+      _renderClearedPager('fund');
+    }})();
   </script>
 '''
 
@@ -600,6 +660,15 @@ def inject_cleared_module(html: str, module: str) -> str:
     html = re.sub(
         r'\s*<!-- 已清仓标的.*?switchClearedTab.*?</script>\s*',
         '\n\n',
+        html, flags=re.DOTALL, count=1,
+    )
+    # 2026-09-14：顺带清除"近期交易记录"section 后遗留的孤立 switchClearedTab
+    # script 块（历史修复回归遗留物，与模块内 script 重复定义导致函数覆盖混乱）。
+    # 特征：<script> 后紧跟 function（模塊内 script 开头是注释+const，不会误伤）；
+    # 不用前瞻锚定模块位置——模塊可能已被上一步清掉，前瞻会失效。
+    html = re.sub(
+        r'<script>\s*function switchClearedTab.*?</script>',
+        '\n',
         html, flags=re.DOTALL, count=1,
     )
     # 尝试多个锚点（兼容历史版本）

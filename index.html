@@ -223,18 +223,11 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     <div class="pagination" id="tradePagination"></div>
   </div>
 
-<script>
-    function switchClearedTab(tab) {
-      document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
-      const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${tab}"]`);
-      if (btn) btn.classList.add('active');
-      document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
-      document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
-    }
-  </script>
 
 
-  <!-- 已清仓标的 — 2026-07-08 新增 -->
+
+
+  <!-- 已清仓标的 — 2026-07-08 新增；2026-09-14 加分页 -->
   <div class="section" id="clearedSection">
     <h2>📦 已清仓标的</h2>
     <div class="filters" id="clearedFilters" style="margin-bottom:12px;">
@@ -254,26 +247,27 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
           <th class="hide-mobile">成本均价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
-          <tr><td class='hide-mobile'><span class='stock-code'>688368</span></td><td class='col-text'><span class='stock-name'>晶丰明源</span></td><td>2026-09-11</td><td class='down'>-¥2,670.11</td><td class='down'>-9.45%</td><td>¥127.91</td><td>¥141.26</td><td class='down'>-0.41%<br><small>现价格 ¥127.38</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688206</span></td><td class='col-text'><span class='stock-name'>概伦电子</span></td><td>2026-09-10</td><td class='down'>-¥3,533.22</td><td class='down'>-9.37%</td><td>¥37.99</td><td>¥41.92</td><td class='down'>-4.54%<br><small>现价格 ¥36.27</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300124</span></td><td class='col-text'><span class='stock-name'>汇川技术</span></td><td>2026-09-09</td><td class='down'>-¥2,241.68</td><td class='down'>-9.09%</td><td>¥56.03</td><td>¥61.63</td><td class='down'>-4.05%<br><small>现价格 ¥53.76</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300750</span></td><td class='col-text'><span class='stock-name'>宁德时代</span></td><td>2026-09-08</td><td class='down'>-¥3,343.19</td><td class='down'>-9.17%</td><td>¥331.22</td><td>¥364.66</td><td class='up'>+2.46%<br><small>现价格 ¥339.38</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688585</span></td><td class='col-text'><span class='stock-name'>上纬新材</span></td><td>2026-09-03</td><td class='down'>-¥1,979.91</td><td class='down'>-6.22%</td><td>¥149.37</td><td>¥159.27</td><td class='down'>-2.33%<br><small>现价格 ¥145.90</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>601212</span></td><td class='col-text'><span class='stock-name'>白银有色</span></td><td>2026-09-02</td><td class='down'>-¥3,068.44</td><td class='down'>-8.66%</td><td>¥6.61</td><td>¥7.23</td><td class='down'>-5.68%<br><small>现价格 ¥6.23</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>2026-08-21</td><td class='up'>+¥1,138.76</td><td class='up'>+3.81%</td><td>¥61.38</td><td>¥59.76</td><td class='down'>-4.76%<br><small>现价格 ¥58.46</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,626.84</td><td class='up'>+13.68%</td><td>¥46.76</td><td>¥41.13</td><td class='down'>-36.27%<br><small>现价格 ¥29.80</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥32,998.49</td><td class='up'>+36.60%</td><td>¥82.11</td><td>¥60.11</td><td class='down'>-16.29%<br><small>现价格 ¥68.73</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,400.88</td><td class='down'>-7.15%</td><td>¥181.88</td><td>¥195.89</td><td class='down'>-2.72%<br><small>现价格 ¥176.94</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,538.81</td><td class='down'>-7.39%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+44.13%<br><small>现价格 ¥34.60</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,909.32</td><td class='down'>-5.60%</td><td>¥64.40</td><td>¥68.21</td><td class='down'>-11.90%<br><small>现价格 ¥56.73</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,399.97</td><td class='down'>-7.66%</td><td>¥84.40</td><td>¥91.40</td><td class='up'>+6.33%<br><small>现价格 ¥89.75</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,116.38</td><td class='up'>+24.27%</td><td>¥103.51</td><td>¥83.36</td><td class='down'>-36.05%<br><small>现价格 ¥66.20</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,818.43</td><td class='down'>-8.09%</td><td>¥144.65</td><td>¥157.38</td><td class='down'>-12.52%<br><small>现价格 ¥126.53</small></td></tr>
+        <tbody id="clearedAstockBody">
+          <tr><td class='hide-mobile'><span class='stock-code'>688368</span></td><td class='col-text'><span class='stock-name'>晶丰明源</span></td><td>2026-09-11</td><td class='down'>-¥2,670.11</td><td class='down'>-9.45%</td><td>¥127.91</td><td>¥141.26</td><td class='down'>-0.37%<br><small>现价格 ¥127.43</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688206</span></td><td class='col-text'><span class='stock-name'>概伦电子</span></td><td>2026-09-10</td><td class='down'>-¥3,533.22</td><td class='down'>-9.37%</td><td>¥37.99</td><td>¥41.92</td><td class='down'>-3.14%<br><small>现价格 ¥36.80</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300124</span></td><td class='col-text'><span class='stock-name'>汇川技术</span></td><td>2026-09-09</td><td class='down'>-¥2,241.68</td><td class='down'>-9.09%</td><td>¥56.03</td><td>¥61.63</td><td class='down'>-4.21%<br><small>现价格 ¥53.67</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300750</span></td><td class='col-text'><span class='stock-name'>宁德时代</span></td><td>2026-09-08</td><td class='down'>-¥3,343.19</td><td class='down'>-9.17%</td><td>¥331.22</td><td>¥364.66</td><td class='up'>+2.01%<br><small>现价格 ¥337.89</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688585</span></td><td class='col-text'><span class='stock-name'>上纬新材</span></td><td>2026-09-03</td><td class='down'>-¥1,979.91</td><td class='down'>-6.22%</td><td>¥149.37</td><td>¥159.27</td><td class='down'>-2.40%<br><small>现价格 ¥145.79</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>601212</span></td><td class='col-text'><span class='stock-name'>白银有色</span></td><td>2026-09-02</td><td class='down'>-¥3,068.44</td><td class='down'>-8.66%</td><td>¥6.61</td><td>¥7.23</td><td class='down'>-5.38%<br><small>现价格 ¥6.25</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>601336</span></td><td class='col-text'><span class='stock-name'>新华保险</span></td><td>2026-08-21</td><td class='up'>+¥1,138.76</td><td class='up'>+3.81%</td><td>¥61.38</td><td>¥59.76</td><td class='down'>-4.89%<br><small>现价格 ¥58.38</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600460</span></td><td class='col-text'><span class='stock-name'>士兰微</span></td><td>2026-07-22</td><td class='up'>+¥5,626.84</td><td class='up'>+13.68%</td><td>¥46.76</td><td>¥41.13</td><td class='down'>-36.21%<br><small>现价格 ¥29.83</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000977</span></td><td class='col-text'><span class='stock-name'>浪潮信息</span></td><td>2026-07-21</td><td class='up'>+¥32,998.49</td><td class='up'>+36.60%</td><td>¥82.11</td><td>¥60.11</td><td class='down'>-16.28%<br><small>现价格 ¥68.74</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688300</span></td><td class='col-text'><span class='stock-name'>联瑞新材</span></td><td>2026-07-13</td><td class='down'>-¥1,400.88</td><td class='down'>-7.15%</td><td>¥181.88</td><td>¥195.89</td><td class='down'>-2.41%<br><small>现价格 ¥177.50</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600547</span></td><td class='col-text'><span class='stock-name'>山东黄金</span></td><td>2026-07-09</td><td class='down'>-¥1,538.81</td><td class='down'>-7.39%</td><td>¥24.01</td><td>¥26.02</td><td class='up'>+43.72%<br><small>现价格 ¥34.50</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>002156</span></td><td class='col-text'><span class='stock-name'>通富微电</span></td><td>2026-07-08</td><td class='down'>-¥1,909.32</td><td class='down'>-5.60%</td><td>¥64.40</td><td>¥68.21</td><td class='down'>-11.62%<br><small>现价格 ¥56.91</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>688131</span></td><td class='col-text'><span class='stock-name'>皓元医药</span></td><td>2026-07-08</td><td class='down'>-¥1,399.97</td><td class='down'>-7.66%</td><td>¥84.40</td><td>¥91.40</td><td class='up'>+7.14%<br><small>现价格 ¥90.43</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>600584</span></td><td class='col-text'><span class='stock-name'>长电科技</span></td><td>2026-07-02</td><td class='up'>+¥10,116.38</td><td class='up'>+24.27%</td><td>¥103.51</td><td>¥83.36</td><td class='down'>-35.84%<br><small>现价格 ¥66.41</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>300408</span></td><td class='col-text'><span class='stock-name'>三环集团</span></td><td>2026-06-24</td><td class='down'>-¥3,818.43</td><td class='down'>-8.09%</td><td>¥144.65</td><td>¥157.38</td><td class='down'>-12.68%<br><small>现价格 ¥126.30</small></td></tr>
           
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="clearedAstockPager" style=""></div>
 
     <div class="table-wrap" id="clearedFundTable" style="display:none;">
       <table>
@@ -287,23 +281,72 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
           <th class="hide-mobile">成本净价</th>
           <th>清仓后距今</th>
         </tr></thead>
-        <tbody>
-          <tr><td class='hide-mobile'><span class='stock-code'>512480</span></td><td class='col-text'><span class='stock-name'>半导体ETF</span></td><td>2026-09-11</td><td class='down'>-¥9,303.01</td><td class='down'>-11.35%</td><td>¥0.9847</td><td>¥1.1107</td><td class='down'>-3.93%<br><small>现净值 ¥0.9460</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>588000</span></td><td class='col-text'><span class='stock-name'>科创50ETF</span></td><td>2026-08-21</td><td class='up'>+¥18,395.16</td><td class='up'>+24.61%</td><td>¥2.1659</td><td>¥1.7381</td><td class='down'>-25.48%<br><small>现净值 ¥1.6140</small></td></tr>
+        <tbody id="clearedFundBody">
+          <tr><td class='hide-mobile'><span class='stock-code'>512480</span></td><td class='col-text'><span class='stock-name'>半导体ETF</span></td><td>2026-09-11</td><td class='down'>-¥9,303.01</td><td class='down'>-11.35%</td><td>¥0.9847</td><td>¥1.1107</td><td class='down'>-3.83%<br><small>现净值 ¥0.9470</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>588000</span></td><td class='col-text'><span class='stock-name'>科创50ETF</span></td><td>2026-08-21</td><td class='up'>+¥18,395.16</td><td class='up'>+24.61%</td><td>¥2.1659</td><td>¥1.7381</td><td class='down'>-25.44%<br><small>现净值 ¥1.6150</small></td></tr>
           
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="clearedFundPager" style=""></div>
   </div>
 
   <script>
+    // 已清仓标的分页（2026-09-14）：每页 5 条，A股/基金独立分页
+    const CLEARED_PAGE_SIZE = 5;
+    var clearedAstockPage = 1;
+    var clearedFundPage = 1;
+
+    function _renderClearedPager(kind) {
+      var bodyId = kind === 'fund' ? 'clearedFundBody' : 'clearedAstockBody';
+      var pagerId = kind === 'fund' ? 'clearedFundPager' : 'clearedAstockPager';
+      var body = document.getElementById(bodyId);
+      var pager = document.getElementById(pagerId);
+      if (!body || !pager) return;
+      var rows = body.querySelectorAll('tr');
+      var total = rows.length;
+      if (total <= CLEARED_PAGE_SIZE) { pager.style.display = 'none'; return; }
+      var totalPages = Math.ceil(total / CLEARED_PAGE_SIZE);
+      var page = kind === 'fund' ? clearedFundPage : clearedAstockPage;
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      rows.forEach(function(row, idx) {
+        row.style.display = (idx >= (page - 1) * CLEARED_PAGE_SIZE && idx < page * CLEARED_PAGE_SIZE) ? '' : 'none';
+      });
+      var prevFn = kind === 'fund' ? 'changeClearedFPage' : 'changeClearedAPage';
+      pager.style.display = '';
+      pager.innerHTML =
+        '<button onclick="' + prevFn + '(-1)" ' + (page <= 1 ? 'disabled' : '') + '>◀ 上一页</button>' +
+        '<span class="page-info">' + page + ' / ' + totalPages + ' 页（共 ' + total + ' 条）</span>' +
+        '<button onclick="' + prevFn + '(1)" ' + (page >= totalPages ? 'disabled' : '') + '>下一页 ▶</button>';
+    }
+
+    function changeClearedAPage(delta) {
+      clearedAstockPage += delta;
+      _renderClearedPager('astock');
+    }
+
+    function changeClearedFPage(delta) {
+      clearedFundPage += delta;
+      _renderClearedPager('fund');
+    }
+
     function switchClearedTab(tab) {
       document.querySelectorAll('#clearedFilters .filter-btn').forEach(b => b.classList.remove('active'));
       const btn = document.querySelector(`#clearedFilters .filter-btn[onclick*="${tab}"]`);
       if (btn) btn.classList.add('active');
       document.getElementById('clearedAstockTable').style.display = tab === 'astock' ? '' : 'none';
+      document.getElementById('clearedAstockPager').style.display = tab === 'astock' ? '' : 'none';
       document.getElementById('clearedFundTable').style.display = tab === 'fund' ? '' : 'none';
+      document.getElementById('clearedFundPager').style.display = tab === 'fund' ? '' : 'none';
+      _renderClearedPager(tab === 'fund' ? 'fund' : 'astock');
     }
+
+    // 初始渲染两套分页（当前可见的 A股表 + 隐藏的基金表都先算好）
+    (function() {
+      _renderClearedPager('astock');
+      _renderClearedPager('fund');
+    })();
   </script>
 
 <div class="section">
