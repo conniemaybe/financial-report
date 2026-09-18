@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-09-17 15:28</div>
+    <div class="update-time" id="updateTime">数据更新：2026-09-18 08:42</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥503,812.19</div>
-      <div class="change"><span class="up">累计 +¥3,812.19 (+0.76%)</span> · <span class="down">今日 -¥385.24 (-0.08%)</span></div>
+      <div class="value">¥503,667.35</div>
+      <div class="change"><span class="up">累计 +¥3,667.35 (+0.73%)</span> · <span class="down">今日 -¥530.09 (-0.11%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,028,931.38</div>
-      <div class="change"><span class="up">累计 +¥28,931.38 (+2.89%)</span></div>
+      <div class="value">¥1,028,786.54</div>
+      <div class="change"><span class="up">累计 +¥28,786.54 (+2.88%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -191,8 +191,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股宽基·ETF</td><td>33,800 份</td><td class='hide-mobile'>¥4.7814</td><td class='down'>¥4.5300↓</td><td>¥153,114.00</td><td class='down'>-¥676.00<br><small>-0.44%</small></td><td class='down'>-¥8,490.33<br><small>-5.25%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='up'>¥8.8600↑</td><td>¥68,222.00</td><td class='down'>-¥346.50<br><small>-0.51%</small></td><td class='up'>+¥1,777.82<br><small>+2.68%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>8,218 份</td><td class='hide-mobile'>¥2.4300</td><td class='up'>¥2.5110↑</td><td>¥20,635.67</td><td class='up'>+¥328.72<br><small>+1.62% · 上一交易日</small></td><td class='up'>+¥635.67<br><small>+3.18%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='up'>¥3.4950↑</td><td>¥20,816.99</td><td class='up'>+¥308.53<br><small>+1.50% · 上一交易日</small></td><td class='up'>+¥816.99<br><small>+4.08%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>8,218 份</td><td class='hide-mobile'>¥2.4300</td><td class='up'>¥2.5020↑</td><td>¥20,561.71</td><td class='up'>+¥254.76<br><small>+1.25% · 上一交易日</small></td><td class='up'>+¥561.71<br><small>+2.81%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='up'>¥3.4831↑</td><td>¥20,746.11</td><td class='up'>+¥237.65<br><small>+1.16% · 上一交易日</small></td><td class='up'>+¥746.11<br><small>+3.73%</small></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -463,6 +463,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-09-18', type: 'morning', file: '20260918_晨报.html', label: '9/18 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-09-17', type: 'evening', file: '20260917_日报.html', label: '9/17 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-09-17', type: 'morning', file: '20260917_晨报.html', label: '9/17 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-09-16', type: 'evening', file: '20260916_日报.html', label: '9/16 日报', ico: '🌙', cls: 'evening' },
@@ -1733,6 +1734,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-18，由 inject_intraday_to_site.py v6 生成）===
@@ -1740,7 +1744,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-18",
-  "now": "08:35",
+  "now": "08:40",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1769,7 +1773,7 @@ const INTRADAY_DATA = {
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：电子化学品Ⅱ(+6.2%)"
+    "板块主线": "5日强势：种植业(-8.6%)"
   },
   "standard_times": [
     "10:00",
