@@ -1758,6 +1758,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-09-21，由 inject_intraday_to_site.py v6 生成）===
@@ -1765,12 +1768,32 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-09-21",
-  "now": "09:35",
+  "now": "10:13",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-09-21",
+          "time": "10:09",
+          "action": "SELL",
+          "code": "603663",
+          "name": "三祥新材",
+          "price": 49.82,
+          "shares": 300,
+          "amount": 14933.37754,
+          "stamp_tax": 7.473,
+          "commission": 5.0,
+          "transfer_fee": 0.14946,
+          "reason": "中等趋势止盈：浮盈+24.59%>=+20%档位减1/3（100股），防碎片化约束3覆盖（单笔4982<15000且<剩余50%）升级清仓300股 @49.82 涨停价",
+          "group": "A",
+          "strategy": "legacy",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": []
     },
     {
