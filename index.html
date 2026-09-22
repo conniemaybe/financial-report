@@ -198,7 +198,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-21（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-09-22（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1771,63 +1771,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-09-21，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-09-22，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-09-21",
-  "now": "14:54",
+  "date": "2026-09-22",
+  "now": "08:38",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-09-21",
-          "time": "10:09",
-          "action": "SELL",
-          "code": "603663",
-          "name": "三祥新材",
-          "price": 49.82,
-          "shares": 300,
-          "amount": 14933.37754,
-          "stamp_tax": 7.473,
-          "commission": 5.0,
-          "transfer_fee": 0.14946,
-          "reason": "中等趋势止盈：浮盈+24.59%>=+20%档位减1/3（100股），防碎片化约束3覆盖（单笔4982<15000且<剩余50%）升级清仓300股 @49.82 涨停价",
-          "group": "A",
-          "strategy": "legacy",
-          "entry_point": "",
-          "sector": "",
-          "tier": ""
-        }
-      ],
-      "checked": true,
+      "trades": [],
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：通信设备(+9.2%)、半导体(+10.8%)、电子化学品Ⅱ(+8.8%)"
+    "板块主线": "5日强势：房地产服务(+11.1%)、航海装备Ⅱ(+6.2%)、化学制药(+5.0%)"
   },
   "standard_times": [
     "10:00",
