@@ -1863,6 +1863,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-12，由 inject_intraday_to_site.py v6 生成）===
@@ -1870,13 +1873,40 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-12",
-  "now": "10:13",
+  "now": "11:09",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": true,
       "pending_states": [
+        {
+          "code": "605577",
+          "name": "龙版传媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 46.12 ≥ 1.0 | 现价 17.82 在区间 [17.46-18.18] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1100,
+          "status": "checked",
+          "reason": "未触发"
+        },
+        {
+          "code": "300124",
+          "name": "汇川技术",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 4.380165% < 30% 触发 | 方向：机器人/工控 | 当前价 50.92 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "checked",
+          "reason": "未触发"
+        },
+        {
+          "code": "002475",
+          "name": "立讯精密",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 15.53719% < 30% 触发 | 方向：消费电子 | 当前价 46.58 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 500,
+          "status": "checked",
+          "reason": "未触发"
+        },
         {
           "code": "510300",
           "name": "沪深300ETF",
@@ -1890,17 +1920,81 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "11:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-10-12",
+          "time": "11:07",
+          "action": "BUY",
+          "code": "300124",
+          "name": "汇川技术",
+          "price": 50.78,
+          "shares": 400,
+          "amount": 20317.20312,
+          "commission": 5.0,
+          "transfer_fee": 0.20312000000000002,
+          "reason": "[11:00] S2 科技龙头池 PE分位<30%，现价50.78在区间[49.90,51.94]内，任意时段可建仓",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        },
+        {
+          "date": "2026-10-12",
+          "time": "11:07",
+          "action": "BUY",
+          "code": "002475",
+          "name": "立讯精密",
+          "price": 46.56,
+          "shares": 500,
+          "amount": 23285.2328,
+          "commission": 5.0,
+          "transfer_fee": 0.2328,
+          "reason": "[11:00] S2 科技龙头池 PE分位<30%，现价46.56在区间[45.65,47.51]内，任意时段可建仓",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": [
+        {
+          "code": "605577",
+          "name": "龙版传媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 46.12 ≥ 1.0 | 现价 17.82 在区间 [17.46-18.18] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1100,
+          "status": "checked",
+          "reason": "[11:00] 现价17.82在买入区间[17.46,18.18]内，满足触发条件"
+        },
+        {
+          "code": "300124",
+          "name": "汇川技术",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 4.380165% < 30% 触发 | 方向：机器人/工控 | 当前价 50.92 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "executed",
+          "reason": ""
+        },
+        {
+          "code": "002475",
+          "name": "立讯精密",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 15.53719% < 30% 触发 | 方向：消费电子 | 当前价 46.58 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 500,
+          "status": "executed",
+          "reason": ""
+        },
         {
           "code": "510300",
           "name": "沪深300ETF",
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 8.0% 低于目标带下沿 40%（欠 32.0pct ≈ ¥157,918） | 本次补足批次 50% = ¥78,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 49000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥49,000，无价格区间），于尾盘窗口按现价4.38执行"
         }
       ]
     },
@@ -1909,6 +2003,33 @@ const INTRADAY_DATA = {
       "trades": [],
       "checked": false,
       "pending_states": [
+        {
+          "code": "605577",
+          "name": "龙版传媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 46.12 ≥ 1.0 | 现价 17.82 在区间 [17.46-18.18] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "300124",
+          "name": "汇川技术",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 4.380165% < 30% 触发 | 方向：机器人/工控 | 当前价 50.92 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
+        },
+        {
+          "code": "002475",
+          "name": "立讯精密",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 15.53719% < 30% 触发 | 方向：消费电子 | 当前价 46.58 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 500,
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
+        },
         {
           "code": "510300",
           "name": "沪深300ETF",
@@ -1925,6 +2046,33 @@ const INTRADAY_DATA = {
       "trades": [],
       "checked": false,
       "pending_states": [
+        {
+          "code": "605577",
+          "name": "龙版传媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 46.12 ≥ 1.0 | 现价 17.82 在区间 [17.46-18.18] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "300124",
+          "name": "汇川技术",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 4.380165% < 30% 触发 | 方向：机器人/工控 | 当前价 50.92 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
+        },
+        {
+          "code": "002475",
+          "name": "立讯精密",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 15.53719% < 30% 触发 | 方向：消费电子 | 当前价 46.58 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 500,
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
+        },
         {
           "code": "510300",
           "name": "沪深300ETF",
