@@ -1885,6 +1885,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-13，由 inject_intraday_to_site.py v6 生成）===
@@ -1892,7 +1895,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-13",
-  "now": "10:11",
+  "now": "11:14",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1922,7 +1925,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "600825",
@@ -1930,8 +1933,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 162.19 ≥ 1.0 | 现价 13.78 在区间 [13.5-14.06] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 1200,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价13.78在买入区间[13.5,14.06]内，满足触发条件"
         },
         {
           "code": "510300",
@@ -1939,8 +1942,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 17.9% 低于目标带下沿 40%（欠 22.1pct ≈ ¥108,975） | 本次补足批次 50% = ¥54,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 49000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥49,000，无价格区间），于尾盘窗口按现价4.3执行"
         }
       ]
     },
