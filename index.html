@@ -202,7 +202,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-13（周二）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-14（周三）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1898,154 +1898,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-10-13，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-10-14，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-10-13",
-  "now": "14:52",
+  "date": "2026-10-14",
+  "now": "08:46",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "600825",
-          "name": "新华传媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 162.19 ≥ 1.0 | 现价 13.78 在区间 [13.5-14.06] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1200,
-          "status": "checked",
-          "reason": "[10:00] 现价13.78在买入区间[13.5,14.06]内，满足触发条件"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 17.9% 低于目标带下沿 40%（欠 22.1pct ≈ ¥108,975） | 本次补足批次 50% = ¥54,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 49000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥49,000，无价格区间），于尾盘窗口按现价4.32执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "600825",
-          "name": "新华传媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 162.19 ≥ 1.0 | 现价 13.78 在区间 [13.5-14.06] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1200,
-          "status": "checked",
-          "reason": "[11:00] 现价13.78在买入区间[13.5,14.06]内，满足触发条件"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 17.9% 低于目标带下沿 40%（欠 22.1pct ≈ ¥108,975） | 本次补足批次 50% = ¥54,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 49000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥49,000，无价格区间），于尾盘窗口按现价4.3执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "600825",
-          "name": "新华传媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 162.19 ≥ 1.0 | 现价 13.78 在区间 [13.5-14.06] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1200,
-          "status": "checked",
-          "reason": "[13:30] 现价13.78在买入区间[13.5,14.06]内，满足触发条件"
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 17.9% 低于目标带下沿 40%（欠 22.1pct ≈ ¥108,975） | 本次补足批次 50% = ¥54,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 49000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥49,000，无价格区间），于尾盘窗口按现价4.38执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
-      "trades": [
-        {
-          "date": "2026-10-13",
-          "time": "14:47",
-          "action": "BUY",
-          "code": "600825",
-          "name": "新华传媒",
-          "price": 13.78,
-          "shares": 1200,
-          "amount": 16541.16536,
-          "commission": 5.0,
-          "transfer_fee": 0.16536,
-          "reason": "S1 pending 尾盘硬执行：现价13.78在区间[13.5,14.06]内（v13 机械执行）",
-          "group": "A",
-          "strategy": "S1",
-          "entry_point": "主线追涨",
-          "sector": "出版",
-          "tier": "龙头"
-        },
-        {
-          "date": "2026-10-13",
-          "time": "14:47",
-          "action": "BUY",
-          "code": "510300",
-          "name": "沪深300ETF",
-          "nav": 4.34,
-          "shares": 11200,
-          "amount": 48618.21,
-          "fee": 10.21,
-          "commission": 9.72,
-          "transfer_fee": 0.49,
-          "fund_type": "A股基金",
-          "is_etf": true,
-          "reason": "rebalance_F1 尾盘硬执行：按金额 ¥49,000 尾盘执行（现价4.34）（v13 机械执行）"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "600825",
-          "name": "新华传媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：出版（当日 1.96% / 5日 9.6%） | 龙头标的 量比 162.19 ≥ 1.0 | 现价 13.78 在区间 [13.5-14.06] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1200,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 17.9% 低于目标带下沿 40%（欠 22.1pct ≈ ¥108,975） | 本次补足批次 50% = ¥54,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 49000,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：出版(+9.6%)、影视院线(+9.1%)、农产品加工(+6.4%)"
+    "板块主线": "5日强势：元件(-10.4%)"
   },
   "standard_times": [
     "10:00",
