@@ -1948,6 +1948,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-16，由 inject_intraday_to_site.py v6 生成）===
@@ -1955,31 +1958,71 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-16",
-  "now": "08:50",
+  "now": "10:13",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
-      "pending_states": []
+      "checked": true,
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
+          "shares_plan": 2739.37,
+          "status": "checked",
+          "reason": "未触发"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
+          "shares_plan": 2739.37,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
+          "shares_plan": 2739.37,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
+          "shares_plan": 2739.37,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
