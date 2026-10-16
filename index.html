@@ -1952,6 +1952,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-16，由 inject_intraday_to_site.py v6 生成）===
@@ -1959,7 +1962,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-16",
-  "now": "10:13",
+  "now": "11:09",
   "slots": [
     {
       "time_slot": "10:00",
@@ -1979,8 +1982,24 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "11:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-10-16",
+          "time": "11:05",
+          "action": "SELL",
+          "code": "161017",
+          "name": "富国中证500增强",
+          "nav": 2.217,
+          "shares": 2739.37,
+          "amount": 6042.82,
+          "fee": 30.37,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "161017",
@@ -1988,8 +2007,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 2739.37,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     },
@@ -2004,8 +2023,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 2739.37,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         }
       ]
     },
@@ -2020,8 +2039,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 2739.37,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         }
       ]
     }
