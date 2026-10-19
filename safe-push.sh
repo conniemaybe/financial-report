@@ -83,9 +83,13 @@ fi
 
 try_push() {
     # $1 = 描述; 其余为 git 额外参数
+    # v2(2026-10-19): 直连尝试必须显式清空代理（-c http.proxy=），否则 libcurl 会
+    # 回落到环境变量代理（如 WorkBuddy 沙箱的 127.0.0.1:58197）。10-19 事故：
+    # 环境代理损坏返回 CONNECT 502 → 直连三轮全败 → 日报推送静默失败、
+    # LLM 走 API 兜底制造远端分叉。空字符串代理 = 显式禁用，优先级高于环境变量。
     local desc="$1"; shift
     echo "🔄 $desc ..."
-    if timeout $PUSH_TIMEOUT git "${AUTH_HEADER_ARGS[@]}" "$@" push origin main 2>&1; then
+    if timeout $PUSH_TIMEOUT git "${AUTH_HEADER_ARGS[@]}" -c http.proxy= -c https.proxy= "$@" push origin main 2>&1; then
         return 0
     fi
     return 1
