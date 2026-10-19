@@ -1976,6 +1976,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-19，由 inject_intraday_to_site.py v6 生成）===
@@ -1983,7 +1986,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-19",
-  "now": "11:06",
+  "now": "13:35",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2073,7 +2076,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "510300",
@@ -2081,8 +2084,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 34000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 按金额执行的单（计划金额 ¥34,000，无价格区间），于尾盘窗口按现价4.24执行"
         },
         {
           "code": "161017",
