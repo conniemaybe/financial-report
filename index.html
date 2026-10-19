@@ -1970,6 +1970,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-19，由 inject_intraday_to_site.py v6 生成）===
@@ -1977,12 +1980,47 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-19",
-  "now": "10:13",
+  "now": "10:23",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-10-19",
+          "time": "10:21",
+          "action": "SELL",
+          "code": "605577",
+          "name": "龙版传媒",
+          "price": 15.96,
+          "shares": 1100,
+          "amount": 17542.046440000002,
+          "stamp_tax": 8.778,
+          "commission": 5.0,
+          "transfer_fee": 0.17556000000000002,
+          "reason": "止损铁律触发：浮亏-10.5% ≤ -8%",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "出版",
+          "tier": "龙头"
+        },
+        {
+          "date": "2026-10-19",
+          "time": "10:21",
+          "action": "SELL",
+          "code": "161017",
+          "name": "富国中证500增强",
+          "nav": 2.217,
+          "shares": 1826.25,
+          "amount": 4028.55,
+          "fee": 20.24,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "510300",
@@ -1990,8 +2028,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 34000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 按金额执行的单（计划金额 ¥34,000，无价格区间），于尾盘窗口按现价4.23执行"
         },
         {
           "code": "161017",
@@ -1999,8 +2037,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 1826.25,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     },
@@ -2024,8 +2062,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 1826.25,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2049,8 +2087,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 1826.25,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2074,8 +2112,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
           "shares_plan": 1826.25,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     }
