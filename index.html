@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-19（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-20（周二）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -1985,171 +1985,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-10-19，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-10-20，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-10-19",
-  "now": "14:51",
+  "date": "2026-10-20",
+  "now": "08:40",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-10-19",
-          "time": "10:21",
-          "action": "SELL",
-          "code": "605577",
-          "name": "龙版传媒",
-          "price": 15.96,
-          "shares": 1100,
-          "amount": 17542.046440000002,
-          "stamp_tax": 8.778,
-          "commission": 5.0,
-          "transfer_fee": 0.17556000000000002,
-          "reason": "止损铁律触发：浮亏-10.5% ≤ -8%",
-          "group": "A",
-          "strategy": "S1",
-          "entry_point": "主线追涨",
-          "sector": "出版",
-          "tier": "龙头"
-        },
-        {
-          "date": "2026-10-19",
-          "time": "10:21",
-          "action": "SELL",
-          "code": "161017",
-          "name": "富国中证500增强",
-          "nav": 2.217,
-          "shares": 1826.25,
-          "amount": 4028.55,
-          "fee": 20.24,
-          "is_etf": false,
-          "share_class": "A",
-          "arrive_date": null,
-          "reason": "SELL pending 触发：价格进入卖出区间"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 34000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥34,000，无价格区间），于尾盘窗口按现价4.23执行"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
-          "shares_plan": 1826.25,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 34000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥34,000，无价格区间），于尾盘窗口按现价4.26执行"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
-          "shares_plan": 1826.25,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 34000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥34,000，无价格区间），于尾盘窗口按现价4.24执行"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
-          "shares_plan": 1826.25,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
-      "trades": [
-        {
-          "date": "2026-10-19",
-          "time": "14:47",
-          "action": "BUY",
-          "code": "510300",
-          "name": "沪深300ETF",
-          "nav": 4.25,
-          "shares": 8000,
-          "amount": 34007.14,
-          "fee": 7.14,
-          "commission": 6.8,
-          "transfer_fee": 0.34,
-          "fund_type": "A股基金",
-          "is_etf": true,
-          "reason": "rebalance_F1 尾盘硬执行：按金额 ¥34,000 尾盘执行（现价4.25）（v13 机械执行）"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "510300",
-          "name": "沪深300ETF",
-          "action": "BUY",
-          "trigger_conditions": "RB-F01 再平衡：F1 实际 25.8% 低于目标带下沿 40%（欠 14.2pct ≈ ¥69,342） | 本次补足批次 50% = ¥34,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
-          "shares_plan": 34000,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-8.8% + 指数5日-8.1%",
-          "shares_plan": 1826.25,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓",
-    "板块主线": "5日强势：地面兵装Ⅱ(+9.5%)"
+    "板块主线": "5日强势：地面兵装Ⅱ(+13.3%)"
   },
   "standard_times": [
     "10:00",
