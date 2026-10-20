@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥468,693.77</div>
-      <div class="change"><span class="down">累计 -¥31,306.23 (-6.26%)</span> · <span class="down">今日 -¥18,430.94 (-3.78%)</span></div>
+      <div class="value">¥486,552.30</div>
+      <div class="change"><span class="down">累计 -¥13,447.70 (-2.69%)</span> · <span class="down">今日 -¥572.41 (-0.12%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥996,192.58</div>
-      <div class="change"><span class="down">累计 -¥3,807.42 (-0.38%)</span></div>
+      <div class="value">¥1,014,051.11</div>
+      <div class="change"><span class="up">累计 +¥14,051.11 (+1.41%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -2001,6 +2001,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-20，由 inject_intraday_to_site.py v6 生成）===
@@ -2008,7 +2011,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-20",
-  "now": "10:16",
+  "now": "11:08",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2029,7 +2032,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "000478",
@@ -2037,8 +2040,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-96.7% <= -20%（量化增强）",
           "shares_plan": 2978.11,
-          "status": "skipped",
-          "reason": "已跳过"
+          "status": "checked",
+          "reason": "未触发"
         }
       ]
     },
