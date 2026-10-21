@@ -2024,6 +2024,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-21，由 inject_intraday_to_site.py v6 生成）===
@@ -2031,7 +2034,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-21",
-  "now": "11:05",
+  "now": "13:35",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2047,8 +2050,28 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "13:30",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-10-21",
+          "time": "13:33",
+          "action": "SELL",
+          "code": "600825",
+          "name": "新华传媒",
+          "price": 15.89,
+          "shares": 1200,
+          "amount": 19053.27532,
+          "stamp_tax": 9.534,
+          "commission": 5.0,
+          "transfer_fee": 0.19068000000000002,
+          "reason": "止盈清仓：浮盈15.3%触发弱趋势档(+15%减1/2)，减半单笔9534<15000触发防碎片化升级清仓；止损上移至成本线；重组妖股高位巨震趋势钝化",
+          "group": "A",
+          "strategy": "S1",
+          "entry_point": "主线追涨",
+          "sector": "出版",
+          "tier": "龙头"
+        }
+      ],
+      "checked": true,
       "pending_states": []
     },
     {
