@@ -200,7 +200,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-21（周三）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-22（周四）</span></h2>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
       <!-- 由 inject_intraday_to_site.py v6 动态填充 -->
@@ -2032,57 +2032,40 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-10-21，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-10-22，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-10-21",
-  "now": "14:50",
+  "date": "2026-10-22",
+  "now": "08:37",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "13:30",
-      "trades": [
-        {
-          "date": "2026-10-21",
-          "time": "13:33",
-          "action": "SELL",
-          "code": "600825",
-          "name": "新华传媒",
-          "price": 15.89,
-          "shares": 1200,
-          "amount": 19053.27532,
-          "stamp_tax": 9.534,
-          "commission": 5.0,
-          "transfer_fee": 0.19068000000000002,
-          "reason": "止盈清仓：浮盈15.3%触发弱趋势档(+15%减1/2)，减半单笔9534<15000触发防碎片化升级清仓；止损上移至成本线；重组妖股高位巨震趋势钝化",
-          "group": "A",
-          "strategy": "S1",
-          "entry_point": "主线追涨",
-          "sector": "出版",
-          "tier": "龙头"
-        }
-      ],
-      "checked": true,
+      "trades": [],
+      "checked": false,
       "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
+      "checked": false,
       "pending_states": []
     }
   ],
