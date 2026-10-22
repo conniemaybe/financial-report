@@ -286,9 +286,32 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> dict:
             failures.append(("A股", code, item["name"], reason))
             print(f"  ❌ {item['name']}({code}) {reason}")
 
-    # 基金：继续走 NeoData（基金通道不带前复权）
+    # 基金：ETF 走场内通道（2026-10-22 修复），场外基金走 NeoData 净值
+    # 事故：NeoData 对 ETF（512480/588000）返回「基金净值序列」表格且错配到
+    # 联接基金（007300.OF 净值 3.27 vs 512480 场内价 0.81），两害叠加：
+    #   ① 旧解析器只认「最新价」列/「最新净值:」字段 → 解析失败告警
+    #   ② 就算解析成功也是联接基金净值 → 显示 +232% 假收益率
+    # 修法（与 ETF 盘中定价硬编码规则同口径）：场内 ETF 现价走 westock bfq，
+    # 与 A 股清仓标的同通道；只有场外基金才走 NeoData 基金净值。
+    ETF_PREFIXES = ("51", "56", "58", "159", "162")
     for item in cleared_fund:
         code = item["code"]
+        if code.startswith(ETF_PREFIXES):
+            # ETF：场内价通道（westock bfq + 新浪兜底），与 A 股同款
+            price = _westock_bfq_price(code)
+            if price is not None:
+                item["current_price"] = price
+                item["price_status"] = "ok"
+                if item["avg_sell"] > 0:
+                    item["post_clear_pct"] = (price - item["avg_sell"]) / item["avg_sell"]
+                print(f"  ✅ [ETF场内] {item['name']}({code}) 现价 {price}")
+                ok_count += 1
+            else:
+                reason = "westock bfq 场内通道 3 次重试后仍失败"
+                item["price_status"] = "data_missing"
+                failures.append(("基金", code, item["name"], reason))
+                print(f"  ❌ [ETF场内] {item['name']}({code}) {reason}")
+            continue
         query = f"{item['name']} {code} 最新净值"
         out = _query_neodata(query)
         m = re.search(r"最新(?:价格|净值)[:：]\s*([\d.]+)", out)
@@ -321,6 +344,23 @@ def fetch_current_prices(cleared_astock: list, cleared_fund: list) -> dict:
                                 except ValueError:
                                     continue
                         break
+        # 2026-10-22 修复②：新格式「基金净值序列」表格
+        # （| 交易日期 | 单位净值（元） | 累计净值（元） | …）取首行单位净值
+        if not m:
+            lines = out.split("\n")
+            for i, ln in enumerate(lines):
+                if "基金代码" in ln:
+                    # 实体防错配：NeoData 可能返回同名联接基金（如 512480 →
+                    # 007300.OF 联接A），代码对不上直接判失败，绝不用错价
+                    code_digits = re.search(r"\d{6}", ln)
+                    if code_digits and code_digits.group(0) != code:
+                        print(f"  ⚠️ {item['name']}({code}) NeoData 错配到 {code_digits.group(0)}，拒用")
+                        out = ""  # 清空防止后续解析误用
+                        break
+            if out:
+                m2 = re.search(r"\|\s*\d{8}\s*\|\s*([\d.]+)\s*\|", out)
+                if m2:
+                    m = m2
         if m:
             price = float(m.group(1))
             item["current_price"] = price
@@ -483,7 +523,9 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
     for item in cleared:
         realized_cls = cls(item["realized"])
         post_cls = cls(item["post_clear_pct"] or 0)
-        price_label = "净值" if is_fund else "价格"
+        # 2026-10-22：ETF 现价走场内通道，标签用「现价」；场外基金才叫「净值」
+        _is_etf = item["code"].startswith(("51", "56", "58", "159", "162"))
+        price_label = ("现价" if _is_etf else "净值") if is_fund else "价格"
         # 清仓后收益率（带现价）
         # 2026-08-04 #P5：data_missing 时显示"⚠️ 数据缺失"而不是 "—"，
         # 让用户知道这是异常而非正常状态
