@@ -523,9 +523,10 @@ def build_cleared_rows(cleared: list, is_fund: bool) -> str:
     for item in cleared:
         realized_cls = cls(item["realized"])
         post_cls = cls(item["post_clear_pct"] or 0)
-        # 2026-10-22：ETF 现价走场内通道，标签用「现价」；场外基金才叫「净值」
+        # 2026-10-22：ETF 现价走场内通道，标签用「价」；场外基金用「净值」
+        # 注意：模板是「现{price_label}」，这里只能给名词，不能带「现」字
         _is_etf = item["code"].startswith(("51", "56", "58", "159", "162"))
-        price_label = ("现价" if _is_etf else "净值") if is_fund else "价格"
+        price_label = ("价" if _is_etf else "净值") if is_fund else "价格"
         # 清仓后收益率（带现价）
         # 2026-08-04 #P5：data_missing 时显示"⚠️ 数据缺失"而不是 "—"，
         # 让用户知道这是异常而非正常状态
