@@ -2088,6 +2088,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-26，由 inject_intraday_to_site.py v6 生成）===
@@ -2095,7 +2098,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-26",
-  "now": "13:34",
+  "now": "16:37",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2175,7 +2178,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "161017",
@@ -2183,8 +2186,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-10.4% + 指数5日-10.1%",
           "shares_plan": 1217.5,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "未触发"
         },
         {
           "code": "000478",
@@ -2192,8 +2195,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.3% + 指数5日-10.1%",
           "shares_plan": 1985.41,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "未触发"
         }
       ]
     }
