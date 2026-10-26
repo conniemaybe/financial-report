@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-10-23 15:20</div>
+    <div class="update-time" id="updateTime">数据更新：2026-10-26 08:54</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥482,113.76</div>
-      <div class="change"><span class="down">累计 -¥17,886.24 (-3.58%)</span> · <span class="up">今日 +¥288.22 (+0.06%)</span></div>
+      <div class="value">¥482,604.96</div>
+      <div class="change"><span class="down">累计 -¥17,395.04 (-3.48%)</span> · <span class="up">今日 +¥779.42 (+0.16%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,012,699.85</div>
-      <div class="change"><span class="up">累计 +¥12,699.85 (+1.27%)</span></div>
+      <div class="value">¥1,013,191.05</div>
+      <div class="change"><span class="up">累计 +¥13,191.05 (+1.32%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -191,8 +191,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='down'>¥8.2000↓</td><td>¥63,140.00</td><td class='down'>-¥1,232.00<br><small>-1.91%</small></td><td class='down'>-¥3,304.18<br><small>-4.97%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.1780↓</td><td>¥7,955.12</td><td class='down'>-¥208.19<br><small>-2.55% · 上一交易日</small></td><td class='down'>-¥1,973.51<br><small>-9.87%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥3.0402↓</td><td>¥18,108.10</td><td class='down'>-¥490.79<br><small>-2.64% · 上一交易日</small></td><td class='down'>-¥1,891.90<br><small>-9.46%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.2210↓</td><td>¥8,112.18</td><td class='down'>-¥51.13<br><small>-0.63% · 上一交易日</small></td><td class='down'>-¥1,816.45<br><small>-9.08%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥3.0963↓</td><td>¥18,442.24</td><td class='down'>-¥156.65<br><small>-0.84% · 上一交易日</small></td><td class='down'>-¥1,557.76<br><small>-7.79%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股基金·ETF</td><td>30,400 份</td><td class='hide-mobile'>¥4.3274</td><td class='down'>¥4.1800↓</td><td>¥127,072.00</td><td class='up'>+¥2,219.20<br><small>+1.78%</small></td><td class='down'>-¥19,788.69<br><small>-6.75%</small></td></tr>
       </tbody>
     </table></div>
@@ -479,6 +479,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-10-26', type: 'morning', file: '20261026_晨报.html', label: '10/26 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-10-23', type: 'evening', file: '20261023_日报.html', label: '10/23 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-10-23', type: 'morning', file: '20261023_晨报.html', label: '10/23 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-10-22', type: 'evening', file: '20261022_日报.html', label: '10/22 日报', ico: '🌙', cls: 'evening' },
@@ -2075,6 +2076,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-26，由 inject_intraday_to_site.py v6 生成）===
@@ -2082,31 +2086,107 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-26",
-  "now": "08:41",
+  "now": "08:51",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-10.4% + 指数5日-10.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.3% + 指数5日-10.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-10.4% + 指数5日-10.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.3% + 指数5日-10.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-10.4% + 指数5日-10.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.3% + 指数5日-10.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-10.4% + 指数5日-10.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.3% + 指数5日-10.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
