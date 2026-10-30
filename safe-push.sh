@@ -89,7 +89,8 @@ try_push() {
     # LLM 走 API 兜底制造远端分叉。空字符串代理 = 显式禁用，优先级高于环境变量。
     local desc="$1"; shift
     echo "🔄 $desc ..."
-    if timeout $PUSH_TIMEOUT git "${AUTH_HEADER_ARGS[@]}" -c http.proxy= -c https.proxy= "$@" push origin main 2>&1; then
+    # $FORCE_LEASE_ARG 不加引号：空值时展开为零个参数，有值时作为独立参数传入
+    if timeout $PUSH_TIMEOUT git "${AUTH_HEADER_ARGS[@]}" -c http.proxy= -c https.proxy= "$@" $FORCE_LEASE_ARG push origin main 2>&1; then
         return 0
     fi
     return 1
@@ -119,6 +120,27 @@ case "$REMOTE_URL" in
 esac
 export GIT_TERMINAL_PROMPT=0
 
+# 4.9 API快照分叉自愈 (2026-10-30 新增)
+# 背景：无代理时 api_push.py 通过 Git Data API 推送文件快照，远端 main 会多一个
+#       不在本地历史里的 API commit → 下次正常 git push 会 non-fast-forward 失败。
+# 自愈：若远端 main 仍等于 .api_push_head 记录值（快照由本地 HEAD 生成，内容
+#       必然已包含在本地历史中）→ 本次 push 改用 --force-with-lease 收回本地历史主导权。
+#       force-with-lease 保证远端若被第三方推进则拒绝，不会盲覆盖。
+# 探测：github.com 直连可能被墙，ls-remote 先直连、失败且代理在线再走代理。
+FORCE_LEASE_ARG=""
+API_HEAD_FILE="$REPO_DIR/.api_push_head"
+if [ -f "$API_HEAD_FILE" ]; then
+    API_HEAD_SHA=$(tr -d '\r\n ' < "$API_HEAD_FILE")
+    REMOTE_MAIN_SHA=$(timeout 30 git "${AUTH_HEADER_ARGS[@]}" -c http.proxy= -c https.proxy= ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')
+    if [ -z "$REMOTE_MAIN_SHA" ] && [ "$PROXY_ACTIVE" -eq 1 ]; then
+        REMOTE_MAIN_SHA=$(timeout 30 git "${AUTH_HEADER_ARGS[@]}" $PROXY_OPTS ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')
+    fi
+    if [ -n "$REMOTE_MAIN_SHA" ] && [ "$REMOTE_MAIN_SHA" = "$API_HEAD_SHA" ]; then
+        FORCE_LEASE_ARG="--force-with-lease=main:$API_HEAD_SHA"
+        echo "🔧 检测到远端为 API 快照提交（${API_HEAD_SHA:0:7}），本次 push 将 force-with-lease 收回本地历史"
+    fi
+fi
+
 # 5. 推送：直连优先（每轮最多 2 次直连），全失败后若代理在线再试 1 次代理
 # P0 修复 (2026-08-07): 原 `for i in $(seq 1 $MAX_RETRIES)` 因 `seq: command not found`
 # 直接跳过整个循环。改用 bash 内置 C 风格 for 循环，不依赖外部命令。
@@ -146,9 +168,29 @@ if [ "$PUSH_SUCCESS" -eq 0 ] && [ "$PROXY_ACTIVE" -eq 1 ]; then
     fi
 fi
 
+# 5.8 API通道终极兜底 (2026-10-30 新增)
+# 背景：github.com:443 直连被墙（TCP 超时）、Clash 又没开时，git 协议 push 完全不可能。
+#       但 api.github.com:443 直连畅通 → 改用 Git Data API 推文件快照（api_push.py）。
+#       快照 push 后远端会形成分叉，由上方 4.9 自愈逻辑在下次代理恢复时收回。
+API_MODE=0
+if [ "$PUSH_SUCCESS" -eq 0 ] && [ -f "$REPO_DIR/api_push.py" ]; then
+    echo "🛟 git 协议全败，切换 Git Data API 通道（api_push.py）..."
+    if timeout 300 python "$REPO_DIR/api_push.py"; then
+        echo "✅ API 通道推送成功（远端 main = 本地快照）"
+        PUSH_SUCCESS=1
+        API_MODE=1
+        # API 模式 = Clash 关闭 + 直连可用的场景，环境里的代理变量必然指向死端口
+        # （10-19 事故：沙箱残留 127.0.0.1:58197 劫持 libcurl/urllib 返回 502）。
+        # 清掉，保证后续 curl（raw/Pages 验证）走直连。
+        unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY all_proxy ALL_PROXY
+    else
+        echo "⚠️ API 通道也失败"
+    fi
+fi
+
 if [ "$PUSH_SUCCESS" -eq 0 ]; then
-    echo "❌ PUSH 失败 ($MAX_RETRIES 次重试均失败)"
-    echo "   排查：① 确认网络能访问 github.com  ② 代理端口是否正确"
+    echo "❌ PUSH 失败 (直连 $MAX_RETRIES 次 + 代理 + API 通道均失败)"
+    echo "   排查：① 确认网络能访问 github.com / api.github.com  ② 代理端口是否正确"
     exit 1
 fi
 
@@ -159,15 +201,37 @@ fi
 #    方案：先向远端查询真实 HEAD，与本地比对——一致才算成功；
 #          本地引用落后时用 update-ref 强制回写，而不是误报失败。
 REMOTE_HEAD_SHA=$(timeout 30 git "${AUTH_HEADER_ARGS[@]}" ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')
+# github.com 被墙时 ls-remote 拿不到值，改用 api.github.com 查询（直连畅通）
+if [ -z "$REMOTE_HEAD_SHA" ]; then
+    REMOTE_HEAD_SHA=$(timeout 30 python - <<'PYHEAL'
+import urllib.request, json
+urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({})))
+token = open(r"C:/Users/conniehe/.workbuddy/astock-simulator/.gh_token").read().strip()
+req = urllib.request.Request("https://api.github.com/repos/conniemaybe/financial-report/git/ref/heads/main",
+    headers={"Authorization": "token " + token, "User-Agent": "safe-push"})
+print(json.loads(urllib.request.urlopen(req, timeout=25).read())["object"]["sha"])
+PYHEAL
+)
+    REMOTE_HEAD_SHA=$(echo "$REMOTE_HEAD_SHA" | tr -d '\r\n ')
+fi
 LOCAL_HEAD_SHA=$(git rev-parse HEAD)
+# API 模式下远端是快照 commit（不在本地历史），改与 .api_push_head 比对
+if [ "$API_MODE" -eq 1 ]; then
+    LOCAL_HEAD_SHA=$(tr -d '\r\n ' < "$API_HEAD_FILE")
+fi
 if [ "$REMOTE_HEAD_SHA" = "$LOCAL_HEAD_SHA" ]; then
     # 远端已是本地 HEAD → push 确实成功；若本地 tracking ref 落后则修复它
     TRACKING_SHA=$(git rev-parse refs/remotes/origin/main 2>/dev/null || echo "")
-    if [ "$TRACKING_SHA" != "$LOCAL_HEAD_SHA" ]; then
+    if [ "$TRACKING_SHA" != "$LOCAL_HEAD_SHA" ] && [ "$API_MODE" -eq 0 ]; then
         echo "🔧 push 已成功但本地 tracking ref 落后（$TRACKING_SHA），强制回写为 $LOCAL_HEAD_SHA"
         git update-ref refs/remotes/origin/main "$LOCAL_HEAD_SHA"
     fi
     echo "✅ git 验证通过：远端 main = 本地 HEAD = $LOCAL_HEAD_SHA"
+    # git 通道推送成功 = 分叉已愈合（或从未发生），清除 API 快照标记
+    if [ "$API_MODE" -eq 0 ] && [ -f "$API_HEAD_FILE" ]; then
+        rm -f "$API_HEAD_FILE"
+        echo "🧹 已清除 .api_push_head 标记（git 通道推送成功，分叉已愈合）"
+    fi
 else
     echo "❌ 验证失败：远端 main（$REMOTE_HEAD_SHA）≠ 本地 HEAD（$LOCAL_HEAD_SHA）"
     echo "   push 可能被静默拒绝或网络中断，需人工核查"
