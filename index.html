@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-10-29 15:21</div>
+    <div class="update-time" id="updateTime">数据更新：2026-10-30 09:11</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥480,102.63</div>
-      <div class="change"><span class="down">累计 -¥19,897.37 (-3.98%)</span> · <span class="down">今日 -¥823.82 (-0.17%)</span></div>
+      <div class="value">¥479,349.09</div>
+      <div class="change"><span class="down">累计 -¥20,650.91 (-4.13%)</span> · <span class="down">今日 -¥1,577.37 (-0.33%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,010,595.72</div>
-      <div class="change"><span class="up">累计 +¥10,595.72 (+1.06%)</span></div>
+      <div class="value">¥1,009,842.17</div>
+      <div class="change"><span class="up">累计 +¥9,842.17 (+0.98%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -191,8 +191,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='down'>¥8.2200↓</td><td>¥63,294.00</td><td class='down'>-¥46.20<br><small>-0.07%</small></td><td class='down'>-¥3,150.18<br><small>-4.74%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.1830↓</td><td>¥7,973.39</td><td class='up'>+¥168.01<br><small>+2.15% · 上一交易日</small></td><td class='down'>-¥1,955.24<br><small>-9.78%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥3.0309↓</td><td>¥18,052.71</td><td class='up'>+¥331.17<br><small>+1.87% · 上一交易日</small></td><td class='down'>-¥1,947.29<br><small>-9.74%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.1290↓</td><td>¥7,776.15</td><td class='down'>-¥29.22<br><small>-0.37% · 上一交易日</small></td><td class='down'>-¥2,152.48<br><small>-10.76%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥2.9375↓</td><td>¥17,496.40</td><td class='down'>-¥225.15<br><small>-1.27% · 上一交易日</small></td><td class='down'>-¥2,503.60<br><small>-12.52%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股基金·ETF</td><td>30,400 份</td><td class='hide-mobile'>¥4.3274</td><td class='down'>¥4.1100↓</td><td>¥124,944.00</td><td class='down'>-¥1,276.80<br><small>-1.01%</small></td><td class='down'>-¥21,916.69<br><small>-7.48%</small></td></tr>
       </tbody>
     </table></div>
@@ -479,6 +479,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-10-30', type: 'morning', file: '20261030_晨报.html', label: '10/30 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-10-29', type: 'evening', file: '20261029_日报.html', label: '10/29 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-10-29', type: 'morning', file: '20261029_晨报.html', label: '10/29 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-10-28', type: 'evening', file: '20261028_日报.html', label: '10/28 日报', ico: '🌙', cls: 'evening' },
@@ -2152,6 +2153,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-10-30，由 inject_intraday_to_site.py v6 生成）===
@@ -2159,31 +2163,107 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-10-30",
-  "now": "08:59",
+  "now": "09:08",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000977",
+          "name": "浪潮信息",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000977",
+          "name": "浪潮信息",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000977",
+          "name": "浪潮信息",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000977",
+          "name": "浪潮信息",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
+          "shares_plan": 400,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
