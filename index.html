@@ -200,7 +200,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-10-30（周五）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-02（周一）</span></h2>
     <div style="font-size:12px;color:#64748b;margin:-4px 0 8px;">注：10:00 / 11:00 / 13:30 时段仅判定价格条件是否满足，实际买入统一在 14:45 尾盘窗口执行（尾盘买入铁律）。「满足触发条件」≠已成交，以 14:45 结果和成交推送为准。</div>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
@@ -2170,119 +2170,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-10-30，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-11-02，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-10-30",
-  "now": "15:07",
+  "date": "2026-11-02",
+  "now": "08:59",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[10:00] 现价165.0低于买入区间下沿170，差2.9%，未触发（等回落）"
-        },
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 400,
-          "status": "checked",
-          "reason": "[10:00] 现价55.98在买入区间[55.0564,57.3036]内，满足触发条件"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[11:00] 现价159.82低于买入区间下沿170，差6.0%，未触发（等回落）"
-        },
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 400,
-          "status": "checked",
-          "reason": "[11:00] 现价54.96低于买入区间下沿55.0564，差0.2%，未触发（等回落）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "[13:30] 现价161.13低于买入区间下沿170，差5.2%，未触发（等回落）"
-        },
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 400,
-          "status": "checked",
-          "reason": "[13:30] 现价55.72在买入区间[55.0564,57.3036]内，满足触发条件"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 160.79 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
-          "shares_plan": 100,
-          "status": "checked",
-          "reason": "未触发"
-        },
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 10.58% < 30% 触发 | 方向：AI算力 | 当前价 56.18 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 400,
-          "status": "checked",
-          "reason": "未触发"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：航天装备Ⅱ(+8.5%)"
+    "板块主线": "5日强势：航运港口(+5.5%)"
   },
   "standard_times": [
     "10:00",
