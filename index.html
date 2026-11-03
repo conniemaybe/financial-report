@@ -2200,6 +2200,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-03，由 inject_intraday_to_site.py v6 生成）===
@@ -2207,12 +2210,43 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-03",
-  "now": "08:59",
+  "now": "10:25",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-11-03",
+          "time": "10:21",
+          "action": "SELL",
+          "code": "161017",
+          "name": "富国中证500增强",
+          "nav": 2.1155,
+          "shares": 1217.5,
+          "amount": 2562.74,
+          "fee": 12.88,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        },
+        {
+          "date": "2026-11-03",
+          "time": "10:21",
+          "action": "SELL",
+          "code": "000478",
+          "name": "建信中证500增强",
+          "nav": 2.9268,
+          "shares": 1985.41,
+          "amount": 5781.84,
+          "fee": 29.05,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "300666",
@@ -2220,8 +2254,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 165.99 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价162.21低于买入区间下沿170，差4.6%，未触发（等回落）"
         },
         {
           "code": "603663",
@@ -2229,8 +2263,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 28.92 在区间 [30-40] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 800,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价29.13低于买入区间下沿30，差2.9%，未触发（等回落）"
         },
         {
           "code": "161017",
@@ -2238,8 +2272,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
           "shares_plan": 1217.5,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "000478",
@@ -2247,8 +2281,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
           "shares_plan": 1985.41,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     },
@@ -2281,8 +2315,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
           "shares_plan": 1217.5,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         },
         {
           "code": "000478",
@@ -2290,8 +2324,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
           "shares_plan": 1985.41,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2324,8 +2358,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
           "shares_plan": 1217.5,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         },
         {
           "code": "000478",
@@ -2333,8 +2367,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
           "shares_plan": 1985.41,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2367,8 +2401,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
           "shares_plan": 1217.5,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         },
         {
           "code": "000478",
@@ -2376,8 +2410,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
           "shares_plan": 1985.41,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     }
