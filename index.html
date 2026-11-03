@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-11-02 15:27</div>
+    <div class="update-time" id="updateTime">数据更新：2026-11-03 09:02</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥475,674.07</div>
-      <div class="change"><span class="down">累计 -¥24,325.93 (-4.87%)</span> · <span class="down">今日 -¥1,419.82 (-0.30%)</span></div>
+      <div class="value">¥476,133.46</div>
+      <div class="change"><span class="down">累计 -¥23,866.54 (-4.77%)</span> · <span class="down">今日 -¥358.60 (-0.08%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,004,259.15</div>
-      <div class="change"><span class="up">累计 +¥4,259.15 (+0.43%)</span></div>
+      <div class="value">¥1,004,718.55</div>
+      <div class="change"><span class="up">累计 +¥4,718.55 (+0.47%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -191,8 +191,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='down'>¥7.9400↓</td><td>¥61,138.00</td><td class='down'>-¥1,347.50<br><small>-2.16%</small></td><td class='down'>-¥5,306.18<br><small>-7.99%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.0730↓</td><td>¥7,571.61</td><td class='down'>-¥204.54<br><small>-2.63% · 上一交易日</small></td><td class='down'>-¥2,357.02<br><small>-11.79%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥2.8708↓</td><td>¥17,099.12</td><td class='down'>-¥397.28<br><small>-2.27% · 上一交易日</small></td><td class='down'>-¥2,900.88<br><small>-14.50%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,652 份</td><td class='hide-mobile'>¥2.7101</td><td class='down'>¥2.1130↓</td><td>¥7,717.71</td><td class=''><span style='color:#64748b'>— 上一交易日无变化</span></td><td class='down'>-¥2,210.92<br><small>-11.05%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>5,956 份</td><td class='hide-mobile'>¥3.3528</td><td class='down'>¥2.9234↓</td><td>¥17,412.41</td><td class=''><span style='color:#64748b'>— 上一交易日无变化</span></td><td class='down'>-¥2,587.59<br><small>-12.94%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股基金·ETF</td><td>35,300 份</td><td class='hide-mobile'>¥4.2604</td><td class='down'>¥4.0800↓</td><td>¥144,024.00</td><td class='up'>+¥529.50<br><small>+0.37%</small></td><td class='down'>-¥22,833.89<br><small>-7.29%</small></td></tr>
       </tbody>
     </table></div>
@@ -481,6 +481,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-11-03', type: 'morning', file: '20261103_晨报.html', label: '11/3 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-02', type: 'evening', file: '20261102_日报.html', label: '11/2 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-11-02', type: 'morning', file: '20261102_晨报.html', label: '11/2 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-10-30', type: 'evening', file: '20261030_日报.html', label: '10/30 日报', ico: '🌙', cls: 'evening' },
@@ -2194,6 +2195,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-03，由 inject_intraday_to_site.py v6 生成）===
@@ -2201,35 +2205,183 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-03",
-  "now": "08:50",
+  "now": "08:59",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 165.99 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "603663",
+          "name": "三祥新材",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 28.92 在区间 [30-40] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 165.99 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "603663",
+          "name": "三祥新材",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 28.92 在区间 [30-40] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 165.99 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "603663",
+          "name": "三祥新材",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 28.92 在区间 [30-40] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300666",
+          "name": "江丰电子",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 165.99 在区间 [170-210] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 100,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "603663",
+          "name": "三祥新材",
+          "action": "BUY",
+          "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 28.92 在区间 [30-40] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
+          "shares_plan": 800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.6% + 指数5日-8.1%",
+          "shares_plan": 1217.5,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "000478",
+          "name": "建信中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-12.3% + 指数5日-8.1%",
+          "shares_plan": 1985.41,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
-    "冷却期": "仓位 0.0% · 可加仓",
+    "冷却期": "仓位 0.1% · 可加仓",
     "板块主线": "5日强势：软件开发(-7.3%)"
   },
   "standard_times": [
