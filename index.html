@@ -2220,6 +2220,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-04，由 inject_intraday_to_site.py v6 生成）===
@@ -2227,12 +2230,12 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-04",
-  "now": "08:51",
+  "now": "10:20",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300666",
@@ -2240,8 +2243,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 154.61 在区间 [139-268] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价163.79在买入区间[139,268]内，满足触发条件"
         },
         {
           "code": "000977",
@@ -2249,8 +2252,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 7.44% < 30% 触发 | 方向：AI算力 | 当前价 51.95 | S2 价格优先，任意时段可建仓",
           "shares_plan": 400,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] 现价52.34在买入区间[50.911,52.989000000000004]内，满足触发条件"
         }
       ]
     },
