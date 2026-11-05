@@ -2243,6 +2243,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-05，由 inject_intraday_to_site.py v6 生成）===
@@ -2250,31 +2253,91 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-05",
-  "now": "09:10",
+  "now": "10:12",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
-      "pending_states": []
+      "trades": [
+        {
+          "date": "2026-11-05",
+          "time": "10:09",
+          "action": "SELL",
+          "code": "300666",
+          "name": "江丰电子",
+          "price": 198.2,
+          "shares": 100,
+          "amount": 19804.8918,
+          "stamp_tax": 9.91,
+          "commission": 5.0,
+          "transfer_fee": 0.19820000000000002,
+          "reason": "止盈+20%档触发(浮盈+22.5%,中等趋势减1/3,33股x198.2=6537<15000触发防碎片化约束3清仓)",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
+      "pending_states": [
+        {
+          "code": "007349",
+          "name": "华夏科技创新混合A",
+          "action": "BUY",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
+          "shares_plan": 20000,
+          "status": "checked",
+          "reason": "[10:00] 按金额执行的单（计划金额 ¥20,000，无价格区间），于尾盘窗口按现价None执行"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "007349",
+          "name": "华夏科技创新混合A",
+          "action": "BUY",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
+          "shares_plan": 20000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "007349",
+          "name": "华夏科技创新混合A",
+          "action": "BUY",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
+          "shares_plan": 20000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "007349",
+          "name": "华夏科技创新混合A",
+          "action": "BUY",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
+          "shares_plan": 20000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
