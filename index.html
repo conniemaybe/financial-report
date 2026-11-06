@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-11-05 15:21</div>
+    <div class="update-time" id="updateTime">数据更新：2026-11-06 09:02</div>
   </div>
 
   <!-- Summary Cards -->
@@ -151,13 +151,13 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
     </div>
     <div class="card">
       <div class="label">基金账户净值</div>
-      <div class="value">¥484,777.14</div>
-      <div class="change"><span class="down">累计 -¥15,222.86 (-3.04%)</span> · <span class="up">今日 +¥3,395.24 (+0.71%)</span></div>
+      <div class="value">¥484,706.86</div>
+      <div class="change"><span class="down">累计 -¥15,293.14 (-3.06%)</span> · <span class="up">今日 +¥3,324.96 (+0.69%)</span></div>
     </div>
     <div class="card">
       <div class="label">合并总净值</div>
-      <div class="value">¥1,023,862.75</div>
-      <div class="change"><span class="up">累计 +¥23,862.75 (+2.39%)</span></div>
+      <div class="value">¥1,023,792.47</div>
+      <div class="change"><span class="up">累计 +¥23,792.47 (+2.38%)</span></div>
     </div>
     <div class="card">
       <div class="label">A股可用 / 基金可用</div>
@@ -192,8 +192,8 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
       <thead><tr><th class="hide-mobile">代码</th><th>名称</th><th class="hide-mobile">类型</th><th>持仓</th><th class="hide-mobile">成本净值</th><th>当前净值</th><th>市值</th><th>当日盈亏</th><th>总盈亏</th></tr></thead>
       <tbody>
         <tr><td class='hide-mobile'><span class='stock-code'>518880</span></td><td class='col-text'><span class='stock-name'>黄金ETF</span></td><td class='hide-mobile col-text'>黄金·ETF</td><td>7,700 份</td><td class='hide-mobile'>¥8.6291</td><td class='down'>¥8.4200↓</td><td>¥64,834.00</td><td class='up'>+¥1,470.70<br><small>+2.32%</small></td><td class='down'>-¥1,610.18<br><small>-2.42%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>2,435 份</td><td class='hide-mobile'>¥3.0127</td><td class='down'>¥2.2130↓</td><td>¥5,388.63</td><td class='up'>+¥94.96<br><small>+1.79% · 上一交易日</small></td><td class='down'>-¥1,977.26<br><small>-9.89%</small></td></tr>
-        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,971 份</td><td class='hide-mobile'>¥3.5731</td><td class='down'>¥3.0494↓</td><td>¥12,108.59</td><td class='up'>+¥213.63<br><small>+1.80% · 上一交易日</small></td><td class='down'>-¥2,109.57<br><small>-10.55%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>161017</span></td><td class='col-text'><span class='stock-name'>富国中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>2,435 份</td><td class='hide-mobile'>¥3.0127</td><td class='down'>¥2.2130↓</td><td>¥5,388.63</td><td class=''><span style='color:#64748b'>— 上一交易日无变化</span></td><td class='down'>-¥1,977.26<br><small>-9.89%</small></td></tr>
+        <tr><td class='hide-mobile'><span class='stock-code'>000478</span></td><td class='col-text'><span class='stock-name'>建信中证500增强</span></td><td class='hide-mobile col-text'>量化增强·ETF</td><td>3,971 份</td><td class='hide-mobile'>¥3.5731</td><td class='down'>¥3.0317↓</td><td>¥12,038.30</td><td class='down'>-¥0.40<br><small>-0.00% · 上一交易日</small></td><td class='down'>-¥2,179.86<br><small>-10.90%</small></td></tr>
         <tr><td class='hide-mobile'><span class='stock-code'>510300</span></td><td class='col-text'><span class='stock-name'>沪深300ETF</span></td><td class='hide-mobile col-text'>A股基金·ETF</td><td>35,300 份</td><td class='hide-mobile'>¥4.2604</td><td class='down'>¥4.2000↓</td><td>¥148,260.00</td><td class='up'>+¥882.50<br><small>+0.60%</small></td><td class='down'>-¥18,597.89<br><small>-5.94%</small></td></tr>
       </tbody>
     </table></div>
@@ -487,6 +487,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-11-06', type: 'morning', file: '20261106_晨报.html', label: '11/6 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-05', type: 'evening', file: '20261105_日报.html', label: '11/5 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-11-05', type: 'morning', file: '20261105_晨报.html', label: '11/5 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-04', type: 'evening', file: '20261104_日报.html', label: '11/4 日报', ico: '🌙', cls: 'evening' },
@@ -2260,6 +2261,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-06，由 inject_intraday_to_site.py v6 生成）===
@@ -2267,7 +2271,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-06",
-  "now": "08:52",
+  "now": "09:00",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2284,10 +2288,19 @@ const INTRADAY_DATA = {
           "reason": "时段未到"
         },
         {
+          "code": "300413",
+          "name": "芒果超媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1000,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
           "code": "007349",
           "name": "华夏科技创新混合A",
           "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS + 净值落在[3.82, 3.98]",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
           "shares_plan": 20000,
           "status": "pending",
           "reason": "时段未到"
@@ -2309,10 +2322,19 @@ const INTRADAY_DATA = {
           "reason": "时段未到"
         },
         {
+          "code": "300413",
+          "name": "芒果超媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1000,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
           "code": "007349",
           "name": "华夏科技创新混合A",
           "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS + 净值落在[3.82, 3.98]",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
           "shares_plan": 20000,
           "status": "pending",
           "reason": "时段未到"
@@ -2334,10 +2356,19 @@ const INTRADAY_DATA = {
           "reason": "时段未到"
         },
         {
+          "code": "300413",
+          "name": "芒果超媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1000,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
           "code": "007349",
           "name": "华夏科技创新混合A",
           "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS + 净值落在[3.82, 3.98]",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
           "shares_plan": 20000,
           "status": "pending",
           "reason": "时段未到"
@@ -2359,10 +2390,19 @@ const INTRADAY_DATA = {
           "reason": "时段未到"
         },
         {
+          "code": "300413",
+          "name": "芒果超媒",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1000,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
           "code": "007349",
           "name": "华夏科技创新混合A",
           "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS + 净值落在[3.82, 3.98]",
+          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
           "shares_plan": 20000,
           "status": "pending",
           "reason": "时段未到"
