@@ -2272,6 +2272,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-06，由 inject_intraday_to_site.py v6 生成）===
@@ -2279,7 +2282,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-06",
-  "now": "11:17",
+  "now": "13:36",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2391,7 +2394,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300666",
@@ -2408,8 +2411,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 1000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 现价33.68高于买入区间上沿33.44，差0.7%，未触发（等回调）"
         },
         {
           "code": "007349",
@@ -2417,8 +2420,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
           "shares_plan": 20000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 按金额执行的单（计划金额 ¥20,000，无价格区间），于尾盘窗口按现价None执行"
         }
       ]
     },
