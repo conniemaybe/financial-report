@@ -202,7 +202,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-06（周五）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-09（周一）</span></h2>
     <div style="font-size:12px;color:#64748b;margin:-4px 0 8px;">注：10:00 / 11:00 / 13:30 时段仅判定价格条件是否满足，实际买入统一在 14:45 尾盘窗口执行（尾盘买入铁律）。「满足触发条件」≠已成交，以 14:45 结果和成交推送为准。</div>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
@@ -2281,194 +2281,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-11-06，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-11-09，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-11-06",
-  "now": "15:01",
+  "date": "2026-11-09",
+  "now": "08:58",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-11-06",
-          "time": "11:11",
-          "action": "SELL",
-          "code": "002714",
-          "name": "牧原股份",
-          "price": 44.61,
-          "shares": 500,
-          "amount": 22288.62445,
-          "stamp_tax": 11.1525,
-          "commission": 5.0,
-          "transfer_fee": 0.22305000000000003,
-          "reason": "弱趋势止盈：浮盈+15.9%>=+15%减仓线，拟减1/2(250股回款约1.12万<1.5万)触发防碎片化规则升级为清仓",
-          "group": "A",
-          "strategy": "legacy",
-          "entry_point": "",
-          "sector": "",
-          "tier": ""
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "现价落在区间[185.00, 205.00]内；不在涨停板追高",
-          "shares_plan": 19540,
-          "status": "checked",
-          "reason": "[10:00] 现价189.99在买入区间[185.0,205.0]内，满足触发条件"
-        },
-        {
-          "code": "300413",
-          "name": "芒果超媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1000,
-          "status": "checked",
-          "reason": "[10:00] 现价32.46在买入区间[32.12,33.44]内，满足触发条件"
-        },
-        {
-          "code": "007349",
-          "name": "华夏科技创新混合A",
-          "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
-          "shares_plan": 20000,
-          "status": "checked",
-          "reason": "[10:00] 按金额执行的单（计划金额 ¥20,000，无价格区间），于尾盘窗口按现价None执行"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
-      "trades": [
-        {
-          "date": "2026-11-06",
-          "time": "11:10",
-          "action": "BUY",
-          "code": "300666",
-          "name": "江丰电子",
-          "price": 196.9,
-          "shares": 100,
-          "amount": 19695.1969,
-          "commission": 5.0,
-          "transfer_fee": 0.19690000000000002,
-          "reason": "S2-20261106-300666 首笔建仓：现价196.90在区间[185,205]内（昨日止盈清仓后回落至入场区间），未涨停（昨收195.40，当日+0.76%），S2任意时段可建仓，现金充足",
-          "group": "A",
-          "strategy": "",
-          "entry_point": "",
-          "sector": "",
-          "tier": ""
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "现价落在区间[185.00, 205.00]内；不在涨停板追高",
-          "shares_plan": 19540,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "300413",
-          "name": "芒果超媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1000,
-          "status": "checked",
-          "reason": "[11:00] 现价33.86高于买入区间上沿33.44，差1.3%，未触发（等回调）"
-        },
-        {
-          "code": "007349",
-          "name": "华夏科技创新混合A",
-          "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
-          "shares_plan": 20000,
-          "status": "checked",
-          "reason": "[11:00] 按金额执行的单（计划金额 ¥20,000，无价格区间），于尾盘窗口按现价None执行"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "现价落在区间[185.00, 205.00]内；不在涨停板追高",
-          "shares_plan": 19540,
-          "status": "already_done",
-          "reason": "已于 11:00 成交"
-        },
-        {
-          "code": "300413",
-          "name": "芒果超媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1000,
-          "status": "checked",
-          "reason": "[13:30] 现价33.68高于买入区间上沿33.44，差0.7%，未触发（等回调）"
-        },
-        {
-          "code": "007349",
-          "name": "华夏科技创新混合A",
-          "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
-          "shares_plan": 20000,
-          "status": "checked",
-          "reason": "[13:30] 按金额执行的单（计划金额 ¥20,000，无价格区间），于尾盘窗口按现价None执行"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "300666",
-          "name": "江丰电子",
-          "action": "BUY",
-          "trigger_conditions": "现价落在区间[185.00, 205.00]内；不在涨停板追高",
-          "shares_plan": 19540,
-          "status": "already_done",
-          "reason": "已于 11:00 成交"
-        },
-        {
-          "code": "300413",
-          "name": "芒果超媒",
-          "action": "BUY",
-          "trigger_conditions": "S1 主线 confirmed：数字媒体（当日 5.41% / 5日 13.87%） | 龙头标的 量比 1.59 ≥ 1.0 | 现价 32.78 在区间 [32.12-33.44] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
-          "shares_plan": 1000,
-          "status": "checked",
-          "reason": "未触发"
-        },
-        {
-          "code": "007349",
-          "name": "华夏科技创新混合A",
-          "action": "BUY",
-          "trigger_conditions": "申购状态=open + 评分≥70且硬筛PASS",
-          "shares_plan": 20000,
-          "status": "checked",
-          "reason": "未触发"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓",
-    "板块主线": "5日强势：数字媒体(+13.9%)、光伏设备(+14.9%)、能源金属(+9.7%)"
+    "板块主线": "5日强势：种植业(+6.6%)"
   },
   "standard_times": [
     "10:00",
