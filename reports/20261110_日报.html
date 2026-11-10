@@ -344,7 +344,7 @@
             </div>
             <div>
                 <span class="badge badge-evening">收盘日报</span>
-                <div class="date-text">2026-11-10 15:17</div>
+                <div class="date-text">2026-11-10 15:23</div>
             </div>
         </div>
     </div>
@@ -394,15 +394,18 @@
         <div class="section"><div class="section-title">策略反思 · A股</div>
         <div class="reflection-item">
             <strong>🔍 策略执行质量评估</strong><br>今日待执行策略 0 条：✅执行 0 / ❌过期 0 / 🟡跳过 0，执行率 0%<br>&nbsp;&nbsp;今日无成交（无触发或被档位闸门拦截）
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断芒果超媒差 0.7% 过期属精度极限、等回调自然触发，且已提示汇川观察项交由持仓健康度维度。 → 验证：今日待执行策略仍 0 条，✅0 / ❌0 / 🟡0、执行率 0%，0 笔成交——生成器连续第 2 日未重挂芒果入场单，昨日期待的回调触发前提今日依旧不存在。 → 结论：执行率 0% 是静默期延续、无单可执行，不是执行通道故障；芒果回调假设连续两日无样本，暂挂起不再跟踪。 → 下一步：不手工造单、不补挂芒果；立讯浮盈今日越过 +10% 观察门槛，观察项已由持仓健康度维度下达，本维度不重复下指令。</div>        <div class="reflection-item">
             <strong>📊 选股方向复盘</strong><br>当前持仓 4 只，集中度：<br>&nbsp;&nbsp;汇川技术(300124) 占比25% 份额400股 成本50.79<br>&nbsp;&nbsp;立讯精密(002475) 占比29% 份额500股 成本46.57<br>&nbsp;&nbsp;浪潮信息(000977) 占比25% 份额400股 成本51.87<br>&nbsp;&nbsp;江丰电子(300666) 占比22% 份额100股 成本196.95
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断现金闲置议题（仓位仅 16.6%）留用户侧待决策、本日不自行调仓，等新 BUY 自然摊薄集中度。 → 验证：今日持仓仍 4 只——汇川 25%、立讯 29%、浪潮 25%、江丰 22%，立讯占比由 28% 抬到 29% 仍越 25% 上限；0 条新策略生成，组合当日 +528.00（+0.10%）。 → 结论：静默期第 3 日，集中度无恶化压力；立讯 29% 属浮盈（+10.97%）推动的被动超限，不为凑比例去砍一只正在走强的浮盈仓——这条判断与 10-21 减持新华后维持 3 只超限仓的口径一致。 → 下一步：不自行调仓、不重复提交现金闲置议题（用户未回复=不改）；集中度改善继续等生成器恢复产出新 BUY。</div>        <div class="reflection-item">
             <strong>⚙️ 触发条件调整建议</strong><br>今日无 pending 策略，无需调整触发条件
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断区间口径工作正常、0.7% 擦肩属精度极限而非设计缺陷、不手工干预参数。 → 验证：今日仍 0 条 pending 策略，没有任何区间判定样本，昨日结论既无新证据支撑也无证据反驳。 → 结论：无单可调，区间口径维持既有判断——工作正常、不做追涨式放宽，连续 3 日无样本说明问题出在生成器供给端而非区间端，调参数解决不了。 → 下一步：不下 ADJUST_TRIGGER；若生成器重挂芒果，维持原区间口径等回调自然触发。</div>        <div class="reflection-item">
             <strong>💼 持仓健康度反馈</strong><br>&nbsp;&nbsp;汇川技术(300124) 浮盈亏+9.96% 成本50.79 现价55.85<br>&nbsp;&nbsp;立讯精密(002475) 浮盈亏+10.97% 成本46.57 现价51.68<br>&nbsp;&nbsp;浪潮信息(000977) 浮盈亏+7.09% 成本51.87 现价55.55<br>&nbsp;&nbsp;江丰电子(300666) 浮盈亏+1.43% 成本196.95 现价199.76<br>&nbsp;&nbsp;组合当日盈亏 +528.00（+0.10%）
-        </div>
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日给汇川下了 5 天观察项（触及 +15% 止盈线或回落跌破 +10% 启动差异化止盈评估），江丰新仓盯成本保护线、其余两只同步修复中。 → 验证：汇川 57.55→55.85、浮盈 +13.30%→+9.96%，回落跌破 +10%——昨日观察项的回落分支当日即触发；按差异化止盈规则 +9.96% 未达弱趋势 +15% 减仓线，评估结论是不动作。立讯 50.78→51.68、+9.04%→+10.97% 反向上攻并越过 +10% 观察门槛；江丰 192.22→199.76 由 -2.40% 转 +1.43%，成本保护线警报解除；浪潮 55.55 微动 +7.09%；组合当日 +528.00（+0.10%）。 → 结论：昨日不强行给汇川加码止盈的判断被市场当日验证正确——若昨日按 +15% 提前设线并减仓，今日回落后就是卖在阶段高点前、但真实结果是趋势转弱而非崩坏，不动作是对的；四只持仓全绿、无一只靠近 -8% 止损线。 → 下一步：立讯越过 +10% 门槛重新武装观察（指令见下行）；汇川回落未破位、继续持有不加不减；江丰刚转正、继续持有。<br>观察项：触及+15%止盈线或回落跌破+10%启动差异化止盈评估（5 个交易日内）</div>
     </div>
         <div class="section"><div class="section-title">明日关注</div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">立讯精密（002475）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">观察项：触及+15%止盈线或回落跌破+10%启动差异化止盈评估（5 个交易日内）——</span></div>
         <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
             <span style="color:#a8c8ff;font-weight:600">（脚本未扫描出明日行动项）（-）</span>
             <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">LLM 可基于今日盘面追加</span></div>
@@ -411,9 +414,9 @@
 
     <div id="panel-fund" class="panel-fund">
     <div class="section"><div class="section-title">当日业绩 · 基金</div><div class="nav-grid">
-        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥521,727.17</div><div class="sub">收益率 <span class="pos">+4.35%</span></div></div>
-        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+40,221.15</span></div><div class="sub neu">vs 昨日净值 ¥481,506.02</div></div>
-        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+21,727.17</span></div><div class="sub"><span class="pos">+4.35%</span></div></div>
+        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥481,787.16</div><div class="sub">收益率 <span class="neg">-3.64%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="pos">+281.14</span></div><div class="sub neu">vs 昨日净值 ¥481,506.02</div></div>
+        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="neg">-18,212.84</span></div><div class="sub"><span class="neg">-3.64%</span></div></div>
         <div class="nav-card"><div class="label">现金余额</div><div class="value">¥214,185.92</div><div class="sub neu">持仓 5 支</div></div>
     </div></div>
         <div class="section"><div class="section-title">收盘持仓</div>
@@ -462,13 +465,13 @@
         <div class="section"><div class="section-title">策略反思 · 基金</div>
         <div class="reflection-item">
             <strong>🔍 基金策略执行质量</strong><br>今日基金策略 0 条：✅0 / ❌0 / 🟡0，执行率 0%<br>&nbsp;&nbsp;今日无成交
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断 007349 两笔 ¥20,000 待确认份额将陆续落地，并把『存在未确认订单时暂停同标的重复申购』提交用户决策。 → 验证：两笔订单今日同时确认入账——11-06 单 7,663.67 份 @2.6058、11-09 单 7,669.27 份 @2.6039，合计 15,332.94 份、¥40,000 全部落地为持仓；基金现金 214,185.92 未再流出；今日 0 条新策略、0 笔成交。 → 结论：昨日议题正式实体化——重复申购不再是待确认数字，而是 007349 单一标的 ¥40,000 的实际敞口；好消息是申购动作已全部完成、没有第三笔在路上，风险敞口到此封闭不再扩大。 → 下一步：议题已在用户侧挂起不重复提交；本维度不新增指令，明日重点观察 007349 首日净值表现。</div>        <div class="reflection-item">
             <strong>📊 基金持仓结构复盘</strong><br>当前基金持仓 5 只，结构：<br>&nbsp;&nbsp;[ETF] 黄金ETF(518880) 7700份 成本8.6291<br>&nbsp;&nbsp;[场外] 富国中证500增强(161017) 2435份 成本2.4300<br>&nbsp;&nbsp;[场外] 建信中证500增强(000478) 3971份 成本3.3528<br>&nbsp;&nbsp;[ETF] 沪深300ETF(510300) 35300份 成本4.2940<br>&nbsp;&nbsp;[场外] 华夏科技创新混合A(007349) 15333份 成本2.6048
-        </div>        <div class="reflection-item">
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断等 007349 份额确认落地后再评五只结构，本日不自行调仓。 → 验证：今日基金持仓正式扩到 5 只——[ETF] 黄金ETF 7700 份、[场外] 富国 2435 份、[场外] 建信 3971 份、[ETF] 沪深300ETF 35300 份、[场外] 华夏科技创新混合A 15333 份；前 4 只份额完全不变，组合当日 +281.14（+0.06%）。 → 结论：结构从 4 只扩到 5 只，场外主动权益类首次入场，但单只近 ¥40,000 让持仓离散度上升、且该标的与双增强同属中盘成长风格，风格集中度实际没有分散。 → 下一步：不自行调仓；观察 007349 首周表现及其与 161017/000478 的相关性，若三者同涨同跌再提请合并评估。</div>        <div class="reflection-item">
             <strong>⚙️ 基金触发条件评估</strong><br>今日无基金 pending 策略
-        </div>        <div class="reflection-item">
-            <strong>💼 基金持仓健康度</strong><br>&nbsp;&nbsp;黄金ETF(518880) 浮盈亏-2.68% 成本8.6291<br>&nbsp;&nbsp;富国中证500增强(161017) 浮盈亏-10.82% 成本2.4300<br>&nbsp;&nbsp;建信中证500增强(000478) 浮盈亏-11.60% 成本3.3528<br>&nbsp;&nbsp;沪深300ETF(510300) 浮盈亏-3.70% 成本4.2940<br>&nbsp;&nbsp;华夏科技创新混合A(007349) 浮盈亏-0.03% 成本2.6048<br>&nbsp;&nbsp;组合当日盈亏 +40,221.15（+8.35%）
-        </div>
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日实测出场外双增强的 -8% 止损在检查链路中不产出信号，判断为自动减仓通道实质失效、并与用户侧已挂起的减仓通道议题保持一致不再重复提交。 → 验证：今日基金 pending 策略 0 条、成交 0 笔，双增强浮亏仍深于 -8% 线，自动链路连续第 2 日未产出任何 SELL 信号。 → 结论：昨日结论得到第二日数据确认——不是净值时点问题，是链路里 -8% 止损确实不触发卖出；该议题 10-23/10-27 已在用户侧待决策，按『不重复提交』原则本日不再新开议题。 → 下一步：不下新指令；双增强敞口维持不动，等用户对减仓通道议题的决策。</div>        <div class="reflection-item">
+            <strong>💼 基金持仓健康度</strong><br>&nbsp;&nbsp;黄金ETF(518880) 浮盈亏-2.68% 成本8.6291<br>&nbsp;&nbsp;富国中证500增强(161017) 浮盈亏-10.82% 成本2.4300<br>&nbsp;&nbsp;建信中证500增强(000478) 浮盈亏-11.60% 成本3.3528<br>&nbsp;&nbsp;沪深300ETF(510300) 浮盈亏-3.70% 成本4.2940<br>&nbsp;&nbsp;华夏科技创新混合A(007349) 浮盈亏-0.03% 成本2.6048<br>&nbsp;&nbsp;组合当日盈亏 +281.14（+0.06%）
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断双增强敞口维持不动、等用户决策与净值自然收敛，新标的未入账前不参与评估。 → 验证：富国 -10.81%→-10.82%、建信 -11.46%→-11.60% 未收敛反而微幅走阔，双增强继续原地踏步式深陷 -10% 以下；黄金 -2.89%→-2.68%、沪深300ETF -3.82%→-3.70% 小幅修复；007349 入账首日 -0.03% 基本平进；组合当日 +281.14（+0.06%）。 → 结论：昨日『净值自然收敛』的期待未兑现——修复只发生在两只 ETF 上，双增强反向走弱，而自动减仓通道又被连续两日证实失效，这部分敞口处于无人处置状态；新标的尚未产生实质亏损。 → 下一步：与触发条件维度口径一致，不自行减仓、不重复提交议题；007349 以成本保护为主，浮亏扩大到 -8% 再提请处置。</div>
     </div>
         <div class="section"><div class="section-title">明日关注</div>
         <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
