@@ -2341,6 +2341,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-11，由 inject_intraday_to_site.py v6 生成）===
@@ -2348,7 +2351,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-11",
-  "now": "11:12",
+  "now": "13:36",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2403,7 +2406,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300426",
@@ -2411,8 +2414,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：影视院线（当日 6.8% / 5日 12.11%） | 龙头标的 量比 1.21 ≥ 1.0 | 现价 11.47 在区间 [11.24-11.7] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 3100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 现价11.56在买入区间[11.24,11.7]内，满足触发条件"
         },
         {
           "code": "688818",
@@ -2420,8 +2423,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：航天装备Ⅱ（当日 3.59% / 5日 11.07%） | 中军标的 量比 1.22 ≥ 1.0 | 现价 50.0 在区间 [49.0-51.0] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 700,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] 现价47.37低于买入区间下沿49.0，差3.3%，未触发（等回落）"
         }
       ]
     },
