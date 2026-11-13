@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-11-12 15:20</div>
+    <div class="update-time" id="updateTime">数据更新：2026-11-13 09:13</div>
   </div>
 
   <!-- Summary Cards -->
@@ -494,6 +494,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-11-13', type: 'morning', file: '20261113_晨报.html', label: '11/13 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-12', type: 'evening', file: '20261112_日报.html', label: '11/12 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-11-12', type: 'morning', file: '20261112_晨报.html', label: '11/12 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-11', type: 'evening', file: '20261111_日报.html', label: '11/11 日报', ico: '🌙', cls: 'evening' },
@@ -2373,6 +2374,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-13，由 inject_intraday_to_site.py v6 生成）===
@@ -2380,7 +2384,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-13",
-  "now": "08:59",
+  "now": "09:11",
   "slots": [
     {
       "time_slot": "10:00",
