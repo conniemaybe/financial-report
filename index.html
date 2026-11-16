@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-11-13 15:20</div>
+    <div class="update-time" id="updateTime">数据更新：2026-11-16 09:02</div>
   </div>
 
   <!-- Summary Cards -->
@@ -494,6 +494,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-11-16', type: 'morning', file: '20261116_晨报.html', label: '11/16 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-13', type: 'evening', file: '20261113_日报.html', label: '11/13 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-11-13', type: 'morning', file: '20261113_晨报.html', label: '11/13 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-12', type: 'evening', file: '20261112_日报.html', label: '11/12 日报', ico: '🌙', cls: 'evening' },
@@ -2393,6 +2394,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-16，由 inject_intraday_to_site.py v6 生成）===
@@ -2400,31 +2404,107 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-16",
-  "now": "08:55",
+  "now": "09:01",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300528",
+          "name": "幸福蓝海",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：影视院线（当日 3.5% / 5日 5.72%） | 中军标的 量比 1.92 ≥ 1.0 | 现价 17.99 在区间 [17.63-18.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 33.8% 低于目标带下沿 40%（欠 6.2pct ≈ ¥29,355） | 本次补足批次 50% = ¥14,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 14000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300528",
+          "name": "幸福蓝海",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：影视院线（当日 3.5% / 5日 5.72%） | 中军标的 量比 1.92 ≥ 1.0 | 现价 17.99 在区间 [17.63-18.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 33.8% 低于目标带下沿 40%（欠 6.2pct ≈ ¥29,355） | 本次补足批次 50% = ¥14,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 14000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300528",
+          "name": "幸福蓝海",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：影视院线（当日 3.5% / 5日 5.72%） | 中军标的 量比 1.92 ≥ 1.0 | 现价 17.99 在区间 [17.63-18.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 33.8% 低于目标带下沿 40%（欠 6.2pct ≈ ¥29,355） | 本次补足批次 50% = ¥14,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 14000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "300528",
+          "name": "幸福蓝海",
+          "action": "BUY",
+          "trigger_conditions": "S1 主线 confirmed：影视院线（当日 3.5% / 5日 5.72%） | 中军标的 量比 1.92 ≥ 1.0 | 现价 17.99 在区间 [17.63-18.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
+          "shares_plan": 1800,
+          "status": "pending",
+          "reason": "时段未到"
+        },
+        {
+          "code": "510300",
+          "name": "沪深300ETF",
+          "action": "BUY",
+          "trigger_conditions": "RB-F01 再平衡：F1 实际 33.8% 低于目标带下沿 40%（欠 6.2pct ≈ ¥29,355） | 本次补足批次 50% = ¥14,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
+          "shares_plan": 14000,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
