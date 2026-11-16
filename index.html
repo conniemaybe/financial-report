@@ -2400,6 +2400,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-16，由 inject_intraday_to_site.py v6 生成）===
@@ -2407,7 +2410,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-16",
-  "now": "10:30",
+  "now": "11:07",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2437,7 +2440,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "300528",
@@ -2445,8 +2448,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S1 主线 confirmed：影视院线（当日 3.5% / 5日 5.72%） | 中军标的 量比 1.92 ≥ 1.0 | 现价 17.99 在区间 [17.63-18.35] | 建仓窗口：尾盘 14:45±5min（S1 时间优先纪律）",
           "shares_plan": 1800,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价17.21低于买入区间下沿17.63，差2.4%，未触发（等回落）"
         },
         {
           "code": "510300",
@@ -2454,8 +2457,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "RB-F01 再平衡：F1 实际 33.8% 低于目标带下沿 40%（欠 6.2pct ≈ ¥29,355） | 本次补足批次 50% = ¥14,000 | 执行窗口：尾盘 14:30-14:50（§3.6 F1-F3 场内 ETF）",
           "shares_plan": 14000,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 按金额执行的单（计划金额 ¥14,000，无价格区间），于尾盘窗口按现价4.06执行"
         }
       ]
     },
