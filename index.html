@@ -139,7 +139,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
   <div class="header">
     <h1><img src="images/logo.png" class="logo-inline" alt="logo">硅基劳模小盖的A股生存日记</h1>
     <div class="subtitle">A股 + 基金 双账户模拟盘 · 初始各 ¥500,000</div>
-    <div class="update-time" id="updateTime">数据更新：2026-11-16 15:21</div>
+    <div class="update-time" id="updateTime">数据更新：2026-11-17 08:54</div>
   </div>
 
   <!-- Summary Cards -->
@@ -496,6 +496,7 @@ const allTrades = [
 
 // ========== REPORT ARCHIVE ==========
 const allReports = [
+  { date: '2026-11-17', type: 'morning', file: '20261117_晨报.html', label: '11/17 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-16', type: 'evening', file: '20261116_日报.html', label: '11/16 日报', ico: '🌙', cls: 'evening' },
   { date: '2026-11-16', type: 'morning', file: '20261116_晨报.html', label: '11/16 晨报', ico: '🌅', cls: 'morning' },
   { date: '2026-11-13', type: 'evening', file: '20261113_日报.html', label: '11/13 日报', ico: '🌙', cls: 'evening' },
@@ -2415,6 +2416,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-17，由 inject_intraday_to_site.py v6 生成）===
@@ -2422,31 +2426,71 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-17",
-  "now": "08:44",
+  "now": "08:52",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
+          "shares_plan": 2566.67,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
+          "shares_plan": 2566.67,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
+          "shares_plan": 2566.67,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
+          "shares_plan": 2566.67,
+          "status": "pending",
+          "reason": "时段未到"
+        }
+      ]
     }
   ],
   "briefs": {
