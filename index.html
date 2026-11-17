@@ -2420,6 +2420,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-17，由 inject_intraday_to_site.py v6 生成）===
@@ -2427,12 +2430,28 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-17",
-  "now": "08:52",
+  "now": "10:14",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-11-17",
+          "time": "10:09",
+          "action": "SELL",
+          "code": "518880",
+          "name": "黄金ETF",
+          "nav": 7.89,
+          "shares": 2500,
+          "amount": 19719.8,
+          "fee": 5.2,
+          "commission": 5.0,
+          "transfer_fee": 0.2,
+          "is_etf": true,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "518880",
@@ -2440,8 +2459,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
           "shares_plan": 2566.67,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         }
       ]
     },
@@ -2456,8 +2475,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
           "shares_plan": 2566.67,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2472,8 +2491,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
           "shares_plan": 2566.67,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     },
@@ -2488,8 +2507,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-9.0% + 指数5日-6.5%",
           "shares_plan": 2566.67,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
         }
       ]
     }
