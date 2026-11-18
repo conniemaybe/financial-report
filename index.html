@@ -2440,6 +2440,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-18，由 inject_intraday_to_site.py v6 生成）===
@@ -2447,31 +2450,87 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-18",
-  "now": "08:48",
+  "now": "10:24",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
-      "pending_states": []
+      "trades": [
+        {
+          "date": "2026-11-18",
+          "time": "10:24",
+          "action": "SELL",
+          "code": "161017",
+          "name": "富国中证500增强",
+          "nav": 2.087,
+          "shares": 811.66,
+          "amount": 1685.46,
+          "fee": 8.47,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-5.5%",
+          "shares_plan": 811.66,
+          "status": "executed",
+          "reason": ""
+        }
+      ]
     },
     {
       "time_slot": "11:00",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-5.5%",
+          "shares_plan": 811.66,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        }
+      ]
     },
     {
       "time_slot": "13:30",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-5.5%",
+          "shares_plan": 811.66,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        }
+      ]
     },
     {
       "time_slot": "14:45",
       "trades": [],
       "checked": false,
-      "pending_states": []
+      "pending_states": [
+        {
+          "code": "161017",
+          "name": "富国中证500增强",
+          "action": "SELL",
+          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-5.5%",
+          "shares_plan": 811.66,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        }
+      ]
     }
   ],
   "briefs": {
