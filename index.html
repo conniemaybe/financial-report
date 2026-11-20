@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-19（周四）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-20（周五）</span></h2>
     <div style="font-size:12px;color:#64748b;margin:-4px 0 8px;">注：10:00 / 11:00 / 13:30 时段仅判定价格条件是否满足，实际买入统一在 14:45 尾盘窗口执行（尾盘买入铁律）。「满足触发条件」≠已成交，以 14:45 结果和成交推送为准。</div>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
@@ -2473,118 +2473,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-11-19，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-11-20，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-11-19",
-  "now": "15:07",
+  "date": "2026-11-20",
+  "now": "08:51",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-11-19",
-          "time": "10:17",
-          "action": "SELL",
-          "code": "000977",
-          "name": "浪潮信息",
-          "price": 47.12,
-          "shares": 400,
-          "amount": 18833.38752,
-          "stamp_tax": 9.424,
-          "commission": 5.0,
-          "transfer_fee": 0.18848,
-          "reason": "止损铁律触发：浮亏-9.2% ≤ -8%",
-          "group": "A",
-          "strategy": "",
-          "entry_point": "",
-          "sector": "",
-          "tier": ""
-        },
-        {
-          "date": "2026-11-19",
-          "time": "10:17",
-          "action": "SELL",
-          "code": "161017",
-          "name": "富国中证500增强",
-          "nav": 2.087,
-          "shares": 541.11,
-          "amount": 1123.65,
-          "fee": 5.65,
-          "is_etf": false,
-          "share_class": "A",
-          "arrive_date": null,
-          "reason": "SELL pending 触发：价格进入卖出区间"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-6.4%",
-          "shares_plan": 541.11,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-6.4%",
-          "shares_plan": 541.11,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-6.4%",
-          "shares_plan": 541.11,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.1% + 指数5日-6.4%",
-          "shares_plan": 541.11,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.1% · 可加仓",
-    "板块主线": "5日强势：黑色家电(+5.4%)、电子化学品Ⅱ(-6.5%)"
+    "板块主线": "5日强势：白色家电(+7.9%)、电子化学品Ⅱ(-7.0%)"
   },
   "standard_times": [
     "10:00",
