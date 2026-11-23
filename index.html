@@ -2512,6 +2512,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-23，由 inject_intraday_to_site.py v6 生成）===
@@ -2519,7 +2522,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-23",
-  "now": "11:06",
+  "now": "14:42",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2623,7 +2626,7 @@ const INTRADAY_DATA = {
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": false,
+      "checked": true,
       "pending_states": [
         {
           "code": "000977",
@@ -2631,8 +2634,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[13:30] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价44.13高于买入区间上沿43.3806，差1.7%，未触发（等回调）"
         },
         {
           "code": "161017",
