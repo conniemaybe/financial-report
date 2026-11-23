@@ -2502,6 +2502,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-23，由 inject_intraday_to_site.py v6 生成）===
@@ -2509,12 +2512,28 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-23",
-  "now": "10:14",
+  "now": "10:25",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-11-23",
+          "time": "10:22",
+          "action": "SELL",
+          "code": "161017",
+          "name": "富国中证500增强",
+          "nav": 2.085,
+          "shares": 240.49,
+          "amount": 498.91,
+          "fee": 2.51,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "000977",
@@ -2522,8 +2541,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[10:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价42.06在买入区间[41.6794,43.3806]内，满足触发条件"
         },
         {
           "code": "161017",
@@ -2531,8 +2550,17 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
           "shares_plan": 240.49,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
+        },
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
+          "shares_plan": 1733.33,
+          "status": "checked",
+          "reason": "未触发"
         }
       ]
     },
@@ -2556,6 +2584,15 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
           "shares_plan": 240.49,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        },
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
+          "shares_plan": 1733.33,
           "status": "pending",
           "reason": "时段未到"
         }
@@ -2581,6 +2618,15 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
           "shares_plan": 240.49,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        },
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
+          "shares_plan": 1733.33,
           "status": "pending",
           "reason": "时段未到"
         }
@@ -2606,6 +2652,15 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
           "shares_plan": 240.49,
+          "status": "already_done",
+          "reason": "已于 10:00 成交"
+        },
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "action": "SELL",
+          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
+          "shares_plan": 1733.33,
           "status": "pending",
           "reason": "时段未到"
         }
