@@ -201,7 +201,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-23（周一）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-24（周二）</span></h2>
     <div style="font-size:12px;color:#64748b;margin:-4px 0 8px;">注：10:00 / 11:00 / 13:30 时段仅判定价格条件是否满足，实际买入统一在 14:45 尾盘窗口执行（尾盘买入铁律）。「满足触发条件」≠已成交，以 14:45 结果和成交推送为准。</div>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
@@ -2519,186 +2519,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-11-23，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-11-24，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-11-23",
-  "now": "14:59",
+  "date": "2026-11-24",
+  "now": "08:59",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-11-23",
-          "time": "10:22",
-          "action": "SELL",
-          "code": "161017",
-          "name": "富国中证500增强",
-          "nav": 2.085,
-          "shares": 240.49,
-          "amount": 498.91,
-          "fee": 2.51,
-          "is_etf": false,
-          "share_class": "A",
-          "arrive_date": null,
-          "reason": "SELL pending 触发：价格进入卖出区间"
-        },
-        {
-          "date": "2026-11-23",
-          "time": "10:29",
-          "action": "SELL",
-          "code": "518880",
-          "name": "黄金ETF",
-          "nav": 7.32,
-          "shares": 1700,
-          "amount": 12438.88,
-          "fee": 5.12,
-          "commission": 5.0,
-          "transfer_fee": 0.12,
-          "is_etf": true,
-          "reason": "SELL pending 触发：价格进入卖出区间"
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[10:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价42.06在买入区间[41.6794,43.3806]内，满足触发条件"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
-          "shares_plan": 240.49,
-          "status": "executed",
-          "reason": ""
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
-          "shares_plan": 1733.33,
-          "status": "executed",
-          "reason": ""
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[11:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价42.2在买入区间[41.6794,43.3806]内，满足触发条件"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
-          "shares_plan": 240.49,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
-          "shares_plan": 1733.33,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[13:30] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价44.13高于买入区间上沿43.3806，差1.7%，未触发（等回调）"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
-          "shares_plan": 240.49,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
-          "shares_plan": 1733.33,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.165289% < 30% 触发 | 方向：AI算力 | 当前价 42.53 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "未触发"
-        },
-        {
-          "code": "161017",
-          "name": "富国中证500增强",
-          "action": "SELL",
-          "trigger_conditions": "趋势止损加强：浮亏-14.2% + 指数5日-7.1%",
-          "shares_plan": 240.49,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        },
-        {
-          "code": "518880",
-          "name": "黄金ETF",
-          "action": "SELL",
-          "trigger_conditions": "纯趋势止损：黄金趋势双确认（5日-8.3% / 20日-14.2%）",
-          "shares_plan": 1733.33,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：数字媒体(-11.1%)、电机Ⅱ(-10.8%)、自动化设备(-8.2%)"
+    "板块主线": "5日强势：影视院线(-12.3%)、电机Ⅱ(-7.0%)"
   },
   "standard_times": [
     "10:00",
