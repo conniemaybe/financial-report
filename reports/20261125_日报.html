@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟盘 · 日报 2026-11-25</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0f1117;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1a1f35 0%, #0d1528 100%);
+            border: 1px solid rgba(100, 180, 255, 0.2);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #e8f4ff;
+            letter-spacing: 0.5px;
+        }
+        .header-left .subtitle { color: #6b87b0; margin-top: 6px; font-size: 0.9rem; }
+        .header-right { text-align: right; display: flex; align-items: center; gap: 12px; }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .badge-morning { background: rgba(255, 180, 60, 0.15); color: #ffb43c; border: 1px solid rgba(255, 180, 60, 0.3); }
+        .badge-evening { background: rgba(100, 220, 160, 0.15); color: #64dc9a; border: 1px solid rgba(100, 220, 160, 0.3); }
+        .date-text { color: #8aa5c5; font-size: 0.85rem; margin-top: 6px; }
+
+        /* 版本切换按钮 */
+        .mode-switcher {
+            display: flex;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .mode-btn {
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #6b87b0;
+            transition: all 0.2s;
+        }
+        .mode-btn:hover { color: #a0c4f5; background: rgba(255,255,255,0.05); }
+        .mode-btn.active-stock { background: rgba(239,83,80,0.2); color: #ef5350; }
+        .mode-btn.active-fund { background: rgba(66,165,245,0.2); color: #42a5f5; }
+
+        .section {
+            background: #161b2e;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-bottom: 18px;
+        }
+        .section-title {
+            font-size: 1.0rem;
+            font-weight: 600;
+            color: #a0c4f5;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(180deg, #4a90e2, #7c3aed);
+            border-radius: 2px;
+        }
+
+        /* NAV 卡片 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 0;
+        }
+        .nav-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-align: center;
+        }
+        .nav-card .label { font-size: 0.78rem; color: #607a99; margin-bottom: 6px; }
+        .nav-card .value { font-size: 1.35rem; font-weight: 700; color: #e8f4ff; }
+        .nav-card .sub { font-size: 0.78rem; margin-top: 4px; }
+        .pos { color: #ef5350; }
+        .neg { color: #26a69a; }
+        .neu { color: #8aa5c5; }
+
+        /* 表格 */
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th {
+            background: rgba(255,255,255,0.04);
+            color: #6b87b0;
+            font-weight: 500;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #d0dce8;
+        }
+        /* 语义化列对齐：表头一律居中，数据默认居中；仅数据单元格按列类型覆盖 */
+        th { text-align: center; }
+        td { text-align: center; }
+        td.col-text { text-align: left; }
+        td.col-reason {
+            text-align: left;
+            font-size: 0.8rem;
+            color: #8aa5c5;
+            line-height: 1.7;
+            word-break: break-word;
+            white-space: normal;
+            max-width: 540px;
+        }
+        /* 策略追踪表：固定列宽，防止"原因/说明"挤压其他列 */
+        table.tracking { table-layout: fixed; width: 100%; }
+        /* 策略分布表（5列）：不复用 tracking 的 4 列固定宽（第5列会被挤成 0 宽导致文字竖排） */
+        table.dist-table { table-layout: auto; }
+        table.dist-table td { white-space: normal; word-break: break-word; vertical-align: top; }
+        table.tracking th, table.tracking td { vertical-align: top; }
+        table.tracking th:nth-child(1), table.tracking td:nth-child(1) { width: 14%; }
+        table.tracking th:nth-child(2), table.tracking td:nth-child(2) { width: 12%; }
+        table.tracking th:nth-child(3), table.tracking td:nth-child(3) { width: 14%; }
+        table.tracking th:nth-child(4), table.tracking td:nth-child(4) { width: 60%; }
+        /* 文本列首列增强 */
+        td.col-text { color: #e0eaf6; font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* 基金类型标签 */
+        .fund-type-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin-left: 4px;
+            font-weight: 500;
+        }
+        .ft-a-share { background: rgba(239,83,80,0.15); color: #ef5350; }
+        .ft-qdii-us { background: rgba(66,165,245,0.15); color: #42a5f5; }
+        .ft-qdii-jp { background: rgba(171,71,188,0.15); color: #ab47bc; }
+        .ft-qdii-gold { background: rgba(255,193,7,0.15); color: #ffc107; }
+        .ft-bond { background: rgba(102,187,106,0.15); color: #66bb6a; }
+        .ft-money { background: rgba(120,144,156,0.15); color: #78909c; }
+
+        /* 策略卡片 */
+        .strategy-card {
+            background: rgba(74, 144, 226, 0.07);
+            border: 1px solid rgba(74, 144, 226, 0.2);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+        .strategy-card .stock-title {
+            font-size: 1.0rem;
+            font-weight: 600;
+            color: #a8c8ff;
+            margin-bottom: 8px;
+        }
+        .strategy-card .stock-title .action-buy { color: #ef5350; margin-left: 8px; font-size: 0.8rem; background: rgba(239,83,80,0.15); padding: 2px 8px; border-radius: 4px; }
+        .strategy-card .stock-title .action-sell { color: #26a69a; margin-left: 8px; font-size: 0.8rem; background: rgba(38,166,154,0.15); padding: 2px 8px; border-radius: 4px; }
+        .strategy-card .stock-title .action-hold { color: #ffa726; margin-left: 8px; font-size: 0.8rem; background: rgba(255,167,38,0.1); padding: 2px 8px; border-radius: 4px; }
+        .strategy-card .stock-title .action-watch { color: #78909c; margin-left: 8px; font-size: 0.8rem; background: rgba(120,144,156,0.15); padding: 2px 8px; border-radius: 4px; }
+        .strategy-card .details { font-size: 0.85rem; color: #8aa5c5; line-height: 1.7; }
+        .strategy-card .rationale { color: #b0c8e8; font-size: 0.88rem; margin-top: 6px; line-height: 1.6; }
+        .strategy-card .trigger-conditions {
+            margin-top: 8px; padding: 8px 12px;
+            background: rgba(255,193,7,0.06);
+            border: 1px solid rgba(255,193,7,0.15);
+            border-radius: 6px;
+            font-size: 0.82rem; color: #c8b87a; line-height: 1.6;
+        }
+        .strategy-card .trigger-conditions .tc-title {
+            color: #ffc107; font-weight: 600; margin-bottom: 4px; font-size: 0.8rem;
+        }
+        .strategy-card .trigger-conditions .tc-item { padding: 1px 0; }
+        .price-range { display: inline-flex; gap: 16px; margin-top: 6px; flex-wrap: wrap; }
+        .price-tag { font-size: 0.82rem; }
+        .price-tag .p-label { color: #607a99; }
+        .price-tag .p-value { color: #e8f4ff; font-weight: 600; }
+
+        /* 反思区 */
+        .reflection-item {
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border-left: 3px solid #4a90e2;
+            background: rgba(74, 144, 226, 0.05);
+            border-radius: 0 8px 8px 0;
+            line-height: 1.7;
+            font-size: 0.88rem;
+            color: #b8cce0;
+        }
+        .reflection-item.warn { border-left-color: #ffa726; background: rgba(255,167,38,0.05); }
+        .reflection-item.good { border-left-color: #26a69a; background: rgba(38,166,154,0.05); }
+
+        .disclaimer {
+            font-size: 0.76rem;
+            color: #445566;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 16px;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* 切换面板控制 */
+        .panel-stock, .panel-fund { display: none; }
+        .panel-stock.visible, .panel-fund.visible { display: block; }
+
+        /* ====== 移动端响应式（< 640px） ====== */
+        @media (max-width: 640px) {
+            body { padding: 12px 8px; }
+            .container { max-width: 100%; }
+            
+            /* Header 纵向布局 */
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 18px;
+                gap: 14px;
+            }
+            .header-left h1 { font-size: 1.25rem; }
+            .header-left .subtitle { font-size: 0.82rem; }
+            .header-right { width: 100%; justify-content: space-between; }
+            
+            /* Section 缩小 padding */
+            .section { padding: 16px 14px; margin-bottom: 14px; border-radius: 10px; }
+            .section-title { font-size: 0.92rem; margin-bottom: 12px; }
+            
+            /* NAV 卡片：2列布局 */
+            .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .nav-card { padding: 12px 10px; }
+            .nav-card .value { font-size: 1.1rem; }
+            .nav-card .label { font-size: 0.72rem; }
+            .nav-card .sub { font-size: 0.72rem; }
+            
+            /* 表格横向滚动 */
+            table { font-size: 0.8rem; }
+            th, td { padding: 8px 6px; white-space: nowrap; }
+            th:first-child, td:first-child { white-space: normal; min-width: 60px; }
+            
+            /* 策略卡片 */
+            .strategy-card { padding: 12px 14px; }
+            .strategy-card .stock-title { font-size: 0.92rem; }
+            .strategy-card .stock-title .action-buy,
+            .strategy-card .stock-title .action-sell,
+            .strategy-card .stock-title .action-hold,
+            .strategy-card .stock-title .action-watch { font-size: 0.74rem; }
+            .strategy-card .rationale { font-size: 0.82rem; }
+            .price-range { gap: 10px; }
+            .price-tag { font-size: 0.78rem; }
+            
+            /* 反思区 */
+            .reflection-item { padding: 10px 12px; font-size: 0.82rem; line-height: 1.6; }
+            
+            /* 版本切换按钮 */
+            .mode-btn { padding: 5px 12px; font-size: 0.76rem; }
+            
+            /* 免责声明 */
+            .disclaimer { font-size: 0.72rem; padding-top: 12px; }
+        }
+
+        /* === v6 晨报新增样式（2026-07-27，A股基金对等 + 去重 + 黑话改白话）=== */
+        .section-subtitle { font-size: 0.85rem; color: #8aa5c5; margin-bottom: 12px; }
+        .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+        .mini-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; }
+        .mini-card .mc-label { font-size: 0.78rem; color: #607a99; margin-bottom: 4px; }
+        .mini-card .mc-value { font-size: 1.1rem; font-weight: 600; color: #e8f4ff; }
+        .mini-card .mc-note { font-size: 0.72rem; color: #8aa5c5; margin-top: 4px; }
+
+        /* 风险过滤表 */
+        .risk-table td:first-child { color: #8aa5c5; text-align: left; }
+        .risk-status { font-weight: 500; padding: 2px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; }
+        .risk-warn { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .risk-pending { background: rgba(245,158,11,0.08); color: #fbbf24; }
+        .risk-ok { background: rgba(16,185,129,0.15); color: #10b981; }
+
+        /* 综合判定横幅 */
+        .judge-banner { margin-top: 12px; padding: 10px 14px; background: rgba(245,158,11,0.12); border-radius: 6px; }
+        .judge-banner strong { color: #ffb43c; }
+        .judge-banner .advice { color: #a0c4f5; font-size: 0.9em; display: block; margin-top: 4px; }
+
+        /* 主线判定/决策摘要文字流 */
+        .theme-list { font-size: 0.88rem; color: #b0c4de; line-height: 1.9; }
+        .theme-list strong { color: #a0c4f5; }
+        .theme-list .highlight { color: #e8f4ff; font-weight: 500; }
+
+        /* 持仓监控操作标签 */
+        .action-tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 600; margin-right: 8px; }
+        .action-hold { background: rgba(255,167,38,0.15); color: #ffa726; }
+        .action-watch { background: rgba(120,144,156,0.15); color: #78909c; }
+        .action-sell { background: rgba(38,166,154,0.15); color: #26a69a; }
+        .action-stop { background: rgba(239,83,80,0.15); color: #ef5350; }
+
+        /* 空提示 */
+        .empty-hint { padding: 18px 22px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; color: #8aa5c5; font-size: 0.88rem; text-align: center; }
+
+        /* A股/基金分隔 */
+        .panel-divider { height: 28px; display: flex; align-items: center; margin: 8px 0; }
+        .panel-divider::before, .panel-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+        .panel-divider span { padding: 0 16px; color: #6b87b0; font-size: 0.78rem; }
+    </style>
+    
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>📊 模拟盘 · 日报</h1>
+            <div class="subtitle">收盘复盘 · 策略反思</div>
+        </div>
+        <div class="header-right">
+            <div class="mode-switcher">
+                <button id="btn-stock" class="mode-btn active-stock" onclick="switchMode('stock')">A股</button>
+                <button id="btn-fund" class="mode-btn" onclick="switchMode('fund')">基金</button>
+            </div>
+            <div>
+                <span class="badge badge-evening">收盘日报</span>
+                <div class="date-text">2026-11-25 15:17</div>
+            </div>
+        </div>
+    </div>
+    <div id="panel-stock" class="panel-stock visible">
+    <div class="section"><div class="section-title">当日业绩 · A股</div><div class="nav-grid">
+        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥525,849.57</div><div class="sub">收益率 <span class="pos">+5.17%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="neg">-3,042.21</span></div><div class="sub neu">vs 昨日净值 ¥528,891.78</div></div>
+        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="pos">+25,849.57</span></div><div class="sub"><span class="pos">+5.17%</span></div></div>
+        <div class="nav-card"><div class="label">现金余额</div><div class="value">¥481,722.57</div><div class="sub neu">持仓 2 支</div></div>
+    </div></div>
+        <div class="section"><div class="section-title">收盘持仓</div>
+    <table><thead><tr><th class="col-text">股票</th><th>持股数</th><th>成本价</th><th>收盘价</th><th>市值</th><th>占持仓比</th><th>浮盈亏%</th><th>浮盈亏额</th></tr></thead>
+    <tbody>
+        <tr>
+            <td class="col-text">立讯精密<br><small style="color:#607a99">002475 · 存量</small></td>
+            <td>500</td><td>46.57</td>
+            <td>46.47</td><td>23,235</td>
+            <td>52.7%</td>
+            <td><span class="neg">-0.22%</span></td>
+            <td><span class="neg">-50</span></td></tr>
+        <tr>
+            <td class="col-text">汇川技术<br><small style="color:#607a99">300124 · 存量</small></td>
+            <td>400</td><td>50.79</td>
+            <td>52.23</td><td>20,892</td>
+            <td>47.3%</td>
+            <td><span class="pos">+2.83%</span></td>
+            <td><span class="pos">+575</span></td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">今日成交记录</div>
+    <table><thead><tr><th>时间</th><th>操作</th><th class="col-text">股票</th><th>价格</th><th>数量</th><th>金额</th><th class="col-text">原因</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>11:03</td><td><span class="neg">卖出</span></td>
+            <td class="col-text">江丰电子（300666）</td><td>180.51</td>
+            <td>100</td><td>18,036.79</td>
+            <td class="col-text" style="font-size:0.8rem;color:#607a99">止损铁律触发：浮亏-8.3% ≤ -8%</td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
+    <p style="font-size:0.82rem; color:#607a99; margin-bottom:10px;">对比晨报预报与实际执行情况</p>
+    <table class="tracking"><thead><tr><th class="col-text">标的</th><th>计划执行区间</th><th>执行结果</th><th class="col-text">原因/说明</th></tr></thead>
+    <tbody><tr>
+                <td class="col-text" style="color:#e0eaf6;font-weight:500">浪潮信息（000977）</td>
+                <td>买入 43.11～44.87</td>
+                <td>⏳ 过期未执行</td>
+                <td class="col-reason">10:00 [10:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价43.8在买入区间[43.1102,44.869800000000005]内，满足触发条件<br><br>11:00 [11:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价43.22在买入区间[43.1102,44.869800000000005]内，满足触发条件<br><br>13:30 [13:30] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价42.85低于买入区间下沿43.1102，差0.6%，未触发（等回落）</td>
+            </tr></tbody></table></div>
+        <div class="section"><div class="section-title">策略反思 · A股</div>
+        <div class="reflection-item">
+            <strong>🔍 策略执行质量评估</strong><br>今日待执行策略 1 条：✅执行 0 / ❌过期 1 / 🟡跳过 0，执行率 0%<br>&nbsp;&nbsp;SELL 江丰电子(300666) 100股@180.51 到账¥18,036.79
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日预期今日维持冷却冻结、无成交，等 11-26 解除。验证：浪潮 BUY 连续第 4 日被冷却期 L1 拦截过期，pending 执行率 0%；但今日出现计划外成交——江丰电子 100股@180.51 止损清仓到账 ¥18,036.79，较昨收 197.12 单日约 -8.4% 触发 -8% 无条件止损铁律（盘中止损不计入 pending 执行率口径，与 11-16 华智清仓日同口径）。结论：止损纪律执行到位，但这是急跌日的被动止损而非主动策略成交，组合当日 -3,042.21（-0.58%）终结两连涨。下一步：不动参数，明日 11-26 冷却解除，观察首条入场单是否自然落地；另注意江丰今日止损可能触发新一轮冷却期。</div>        <div class="reflection-item">
+            <strong>📊 选股方向复盘</strong><br>当前持仓 2 只，集中度：<br>&nbsp;&nbsp;汇川技术(300124) 占比47% 份额400股 成本50.79<br>&nbsp;&nbsp;立讯精密(002475) 占比53% 份额500股 成本46.57
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断三只转盈、超限为卖出侧旧账、不自行调仓。验证：今日江丰止损清仓后持仓降为 2 只——汇川 47%（400股 成本50.79）、立讯 53%（500股 成本46.57），双双大幅超 25% 上限，集中度较昨日 33/37/30 明显被动恶化。结论：集中度从『卖出侧旧账』变为『清仓后被动恶化』，两只 47/53 双超限，但根因仍是冷却冻结压制供给、非选股端问题。下一步：不为凑比例强行卖出或加仓，等 11-26 冷却解除由生成器恢复供给自然摊薄。</div>        <div class="reflection-item">
+            <strong>⚙️ 触发条件调整建议</strong><br>分析 1 条策略的触发条件命中情况：<br>&nbsp;&nbsp;❌ 浪潮信息(000977) [BUY] status=expired<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最后判定: [13:30] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断区间口径维持不证实不证伪、不动参数。验证：今日浪潮 BUY 仍未走到区间比较即被冷却期 L1（至 2026-11-26）拦截，有效区间命中样本连续第 4 日零新增；今日唯一到达判定层的卖出触发是江丰 -8% 止损铁律直接触发（无区间设计），执行正常。结论：区间口径议题继续冻结无从检验，止损触发链路本身无恙。下一步：不动任何区间参数，明日冷却解除后再积累样本。</div>        <div class="reflection-item">
+            <strong>💼 持仓健康度反馈</strong><br>&nbsp;&nbsp;汇川技术(300124) 浮盈亏+2.83% 成本50.79 现价52.23<br>&nbsp;&nbsp;立讯精密(002475) 浮盈亏-0.22% 成本46.57 现价46.47<br>&nbsp;&nbsp;组合当日盈亏 -3,042.21（-0.58%）
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日预期三只距止损线均超 8pp、无动作区间，仅关注汇川是否越 +10%。验证：今日急跌反转——汇川 53.61→52.23 +5.55%→+2.83%、立讯 48.10→46.47 +3.28%→-0.22% 转亏；江丰 197.12 盘中跳水至 180.51 止损清仓（昨日 +0.09% 一日转深亏出局）；组合当日 -3,042.21（-0.58%）。结论：昨日『三只全盈、无动作区间』判断被单日急跌证伪，-8% 止损铁律又一次兑现；江丰止损或触发新一轮冷却期，明日供给恢复存在变数。下一步：不新下指令；明日关注立讯是否续跌逼近 -8% 线、汇川是否跌破 +10% 以下，冷却解除后看供给是否恢复。</div>
+    </div>
+            <div class="section" style="border-left: 3px solid #ffb43c;">
+        <div class="section-title">⚖️ 待决策事项（策略级 · 共 1 项）</div>
+        <div class="reflection-item" style="border-left:2px solid #ffb43c;">
+            <strong>⚖️ 建信000478破-20%处置授权</strong><br>
+            建议：浮亏-20.49%为全组合最深单点、观察期已满且昨日预设条件触发，建议授权分批减仓（首批约1300份），观察2周再评<br>
+            <span style="color:#6b87b0;font-size:0.8rem">（宏观策略调整，需你确认后才改；不回复=维持现状）</span>
+        </div>
+    </div>
+    <div class="section"><div class="section-title">明日关注</div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">立讯精密（002475）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">现价 46.47 距止损线 ¥42.84 还有 7.8%</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">浪潮信息（000977）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">原触发条件: 43.1102~44.869800000000005（今日expired）</span></div>
+    </div>
+    </div>
+
+    <div id="panel-fund" class="panel-fund">
+    <div class="section"><div class="section-title">当日业绩 · 基金</div><div class="nav-grid">
+        <div class="nav-card"><div class="label">账户净值</div><div class="value">¥464,905.40</div><div class="sub">收益率 <span class="neg">-7.02%</span></div></div>
+        <div class="nav-card"><div class="label">今日盈亏</div><div class="value"><span class="neg">-3,193.24</span></div><div class="sub neu">vs 昨日净值 ¥468,098.64</div></div>
+        <div class="nav-card"><div class="label">累计盈亏</div><div class="value"><span class="neg">-35,094.60</span></div><div class="sub"><span class="neg">-7.02%</span></div></div>
+        <div class="nav-card"><div class="label">现金余额</div><div class="value">¥244,797.73</div><div class="sub neu">持仓 5 支</div></div>
+    </div></div>
+        <div class="section"><div class="section-title">收盘持仓</div>
+    <table><thead><tr><th class="col-text">基金</th><th>份额</th><th>成本净值</th><th>最新净值</th><th>市值</th><th>占比</th><th>浮盈亏%</th><th>浮盈亏额</th></tr></thead>
+    <tbody>
+        <tr>
+            <td class="col-text">沪深300ETF<br><small style="color:#607a99">510300 · ETF</small></td>
+            <td>38,700.00</td><td>4.2727</td>
+            <td>3.9700</td><td>153,639</td>
+            <td>69.8%</td>
+            <td><span class="neg">-7.08%</span></td>
+            <td><span class="neg">-11,714</span></td></tr>
+        <tr>
+            <td class="col-text">华夏科技创新混合A<br><small style="color:#607a99">007349 · 场外</small></td>
+            <td>15,332.94</td><td>2.6048</td>
+            <td>2.4606</td><td>37,728</td>
+            <td>17.1%</td>
+            <td><span class="neg">-5.54%</span></td>
+            <td><span class="neg">-2,211</span></td></tr>
+        <tr>
+            <td class="col-text">黄金ETF<br><small style="color:#607a99">518880 · ETF</small></td>
+            <td>2,400.00</td><td>8.6291</td>
+            <td>7.1700</td><td>17,208</td>
+            <td>7.8%</td>
+            <td><span class="neg">-16.91%</span></td>
+            <td><span class="neg">-3,502</span></td></tr>
+        <tr>
+            <td class="col-text">建信中证500增强<br><small style="color:#607a99">000478 · 场外</small></td>
+            <td>3,970.81</td><td>3.3528</td>
+            <td>2.6657</td><td>10,585</td>
+            <td>4.8%</td>
+            <td><span class="neg">-20.49%</span></td>
+            <td><span class="neg">-2,728</span></td></tr>
+        <tr>
+            <td class="col-text">富国中证500增强<br><small style="color:#607a99">161017 · 场外</small></td>
+            <td>480.99</td><td>2.4300</td>
+            <td>1.9698</td><td>947</td>
+            <td>0.4%</td>
+            <td><span class="neg">-18.94%</span></td>
+            <td><span class="neg">-221</span></td></tr>
+    </tbody></table></div>
+        <div class="section"><div class="section-title">今日申赎记录</div>
+        <div class="empty-hint">今日无申赎</div></div>
+        <div class="section"><div class="section-title">📋 晨报策略执行追踪</div>
+        <div class="empty-hint">今日无晨报策略</div></div>
+        <div class="section"><div class="section-title">策略反思 · 基金</div>
+        <div class="reflection-item">
+            <strong>🔍 基金策略执行质量</strong><br>今日基金策略 0 条：✅0 / ❌0 / 🟡0，执行率 0%<br>&nbsp;&nbsp;今日无成交
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日预期既有链路继续消化黄金剩余 2400 份与富国 481 份。验证：今日基金 0 条策略 0 成交（无 pending 无 expired），昨日『链路自转』预期被证伪——今日急跌日无新卖出单生成，黄金/富国/建信敞口原地敞开。结论：减仓链路昨日成交今日停摆，卡点不在通道而在急跌日的单据生成侧，深亏标的无人照看。下一步：不自行造卖单（基金侧 ADD_SELL 无落地路径），将『急跌日无 pending 生成』升级宏观议题随日报推送。</div>        <div class="reflection-item">
+            <strong>📊 基金持仓结构复盘</strong><br>当前基金持仓 5 只，结构：<br>&nbsp;&nbsp;[ETF] 黄金ETF(518880) 2400份 成本8.6291<br>&nbsp;&nbsp;[场外] 富国中证500增强(161017) 481份 成本2.4300<br>&nbsp;&nbsp;[场外] 建信中证500增强(000478) 3971份 成本3.3528<br>&nbsp;&nbsp;[ETF] 沪深300ETF(510300) 38700份 成本4.2727<br>&nbsp;&nbsp;[场外] 华夏科技创新混合A(007349) 15333份 成本2.6048
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断黄金三日压缩过半、结构缓步改善。验证：今日五只份额零变动（黄金 2400/富国 481/建信 3971/510300 38700/华夏 15333），无新卖出落地、无回款。结论：结构改善进程今日停摆，组合当日 -3,193.24（-0.68%）回吐昨日全部反弹并倒亏，四只深亏浮亏进一步加深。下一步：不自行动仓，结构处置维持用户侧待决并升级授权请求（见持仓健康度维度指令）。</div>        <div class="reflection-item">
+            <strong>⚙️ 基金触发条件评估</strong><br>今日无基金 pending 策略
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日判断 ETF 卖出通道可用（三个成交样本）、触发层无需调整。验证：今日 0 条基金 pending——黄金/建信/富国全线急挫的日子生成器未产出任何卖出单，与 11-17 已实证的『急跌破下沿判未触发』方向缺陷一致：价格落区间下方时既不触发、也不生成新单。结论：通道成交能力已被证实，真正的卡点在急跌日生成器无单可发，议题应从『区间判定』升级为『急跌日供给缺失』。下一步：不动任何触发参数；将该缺陷升级宏观议题提交用户决策。<br>待决策：基金急跌日卖出单缺失 —— 急跌日生成器不产卖出单已两度实证（11-17、11-25），建议卖出触发改为只判区间上限、破线次日无条件生成减仓单，观察2周再评（见下方待决策事项）</div>        <div class="reflection-item">
+            <strong>💼 基金持仓健康度</strong><br>&nbsp;&nbsp;黄金ETF(518880) 浮盈亏-16.91% 成本8.6291<br>&nbsp;&nbsp;富国中证500增强(161017) 浮盈亏-18.94% 成本2.4300<br>&nbsp;&nbsp;建信中证500增强(000478) 浮盈亏-20.49% 成本3.3528<br>&nbsp;&nbsp;沪深300ETF(510300) 浮盈亏-7.08% 成本4.2727<br>&nbsp;&nbsp;华夏科技创新混合A(007349) 浮盈亏-5.54% 成本2.6048<br>&nbsp;&nbsp;组合当日盈亏 -3,193.24（-0.68%）
+        <br><strong style="color:#ffb43c">→ 判断：</strong>假设：昨日承诺建信恶化超 -18% 或黄金续跌破 -15% 再评估处置、WATCH 000478 剩 1 天。验证：今日条件双双触发——建信 -17.14%→-20.49%（恶化 3.35pp、破 -20%、WATCH 今日期满）、黄金 -14.30%→-16.91%（续跌破 -15%、超 -8% 止损线 8.91pp）、富国 -15.93%→-18.94%、510300 -5.61%→-7.08%（逼近 -8% 线）、华夏 -6.20%→-5.54% 唯一收敛；组合当日 -3,193.24（-0.68%）。注：富国/建信为估值净值口径（今日 NAV 刷新仅覆盖 510300/007349），正式净值出来后数字会修正。结论：昨日『风险迁移被反弹打断』的侥幸不再，五只中四只深亏且全数越过昨日预设的处置评估线，建信 -20.49% 成为全组合最深单点。下一步：WATCH 000478 期满且条件触发，升级宏观授权处置。<br>待决策：建信000478破-20%处置授权 —— 浮亏-20.49%为全组合最深单点、观察期已满且昨日预设条件触发，建议授权分批减仓（首批约1300份），观察2周再评（见下方待决策事项）</div>
+    </div>
+            <div class="section" style="border-left: 3px solid #ffb43c;">
+        <div class="section-title">⚖️ 待决策事项（策略级 · 共 1 项）</div>
+        <div class="reflection-item" style="border-left:2px solid #ffb43c;">
+            <strong>⚖️ 基金急跌日卖出单缺失</strong><br>
+            建议：急跌日生成器不产卖出单已两度实证（11-17、11-25），建议卖出触发改为只判区间上限、破线次日无条件生成减仓单，观察2周再评<br>
+            <span style="color:#6b87b0;font-size:0.8rem">（宏观策略调整，需你确认后才改；不回复=维持现状）</span>
+        </div>
+    </div>
+    <div class="section"><div class="section-title">明日关注</div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">建信中证500增强（000478）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">现净值 2.6657 距硬止损 ¥2.8499 还有 -6.9%</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">富国中证500增强（161017）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">现净值 1.9698 距硬止损 ¥2.0655 还有 -4.9%</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">黄金ETF（518880）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">现净值 7.1700 距硬止损 ¥7.3347 还有 -2.3%</span></div>
+        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:#a8c8ff;font-weight:600">沪深300ETF（510300）</span>
+            <span style="color:#8aa5c5;font-size:0.85rem;margin-left:10px">现净值 3.9700 距硬止损 ¥3.6318 还有 8.5%</span></div>
+    </div>
+    </div>
+    <div class="disclaimer">所有交易均为虚拟操作，数据来源：NeoData 金融数据服务。</div>
+</div>
+
+    <script>
+    function switchMode(mode) {
+        var stockPanel = document.getElementById('panel-stock');
+        var fundPanel = document.getElementById('panel-fund');
+        var btnStock = document.getElementById('btn-stock');
+        var btnFund = document.getElementById('btn-fund');
+        if (mode === 'stock') {
+            stockPanel.classList.add('visible');
+            fundPanel.classList.remove('visible');
+            btnStock.classList.add('active-stock');
+            btnStock.classList.remove('active-fund');
+            btnFund.classList.remove('active-stock', 'active-fund');
+            btnFund.style.background = '';
+            btnFund.style.color = '';
+        } else {
+            fundPanel.classList.add('visible');
+            stockPanel.classList.remove('visible');
+            btnFund.classList.add('active-fund');
+            btnFund.classList.remove('active-stock');
+            btnStock.classList.remove('active-stock', 'active-fund');
+            btnStock.style.background = '';
+            btnStock.style.color = '';
+        }
+    }
+    </script>
+
+</body>
+</html>
