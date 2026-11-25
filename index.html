@@ -2549,6 +2549,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-25，由 inject_intraday_to_site.py v6 生成）===
@@ -2556,7 +2559,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-25",
-  "now": "10:24",
+  "now": "11:08",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2576,8 +2579,28 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "11:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-11-25",
+          "time": "11:03",
+          "action": "SELL",
+          "code": "300666",
+          "name": "江丰电子",
+          "price": 180.51,
+          "shares": 100,
+          "amount": 18036.793990000002,
+          "stamp_tax": 9.025500000000001,
+          "commission": 5.0,
+          "transfer_fee": 0.18051,
+          "reason": "止损铁律触发：浮亏-8.3% ≤ -8%",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "000977",
@@ -2585,8 +2608,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.247934% < 30% 触发 | 方向：AI算力 | 当前价 43.99 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价43.22在买入区间[43.1102,44.869800000000005]内，满足触发条件"
         }
       ]
     },
