@@ -200,7 +200,7 @@ tr.placeholder-row td { border-bottom: 1px dashed #1e293b80; color: transparent;
 
   <!-- 今日盘中决策实录（由 inject_intraday_to_site.py 动态填充）-->
   <div class="section decision-section">
-    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-25（周三）</span></h2>
+    <h2>📍 今日盘中决策实录 <span id="intradayDateLabel" style="font-size:12px;color:#64748b;font-weight:400;">2026-11-26（周四）</span></h2>
     <div style="font-size:12px;color:#64748b;margin:-4px 0 8px;">注：10:00 / 11:00 / 13:30 时段仅判定价格条件是否满足，实际买入统一在 14:45 尾盘窗口执行（尾盘买入铁律）。「满足触发条件」≠已成交，以 14:45 结果和成交推送为准。</div>
     <div class="market-banner pending" id="intradayBanner">📊 加载中...</div>
     <div class="decision-timeline" id="decisionLog">
@@ -2560,103 +2560,46 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
-// === 今日盘中决策实录数据（2026-11-25，由 inject_intraday_to_site.py v6 生成）===
+// === 今日盘中决策实录数据（2026-11-26，由 inject_intraday_to_site.py v6 生成）===
 // v6 (2026-08-11): 完全从 portfolio.trades + pending_strategies 派生，废弃 decision_runs 作为数据源
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
-  "date": "2026-11-25",
-  "now": "15:11",
+  "date": "2026-11-26",
+  "now": "08:48",
   "slots": [
     {
       "time_slot": "10:00",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.247934% < 30% 触发 | 方向：AI算力 | 当前价 43.99 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[10:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价43.8在买入区间[43.1102,44.869800000000005]内，满足触发条件"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "11:00",
-      "trades": [
-        {
-          "date": "2026-11-25",
-          "time": "11:03",
-          "action": "SELL",
-          "code": "300666",
-          "name": "江丰电子",
-          "price": 180.51,
-          "shares": 100,
-          "amount": 18036.793990000002,
-          "stamp_tax": 9.025500000000001,
-          "commission": 5.0,
-          "transfer_fee": 0.18051,
-          "reason": "止损铁律触发：浮亏-8.3% ≤ -8%",
-          "group": "A",
-          "strategy": "",
-          "entry_point": "",
-          "sector": "",
-          "tier": ""
-        }
-      ],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.247934% < 30% 触发 | 方向：AI算力 | 当前价 43.99 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[11:00] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价43.22在买入区间[43.1102,44.869800000000005]内，满足触发条件"
-        }
-      ]
+      "trades": [],
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "13:30",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.247934% < 30% 触发 | 方向：AI算力 | 当前价 43.99 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "[13:30] BUY 被冷却期拦截：冷却期L1生效中（2026-11-19触发，至2026-11-26）：L1b: 3个交易日内2只持仓止损(华智数媒、浪潮信息)。现价42.85低于买入区间下沿43.1102，差0.6%，未触发（等回落）"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     },
     {
       "time_slot": "14:45",
       "trades": [],
-      "checked": true,
-      "pending_states": [
-        {
-          "code": "000977",
-          "name": "浪潮信息",
-          "action": "BUY",
-          "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.247934% < 30% 触发 | 方向：AI算力 | 当前价 43.99 | S2 价格优先，任意时段可建仓",
-          "shares_plan": 500,
-          "status": "checked",
-          "reason": "未触发"
-        }
-      ]
+      "checked": false,
+      "pending_states": []
     }
   ],
   "briefs": {
     "冷却期": "仓位 0.0% · 可加仓",
-    "板块主线": "5日强势：地面兵装Ⅱ(-6.6%)"
+    "板块主线": "5日强势：渔业(+8.0%)"
   },
   "standard_times": [
     "10:00",
