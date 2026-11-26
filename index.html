@@ -2570,6 +2570,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-26，由 inject_intraday_to_site.py v6 生成）===
@@ -2577,7 +2580,7 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-26",
-  "now": "10:21",
+  "now": "11:09",
   "slots": [
     {
       "time_slot": "10:00",
@@ -2615,8 +2618,45 @@ const INTRADAY_DATA = {
     },
     {
       "time_slot": "11:00",
-      "trades": [],
-      "checked": false,
+      "trades": [
+        {
+          "date": "2026-11-26",
+          "time": "11:08",
+          "action": "BUY",
+          "code": "300666",
+          "name": "江丰电子",
+          "price": 174.69,
+          "shares": 100,
+          "amount": 17474.17469,
+          "commission": 5.0,
+          "transfer_fee": 0.17469,
+          "reason": "S2 入口2 紫苏叶三层判定全绿，现价174.69在区间[139,268]内，任意时段可建仓；昨止损清仓后策略重判再入场，止损-12%@153.16",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        },
+        {
+          "date": "2026-11-26",
+          "time": "11:08",
+          "action": "BUY",
+          "code": "000977",
+          "name": "浪潮信息",
+          "price": 42.7,
+          "shares": 500,
+          "amount": 21355.2135,
+          "commission": 5.0,
+          "transfer_fee": 0.21350000000000002,
+          "reason": "S2 入口1 科技龙头池PE分位0.0%触发，现价42.70在区间[41.258,42.942]内，任意时段可建仓；L1冷却已于今日(11-26)到期，观察期首批4%",
+          "group": "A",
+          "strategy": "",
+          "entry_point": "",
+          "sector": "",
+          "tier": ""
+        }
+      ],
+      "checked": true,
       "pending_states": [
         {
           "code": "300666",
@@ -2624,8 +2664,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 174.05 在区间 [139-268] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "000977",
@@ -2633,8 +2673,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.0% < 30% 触发 | 方向：AI算力 | 当前价 42.1 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "executed",
+          "reason": ""
         },
         {
           "code": "000478",
@@ -2642,8 +2682,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-20.5% <= -20%（量化增强）",
           "shares_plan": 1985.4,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "checked",
+          "reason": "[11:00] 现价2.6891高于上沿2.6790285，未触发（反弹了）（现价2.6891）"
         }
       ]
     },
@@ -2658,8 +2698,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 174.05 在区间 [139-268] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         },
         {
           "code": "000977",
@@ -2667,8 +2707,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.0% < 30% 触发 | 方向：AI算力 | 当前价 42.1 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         },
         {
           "code": "000478",
@@ -2692,8 +2732,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口2 紫苏叶三层判定全绿 | 当前价 174.05 在区间 [139-268] | 市场层 ENTRY_CONFIRMED + 利空层 BLACKLIST_CLEAR | S2 价格优先，任意时段可建仓（不等尾盘）",
           "shares_plan": 100,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         },
         {
           "code": "000977",
@@ -2701,8 +2741,8 @@ const INTRADAY_DATA = {
           "action": "BUY",
           "trigger_conditions": "S2 入口1 科技龙头池 PE 分位 0.0% < 30% 触发 | 方向：AI算力 | 当前价 42.1 | S2 价格优先，任意时段可建仓",
           "shares_plan": 500,
-          "status": "pending",
-          "reason": "时段未到"
+          "status": "already_done",
+          "reason": "已于 11:00 成交"
         },
         {
           "code": "000478",
