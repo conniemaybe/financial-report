@@ -2584,6 +2584,9 @@ renderReports();
 
 
 
+
+
+
 <!-- === 今日盘中决策实录数据（v6，由 inject_intraday_to_site.py 生成）=== -->
 <script>
 // === 今日盘中决策实录数据（2026-11-26，由 inject_intraday_to_site.py v6 生成）===
@@ -2591,27 +2594,11 @@ renderReports();
 // 设计：LLM 不参与内容生成，所有展示由 workflow 自动派生
 const INTRADAY_DATA = {
   "date": "2026-11-26",
-  "now": "15:08",
+  "now": "15:13",
   "slots": [
     {
       "time_slot": "10:00",
-      "trades": [
-        {
-          "date": "2026-11-26",
-          "time": "15:03",
-          "action": "SELL",
-          "code": "000478",
-          "name": "建信中证500增强",
-          "nav": 2.6644,
-          "shares": 1985.4,
-          "amount": 5263.45,
-          "fee": 26.45,
-          "is_etf": false,
-          "share_class": "A",
-          "arrive_date": null,
-          "reason": "SELL pending 触发：价格进入卖出区间"
-        }
-      ],
+      "trades": [],
       "checked": true,
       "pending_states": [
         {
@@ -2638,8 +2625,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-20.5% <= -20%（量化增强）",
           "shares_plan": 1985.4,
-          "status": "executed",
-          "reason": ""
+          "status": "checked",
+          "reason": "[10:00] 现价2.6991高于上沿2.6790285，未触发（反弹了）（现价2.6991）"
         }
       ]
     },
@@ -2709,8 +2696,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-20.5% <= -20%（量化增强）",
           "shares_plan": 1985.4,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
+          "status": "checked",
+          "reason": "[11:00] 现价2.6891高于上沿2.6790285，未触发（反弹了）（现价2.6891）"
         }
       ]
     },
@@ -2743,14 +2730,30 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-20.5% <= -20%（量化增强）",
           "shares_plan": 1985.4,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
+          "status": "checked",
+          "reason": "[13:30] 现价2.6845高于上沿2.6790285，未触发（反弹了）（现价2.6845）"
         }
       ]
     },
     {
       "time_slot": "14:45",
-      "trades": [],
+      "trades": [
+        {
+          "date": "2026-11-26",
+          "time": "15:03",
+          "action": "SELL",
+          "code": "000478",
+          "name": "建信中证500增强",
+          "nav": 2.6644,
+          "shares": 1985.4,
+          "amount": 5263.45,
+          "fee": 26.45,
+          "is_etf": false,
+          "share_class": "A",
+          "arrive_date": null,
+          "reason": "SELL pending 触发：价格进入卖出区间"
+        }
+      ],
       "checked": true,
       "pending_states": [
         {
@@ -2777,8 +2780,8 @@ const INTRADAY_DATA = {
           "action": "SELL",
           "trigger_conditions": "硬止损：浮亏-20.5% <= -20%（量化增强）",
           "shares_plan": 1985.4,
-          "status": "already_done",
-          "reason": "已于 10:00 成交"
+          "status": "executed",
+          "reason": ""
         }
       ]
     }
